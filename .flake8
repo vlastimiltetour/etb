@@ -1,0 +1,12 @@
+[flake8] #include this file in a root directory, name should be .flake8
+exclude =
+    .git,
+    migrations, 
+    venv,
+    __pycache__,
+    docs/source/conf.py,
+    old,
+    build,
+    dist
+max-line-length = 119
+

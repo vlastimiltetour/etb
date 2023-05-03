@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:15.2
+    restart: always
+    ports:
+    - "5433:5433"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - DJANGO_SETTINGS_MODULE=efir.settings.prod
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  app:
+    build: .
+    command: >
+      sh -c "python ./efir/manage.py collectstatic --no-input &&
+             ./wait-for-it.sh db:5432 -- uwsgi --ini /code/config/uwsgi/uwsgi.ini"
+    restart: always
+    volumes:
+      - .:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=efir.settings.prod
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - db
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/code
+    ports:
+      - "80:80"
+      - "443:443"

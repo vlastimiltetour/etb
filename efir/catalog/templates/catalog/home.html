@@ -1,0 +1,512 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<!--Intro, Header Jumbotron --> 
+<!-- link here: https://getbootstrap.com/docs/5.3/examples/jumbotron/ -->
+<div class="container py-2" style="min-height: 100vh;">
+
+  <div class="row-cols-3 row align-items-md-stretch">
+    <div class="col-md-4 py-2" style="height: 100vh;">
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_1.jpeg'); background-size: cover; background-position: center;">
+      </div>
+    </div>
+    <div class="col-md-4 py-2" style="height: 100vh;">
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/logotitle.jpeg'); background-size: cover; background-position: center; max-width: 100%;">
+      </div>
+    </div>
+    
+    <div class="col-md-4 py-2" style="height: 100vh;">
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_2.jpeg'); background-size: cover; background-position: center;">
+      </div>
+    </div>      
+    </div>
+  </div>
+</div>
+
+
+ <!-- About section-->
+ 
+ <section class="py-5" id="about">
+ 
+  <div class="container px-4 px-lg-5 my-5">
+    
+      <div class="row gx-4 gx-lg-5 align-items-center">
+          <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{% static '/assets/img/intro_column_1.jpeg' %}" alt="..." /></div>
+          <div class="col-md-6">
+           
+              <h1 class="display-5 fw-bolder">O nás</h1>
+              <p class="lead"> Efir The Brand je e-commerce, která se specializuje na luxusní spodní prádlo pro ženy. Naše značka se vyznačuje kvalitními materiály, precizním zpracováním a neokoukanými designy.
+        
+                Naše nejnovější kolekce se zaměřuje na kombinaci černé barvy s detaily ze zlatého materiálu, které dodají každému kousku z naší nabídky nádech elegance a luxusu. Například náš podvazkový pás s motivem orchideje na černé síťce vypadá nejenom nádherně, ale také je velmi pohodlný na nošení.
+                
+                V našem e-shopu si můžete vybrat prádlo podle vašich představ, ať už preferujete klasický střih nebo něco více výrazného. Naše spodní prádlo je navrženo tak, aby zdůrazňovalo krásu každé ženy a dodalo jí sebevědomí.
+                
+                Děkujeme vám za návštěvu naší stránky a těšíme se na to, že vás budeme moci oblékat do našich kvalitních a luxusních kousků.</p><br>
+          </div>
+    
+      </div>
+  </div>
+</section>
+
+<!-- Best Sellers -->
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Best Sellers</h1>
+    </div>
+    <div class="album py-5 bg-white">
+      <div class="container">
+  
+        <div class="row row-cols-3">
+  
+          <!-- Single Product 1 -->
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow " style="height: 100vh;">
+              <img class="card-img-top img-fluid" 
+              data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+              alt="Thumbnail [100%x225]"  
+              src="static/assets/img/intro_column_1.jpeg" 
+              data-holder-rendered="true">
+              <div class="card-body" stle="padding: 1rem;">
+                <h5 class="fw-bolder"> Product Name</h5>
+
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                  </div>
+                  <h5 class="fw-bolder"> 900 Kš </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Single Product 2 -->
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img class="card-img-top img-fluid" 
+              data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+              alt="Thumbnail [100%x225]"  
+              src="static/assets/img/logotitle.jpeg" 
+              data-holder-rendered="true">
+              <div class="card-body" stle="padding: 1rem;">
+                <h5 class="fw-bolder"> Product Name</h5>
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Single Product 3 -->
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow" style="height: 100vh;">
+              <img class="card-img-top img-fluid" 
+              data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+              alt="Thumbnail [100%x225]"  
+              src="static/assets/img/backgr.jpeg" 
+              data-holder-rendered="true">
+              <div class="card-body" stle="padding: 1rem;">
+                <h5 class="fw-bolder"> Product Name</h5>
+
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <p class="price"> 999 Kč</p>
+
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+  </section>
+
+  <!-- Catalog of Products -->
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Katalog</h1>
+    </div>
+  <div class="album py-5 bg-white">
+    <div class="container">
+
+      <div class="row">
+
+        <!-- Single Product 1 -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow " style="height: 100vh;">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/intro_column_1.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Single Product 2 -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/logotitle.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Single Product 3 -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow" style="height: 100vh;">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/backgr.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Single Product -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow " style="height: 100vh;">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/intro_column_1.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Single Product -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/logotitle.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Single Product -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow" style="height: 100vh;">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/backgr.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Single Product -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow " style="height: 100vh;">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/intro_column_1.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Single Product -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/logotitle.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Single Product -->
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow" style="height: 100vh;">
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="Thumbnail [100%x225]"  
+            src="static/assets/img/backgr.jpeg" 
+            data-holder-rendered="true">
+            <div class="card-body" stle="padding: 1rem;">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22288%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20288%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_187c9b83a7d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_187c9b83a7d%22%3E%3Crect%20width%3D%22288%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2296.8203125%22%20y%3D%22118.8%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+            <div class="card-body">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22288%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20288%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_187c9b83a7d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_187c9b83a7d%22%3E%3Crect%20width%3D%22288%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2296.8203125%22%20y%3D%22118.8%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+            <div class="card-body">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22288%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20288%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_187c9b83a7d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_187c9b83a7d%22%3E%3Crect%20width%3D%22288%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2296.8203125%22%20y%3D%22118.8%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+            <div class="card-body">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22288%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20288%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_187c9b83a7e%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_187c9b83a7e%22%3E%3Crect%20width%3D%22288%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2296.8203125%22%20y%3D%22118.8%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+            <div class="card-body">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22288%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20288%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_187c9b83a7e%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_187c9b83a7e%22%3E%3Crect%20width%3D%22288%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2296.8203125%22%20y%3D%22118.8%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+            <div class="card-body">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22288%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20288%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_187c9b83a7f%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_187c9b83a7f%22%3E%3Crect%20width%3D%22288%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2296.8203125%22%20y%3D%22118.8%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+            <div class="card-body">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="jumbotron text-center">
+    <div class="container">
+     
+     
+        <a href="#" class="btn btn-warning my-2">Katalog</a>
+     
+    </div>
+  </section>
+  <section id="shipping" class="jumbotron text-center">
+    <div class="container px-4 px-lg-5 my-5">
+      <div class="row gx-4 gx-lg-5 align-items-center">
+    
+        <h1 class="jumbotron-heading">Doprava Vašeho Spodního Prádla </h1>
+        <p class="lead text-muted">
+        
+        Vítejte u naší e-commerce stránky, kde se specializujeme na prodej spodního prádla. Chceme Vám poskytnout nejen skvělý výběr luxusního prádla, ale také kvalitní a spolehlivou dopravu a doručení.
+      
+        Jak probíhá doprava?
+        
+        Když objednáte spodní prádlo u nás, začíná náš tým pracovat na Vaší objednávce okamžitě. Během 1-2 pracovních dnů je Vaše objednávka připravena k odeslání. Poté ji předáme doručovací společnosti, která zajistí doručení Vašeho balíčku.
+        
+        Jak dlouho to trvá?
+        
+        Běžně doručujeme balíčky v průměrném čase 2-3 pracovních dnů, ale doba doručení se může lišit v závislosti na vaší poloze a vytíženosti doručovacích společností. V případě, že Vaše objednávka bude odeslána během víkendu nebo svátků, může doručení trvat déle.
+        
+        Co je s cenou dopravy?
+        
+        Při nákupu nad určitou částku je doprava zdarma. V opačném případě se cena dopravy řídí dle zvoleného typu dopravy a hmotnosti Vaší objednávky. Náklady na dopravu jsou uvedeny při nákupu v košíku a jsou přesně spočítány dle Vašich specifikací.
+        
+        Jak zkontrolovat stav Vaší objednávky?
+        
+        Po odeslání Vaší objednávky dostanete e-mail s potvrzením objednávky a s odkazem na sledování Vaší zásilky. Můžete také sledovat stav Vaší objednávky na našich webových stránkách.
+        
+        Pokud máte jakékoliv otázky ohledně dopravy Vašeho spodního prádla, neváhejte nás kontaktovat. Jsme tu pro Vás a rádi Vám pomůžeme s jakýmkoliv dotazem.
+      <p>
+      
+        <a href="#" class="btn btn-warning my-2">Main call to action</a>
+        <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+      </p>
+    </div>
+  </div>
+  </section>
+
+
+ 
+
+    <section id="returns" class="jumbotron text-center">
+      <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+    
+        <h1 class="jumbotron-heading">Reklamace</h1>
+        <p class="lead text-muted">
+        Vrácení produktů může být důležitým aspektem v každém e-commerce obchodě, včetně obchodů s dámským prádlem. V našem obchodě s dámským prádlem chápeme, že produkt, který obdržíte, se může neshodovat s vašimi očekáváními nebo vám nemusí sedět tak, jak jste si představovali. Proto nabízíme bezproblémovou politiku vrácení.
+
+Pokud nejste s vaším nákupem spokojeni z jakéhokoli důvodu, můžete zboží vrátit do 30 dnů od data doručení. Přijímáme vrácení nenosených, nepoužitých a nepoškozených výrobků v jejich originálním obalu se všemi štítky a štítky připojenými.
+
+Chcete-li zahájit vrácení, jednoduše se přihlaste na svůj účet na našem webu, přejděte na stránku historie objednávek a vyberte položky, které chcete vrátit. Následujte pokyny k vytisknutí nálepky na dopravu a odešlete nám zboží. Jakmile zboží obdržíme, vrácení peněz zpracujeme do 10 pracovních dnů.
+
+Chceme, aby jste byli s vaším nákupem zcela spokojeni a snažíme se vrácení co nejvíce zjednodušit. Pokud máte jakékoliv dotazy nebo obavy ohledně naší politiky vrácení, neváhejte kontaktovat náš tým zákaznického servisu.
+      </p>
+     
+    </div>
+      </div>
+  </section>
+</main>
+<!-- End Best Sellers -->
+
+
+  <!--
+  <header class="masthead">
+    <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+        <div class="d-flex justify-content-center">
+            <div class="text-center">
+            
+                <h1 class="display-5 fw-bolder">{% trans "🪡 Spodní prádlo na míru" %}</h1>
+                <h2 class="text-white mx-auto mt-2 mb-5">{% trans "Exkluzivní design 🤍" %}</h2>
+                            
+            </div> 
+        </div> 
+    </div>
+</header>
+-->
+
+
+
+
+{% endblock %}
