@@ -177,3 +177,7 @@ htmlcov/
 
 # Ignore migrations for apps
 */migrations/*
+
+
+# ssl certificates
+ssl

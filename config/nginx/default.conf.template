@@ -4,6 +4,17 @@ upstream uwsgi_app {
     }
 server {
     listen       80;
+    server_name  www.efirthebrand.cz efirthebrand.cz;
+    }
+
+server {
+    listen               443 ssl;
+    ssl_certificate      /code/efir/ssl/efirthebrand.crt; 
+    ssl_certificate_key  /code/efir/ssl/efirthebrand.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
+    server_name  www.efirthebrand.cz efirthebrand.cz;
+
     error_log    stderr warn;
     access_log   /dev/stdout main;
 
