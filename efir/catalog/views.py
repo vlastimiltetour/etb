@@ -8,7 +8,6 @@ def home(request):
 
 
 def catalog_product_list(request, category_slug=None):
-    
     return render(request, "catalog/catalog.html")
 
 

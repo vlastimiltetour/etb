@@ -1,7 +1,6 @@
 import os
+
 from .base import *
-
-
 
 DEBUG = bool(os.getenv("DEBUG") == "True")
 
