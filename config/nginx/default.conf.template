@@ -2,10 +2,12 @@
 upstream uwsgi_app {
     server unix:/code/efir/uwsgi_app.sock;
     }
+
 server {
     listen       80;
     server_name  www.efirthebrand.cz efirthebrand.cz;
-    }
+    return 301 https://$host$request_uri; #redirection to HTTPS
+}
 
 server {
     listen               443 ssl;
