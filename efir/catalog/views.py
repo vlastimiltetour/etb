@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 from .models import Category, Product
 
@@ -11,10 +11,16 @@ def home(request, category_slug=None):
     category = None
     categories = Category.objects.all()
     products = Product.objects.all()
+    best_sellers = Product.objects.filter(bestseller=True)
     return render(
         request,
         "catalog/home.html",
-        {"category": category, "categories": categories, "products": products},
+        {
+            "category": category,
+            "categories": categories,
+            "products": products,
+            "best_sellers": best_sellers,
+        },
     )
 
 
@@ -22,7 +28,13 @@ def home(request, category_slug=None):
 def catalog_product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
-    products = Product.objects.all()
+    products = Product.objects.filter(available=True)  # filtering available products
+
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=category)
+    else:
+        pass
     return render(
         request,
         "catalog/catalog.html",
@@ -31,8 +43,24 @@ def catalog_product_list(request, category_slug=None):
 
 
 def product_detail(request, id, slug):
-    return render(request, "catalog/product_detail.html")
+    categories = (
+        Category.objects.all()
+    )  # this is only for the purpose of showing the variable in the menu and footer
+    product = get_object_or_404(Product, id=id, slug=slug, available=True)
+    return render(
+        request,
+        "catalog/product_detail.html",
+        {"product": product, "categories": categories},
+    )
 
 
 def kontakty(request):
-    return render(request, "catalog/kontakty.html")
+    categories = Category.objects.all()
+
+    return render(request, "catalog/kontakty.html", {"categories": categories})
+
+
+def about(request):
+    categories = Category.objects.all()
+
+    return render(request, "catalog/about.html", {"categories": categories})

@@ -10,17 +10,25 @@
 <!-- Catalog of Products -->
   <section class="jumbotron text-center">
     <div class="container">
-      <h1 class="jumbotron-heading">Katalog</h1>
+      <h1 class="jumbotron-heading">Katalog{% if category %}: {{category}} 
+        {% else %}
+        {% endif %}</h1>
     </div>
   <div class="album py-2 bg-white">
-    <div class="container">
-
+    <div class="container justify-content-center align-items-center" style="min-height: 60vh;">
+      {% if products %}
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
-        {% for product in products %}        
-        <!-- Single Product -->
 
+        
+        {% for product in products %} 
+
+        <!-- Single Product -->
         <div class="col-md-4 mb-4">
+          <a href="{{ product.get_absolute_url }}">
+
+
           <div class="card mb-4 box-shadow h-100">
+            
             <img class="card-img-top img-fluid" 
             data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
             alt="Thumbnail [100%x225]"
@@ -28,26 +36,35 @@
             data-holder-rendered="true">
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>
+            
               <p class="card-text">{{ product.description }}</p>                
                 <b class="fw-bolder"> {{ product.price }} Kč</b>
+                
+
             </div>
           </div>
+        </a>
         </div>
+      
+       
+
+        
         {% endfor %}
         
       </div>
-    </div></div>
+
+    {% else %}
+    <p></p>
+      <p class="text-center">
+          Zde nejsou žádné produkty. Prohlédněte si celou nabídku.
+      </p>
+  </div>
+  
+    {% endif %}
+  </div>
+  </div>
   </section>
 
-  <section class="jumbotron text-center">
-    <div class="container">
-     
-     
-        <a href="#" class="btn btn-light my-2">Katalog</a>
-     
-    </div>
-  </section>
-</main>
 <!-- End Best Sellers -->
 
 

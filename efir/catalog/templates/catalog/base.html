@@ -35,25 +35,32 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Katalog</a>
               <ul class="dropdown-menu" aria--labelledby="navbarDropdown">
-                <li>
-                  <a class="dropdown-item" href="{% url 'katalog' %}">Vše</a>
+
+
+
+                <li class="dropdown-item">
+                  <a class="nav-link" href="{% url 'katalog' %}">Vše</a>
                 </li>
-                <li>
-                  <a class="dropdown-item" href="#!">Kategorie 2</a>
+                <div class="dropdown-divider"></div>
+
+                {% for c in categories %}
+                <li
+                {% if category.slug == c.slug %}
+                class="nav-link"
+                {% endif %} class="dropdown-item">
+                
+                  <a class="nav-link" href="{{ c.get_absolute_url }}">{{ c.name }}</a>
                 </li>
-                <li>
-                  <a class="dropdown-item" href="#!">Kategorie 3</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#!">Kategorie 4</a>
-                </li>
+                {% endfor %}
+               
+               
               </ul>
             </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'kontakty' %}">Kontakty</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#!">O nás</a>
+              <a class="nav-link" href="https://efirthebrand.cz/#o-nas">O nás</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="https://efirthebrand.cz/#doprava">Doprava</a>
@@ -75,7 +82,7 @@
               </a>
             </li>
             <li class="nav-item col-6 col-lg-auto">
-              <a class="nav-link py-2 px-0 px-lg-2" href="https://www.instagram.com/efir_the_brand/" target="_blank" rel="noopener">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://t.me/ageeva" target="_blank" rel="noopener">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">
                   <title>Telegram</title>
 
@@ -90,7 +97,7 @@
 
 
             <li class="nav-item col-6 col-lg-auto">
-              <a class="nav-link py-2 px-0 px-lg-2" href="https://twitter.com/getbootstrap" target="_blank" rel="noopener">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://wa.me/00420774363883" target="_blank" rel="noopener">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
                   <title>Whatsapp</title>
 
@@ -131,27 +138,18 @@
     <!-- Footer-->
     <section>
       <div class="b-example-divider"></div>
-      <div class="container">
+      <div class="container border-top">
         <footer class="py-5">
           <div class="row">
             <div class="col-6 col-md-2 mb-3">
               <h5>Katalog</h5>
               <ul class="nav flex-column">
+                {% for c in categories %}
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-muted">Kategorie 1</a>
+                  <a href="{{ c.get_absolute_url }}" class="nav-link p-0 text-muted">{{ c.name }}</a>
                 </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-muted">Kategorie 2</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-muted">Kategorie 3</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-muted">Kategorie 4</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-muted">Kategorie 5</a>
-                </li>
+                {% endfor %}
+               
               </ul>
             </div>
             <div class="col-6 col-md-2 mb-3">
@@ -189,7 +187,7 @@
             <div class="col-md-5 offset-md-1 mb-3">
               <form>
                 <h5>Odebírejte novinky</h5>
-                <p>Monthly digest of what's new and exciting from us.</p>
+                <p class="p-0 text-muted">Monthly digest of what's new and exciting from us.</p>
                 <div class="d-flex flex-column flex-sm-row w-100 gap-2">
                   <label for="newsletter1" class="visually-hidden">Email address</label>
                   <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
@@ -199,8 +197,8 @@
             </div>
           </div>
           <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-            <p>&copy; 2023 Efir The Brand. All rights reserved.</p> 
-            <p><center>Made by Vlastimil Tetour, 2023</center></p>
+            <p class="order-sm-first">&copy; 2023 Efir The Brand. All rights reserved.</p> 
+            <p>Made by Vlastimil Tetour, 2023</p>
             <ul class="list-unstyled d-flex">
               <li class="ms-3">
                 <a class="link-dark" href="#">
@@ -224,7 +222,7 @@
                 </a>
               </li>
             </ul>
-            <a href="/admin" style="color: black">Admin</a>
+            <a href="/admin/" style="color: black">Admin</a>
           </div>
         </footer>
       </div>

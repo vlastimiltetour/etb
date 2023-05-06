@@ -31,7 +31,7 @@
 
  <!-- About section-->
  
- <section class="py-5" id="about">
+ <section id="o-nas" class="py-5" id="about">
  
   <div class="container px-4 px-lg-5 my-5">
     
@@ -64,22 +64,24 @@
   <div class="container">
 
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
-      {% for product in products %}        
+      {% for bestseller in best_sellers %}        
       <!-- Single Product -->
 
       <div class="col-md-4 mb-4">
+        <a href="{{ bestseller.get_absolute_url }}">
         <div class="card mb-4 box-shadow h-100">
           <img class="card-img-top img-fluid" 
           data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
           alt="Thumbnail [100%x225]"
-          src="{{ product.image.url }}"
+          src="{{ bestseller.image.url }}"
           data-holder-rendered="true">
           <div class="card-body d-flex flex-column" style="padding: 1rem;">
-            <h5 class="fw-bolder"> {{ product.name }}</h5>
-            <p class="card-text">{{ product.description }}</p>                
-              <b class="fw-bolder"> {{ product.price }} Kč</b>
+            <h5 class="fw-bolder"> {{ bestseller.name }}</h5>
+            <p class="card-text">{{ bestseller.description }}</p>                
+              <b class="fw-bolder"> {{ bestseller.price }} Kč</b>
           </div>
         </div>
+        </a>
       </div>
       {% endfor %}
       
@@ -100,6 +102,8 @@
         <!-- Single Product -->
 
         <div class="col-md-4 mb-4">
+          <a href="{{ product.get_absolute_url }}">
+
           <div class="card mb-4 box-shadow h-100">
             <img class="card-img-top img-fluid" 
             data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
@@ -112,6 +116,7 @@
                 <b class="fw-bolder"> {{ product.price }} Kč</b>
             </div>
           </div>
+          </a>
         </div>
         {% endfor %}
         
@@ -124,18 +129,21 @@
     <div class="container">
      
      
-        <a href="#" class="btn btn-warning my-2">Katalog</a>
+        <a href="{% url 'katalog' %}" class="btn btn-light my-2">Celý katalog</a>
      
     </div>
   </section>
-  <section id="doprava" class="jumbotron text-center">
+
+  <section id="doprava" class="py-5" id="about">
+ 
     <div class="container px-4 px-lg-5 my-5">
-      <div class="row gx-4 gx-lg-5 align-items-center">
-    
-        <h1 class="jumbotron-heading">Doprava Vašeho Spodního Prádla </h1>
-        <p class="lead text-muted">
-        
-        Vítejte u naší e-commerce stránky, kde se specializujeme na prodej spodního prádla. Chceme Vám poskytnout nejen skvělý výběr luxusního prádla, ale také kvalitní a spolehlivou dopravu a doručení.
+      
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            
+             
+                <h1 class="display-5 fw-bolder">Doprava</h1>
+                <p class="lead" style="text-align: justify;"> 
+                  Vítejte u naší e-commerce stránky, kde se specializujeme na prodej spodního prádla. Chceme Vám poskytnout nejen skvělý výběr luxusního prádla, ale také kvalitní a spolehlivou dopravu a doručení.
       
         Jak probíhá doprava?
         
@@ -154,35 +162,39 @@
         Po odeslání Vaší objednávky dostanete e-mail s potvrzením objednávky a s odkazem na sledování Vaší zásilky. Můžete také sledovat stav Vaší objednávky na našich webových stránkách.
         
         Pokud máte jakékoliv otázky ohledně dopravy Vašeho spodního prádla, neváhejte nás kontaktovat. Jsme tu pro Vás a rádi Vám pomůžeme s jakýmkoliv dotazem.
-      <p>
+                        </p><br>
+                        <p class="text-center">
       
-        <a href="#" class="btn btn-warning my-2">Main call to action</a>
-        <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-      </p>
+                          <a href="#" class="btn btn-light my-2">Main call to action</a>
+                        </p>
+            
+      
+        </div>
     </div>
-  </div>
   </section>
 
-
  
-
-    <section id="reklamace" class="jumbotron text-center">
-      <div class="container px-4 px-lg-5 my-5">
+  <section id="reklamace" class="py-5" id="about">
+ 
+    <div class="container px-4 px-lg-5 my-5">
+      
         <div class="row gx-4 gx-lg-5 align-items-center">
-    
-        <h1 class="jumbotron-heading">Reklamace</h1>
-        <p class="lead text-muted">
-        Vrácení produktů může být důležitým aspektem v každém e-commerce obchodě, včetně obchodů s dámským prádlem. V našem obchodě s dámským prádlem chápeme, že produkt, který obdržíte, se může neshodovat s vašimi očekáváními nebo vám nemusí sedět tak, jak jste si představovali. Proto nabízíme bezproblémovou politiku vrácení.
+            
+             
+                <h1 class="display-5 fw-bolder">Reklamace</h1>
+                <p class="lead" style="text-align: justify;"> 
+                  Vrácení produktů může být důležitým aspektem v každém e-commerce obchodě, včetně obchodů s dámským prádlem. V našem obchodě s dámským prádlem chápeme, že produkt, který obdržíte, se může neshodovat s vašimi očekáváními nebo vám nemusí sedět tak, jak jste si představovali. Proto nabízíme bezproblémovou politiku vrácení.
 
-Pokud nejste s vaším nákupem spokojeni z jakéhokoli důvodu, můžete zboží vrátit do 30 dnů od data doručení. Přijímáme vrácení nenosených, nepoužitých a nepoškozených výrobků v jejich originálním obalu se všemi štítky a štítky připojenými.
-
-Chcete-li zahájit vrácení, jednoduše se přihlaste na svůj účet na našem webu, přejděte na stránku historie objednávek a vyberte položky, které chcete vrátit. Následujte pokyny k vytisknutí nálepky na dopravu a odešlete nám zboží. Jakmile zboží obdržíme, vrácení peněz zpracujeme do 10 pracovních dnů.
-
-Chceme, aby jste byli s vaším nákupem zcela spokojeni a snažíme se vrácení co nejvíce zjednodušit. Pokud máte jakékoliv dotazy nebo obavy ohledně naší politiky vrácení, neváhejte kontaktovat náš tým zákaznického servisu.
-      </p>
-     
+                  Pokud nejste s vaším nákupem spokojeni z jakéhokoli důvodu, můžete zboží vrátit do 30 dnů od data doručení. Přijímáme vrácení nenosených, nepoužitých a nepoškozených výrobků v jejich originálním obalu se všemi štítky a štítky připojenými.
+                  
+                  Chcete-li zahájit vrácení, jednoduše se přihlaste na svůj účet na našem webu, přejděte na stránku historie objednávek a vyberte položky, které chcete vrátit. Následujte pokyny k vytisknutí nálepky na dopravu a odešlete nám zboží. Jakmile zboží obdržíme, vrácení peněz zpracujeme do 10 pracovních dnů.
+                  
+                  Chceme, aby jste byli s vaším nákupem zcela spokojeni a snažíme se vrácení co nejvíce zjednodušit. Pokud máte jakékoliv dotazy nebo obavy ohledně naší politiky vrácení, neváhejte kontaktovat náš tým zákaznického servisu.
+                        </p><br>
+            
+      
+        </div>
     </div>
-      </div>
   </section>
 </main>
 <!-- End Best Sellers -->

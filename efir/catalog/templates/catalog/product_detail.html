@@ -1,0 +1,52 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+
+
+<!-- Large Product Detail -->
+<section class="py-2">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 mb-5">
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0" src="{% if product.image %}{{product.image.url}}{% else %} 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg' {% endif %}" alt="..." />
+            </div>
+
+            <div class="col-md-6">
+                <div class="small mb-1"> Kategorie: {{ product.category }} </div>
+                <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
+
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Velikost</option>
+                    <option value="1">A99999</option>
+                    <option value="2">B32398</option>
+                    <option value="3">C2888</option>
+                  </select>
+                
+                
+                
+             
+                <h2>
+                    <a href="{{ product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
+                </h2>
+                <div class="fs-5 mb-2">
+                    
+                    <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
+
+
+                </div>
+                <p class="lead">{{ product.description|linebreaks }}</p>
+                
+                <button type="button" class="btn btn-light btn-lg"><text class="bi-cart-fill me-1"> Do košíku</text></button>
+
+                </div>
+               
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
