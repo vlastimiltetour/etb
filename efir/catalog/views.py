@@ -64,3 +64,9 @@ def about(request):
     categories = Category.objects.all()
 
     return render(request, "catalog/about.html", {"categories": categories})
+
+
+def kosik(request):
+    categories = Category.objects.all()
+
+    return render(request, "catalog/cart.html", {"categories": categories})

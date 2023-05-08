@@ -8,7 +8,7 @@
 
 
 <!-- Intro Photos-->
-<div class="container py-2" style="min-height: 100vh;">
+<div class="container py-2" style="min-height: 70vh;">
 
   <div class="row-cols-3 row align-items-md-stretch">
     <div class="col-md-4 py-2" style="height: 100vh; padding-right: 5px; padding-left: 10px;">
@@ -32,14 +32,13 @@
  <!-- About section-->
  
  <section id="o-nas" class="py-5" id="about">
- 
-  <div class="container px-4 px-lg-5 my-5">
-    
-      <div class="row gx-4 gx-lg-5 align-items-center">
-          
-           
-              <h1 class="display-5 fw-bolder">O nás</h1>
-              <p class="lead" style="text-align: justify;"> Efir The Brand je e-commerce, která se specializuje na luxusní spodní prádlo pro ženy. Naše značka se vyznačuje kvalitními materiály, precizním zpracováním a neokoukanými designy.
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">O nás</h1>
+    </div>
+  <div class="album py-2 bg-white">
+    <div class="container">
+        <p class="lead" style="text-align: center;"> Efir The Brand je e-commerce, která se specializuje na luxusní spodní prádlo pro ženy. Naše značka se vyznačuje kvalitními materiály, precizním zpracováním a neokoukanými designy.
         
                 Naše nejnovější kolekce se zaměřuje na kombinaci černé barvy s detaily ze zlatého materiálu, které dodají každému kousku z naší nabídky nádech elegance a luxusu. Například náš podvazkový pás s motivem orchideje na černé síťce vypadá nejenom nádherně, ale také je velmi pohodlný na nošení.
                 
@@ -77,7 +76,7 @@
           data-holder-rendered="true">
           <div class="card-body d-flex flex-column" style="padding: 1rem;">
             <h5 class="fw-bolder"> {{ bestseller.name }}</h5>
-            <p class="card-text">{{ bestseller.description }}</p>                
+            <p class="card-text">{{ bestseller.short_description }}</p>                
               <b class="fw-bolder"> {{ bestseller.price }} Kč</b>
           </div>
         </div>
@@ -112,7 +111,7 @@
             data-holder-rendered="true">
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>
-              <p class="card-text">{{ product.description }}</p>                
+              <p class="card-text">{{ product.short_description }}</p>                
                 <b class="fw-bolder"> {{ product.price }} Kč</b>
             </div>
           </div>
@@ -129,7 +128,7 @@
     <div class="container">
      
      
-        <a href="{% url 'katalog' %}" class="btn btn-light my-2">Celý katalog</a>
+        <a href="{% url 'katalog' %}" class="btn btn-dark my-2">Katalog</a>
      
     </div>
   </section>
@@ -165,7 +164,7 @@
                         </p><br>
                         <p class="text-center">
       
-                          <a href="#" class="btn btn-light my-2">Main call to action</a>
+                          <a href="#" class="btn btn-dark my-2">Main call to action</a>
                         </p>
             
       

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product
+from .models import Category, Product, ProductSize
 
 
 # Register your models here.
@@ -12,6 +12,26 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name", "slug", "price", "available"]
-    list_editable = ["price", "available"]
+    list_display = [
+        "name",
+        "slug",
+        "price",
+        "available",
+    ]
     prepopulated_fields = {"slug": ("name",)}
+    list_filter = ["bestseller"]
+
+
+admin.site.register(ProductSize)
+
+
+class ProductSizeAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+    ]
+    list_editable = [
+        "name",
+    ]
+    ordering = [
+        "name",
+    ]

@@ -16,37 +16,86 @@
             <div class="col-md-6">
                 <div class="small mb-1"> Kategorie: {{ product.category }} </div>
                 <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
-
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Velikost</option>
-                    <option value="1">A99999</option>
-                    <option value="2">B32398</option>
-                    <option value="3">C2888</option>
-                  </select>
-                
-                
-                
-             
-                <h2>
-                    <a href="{{ product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
-                </h2>
                 <div class="fs-5 mb-2">
                     
                     <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
 
 
                 </div>
-                <p class="lead">{{ product.description|linebreaks }}</p>
-                
-                <button type="button" class="btn btn-light btn-lg"><text class="bi-cart-fill me-1"> Do košíku</text></button>
 
-                </div>
+                <div style="color: #39571B; font-style: italic; border-radius: 0;">
+                    Ušijeme do 2 týdnů!
+                  </div>
+                  
+                <p class="lead">{{ product.short_description|linebreaks }}</p>
+                <p class="lead">{{ product.long_description|linebreaks }}</p>
+
+
+                <!-- select size buttons -->
+              <div class="d-flex mb-3">
+                <select class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" Default select example">
+                    <option selected>Obvod hrudníku</option>
+                    {% for available_sizes in product.product_size.all %}
+                    <option>{{ available_sizes.name }}</option>
+                   {% endfor %}    
+                  </select>
+
+                  <select class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
+                    <option selected>Obvod prsou</option>
+                    {% for available_sizes in product.product_size.all %}
+                    <option>{{ available_sizes.name }}</option>
+                   {% endfor %}    
+                  </select>
+                </div>                         
+                
+                
+                
+                <h2>
+                    <a href="{{ product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
+                </h2>
                
+                
+                
+                
+                <div class="d-flex">
+                    <div class="input-group">
+                      <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
+                        <i class="bi bi-dash"></i>
+                      </button>
+                      <input class="form-control text-center rounded-0" id="inputQuantity" type="num" value="1" style="max-width: 3rem; border-color: black;">
+                      <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
+                        <i class="bi bi-plus"></i>
+                      </button>
+                    </div>
+                </div>
+                <p></p>
+                <div>
+                    <button class="btn btn-outline-dark flex-shrink-0 rounded-0" type="button">
+                      <i class="bi bi-cart-fill me-1"></i>
+                      Do košíku
+                    </button>
+                </div>
                 
             </div>
         </div>
     </div>
 </section>
 
+<script>
+    function decreaseCount() {
+        var input = document.getElementById("inputQuantity");
+        var value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+        }
+    }
+
+    function increaseCount() {
+        var input = document.getElementById("inputQuantity");
+        var value = parseInt(input.value);
+        input.value = value + 1;
+    }
+
+</script>
 
 {% endblock %}
