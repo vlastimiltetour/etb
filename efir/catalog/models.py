@@ -90,20 +90,16 @@ class ObvodPrsa(models.Model):
 
 
 
-def populate_database():
-    existing_instances_prsa = ObvodPrsa.objects.exists()
-    if not existing_instances_prsa:
-        for value in range(18, 26):
-            obvod_prsa = ObvodPrsa(name=str(value))
-            obvod_prsa.save()
+existing_instances_prsa = ObvodPrsa.objects.exists()
+if not existing_instances_prsa:
+    for value in range(18, 26):
+        obvod_prsa = ObvodPrsa(name=str(value))
+        obvod_prsa.save()
 
-    existing_instances_hrudnik = ObvodHrudnik.objects.exists()
-    if not existing_instances_hrudnik:
-        # Save values from 79 to 110
-        for value in range(79, 111):
-            obvod_hrudnik = ObvodHrudnik(name=str(value))
-            obvod_hrudnik.save()
+existing_instances_hrudnik = ObvodHrudnik.objects.exists()
+if not existing_instances_hrudnik:
+    # Save values from 79 to 110
+    for value in range(79, 111):
+        obvod_hrudnik = ObvodHrudnik(name=str(value))
+        obvod_hrudnik.save()
 
-    return 'all good'
-
-populate_database()
