@@ -1,7 +1,7 @@
 {% extends 'catalog/base.html' %}
 {% load static %}
 {% load i18n %}
-
+{% load humanize %}
 {% block content %}
 
 
@@ -18,7 +18,7 @@
                 <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
                 <div class="fs-5 mb-2">
                     
-                    <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
+                    <p class="display-7 fw-bolder">{{ product.price|intcomma }} Kč</p>
 
 
                 </div>
@@ -35,15 +35,15 @@
               <div class="d-flex mb-3">
                 <select class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" Default select example">
                     <option selected>Obvod hrudníku</option>
-                    {% for available_sizes in product.product_size.all %}
-                    <option>{{ available_sizes.name }}</option>
+                    {% for available_sizes_hrudnik in product.obvod_hrudnik.all %}
+                    <option>{{ available_sizes_hrudnik.name }}</option>
                    {% endfor %}    
                   </select>
 
                   <select class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
                     <option selected>Obvod prsou</option>
-                    {% for available_sizes in product.product_size.all %}
-                    <option>{{ available_sizes.name }}</option>
+                    {% for available_sizes_prsa in product.obvod_prsa.all %}
+                    <option>{{ available_sizes_prsa.name }}</option>
                    {% endfor %}    
                   </select>
                 </div>                         

@@ -1,5 +1,6 @@
 {% extends 'catalog/base.html' %}
 {% load static %}
+{% load humanize %}
 {% load i18n %}
 
 {% block content %}
@@ -8,32 +9,27 @@
 
 
 <!-- Intro Photos-->
-<div class="container py-2" style="min-height: 70vh;">
-
-  <div class="row-cols-3 row align-items-md-stretch">
-    <div class="col-md-4 py-2" style="height: 100vh; padding-right: 5px; padding-left: 10px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_1.jpeg'); background-size: cover; background-position: center;">
-      </div>
+<div class="container" style="min-height: 60vh;">
+  <div class="row align-items-md-stretch">
+    <div class="col-md-4 py-2 d-none d-md-block" style="height: 80vh; padding-right: 5px; padding-left: 10px;">
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_1.jpeg'); background-size: cover; background-position: center;"></div>
     </div>
-    <div class="col-md-4 py-2" style="height: 100vh; padding-right: 5px; padding-left: 5px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_2.jpeg'); background-size: cover; background-position: center; max-width: 100%;">
-      </div>
+    <div class="col-md-4 col-sm-12 py-2" style="height: 80vh; padding-right: 5px; padding-left: 5px;">
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_3.jpeg'); background-size: cover; background-position: center top; max-width: 100%;"></div>
     </div>
-    
-    <div class="col-md-4 py-2" style="height: 100vh; padding-right: 10px; padding-left: 5px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_3.jpeg'); background-size: cover; background-position: center;">
-      </div>
-    </div>      
+    <div class="col-md-4 py-2 d-none d-md-block" style="height: 80vh; padding-right: 10px; padding-left: 5px;">
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/intro_column_2.jpeg'); background-size: cover; background-position: center;"></div>
     </div>
   </div>
 </div>
+
 
 
  <!-- About section-->
  
  
 <section id="o-nas" class="jumbotron text-center">
-    <div class="container">
+    <div class="container py-2">
       <h1 class="jumbotron-heading">O nás</h1>
     </div>
   <div class="album py-2 bg-white">
@@ -62,13 +58,13 @@
 <div class="album py-2 bg-white">
   <div class="container">
 
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
       {% for bestseller in best_sellers %}        
       <!-- Single Product -->
 
       <div class="col-md-4 mb-4">
         <a href="{{ bestseller.get_absolute_url }}">
-        <div class="card mb-4 box-shadow h-100">
+        <div class="card mb-4 box-shadow">
           <img class="card-img-top img-fluid" 
           data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
           alt="Thumbnail [100%x225]"
@@ -77,7 +73,7 @@
           <div class="card-body d-flex flex-column" style="padding: 1rem;">
             <h5 class="fw-bolder"> {{ bestseller.name }}</h5>
             <p class="card-text">{{ bestseller.short_description }}</p>                
-              <b class="fw-bolder"> {{ bestseller.price }} Kč</b>
+              <b class="fw-bolder"> {{ bestseller.price|intcomma }} Kč</b>
           </div>
         </div>
         </a>
@@ -96,14 +92,14 @@
   <div class="album py-2 bg-white">
     <div class="container">
 
-      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
         {% for product in products %}        
         <!-- Single Product -->
 
         <div class="col-md-4 mb-4">
           <a href="{{ product.get_absolute_url }}">
 
-          <div class="card mb-4 box-shadow h-100">
+          <div class="card mb-4 box-shadow">
             <img class="card-img-top img-fluid" 
             data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
             alt="Thumbnail [100%x225]"
@@ -112,7 +108,7 @@
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>
               <p class="card-text">{{ product.short_description }}</p>                
-                <b class="fw-bolder"> {{ product.price }} Kč</b>
+                <b class="fw-bolder"> {{ product.price|intcomma }} Kč</b>
             </div>
           </div>
           </a>
@@ -193,24 +189,4 @@
   </section>
 </main>
 <!-- End Best Sellers -->
-
-
-  <!--
-  <header class="masthead">
-    <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
-        <div class="d-flex justify-content-center">
-            <div class="text-center">
-            
-                <h1 class="display-5 fw-bolder">{% trans "🪡 Spodní prádlo na míru" %}</h1>
-                <h2 class="text-white mx-auto mt-2 mb-5">{% trans "Exkluzivní design 🤍" %}</h2>
-                            
-            </div> 
-        </div> 
-    </div>
-</header>
--->
-
-
-
-
 {% endblock %}

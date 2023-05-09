@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product, ProductSize
+from .models import Category, ObvodHrudnik, ObvodPrsa, Product
 
 
 # Register your models here.
@@ -22,14 +22,19 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ["bestseller"]
 
 
-admin.site.register(ProductSize)
-
-
-class ProductSizeAdmin(admin.ModelAdmin):
+@admin.register(ObvodHrudnik)
+class ObvodHrudnikAdmin(admin.ModelAdmin):
     list_display = [
         "name",
     ]
-    list_editable = [
+    ordering = [
+        "name",
+    ]
+
+
+@admin.register(ObvodPrsa)
+class ObvodPrsaAdmin(admin.ModelAdmin):
+    list_display = [
         "name",
     ]
     ordering = [

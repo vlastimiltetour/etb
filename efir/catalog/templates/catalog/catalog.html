@@ -1,5 +1,6 @@
 {% extends 'catalog/base.html' %}
 {% load static %}
+{% load humanize %}
 {% load i18n %}
 
 {% block content %}
@@ -17,7 +18,7 @@
   <div class="album py-2 bg-white">
     <div class="container justify-content-center align-items-center" style="min-height: 60vh;">
       {% if products %}
-      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
 
         
         {% for product in products %} 
@@ -27,7 +28,7 @@
           <a href="{{ product.get_absolute_url }}">
 
 
-          <div class="card mb-4 box-shadow h-100">
+          <div class="card mb-4 box-shadow">
             
             <img class="card-img-top img-fluid" 
             data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
@@ -38,7 +39,7 @@
               <h5 class="fw-bolder"> {{ product.name }}</h5>
             
               <p class="card-text">{{ product.short_description }}</p>                
-                <b class="fw-bolder"> {{ product.price }} Kč</b>
+                <b class="fw-bolder"> {{ product.price|intcomma }} Kč</b>
                 
 
             </div>

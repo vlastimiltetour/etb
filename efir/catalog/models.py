@@ -12,7 +12,8 @@ class Product(models.Model):
     )  # one to many relationship, a product belongs to one category and a category contains multiple products
     # So if you have a Category instance cat, you can access all the related Product instances by calling
     # cat.products.all()
-    product_size = models.ManyToManyField("ProductSize", blank=True)
+    obvod_hrudnik = models.ManyToManyField("ObvodHrudnik", blank=True)
+    obvod_prsa = models.ManyToManyField("ObvodPrsa", blank=True)
 
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, null=False)
@@ -20,7 +21,7 @@ class Product(models.Model):
         upload_to="catalog/%Y/%m/%d", default="/static/assets/img/dummyimage.jpeg"
     )
     price = models.DecimalField(max_digits=10, decimal_places=0)
-    short_description = models.TextField(blank=True)
+    short_description = models.TextField(max_length=50, blank=True)
     long_description = models.TextField(blank=True)
     # Time Specifics
     new = models.BooleanField(default=False)
@@ -72,8 +73,37 @@ class Category(models.Model):
         return reverse("product_list_by_category", args=[self.slug])
 
 
-class ProductSize(models.Model):
+class ObvodHrudnik(models.Model):
     name = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
+
+
+
+class ObvodPrsa(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
+
+
+def populate_database():
+    existing_instances_prsa = ObvodPrsa.objects.exists()
+    if not existing_instances_prsa:
+        for value in range(18, 26):
+            obvod_prsa = ObvodPrsa(name=str(value))
+            obvod_prsa.save()
+
+    existing_instances_hrudnik = ObvodHrudnik.objects.exists()
+    if not existing_instances_hrudnik:
+        # Save values from 79 to 110
+        for value in range(79, 111):
+            obvod_hrudnik = ObvodHrudnik(name=str(value))
+            obvod_hrudnik.save()
+
+    return 'all good'
+
+populate_database()

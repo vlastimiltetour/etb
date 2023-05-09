@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "catalog.apps.CatalogConfig",
     "orders.apps.OrdersConfig",
+    "cart.apps.CartConfig",
+    "django.contrib.humanize",
 ]
 
 MIDDLEWARE = [
@@ -123,6 +125,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+# Maximum size of a file that can be uploaded, added to django settings + settings updated in nginx
+DATA_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
+
+# Maximum size of a request that can be parsed by Django
+# Set it to a value larger than DATA_UPLOAD_MAX_MEMORY_SIZE
+# to allow handling larger files
+FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 
 
 STATIC_URL = "static/"

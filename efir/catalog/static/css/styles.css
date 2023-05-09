@@ -601,7 +601,7 @@ progress {
 .img-fluid {
   object-fit: cover;
   object-position: center;
-  /* height: 100%; this code is damaging the same picture height*/
+  height: 450px;
 }
 
 .img-thumbnail {
@@ -10977,5 +10977,4 @@ textarea.form-control-lg {
     background-attachment: scroll;
     background-size: cover;
   }
-  
 }
