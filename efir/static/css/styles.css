@@ -251,12 +251,6 @@ a {
 }
 a:hover {
   color: var(--bs-link-hover-color);
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 2px solid #000; /* Adjust border properties as needed */
-  box-sizing: border-box;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
