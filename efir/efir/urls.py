@@ -19,9 +19,10 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin", admin.site.urls),
     path("", include("catalog.urls")),
-    path("orders", include("orders.urls")),
+    path("cart/", include("cart.urls")),
+    path("orders/", include("orders.urls")),
 ]
 
 # and is used to serve static files (such as images, CSS files, and JavaScript files) during development.

@@ -1,253 +1,145 @@
 {% extends 'catalog/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load humanize %}
 
 {% block content %}
-<body data-new-gr-c-s-check-loaded="14.1107.0" data-gr-ext-installed="">
 
-    <div class="container py-5">
-  
-      <div class="row">
-        <div class="col-md-4 order-md-2 mb-4">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">Your cart</span>
-            <span class="badge badge-secondary badge-pill">3</span>
-          </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Product name</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$12</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Second product</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$8</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Third item</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$5</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between bg-light">
-              <div class="text-success">
-                <h6 class="my-0">Promo code</h6>
-                <small>EXAMPLECODE</small>
-              </div>
-              <span class="text-success">-$5</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$20</strong>
-            </li>
-          </ul>
 
-          <form class="card p-2">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Promo code">
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Redeem</button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="col-md-8 order-md-1">
-          <h4 class="mb-3">Billing address</h4>
-          <form class="needs-validation" novalidate="">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
-                <div class="invalid-feedback">
-                  Valid first name is required.
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
-                <div class="invalid-feedback">
-                  Valid last name is required.
-                </div>
-              </div>
-            </div>
 
-            <div class="mb-3">
-              <label for="username">Username</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">@</span>
-                </div>
-                <input type="text" class="form-control" id="username" placeholder="Username" required="">
-                <div class="invalid-feedback" style="width: 100%;">
-                  Your username is required.
-                </div>
-              </div>
-            </div>
+<!-- name -->
+<div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
+  <div class="row d-flex justify-content-center">
+    
+      
+          <h4 class="heading">Vaše objednávka</h4>
+      
+      
+  </div>
+  <!-- whole product-->
 
-            <div class="mb-3">
-              <label for="email">Email <span class="text-muted">(Optional)</span></label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
-              <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
-              </div>
-            </div>
+  {% if cart|length > 0%}
 
-            <div class="mb-3">
-              <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
-              <div class="invalid-feedback">
-                Please enter your shipping address.
-              </div>
-            </div>
+  <!-- first row -->
 
-            <div class="mb-3">
-              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-            </div>
 
-            <div class="row">
-              <div class="col-md-5 mb-3">
-                <label for="country">Country</label>
-                <select class="custom-select d-block w-100" id="country" required="">
-                  <option value="">Choose...</option>
-                  <option>United States</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid country.
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label for="state">State</label>
-                <select class="custom-select d-block w-100" id="state" required="">
-                  <option value="">Choose...</option>
-                  <option>California</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please provide a valid state.
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" placeholder="" required="">
-                <div class="invalid-feedback">
-                  Zip code required.
-                </div>
+  <div class="row d-flex py-2 justify-content-center border-top">
+    {% for item in cart %}
+    {% with product=item.product %}
+      <div class="col-2">
+          <div class="row d-flex">
+              <div class="book">
+                  <img src="{{product.image.url}}" class="book-img" height="60px">
               </div>
             </div>
-            <hr class="mb-4">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="same-address">
-              <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="save-info">
-              <label class="custom-control-label" for="save-info">Save this information for next time</label>
-            </div>
-            <hr class="mb-4">
-
-            <h4 class="mb-3">Payment</h4>
-
-            <div class="d-block my-3">
-              <div class="custom-control custom-radio">
-                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="">
-                <label class="custom-control-label" for="credit">Credit card</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="">
-                <label class="custom-control-label" for="debit">Debit card</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
-                <label class="custom-control-label" for="paypal">Paypal</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="cc-name">Name on card</label>
-                <input type="text" class="form-control" id="cc-name" placeholder="" required="">
-                <small class="text-muted">Full name as displayed on card</small>
-                <div class="invalid-feedback">
-                  Name on card is required
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="cc-number">Credit card number</label>
-                <input type="text" class="form-control" id="cc-number" placeholder="" required="">
-                <div class="invalid-feedback">
-                  Credit card number is required
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-3 mb-3">
-                <label for="cc-expiration">Expiration</label>
-                <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
-                <div class="invalid-feedback">
-                  Expiration date required
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="cc-expiration">CVV</label>
-                <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
-                <div class="invalid-feedback">
-                  Security code required
-                </div>
-              </div>
-            </div>
-            <hr class="mb-4">
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-          </form>
-        </div>
       </div>
+      <div class="my-auto py-3 col-10">
+          <div class="row text-right">
+              <div class="col-4">
+                <h6 class="mob-text">{{ product.name}} {{item.quantity}}</h6>
+                <p class="mob-text"> {{ product.obvod_hrudnik}} {{ product.obvod_prsa}}</p>
+                 
 
-      <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">© 2017-2018 Company Name</p>
-        <ul class="list-inline">
-          <li class="list-inline-item"><a href="#">Privacy</a></li>
-          <li class="list-inline-item"><a href="#">Terms</a></li>
-          <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-      </footer>
+              </div>
+              <div class="col-4">
+                <div class="d-flex">
+                  <div class="input-group">
+                    <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <input class="form-control text-center rounded-0" id="inputQuantity" type="num" value="1" style="max-width: 3rem; border-color: black;">
+                    <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+              </div>
+
+              </div>
+              <div class="col-2">    
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                {{ item.update_quantity_form.quantity }}
+                {{ item.update_quantity_form.override }}
+
+
+
+                    <input type="submit" value="Update">
+                    {% csrf_token %}
+                  </form>
+
+                  <h6 class="mob-text"> {{ product.price|intcomma}} Kč</h6>
+
+
+              </div>
+              <div class="col-2" style="text-align: right;">
+                <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                 
+                <button type="submit" class="btn-close" aria-label="Close">
+                  {% csrf_token %}
+                </button>
+                </form>
+              </div>
+          </div>
+      </div>
+      <!-- second row -->
+      <div class="col-5"></div>
+
+       <div class="my-auto col-7">
+
+          <div class="row text-right">
+              
+              <div class="col-4">
+              
+      
+
+               
+
+              </div>
+             
+          </div>
+      </div>
+     
+      {% endwith %}
+      {% endfor %}
+      <div class="row d-flex py-2 justify-content-center border-top">
+        <div class="row text-right" style="text-align: right;">
+          
+            <h6 class="mob-text">Total: {{ cart.get_total_price|intcomma}} Kč </h6>
+          </div>
+      </div>
+  </div>
+  <section class="jumbotron text-center">
+    <div class="container">
+     
+     
+        <a href="{% url 'orders:new_order' %}" type="submit" class="btn btn-dark my-2">Koupit</a>
+     
     </div>
+  </section>
+  {% else %}
+  <img src="{static 'assets/img/empty.jpeg' }" class="book-img" height="60px">
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script><div id="speechify-global-notifications"></div><div id="speechify-summarization-fullscreen-mode" style="position: fixed; inset: 0px; overflow: auto; background: white; z-index: 1999; display: none;"></div><div id="speechify-screenshot-mode" style="position: fixed; top: 0px; right: 0px; width: 100%; min-height: 100%; z-index: 2147483640; display: none;"></div><div id="speechify-shortcuts-prompt" style="position: fixed; bottom: 32px; left: 32px; z-index: 999999999;"></div>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <script src="../../assets/js/vendor/holder.min.js"></script>
-    <script>
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (function() {
-        'use strict';
+  Prozatím zde nic není. Vyberte si z katalogu.
+  {% endif %}
 
-        window.addEventListener('load', function() {
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
-          var forms = document.getElementsByClassName('needs-validation');
-
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-              if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-              form.classList.add('was-validated');
-            }, false);
-          });
-        }, false);
-      })();
-    </script>
   
 
-<div id="^(,rZvUx1683491487730"></div><iframe name="" frameborder="0" id="fnlp-panel-iframe" style="display: none!important; position: fixed!important; top: 0px!important; right: -280px!important; z-index: 1000000000!important; width: 305px!important; height: 100vh!important; margin:0!important; border: 0px!important; outline: 0px!important;"></iframe></body>
 
+</div>
+
+<script>
+  function decreaseCount() {
+      var input = document.getElementById("inputQuantity");
+      var value = parseInt(input.value);
+      if (value > 1) {
+          input.value = value - 1;
+      }
+  }
+
+  function increaseCount() {
+      var input = document.getElementById("inputQuantity");
+      var value = parseInt(input.value);
+      input.value = value + 1;
+  }
+
+</script>
 {% endblock %}

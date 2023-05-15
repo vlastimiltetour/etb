@@ -80,7 +80,6 @@ class ObvodHrudnik(models.Model):
         return self.name
 
 
-
 class ObvodPrsa(models.Model):
     name = models.CharField(max_length=20)
 
@@ -88,8 +87,7 @@ class ObvodPrsa(models.Model):
         return self.name
 
 
-
-
+"""
 existing_instances_prsa = ObvodPrsa.objects.exists()
 if not existing_instances_prsa:
     for value in range(18, 26):
@@ -102,4 +100,4 @@ if not existing_instances_hrudnik:
     for value in range(79, 111):
         obvod_hrudnik = ObvodHrudnik(name=str(value))
         obvod_hrudnik.save()
-
+"""

@@ -13,10 +13,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.core.mail import EmailMessage
 from dotenv import load_dotenv
 
 load_dotenv(".env")
 
+DJANGO_SETTINGS_MODULE = "efir.settings.local"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -31,7 +33,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG")
 
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -40,7 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
+    "django.contrib.sessions",  # anonymous sessions https://docs.djangoproject.com/en/4.1/topics/http/sessions/#module-django.contrib.sessions
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     "cart.apps.CartConfig",
     "django.contrib.humanize",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -73,6 +76,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.cart",
+                "catalog.context_processors.categories",
             ],
         },
     },
@@ -148,3 +153,23 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# This is the key that is going to be used to store the cart in the user session.
+CART_SESSION_ID = "cart"
+
+
+# this is to make Django to write emails to the console
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Setting up email server FORPSI
+# https://support.forpsi.com/kb/a3147/konfigurace-smtp-serveru.aspx
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.forpsi.com"
+EMAIL_HOST_USER = "objednavky@efirthebrand.cz"
+EMAIL_HOST_PASSWORD = ",4d?SAF9A>Ra@f"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "objednavky@efirthebrand.cz"
+EMAIL_ENCRYPTION = "STARTTLS"
+
+ASGI_APPLICATION = "web.asgi.application"

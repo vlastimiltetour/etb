@@ -1,0 +1,149 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+
+{% block content %}
+
+
+
+<!-- Icon -->
+<div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
+  <div class="row d-flex justify-content-center">
+    
+    <div class="container justify-content-center text-center">
+        <a class="navbar-brand" style="margin-top: 10px;" href="{% url 'home' %}">
+            <img src="{% static 'assets/img/logo.png' %}" height="50" alt="">
+          </a>
+    </div>
+    <div class="container">
+    <hr class="my-4">
+    <h4 class="heading">Vaše objednávka #{{ order.id }} </h4>
+
+         
+          <p>
+            {{ order.first_name }},<br>
+            <br>
+            
+            Vaše objednávka #{{order.id}} nám byla doručena. Budeme se ji snažit zpracovat v co nejkratší době.
+            
+            Toto je automaticky generované potvrzení objednávky. Na tento e-mail neodpovídejte. Pokud máte jakékoli dotazy týkající se vaší objednávky, použijte prosím náš kontaktní formulář.
+            
+             </p>
+
+             
+             <div class="container" style="border: 1px solid #b1b1b1; /* Set the border properties */
+             padding: 10px;">
+        
+        <h6 class="mob-text">Detaily:</h6>
+        <p class="mob-text"> {{ order.first_name }} {{ order.last_name }}</p>
+        <p>{{ order.email }}</p>
+        <p> {{ order.comments }}</p>
+
+        <h6 class="mob-text">Doručovací adresa:</h6>
+        <p> {{ order.address }}</p>
+
+        <h6 class="mob-text">Datum objednávky:</h6>
+        <p>{{ order.created}}</p>
+
+            
+            <h6 class="mob-text">Způsob platby:</h6>
+            <p> {{ order.shipping }}</p>
+
+
+            <h6 class="mob-text">Doprava:</h6>
+            <p> {{ order.number }}</p>
+        
+        </table>
+    </div>
+
+<!-- Cart -->
+    <div class="row d-flex py-2 justify-content-center border-top">
+          <div class="col-2">
+              <div class="row d-flex">
+                  <div class="book">
+                      <img src="{{product.image.url}}" class="book-img" height="60px">
+                  </div>
+                </div>
+          </div>
+
+          <!-- Cart -->
+          
+          <div class="row d-flex py-2 justify-content-center border-top">
+            {% for item in order.items.all %}  
+            
+              <div class="col-2">
+                  <div class="row d-flex">
+                      <div class="book">
+                          <img src="{{item.product.image.url}}" class="book-img" height="60px">
+                      </div>
+                    </div>
+              </div>
+              <div class="my-auto py-3 col-10">
+                  <div class="row text-right">
+                      <div class="col-4">
+                        <h6 class="mob-text">{{ item.product.name}} {{item.product.quantity}}</h6>
+                        <p class="mob-text"> {{ item.product.obvod_hrudnik}} {{ item.product.obvod_prsa}}</p>
+                         
+        
+                      </div>
+                      
+                      <div class="col-2">    
+                
+        
+                          <h6 class="mob-text"> {{ item.product.price|intcomma}} Kč</h6>
+        
+        
+                      </div>
+                      
+                  </div>
+              </div>
+          
+    
+             
+             
+             
+              {% endfor %}
+
+              <div class="row d-flex py-2 justify-content-center border-top">
+                <div class="row text-right" style="text-align: right;">
+                  
+                    <h6 class="mob-text">Total: {{ order.get_total_cost|intcomma}} Kč </h6>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- End Cart -->
+              
+          </div>
+          
+    
+      </div>
+      
+  </div>
+  <!-- whole product-->
+
+  
+
+  
+
+  </div>
+</div>
+
+<script>
+  function decreaseCount() {
+      var input = document.getElementById("inputQuantity");
+      var value = parseInt(input.value);
+      if (value > 1) {
+          input.value = value - 1;
+      }
+  }
+
+  function increaseCount() {
+      var input = document.getElementById("inputQuantity");
+      var value = parseInt(input.value);
+      input.value = value + 1;
+  }
+
+</script>
+{% endblock %}

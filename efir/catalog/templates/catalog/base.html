@@ -19,8 +19,12 @@
     <script>
       const csrftoken = Cookies.get('csrftoken');
     </script>
+    
   </head>
+  
+
   <body>
+      <!-- Body -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
       <div class="container">
         <a class="navbar-brand" style="margin-top: 10px;" href="{% url 'home' %}">
@@ -127,6 +131,8 @@
     </div>
     </div>
 
+
+
     <!-- Cart 
     <div class="cart-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -135,6 +141,61 @@
     </div>
   -->
     </header> {% block title %} {% endblock %} {% block content %} {% endblock %}
+          <!-- Floating cart icon -->
+          {% if cart|length > 0 %}
+          <style>
+            .cart-icon {
+              position: fixed;
+              bottom: 500px;
+              right: 20px;
+              width: 80px;
+              height: 80px;
+              background-color: var(--bs-gray-500);
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: #FFFFFF;
+              font-size: 30px;
+              cursor: pointer;
+              transition: transform 0.2s ease-in-out; /* Added transition property */
+              box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Added box-shadow property */
+            }
+            
+            .cart-icon:hover {
+              transform: scale(1.1); /* Increased size by 10% on hover */
+              box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Increased shadow size on hover */
+            }
+            
+            .cart-badge {
+              position: absolute;
+              top: 40px;
+              right: 20px;
+              width: 20px;
+              height: 20px;
+              background-color: #000000;
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 12px;
+              color: #ffffff;
+            }
+          </style>
+          
+          <a href="{% url 'cart:cart_detail' %}">
+            <div class="cart-icon">
+              <i class="bi bi-bag"></i>
+              <div class="cart-badge">{{ cart|length}} </div>
+            </div>
+          </a>
+          {% else %}
+
+          {% endif %}
+
+          
+      <!-- end Floating cart icon -->
+
     <!-- Footer-->
     <section style="background-color: black; color: white;">
       
@@ -222,7 +283,7 @@
                 </a>
               </li>
             </ul>
-            <a href="/admin/" style="color:white">Admin</a>
+            <a href="/admin" style="color:white">Admin</a>
           </div>
         </footer>
       </div>

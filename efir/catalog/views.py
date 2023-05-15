@@ -1,6 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 
+from cart.forms import CartAddProductForm
+from orders.mail_confirmation import *
+
 from .models import Category, Product
 
 # Create your views here.
@@ -12,6 +15,7 @@ def home(request, category_slug=None):
     categories = Category.objects.all()
     products = Product.objects.all()
     best_sellers = Product.objects.filter(bestseller=True)
+
     return render(
         request,
         "catalog/home.html",
@@ -47,10 +51,15 @@ def product_detail(request, id, slug):
         Category.objects.all()
     )  # this is only for the purpose of showing the variable in the menu and footer
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
+    cart_product_form = CartAddProductForm()
     return render(
         request,
         "catalog/product_detail.html",
-        {"product": product, "categories": categories},
+        {
+            "categories": categories,
+            "product": product,
+            "cart_product_form": cart_product_form,
+        },
     )
 
 
@@ -62,5 +71,4 @@ def kontakty(request):
 
 def about(request):
     categories = Category.objects.all()
-
     return render(request, "catalog/about.html", {"categories": categories})

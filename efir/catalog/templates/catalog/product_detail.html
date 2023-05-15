@@ -56,12 +56,14 @@
                
                 
                 
-                
+                <div><form action="{% url 'cart:cart_add' product.id %}" method="post">
                 <div class="d-flex">
                     <div class="input-group">
                       <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
                         <i class="bi bi-dash"></i>
                       </button>
+                      {{ cart_product_form.quantity }}
+
                       <input class="form-control text-center rounded-0" id="inputQuantity" type="num" value="1" style="max-width: 3rem; border-color: black;">
                       <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
                         <i class="bi bi-plus"></i>
@@ -70,10 +72,17 @@
                 </div>
                 <p></p>
                 <div>
-                    <button class="btn btn-outline-dark flex-shrink-0 rounded-0" type="button">
+
+                  
+                    {% csrf_token %}
+                    
+                    
+                    <button class="btn btn-outline-dark flex-shrink-0 rounded-0" type="submit">
                       <i class="bi bi-cart-fill me-1"></i>
                       Do košíku
                     </button>
+                  </form>
+                </div>
                 </div>
                 
             </div>
