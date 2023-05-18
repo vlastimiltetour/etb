@@ -56,7 +56,8 @@
                
                 
                 
-                <div><form action="{% url 'cart:cart_add' product.id %}" method="post">
+                <div>
+                  <form action="{% url 'cart:cart_add' product.id %}" method="post">
                 <div class="d-flex">
                     <div class="input-group">
                       <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">

@@ -1,9 +1,6 @@
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404, render
 
 from cart.cart import Cart
-from cart.forms import CartAddProductForm
-from catalog.models import Product
 
 from .forms import OrderForm
 from .mail_confirmation import *
@@ -26,7 +23,7 @@ def new_order(request):
             # clear the cart
             cart.clear()
             order_id = order.id
-            order_email_confirmation(order_id)
+            customer_order_email_confirmation(order_id)
 
             return render(request, "orders/objednavka_vytvorena.html", {"order": order})
 
@@ -39,6 +36,6 @@ def objednavka_vytvorena(request):
     id = 71
     order = get_object_or_404(Order, id=id)
     # order_email_confirmation(id)
-    order_email_confirmation(id)
-    send_email()
-    return render(request, "orders/objednavka_vytvorena.html", {"order": order})
+    # order_email_confirmation(id)
+
+    return render(request, "orders/customer_email_confirmation.html", {"order": order})
