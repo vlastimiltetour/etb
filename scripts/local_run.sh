@@ -32,6 +32,9 @@ flake8
 echo "$(date) - Running ruff code linter"
 ruff . 
 
+echo "Fixing those errors with Ruff"
+ruff . --fix 
+
 echo "$(date) - Exporting DJANGO_SETTINGS_MODULE to efir.settings.local"
 export DJANGO_SETTINGS_MODULE=efir.settings.local
 

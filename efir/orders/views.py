@@ -33,9 +33,9 @@ def new_order(request):
 
 
 def objednavka_vytvorena(request):
-    id = 71
+    id = 75
     order = get_object_or_404(Order, id=id)
     # order_email_confirmation(id)
     # order_email_confirmation(id)
 
-    return render(request, "orders/customer_email_confirmation.html", {"order": order})
+    return render(request, "orders/objednavka_vytvorena.html", {"order": order})

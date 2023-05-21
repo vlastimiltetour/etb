@@ -14,6 +14,7 @@ class OrderForm(forms.ModelForm):
             "comments",
             "shipping",
             "address",
+            "zpusob_vyroby",
         ]
 
         widgets = {

@@ -47,11 +47,11 @@
         <p>{{ order.created}}</p>
 
             
-            <h6 class="mob-text">Způsob platby:</h6>
-            <p> {{ order.shipping }}</p>
+            <h6 class="mob-text">Způsob dopravy:</h6>
+            <p> {{ order.get_shipping_display }}</p>
 
 
-            <h6 class="mob-text">Doprava:</h6>
+            <h6 class="mob-text">Cislo objednavky:</h6>
             <p> {{ order.number }}</p>
         
         </table>
@@ -82,8 +82,8 @@
               <div class="my-auto py-3 col-10">
                   <div class="row text-right">
                       <div class="col-4">
-                        <h6 class="mob-text">{{ item.product.name}} {{item.product.quantity}}</h6>
-                        <p class="mob-text"> {{ item.product.obvod_hrudnik}} {{ item.product.obvod_prsa}}</p>
+                        <h6 class="mob-text">{{ item.product.name}} {{item.quantity}}</h6>
+                        <p class="mob-text"> {{ item.product.obvod_hrudnik}} {{ item.obvod_prsa}}</p>
                          
         
                       </div>
@@ -91,7 +91,7 @@
                       <div class="col-2">    
                 
         
-                          <h6 class="mob-text"> {{ item.product.price|intcomma}} Kč</h6>
+                          <h6 class="mob-text"> {{ item.get_cost|intcomma}} Kč</h6>
         
         
                       </div>

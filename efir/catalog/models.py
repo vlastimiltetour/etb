@@ -23,6 +23,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0)
     short_description = models.TextField(max_length=50, blank=True)
     long_description = models.TextField(blank=True)
+
     # Time Specifics
     new = models.BooleanField(default=False)
     available = models.BooleanField(default=False)
@@ -74,30 +75,20 @@ class Category(models.Model):
 
 
 class ObvodHrudnik(models.Model):
-    name = models.CharField(max_length=20)
+    konfekcni_velikost = models.CharField(
+        max_length=20, help_text="Dostupné konfekční velikosti"
+    )
+    velikost_na_miru = models.PositiveIntegerField(editable=False, null=True)
 
     def __str__(self):
-        return self.name
+        return self.konfekcni_velikost
 
 
 class ObvodPrsa(models.Model):
-    name = models.CharField(max_length=20)
+    konfekcni_velikost = models.CharField(
+        max_length=20, help_text="Dostupné konfekční velikosti"
+    )
+    velikost_na_miru = models.PositiveIntegerField(editable=False, null=True)
 
     def __str__(self):
-        return self.name
-
-
-"""
-existing_instances_prsa = ObvodPrsa.objects.exists()
-if not existing_instances_prsa:
-    for value in range(18, 26):
-        obvod_prsa = ObvodPrsa(name=str(value))
-        obvod_prsa.save()
-
-existing_instances_hrudnik = ObvodHrudnik.objects.exists()
-if not existing_instances_hrudnik:
-    # Save values from 79 to 110
-    for value in range(79, 111):
-        obvod_hrudnik = ObvodHrudnik(name=str(value))
-        obvod_hrudnik.save()
-"""
+        return self.konfekcni_velikost

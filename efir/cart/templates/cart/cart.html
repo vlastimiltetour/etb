@@ -2,159 +2,142 @@
 {% load static %}
 {% load i18n %}
 {% load humanize %}
-
 {% block content %}
-
-
-
 <!-- name -->
 <div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
   <div class="row d-flex justify-content-center">
-  
-          <h4 class="heading">Objednávka</h4>
-          
+    <h4 class="heading">Objednávka</h4>
   </div>
   <!-- whole product-->
-
   {% if cart|length > 0%}
-
-  
   <!-- loop -->
   <div class="row d-flex py-2 justify-content-center border-top">
     {% for item in cart %}
     {% with product=item.product %}
-
     <!-- first row -->
-      <div class="col-2">
-          <div class="row d-flex">
-              <div class="book">
-                  <img src="{{product.image.url}}" class="book-img" height="60px">
-              </div>
-            </div>
-      </div>
-      <!-- -->
-      <div class="my-auto py-3 col-10 ">
-          <div class="row text-right">
-            <!-- -->
-              <div class="col-4">
-                <h6 class="mob-text">{{ product.name}} </h6>
-                <p class="mob-text"> {{ product.obvod_hrudnik}} {{ product.obvod_prsa}}</p>
-                 
-
-              </div>
-              <!-- -->
-              <div class="col-4">
-                <div class="d-flex">
-                  
-              </div>
-
-              </div>
-              <!-- -->
-              <div class="col-2" style="text-align: right;">
-                <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                 
-                <button type="submit" class="btn-close" aria-label="Close">
-                  {% csrf_token %}
-                </button>
-                </form>
+    <div class="col-2">
+        <div class="row d-flex">
+          <div class="book">
+              <img src="{{product.image.url}}" class="book-img" height="60px">
+          </div>
+        </div>
+    </div>
+    <!-- -->
+    <div class="my-auto py-3 col-10 ">
+        <div class="row text-right">
+          <!-- -->
+          <div class="col-4">
+              <h6 class="mob-text">{{ product.name}} </h6>
+              <p class="mob-text"> {{ obvod_hrudnik_form.size }} {{ obvod_prsa_form.size }}
+              </p>
+          </div>
+          <!-- -->
+          <div class="col-4">
+              <div class="d-flex">
               </div>
           </div>
           <!-- -->
-          <div class="row text-right">
-            <!-- -->
-           
-            <style>
+          <div class="col-2" style="text-align: right;">
+              <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                <button type="submit" class="btn-close" aria-label="Close">
+                {% csrf_token %}
+                </button>
+              </form>
+          </div>
+        </div>
+        <!-- -->
+        <div class="row text-right">
+          <!-- Update Item Quantity -->
+          <style>
               #id_quantity {
-              appearance: none;
-              -webkit-appearance: none;
-              -moz-appearance: none;
-              background-color: transparent;
-              border: none;
-              font-size: 16px;
-              width: 42px; /* Adjust the width as needed */
-              text-align: center;
-              border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
-  }
-            </style>
-
-            <div id="update-quantity-code" class="col-4">
+               appearance: none;
+               -webkit-appearance: none;
+               -moz-appearance: none;
+               background-color: transparent;
+               font-size: 16px;
+               width: 42px; /* Adjust the width as needed */
+               text-align: center;
+               border: 1px solid black; /* Add black square border */
+               }
+          </style>
+          <div id="update-quantity-code mb-0" class="col-8">
               <form id="update-quantity-form" action="{% url 'cart:cart_add' item.product.id %}" method="post">
+                <div class="d-flex">
+                  <div class="input-group">
                 <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
-                  <i class="bi bi-dash"></i>
+                <i class="bi bi-dash"></i>
                 </button>
                 {{ item.update_quantity_form.quantity }}
                 {{ item.update_quantity_form.override }}
                 <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
-                  <i class="bi bi-plus"></i>
+                <i class="bi bi-plus"></i>
                 </button>
                 {% csrf_token %}
+                  </div>
+                  </div>
               </form>
-            </div>
-            <!-- -->
-            <div class="col-2"> 
-              <h6 class="mob-text"> {{ item.total_price|intcomma }} Kč</h6>
-            </div>
           </div>
-      </div>
-     
-     
-      {% endwith %}
-      {% endfor %}
-      <div class="row d-flex py-2 justify-content-center border-top">
-        <div class="row text-right" style="text-align: right;">
           
-            <h6 class="mob-text">Total: {{ cart.get_total_price|intcomma}} Kč </h6>
+          <!-- -->
+          <div class="col-4">
+              <h6 class="mob-text"> {{ item.total_price|intcomma }} Kč</h6>
           </div>
-      </div>
+        </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+    <div class="row d-flex py-2 justify-content-center border-top">
+        <div class="row text-right" style="text-align: right;">
+          <h6 class="mob-text">Total: {{ cart.get_total_price|intcomma}} Kč </h6>
+        </div>
+    </div>
   </div>
   <section class="jumbotron text-center">
     <div class="container">
-     
-     
         <a href="{% url 'orders:new_order' %}" type="submit" class="btn btn-dark my-2">Koupit</a>
-     
     </div>
   </section>
   {% else %}
-
   Prozatím zde nic není. Vyberte si z katalogu.
   {% endif %}
-
-  
-
-
 </div>
 <script>
   // update-quantity-code
-  // Get the quantity input field
+  // 1. Get the quantity input field
   var quantityInput = document.getElementById('id_quantity');
   // Replace 'id_quantity' with the actual ID of your quantity input field
-
-  // Listen for changes in the quantity input field
-  quantityInput.addEventListener('change', function() {
-    // Set the value of the override input field to true
-    document.getElementById('id_override').value = 'True'; // Replace 'id_override' with the actual ID of your override input field
-
-    // Submit the form
-    document.getElementById('update-quantity-form').submit();
+  
+  // 2. Listen for changes in the quantity input field
+    quantityInput.addEventListener('change', function() {
+      // Set the value of the override input field to true
+      document.getElementById('id_override').value = 'True'; // Replace 'id_override' with the actual ID of your override input field
+  
+      // Submit the form
+      document.getElementById('update-quantity-form').submit();
   });
-
-</script>
-
-<script>
+  
+    // 3. increase decrease buttons
   function decreaseCount() {
       var input = document.getElementById("id_quantity");
       var value = parseInt(input.value);
       if (value > 1) {
           input.value = value - 1;
       }
+      document.getElementById('id_override').value = 'True'; // Replace 'id_override' with the actual ID of your override input field
+  
+  // Submit the form
+  document.getElementById('update-quantity-form').submit();
   }
-
+  
   function increaseCount() {
       var input = document.getElementById("id_quantity");
       var value = parseInt(input.value);
       input.value = value + 1;
+      document.getElementById('id_override').value = 'True'; // Replace 'id_override' with the actual ID of your override input field
+  
+  // Submit the form
+  document.getElementById('update-quantity-form').submit();
   }
-
+  
 </script>
 {% endblock %}
