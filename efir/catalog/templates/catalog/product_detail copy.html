@@ -4,34 +4,6 @@
 {% load humanize %}
 {% block content %}
 <!-- Large Product Detail -->
-<style>
-   #id_quantity {
-   appearance: none;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   background-color: transparent;
-   font-size: 16px;
-   width: 42px; /* Adjust the width as needed */
-   text-align: center;
-   border: 1px solid black; /* Add black square border */
-   }
-
-   
-   #id_obvod_hrudnik, #id_obvod_prsa {
-   appearance: none;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   background-color: transparent;
-   font-size: 16px;
-   height: 38px;
-
-   width: 121px; /* Adjust the width as needed */
-   text-align: center;
-   border: 1px solid black; /* Add black square border */
-   }
-</style>
-
-
 <section class="py-2">
    <div class="container px-4 px-lg-5 my-5">
       <div class="row gx-4 gx-lg-5 mb-5">
@@ -54,47 +26,49 @@
 
 
             <!-- select size buttons -->
-            <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
-
             <div id="zpusob_vyroby" class="row mb-3">
                <label for="zpusob_vyroby"><b>Typ</b></label>
                <div class="col">
-                  {{ cart_product_form.zpusob_vyroby }}
-
                   <select id="zpusob_vyroby_selected" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
                  
+                  
                   </select>       
                </div>
              </div>    
+            <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
              <div class="d-flex mb-3">
 
-               <label for="obvod_prsa">Obvod prsa:</label>
-               {{ cart_product_form.obvod_prsa }}
-
-              <!-- <select id="obvod_prsa" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                 
-               </select>-->
-              
-               <!-- Obvod hrudnik field -->
-               <label for="obvod_hrudnik">Obvod hrudník:</label>
-               {{ cart_product_form.obvod_hrudnik }}
-
-               <!-- <select id="obvod_hrudnik_selection" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                   <option selected>Obvod hrudníku</option> 
-                {{ cart_product_form.obvod_hrudnik }}
+               <select id="obvod_hrudnik_selection" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
+                  <option selected>Obvod hrudníku</option>
+                  {% for value in cart_product_form.obvod_hrudnik %}
+                      {{ value }}
+                  {% endfor %}
               </select>
                <select id="obvod_prsa_selection" class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                  <option selected>Obvod prsa</option> 
-                  {{ cart_product_form.obvod_prsa }}
-                             
-               </select> -->
+                  <option selected>Obvod prsa</option>
+                  {% for value in cart_product_form.obvod_prsa %}
+                     {{ value }}
+                  {% endfor %}
+                
+               </select>
             </div>
   
        
             <h2>
                <a href="{{ product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
             </h2>
-        
+            <style>
+               #id_quantity {
+               appearance: none;
+               -webkit-appearance: none;
+               -moz-appearance: none;
+               background-color: transparent;
+               font-size: 16px;
+               width: 42px; /* Adjust the width as needed */
+               text-align: center;
+               border: 1px solid black; /* Add black square border */
+               }
+            </style>
             <div>
               
                   <div class="d-flex">
@@ -103,8 +77,8 @@
                         <i class="bi bi-dash"></i>
                         </button>
                         <!-- this jinja snippet has id_quantity id-->
-{{ cart_product_form.quantity}}
-{{ cart_product_form.override}}
+                        {{ cart_product_form.quantity }}
+                     
                         <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
                         <i class="bi bi-plus"></i>
                         </button>
@@ -150,7 +124,7 @@
      var value = parseInt(input.value);
      input.value = value + 1;
    };
-
+  
 </script>
 {% endblock %}
 

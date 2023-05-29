@@ -4,7 +4,7 @@ from django.urls import reverse  # this is when calling an address by name
 
 # Create your models here.
 class Product(models.Model):
-    # Product specifics
+    # Product specaifics
     category = models.ForeignKey(
         "Category",
         related_name="products",
@@ -12,8 +12,6 @@ class Product(models.Model):
     )  # one to many relationship, a product belongs to one category and a category contains multiple products
     # So if you have a Category instance cat, you can access all the related Product instances by calling
     # cat.products.all()
-    obvod_hrudnik = models.ManyToManyField("ObvodHrudnik", blank=True)
-    obvod_prsa = models.ManyToManyField("ObvodPrsa", blank=True)
 
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, null=False)
@@ -23,6 +21,11 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0)
     short_description = models.TextField(max_length=50, blank=True)
     long_description = models.TextField(blank=True)
+
+    zpusob_vyroby_options = (("K", "Konfekční velikost"), ("N", "Na míru"))
+    zpusob_vyroby = models.CharField(
+        max_length=100, choices=zpusob_vyroby_options, null=True
+    )
 
     # Time Specifics
     new = models.BooleanField(default=False)

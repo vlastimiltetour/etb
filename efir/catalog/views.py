@@ -1,10 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 
 from cart.forms import CartAddProductForm
-from orders.forms import OrderForm
 from orders.mail_confirmation import *
 
-from .forms import KonfekcniVelikostObdovHrudnik, KonfekcniVelikostObdovPrsa
 from .models import Category, Product
 
 # Create your views here.
@@ -53,9 +51,6 @@ def product_detail(request, id, slug):
     )  # this is only for the purpose of showing the variable in the menu and footer
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
-    obvod_prsa_form = KonfekcniVelikostObdovPrsa()
-    obvod_hrudnik_form = KonfekcniVelikostObdovHrudnik()
-    order_form = OrderForm()
     return render(
         request,
         "catalog/product_detail.html",
@@ -63,9 +58,6 @@ def product_detail(request, id, slug):
             "categories": categories,
             "product": product,
             "cart_product_form": cart_product_form,
-            "obvod_prsa_form": obvod_prsa_form,
-            "obvod_hrudnik_form": obvod_hrudnik_form,
-            "order_form": order_form,
         },
     )
 

@@ -16,11 +16,6 @@ class Order(models.Model):
     shipping = models.CharField(max_length=100, choices=shipping_type)
     address = models.CharField(max_length=250)
 
-    zpusob_vyroby_options = (("K", "Konfekční velikost"), ("N", "Na míru"))
-    zpusob_vyroby = models.CharField(
-        max_length=100, choices=zpusob_vyroby_options, null=True
-    )
-
     class Meta:
         ordering = ["-created"]
         indexes = [
@@ -41,7 +36,6 @@ class OrderItem(models.Model):
     )
     price = models.DecimalField(decimal_places=2, max_digits=10)
     quantity = models.PositiveIntegerField(default=1)
-    
 
     def __str__(self):
         return str(self.id)

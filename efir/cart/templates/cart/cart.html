@@ -28,8 +28,13 @@
           <!-- -->
           <div class="col-4">
               <h6 class="mob-text">{{ product.name}} </h6>
-              <p class="mob-text"> {{ obvod_hrudnik_form.size }} {{ obvod_prsa_form.size }}
+              <p class="mob-text"> {{ item.zpusob_vyroby }}
               </p>
+              <p class="mob-text"> Obvod prsa: {{ item.obvod_prsa }}
+              </p>
+              <p class="mob-text"> Obvod hrudníku: {{ item.obvod_hrudnik }}
+              </p>
+
           </div>
           <!-- -->
           <div class="col-4">
@@ -50,6 +55,16 @@
           <!-- Update Item Quantity -->
           <style>
               #id_quantity {
+               appearance: none;
+               -webkit-appearance: none;
+               -moz-appearance: none;
+               background-color: transparent;
+               font-size: 16px;
+               width: 42px; /* Adjust the width as needed */
+               text-align: center;
+               border: 1px solid black; /* Add black square border */
+               }
+               #id_obvod_hrudnik {
                appearance: none;
                -webkit-appearance: none;
                -moz-appearance: none;
