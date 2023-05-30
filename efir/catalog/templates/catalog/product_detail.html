@@ -59,35 +59,31 @@
             <div id="zpusob_vyroby" class="row mb-3">
                <label for="zpusob_vyroby"><b>Typ</b></label>
                <div class="col">
-                  {{ cart_product_form.zpusob_vyroby }}
 
-                  <select id="zpusob_vyroby_selected" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                 
-                  </select>       
+                  <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black;" aria-label="Default select example">
+                     <option selected>---------</option> 
+
+                     {% for zv in cart_product_form.zpusob_vyroby %}
+                     {{ zv }}
+                     {% endfor %}
+                  </select>   
+    
                </div>
              </div>    
-             <div class="d-flex mb-3">
-
-               <label for="obvod_prsa">Obvod prsa:</label>
-               {{ cart_product_form.obvod_prsa }}
-
-              <!-- <select id="obvod_prsa" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                 
-               </select>-->
-              
+             <div class="d-flex mb-3">              
                <!-- Obvod hrudnik field -->
-               <label for="obvod_hrudnik">Obvod hrudník:</label>
-               {{ cart_product_form.obvod_hrudnik }}
 
-               <!-- <select id="obvod_hrudnik_selection" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
+                <select id="obvod_hrudnik_selection" name="obvod_hrudnik" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
                    <option selected>Obvod hrudníku</option> 
-                {{ cart_product_form.obvod_hrudnik }}
-              </select>
-               <select id="obvod_prsa_selection" class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
+                   {% for obvod_hrudnik in cart_product_form.obvod_hrudnik %}
+                   {{ obvod_hrudnik }}
+                   {% endfor %}              </select>
+               <select id="obvod_prsa_selection" name="obvod_prsa" class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
                   <option selected>Obvod prsa</option> 
-                  {{ cart_product_form.obvod_prsa }}
-                             
-               </select> -->
+                  {% for obvod_prsa in cart_product_form.obvod_prsa %}
+                  {{ obvod_prsa }}
+                  {% endfor %}                             
+               </select>
             </div>
   
        
