@@ -79,12 +79,12 @@
               <form id="update-quantity-form" action="{% url 'cart:cart_add' item.product.id %}" method="post">
                 <div class="d-flex">
                   <div class="input-group">
-                <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
+                <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount()">
                 <i class="bi bi-dash"></i>
                 </button>
                 {{ item.update_quantity_form.quantity }}
                 {{ item.update_quantity_form.override }}
-                <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
+                <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="increaseCount()">
                 <i class="bi bi-plus"></i>
                 </button>
                 {% csrf_token %}

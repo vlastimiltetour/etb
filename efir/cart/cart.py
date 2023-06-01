@@ -37,9 +37,9 @@ class Cart:
         self,
         product,
         quantity=1,
-        obvod_prsa=1,
-        obvod_hrudnik=1,
-        zpusob_vyroby=1,  # might be renamed to konfekcni
+        obvod_prsa=0,
+        obvod_hrudnik=0,
+        zpusob_vyroby=None,  # might be renamed to konfekcni
         override_quantity=False,
     ):
         product_id = str(product.id)

@@ -41,11 +41,14 @@ def cart_detail(request):
         item["update_quantity_form"] = CartAddProductForm(
             initial={
                 "quantity": item["quantity"],
+                "obvod_prsa": item["obvod_prsa"],
+                "obvod_hrudnik": item["obvod_hrudnik"],
+                "zpusob_vyroby": item["zpusob_vyroby"],
                 "override": True,
             }
         )
-        item["obvod_prsa"] = item["obvod_prsa"]
-        item["obvod_hrudnik"] = item["obvod_hrudnik"]
-        item["zpusob_vyroby"] = item["zpusob_vyroby"]
+        # item["obvod_prsa"] = item["obvod_prsa"]
+        # item["obvod_hrudnik"] = item["obvod_hrudnik"]
+        # item["zpusob_vyroby"] = item["zpusob_vyroby"]
 
     return render(request, "cart/cart.html", {"cart": cart})
