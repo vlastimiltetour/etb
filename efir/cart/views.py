@@ -18,10 +18,10 @@ def cart_add(request, product_id):
         cart.add(
             product=product,
             quantity=cd["quantity"],
-            override_quantity=cd["override"],
             obvod_hrudnik=cd["obvod_hrudnik"],
             obvod_prsa=cd["obvod_prsa"],
             zpusob_vyroby=cd["zpusob_vyroby"],
+            override=cd["override"],
         )
 
     return redirect("cart:cart_detail")
@@ -42,13 +42,10 @@ def cart_detail(request):
             initial={
                 "quantity": item["quantity"],
                 "obvod_prsa": item["obvod_prsa"],
-                "obvod_hrudnik": item["obvod_hrudnik"],
+                "obvod_hrudnik": item["obvod_hrudnik"], #translates from cart_product_form to cart detail specifically with {{ item.update_quantity_form }}
                 "zpusob_vyroby": item["zpusob_vyroby"],
                 "override": True,
             }
         )
-        # item["obvod_prsa"] = item["obvod_prsa"]
-        # item["obvod_hrudnik"] = item["obvod_hrudnik"]
-        # item["zpusob_vyroby"] = item["zpusob_vyroby"]
 
     return render(request, "cart/cart.html", {"cart": cart})

@@ -18,6 +18,9 @@ class Product(models.Model):
     image = models.ImageField(
         upload_to="catalog/%Y/%m/%d", default="/static/assets/img/dummyimage.jpeg"
     )
+    miniature = models.FileField(
+        upload_to="catalog/%Y/%m/%d")
+
     price = models.DecimalField(max_digits=10, decimal_places=0)
     short_description = models.TextField(max_length=50, blank=True)
     long_description = models.TextField(blank=True)
@@ -26,6 +29,7 @@ class Product(models.Model):
     zpusob_vyroby = models.CharField(
         max_length=100, choices=zpusob_vyroby_options, null=True
     )
+    
 
     # Time Specifics
     new = models.BooleanField(default=False)
@@ -95,3 +99,10 @@ class ObvodPrsa(models.Model):
 
     def __str__(self):
         return self.konfekcni_velikost
+
+
+'''class Miniature(models.Model):
+    miniature_image = models.ImageField(upload_to="catalog/%Y/%m/%d", default="/static/assets/img/dummyimage.jpeg")
+
+    def __str__(self):
+        return self.miniature_image'''

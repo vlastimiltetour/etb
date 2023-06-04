@@ -37,10 +37,10 @@ class Cart:
         self,
         product,
         quantity=1,
-        obvod_prsa=0,
-        obvod_hrudnik=0,
+        obvod_prsa=None,
+        obvod_hrudnik=None,
         zpusob_vyroby=None,  # might be renamed to konfekcni
-        override_quantity=False,
+        override=False,
     ):
         product_id = str(product.id)
 
@@ -53,8 +53,12 @@ class Cart:
                 "zpusob_vyroby": str(zpusob_vyroby),
             }
 
-        if override_quantity:
+        if override:
             self.cart[product_id]["quantity"] = quantity
+            self.cart[product_id]["obvod_prsa"] = obvod_prsa
+            self.cart[product_id]["obvod_hrudnik"] = obvod_hrudnik
+            self.cart[product_id]["zpusob_vyroby"] = str(zpusob_vyroby)
+
         else:
             self.cart[product_id]["quantity"] += quantity
 

@@ -14,15 +14,20 @@ class CartAddProductForm(forms.Form):
     quantity = forms.TypedChoiceField(
         label="quantity", choices=PRODUCT_QUANTITY_CHOICES, coerce=int
     )
-    override = forms.BooleanField(
-        required=False, initial=False, widget=forms.HiddenInput
-    )
+
     obvod_prsa = forms.TypedChoiceField(
-        label="obvod_prsa", choices=KONFEKCNI_OBVOD_PRSA, coerce=int
+        label="obvod_prsa",
+        choices=KONFEKCNI_OBVOD_PRSA,
+        coerce=int,
     )
     obvod_hrudnik = forms.TypedChoiceField(
-        label="obvod_hrudnik", choices=KONFEKCNI_OBVOD_HRUDNIK, coerce=int
+        label="obvod_hrudnik",
+        choices=KONFEKCNI_OBVOD_HRUDNIK,
+        coerce=int,
     )
     zpusob_vyroby = forms.ChoiceField(
         label="zpusob_vyroby", choices=ZPUSOB_VYROBY_CHOICES
+    )
+    override = forms.BooleanField(
+        required=False, initial=False, widget=forms.HiddenInput
     )

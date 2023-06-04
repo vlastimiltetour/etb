@@ -142,7 +142,8 @@
   -->
     </header> {% block title %} {% endblock %} {% block content %} {% endblock %}
           <!-- Floating cart icon -->
-          {% if cart|length > 0 %}
+          
+          {% if cart|length > 0 and request.resolver_match.view_name != 'cart:cart_detail' and request.resolver_match.view_name != 'orders:new_order' %} <!-- this code hides cart icon on the cart detail-->
           <style>
             .cart-icon {
               position: fixed;
