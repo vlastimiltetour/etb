@@ -5,13 +5,11 @@
 {% block content %}
 <!-- Large Product Detail -->
 <style>
-   
    .miniature {
-     width: 100px;
-     height: auto;
-     margin-right: 10px;
+   width: 100px;
+   height: auto;
+   margin-right: 10px;
    }
-
    #id_quantity {
    appearance: none;
    -webkit-appearance: none;
@@ -22,8 +20,6 @@
    text-align: center;
    border: 1px solid black; /* Add black square border */
    }
-
-   
    #id_obvod_hrudnik, #id_obvod_prsa {
    appearance: none;
    -webkit-appearance: none;
@@ -31,12 +27,10 @@
    background-color: transparent;
    font-size: 16px;
    height: 38px;
-
    width: 121px; /* Adjust the width as needed */
    text-align: center;
    border: 1px solid black; /* Add black square border */
    }
-
    .maximized {
    width: 300px;
    height: 450px;
@@ -46,36 +40,110 @@
    right: 0;
    bottom: 0;
    z-index: 9999;
+   }
+
+   .slider {
+      position: relative;
+   }
+
+   .slick-prev {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0; /* Hide the arrows initially */
+      transition: opacity 0.3s ease-in-out; /* Add a smooth transition */
+   }
+   .slick-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0; /* Hide the arrows initially */
+      transition: opacity 0.3s ease-in-out; /* Add a smooth transition */
 }
 
+.slider:hover .slick-prev,
+.slider:hover .slick-next {
+    opacity: 1; /* Show the arrows on hover */
+}
+
+   .slick-prev {
+      left: 10px;
+   }
+
+   .slick-next {
+      right: 10px;
+   }
+
 </style>
-
-
 <section class="py-2">
    <div class="container px-4 px-lg-5 my-5">
-      <div class="row gx-4 gx-lg-5 mb-5">
-         <div class="col-md-6">
-            <img class="card-img-top mb-5 mb-md-0" src="{% if product.image %}{{product.image.url}}{% else %} 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg' {% endif %}" alt="..." />
-            <div class="row mt-1">
-               <div class="col" style="width: 100px;" >
-                  <img class="miniature" src="{{ product.miniature.url }}" alt="Miniature 1" onclick="maximizeImage(this)"/>
-               </div>
-               <div class="col" style="width: 100px;" >
-                  <img class="miniature" src="{{ product.miniature.url }}" alt="Miniature 2" />
-               </div>
-               <div class="col" style="width: 100px;" >
-                  <img class="miniature" src="{{ product.miniature.url }}" alt="Miniature 3" />
-               </div>
-               <div class="col" style="width: 100px;" >
-                  <img class="miniature" src="{{ product.miniature.url }}" alt="Miniature 4" />
-               </div>
+   <div class="row gx-4 gx-lg-5 mb-5">
+      <div class="col-md-6">
+         <div class="slider">
+            <div class="slide">
+               <img class="card-img-top mb-5 mb-md-0" src="{{product.image1.url}}" alt="..." />
             </div>
+            <div class="slide">
+               <img class="card-img-top mb-5 mb-md-0" src="{{product.image2.url}}" alt="..." />
+            </div>
+            <div class="slide">
+               <img class="card-img-top mb-5 mb-md-0" src="{{product.image3.url}}" alt="..." />
+            </div>
+            <div class="slide">
+               <img class="card-img-top mb-5 mb-md-0" src="{{product.image4.url}}" alt="..." />
+            </div>
+            
          </div>
-         <div class="col-md-6">
          
-         <div class="row mt-3">
+
+               <!-- Miniatures -->
+            <div class="row mt-3">
                
+                     <div class="col" style="width: 100px;" >
+                        <img class="miniature" src="{{ product.image1.url }}" alt="Miniature 1" />
+                     </div>
+                     <div class="col" style="width: 100px;" >
+                        <img class="miniature" src="{{ product.image2.url }}" alt="Miniature 2" />
+                     </div>
+                     <div class="col" style="width: 100px;" >
+                        <img class="miniature" src="{{ product.image3.url }}" alt="Miniature 3" />
+                     </div>
+                     <div class="col" style="width: 100px;" >
+                        <img class="miniature" src="{{ product.image4.url }}" alt="Miniature 4" />
+                     </div>
             </div>
+            
+               <!--End of Miniatures -->
+
+      </div>
+
+
+
+        
+            
+      <div class="col-md-6">
+         <div class="row mt-3">
             <div class="small mb-1"> Kategorie: {{ product.category }} </div>
             <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
             <div class="fs-5 mb-2">
@@ -85,57 +153,47 @@
                Ušijeme do 2 týdnů!
             </div>
             <p class="lead">{{ product.short_description|linebreaks }}</p>
-            <p class="lead">{{ product.long_description|linebreaks }}</p>
-
-
+          
             <!-- select size buttons -->
             <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
-
-            <div id="zpusob_vyroby" class="row mb-3">
-               <label for="zpusob_vyroby"><b>Typ</b></label>
-               <div class="col">
-
-                  <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black;" aria-label="Default select example">
-                     <option selected>---------</option> 
-
-                     {% for zv in cart_product_form.zpusob_vyroby %}
-                     {{ zv }}
-                     {% endfor %}
-                  </select>   
-    
+               <div id="zpusob_vyroby" class="row mb-3">
+                  <label for="zpusob_vyroby"><b>Typ</b></label>
+                  <div class="col">
+                     <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black;" aria-label="Default select example">
+                        <option selected>---------</option>
+                        {% for zv in cart_product_form.zpusob_vyroby %}
+                        {{ zv }}
+                        {% endfor %}
+                     </select>
+                  </div>
                </div>
-             </div>    
-             <div class="d-flex mb-3">              
-               <!-- Obvod hrudnik field -->
-
-                <select id="obvod_hrudnik_selection" name="obvod_hrudnik" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                   <option selected>Obvod hrudníku</option> 
-                   {% for obvod_hrudnik in cart_product_form.obvod_hrudnik %}
-                   {{ obvod_hrudnik }}
-                   {% endfor %}              </select>
-               <select id="obvod_prsa_selection" name="obvod_prsa" class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                  <option selected>Obvod prsa</option> 
-                  {% for obvod_prsa in cart_product_form.obvod_prsa %}
-                  {{ obvod_prsa }}
-                  {% endfor %}                             
-               </select>
-            </div>
-  
-       
-            <h2>
-               <a href="{{ product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
-            </h2>
-        
-            <div>
-              
+               <div class="d-flex mb-3">
+                  <!-- Obvod hrudnik field -->
+                  <select id="obvod_hrudnik_selection" name="obvod_hrudnik" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
+                     <option selected>Obvod hrudníku</option>
+                     {% for obvod_hrudnik in cart_product_form.obvod_hrudnik %}
+                     {{ obvod_hrudnik }}
+                     {% endfor %}              
+                  </select>
+                  <select id="obvod_prsa_selection" name="obvod_prsa" class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
+                     <option selected>Obvod prsa</option>
+                     {% for obvod_prsa in cart_product_form.obvod_prsa %}
+                     {{ obvod_prsa }}
+                     {% endfor %}                             
+                  </select>
+               </div>
+               <h2>
+                  <a href="{{ product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
+               </h2>
+               <div>
                   <div class="d-flex">
                      <div class="input-group">
                         <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
                         <i class="bi bi-dash"></i>
                         </button>
                         <!-- this jinja snippet has id_quantity id-->
-{{ cart_product_form.quantity}}
-{{ cart_product_form.override}}
+                        {{ cart_product_form.quantity}}
+                        {{ cart_product_form.override}}
                         <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
                         <i class="bi bi-plus"></i>
                         </button>
@@ -143,16 +201,16 @@
                   </div>
                   <p></p>
                   <div>
-                  
                      <button class="btn btn-outline-dark flex-shrink-0 rounded-0" type="submit">
                      <i class="bi bi-cart-fill me-1"></i>
                      Do košíku
                      </button>
                      {% csrf_token %}        
-
-                  </form>
-               </div>
-       
+            </form>
+            </div>
+            <div>
+               <p class="lead">{{ product.long_description|linebreaks }}</p>
+            </div>
             </div>
          </div>
       </div>
@@ -182,32 +240,33 @@
      input.value = value + 1;
    };
 
-   function maximizeImage(image) {
-   image.classList.toggle('maximized');
-}
-
-
+   
+   $(document).ready(function() {
+   $('.slider').slick({
+      // Slick Carousel options and settings here
+      prevArrow: '<button type="button" class="slick-prev"><i class="bi bi-arrow-left"></i></button>',
+      nextArrow: '<button type="button" class="slick-next"><i class="bi bi-arrow-right"></i></button>'
+   });
+});
+   
 </script>
 {% endblock %}
-
-
-
 <!-- // Get the select elements
-  const obvodHrudnikSelect = document.getElementById('obvod_hrudnik_selection');
-  const obvodPrsouSelect = document.getElementById('obvod_prsa_selection');
-
-  // Function to handle form submission
-  function submitForm() {
-    const obvodHrudnikValue = obvodHrudnikSelect.value;
-    const obvodPrsouValue = obvodPrsouSelect.value;
-
-    // Perform any necessary operations with the selected values before submitting the form
-
-    // Submit the form
-    document.getElementById('add-to-cart-form').submit();
-  }
-
-  // Listen for changes in the select elements
-  obvodHrudnikSelect.addEventListener('change', submitForm);
-  obvodPrsouSelect.addEventListener('change', submitForm);
-</script>-->
+   const obvodHrudnikSelect = document.getElementById('obvod_hrudnik_selection');
+   const obvodPrsouSelect = document.getElementById('obvod_prsa_selection');
+   
+   // Function to handle form submission
+   function submitForm() {
+     const obvodHrudnikValue = obvodHrudnikSelect.value;
+     const obvodPrsouValue = obvodPrsouSelect.value;
+   
+     // Perform any necessary operations with the selected values before submitting the form
+   
+     // Submit the form
+     document.getElementById('add-to-cart-form').submit();
+   }
+   
+   // Listen for changes in the select elements
+   obvodHrudnikSelect.addEventListener('change', submitForm);
+   obvodPrsouSelect.addEventListener('change', submitForm);
+   </script>-->

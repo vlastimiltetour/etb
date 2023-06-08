@@ -42,7 +42,9 @@ def cart_detail(request):
             initial={
                 "quantity": item["quantity"],
                 "obvod_prsa": item["obvod_prsa"],
-                "obvod_hrudnik": item["obvod_hrudnik"], #translates from cart_product_form to cart detail specifically with {{ item.update_quantity_form }}
+                "obvod_hrudnik": item[
+                    "obvod_hrudnik"
+                ],  # translates from cart_product_form to cart detail specifically with {{ item.update_quantity_form }}
                 "zpusob_vyroby": item["zpusob_vyroby"],
                 "override": True,
             }

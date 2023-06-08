@@ -15,6 +15,7 @@ distlib==0.3.6
 distro==1.8.0
 Django==4.2
 django-crispy-forms==2.0
+django-debug-toolbar==4.1.0
 django-dotenv==1.4.2
 django-environ==0.10.0
 django-smtp-ssl==1.0
@@ -45,7 +46,10 @@ paramiko==3.1.0
 pathspec==0.11.1
 pbr==5.11.1
 Pillow==9.5.0
+pip-check==2.8.1
+pipdeptree==2.7.1
 pipenv==2023.4.29
+pipreqs==0.4.13
 platformdirs==3.2.0
 ply==3.11
 psycopg2==2.9.6
@@ -71,6 +75,7 @@ six==1.16.0
 smmap==5.0.0
 sqlparse==0.4.4
 stevedore==5.1.0
+terminaltables==3.1.10
 texttable==1.6.7
 tomli==2.0.1
 up==0.2.1
@@ -80,3 +85,4 @@ virtualenv==20.23.0
 virtualenv-clone==0.5.7
 websocket-client==0.59.0
 Werkzeug==2.3.3
+yarg==0.1.9

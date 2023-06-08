@@ -2,7 +2,21 @@
 {% load static %}
 {% load i18n %}
 {% load humanize %}
+
 {% block content %}
+<style>
+   #id_quantity, #id_obvod_hrudnik, #id_obvod_prsa {
+   appearance: none;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   background-color: transparent;
+   font-size: 16px;
+   width: 42px; /* Adjust the width as needed */
+   text-align: center;
+   border: 1px solid black; /* Add black square border */
+   }
+</style>
+
 <div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
    <div class="row d-flex justify-content-center">
       <h4 class="heading">Objednávka</h4>
@@ -14,71 +28,74 @@
       <div class="col-2">
          <div class="row d-flex">
             <div class="book">
-               <img src="{{ product.image.url }}" class="book-img" height="60px">
+               <img src="{{ product.image1.url }}" class="book-img" height="80px">
             </div>
          </div>
       </div>
       <div class="my-auto py-3 col-10">
          <div class="row text-right">
-            <div class="col-4">
+            <div class="col-6">
                <h6 class="mob-text">{{ product.name }}</h6>
-               <p class="mob-text" id="zpusob_vyroby">  </p>
-               <p class="mob-text" id="obvod_prsa"> Obvod prsa:                         {{ item.update_quantity_form.obvod_prsa }}
-              </p>
-               <p class="mob-text" id="obvod_hrudnik"> Obvod hrudníku:                         {{ item.update_quantity_form.obvod_hrudnik }}
-              </p>
             </div>
-            <div class="col-4">
-               <div class="d-flex"></div>
-            </div>
-            <div class="col-2" style="text-align: right;">
-               <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn-close" aria-label="Close"></button>
-               </form>
+            <div class="col-6">
+               <!-- Cart Remove Function--> 
+               <div class="col-2" style="text-align: right;">
+                  <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                     {% csrf_token %}
+                     <button type="submit" class="btn-close" aria-label="Close"></button>
+                  </form>
+               </div>
             </div>
          </div>
-         <div class="row text-right">
-            <style>
-               #id_quantity, #id_obvod_hrudnik {
-               appearance: none;
-               -webkit-appearance: none;
-               -moz-appearance: none;
-               background-color: transparent;
-               font-size: 16px;
-               width: 42px; /* Adjust the width as needed */
-               text-align: center;
-               border: 1px solid black; /* Add black square border */
-               }
-            </style>
-            <div id="update-quantity-code mb-0" class="col-8">
-               <form id="update-quantity-form" action="{% url 'cart:cart_add' item.product.id %}" method="post">
+         <form id="update-quantity-form" action="{% url 'cart:cart_add' item.product.id %}" method="post">
+            {% csrf_token %}
+            <div class="mob-text">
+               <div class="row">
+                  <div class="col-6">
+                     <p id="zpusob_vyroby">Zpusob</p>
+                  </div>
+                  <div class="col-6">
+                     {{ item.update_quantity_form.zpusob_vyroby }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_prsa">Obvod prsa:</p>
+                  </div>
+                  <div class="col-6">
+                     {{ item.update_quantity_form.obvod_prsa }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_hrudnik">Obvod hrudníku:</p>
+                  </div>
+                  <div class="col-6">
+                     {{ item.update_quantity_form.obvod_hrudnik }}
+                  </div>
+               </div>
+            </div>
+            <div class="row text-right">
+               <div id="update-quantity-code mb-0" class="col-8">
                   <div class="d-flex">
                      <div class="input-group">
                         <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount()">
-                        <i class="bi bi-dash"></i>
+                           <i class="bi bi-dash"></i>
                         </button>
-                    
                         {{ item.update_quantity_form.quantity }}
                         {{ item.update_quantity_form.override }}
-
-
-
-                        {{ item.update_quantity_form.obvod_prsa }}
-                        {{ item.update_quantity_form.obvod_hrudnik }}
-                        {{ item.update_quantity_form.zpusob_vyroby }}
                         <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="increaseCount()">
-                        <i class="bi bi-plus"></i>
+                           <i class="bi bi-plus"></i>
                         </button>
                      </div>
                   </div>
                   {% csrf_token %}
-               </form>
+               </div>
+               <div class="col-4">
+                  <h6 class="mob-text">{{ item.total_price|intcomma }} Kč</h6>
+               </div>
             </div>
-            <div class="col-4">
-               <h6 class="mob-text">{{ item.total_price|intcomma }} Kč</h6>
-            </div>
-         </div>
+         </form>
       </div>
       {% endwith %}
       {% endfor %}
@@ -88,19 +105,22 @@
          </div>
       </div>
    </div>
+
    <section class="jumbotron text-center">
       <div class="container">
          <a href="{% url 'orders:new_order' %}" type="submit" class="btn btn-dark my-2">Koupit</a>
       </div>
    </section>
+
    {% else %}
    Prozatím zde nic není. Vyberte si z katalogu.
    {% endif %}
 </div>
+
 <script>
    // update-quantity-code
    var quantityInput = document.getElementById('id_quantity');
-   
+
    quantityInput.addEventListener('change', function() {
      document.getElementById('id_override').value = 'True';
      document.getElementById('obvod_hrudnik').textContent = this.value;
@@ -108,7 +128,7 @@
      document.getElementById('zpusob_vyroby').textContent = this.value;
      document.getElementById('update-quantity-form').submit();
    });
-   
+
    function decreaseCount() {
      var input = document.getElementById('id_quantity');
      var value = parseInt(input.value);
@@ -121,7 +141,7 @@
      document.getElementById('zpusob_vyroby').textContent = input.value;
      document.getElementById('update-quantity-form').submit();
    }
-   
+
    function increaseCount() {
      var input = document.getElementById('id_quantity');
      var value = parseInt(input.value);
