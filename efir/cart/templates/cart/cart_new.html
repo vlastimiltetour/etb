@@ -16,19 +16,12 @@
    border: 1px solid black; /* Add black square border */
    }
 
-   .mob-text {
+   body {
       font-size: 0.8rem;
    }      
-
-   .btn-outline-dark {
-      width: 30px; 
-      height: 30px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-   }
    
 </style>
+
 <div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
    <div class="row d-flex justify-content-center">
       <h4 class="heading">Objednávka</h4>
@@ -38,43 +31,44 @@
       {% for item in cart %}
       {% with product=item.product %}
 
-      <div class="my-auto col-3">
+      <div class="my-auto py-3 col-4">
+         <div class="row d-flex">
             <div class="book">
-               <img src="{{ product.image1.url }}" class="book-img" style="max-height: 200px; max-width: 100px;">
+               <img src="{{ product.image1.url }}" class="book-img" style="max-height: 200px; max-width: 100%;">
             </div>
+         </div>
       </div>
-      <div class="my-auto py-3 col-9">
-
+      <div class="my-auto py-3 col-8">
          <div class="row text-right">
             <div class="col-6">
                <h6 class="mob-text">{{ product.name }}</h6>
             </div>
             <div class="col-6">
                <!-- Cart Remove Function--> 
-                <div style="text-align: left;">
+               <div style="text-align: left;">
                   <form action="{% url 'cart:cart_remove' product.id %}" method="post">
                      {% csrf_token %}
                      <button type="submit" class="btn-close" aria-label="Close">
-             
+                        Close
                      </button>
                   </form>
                </div>
             </div>
          </div>
-         <form id="update-quantity-form-{{ forloop.counter }}" action="{% url 'cart:cart_add' item.product.id %}" method="post">
+         <form id="update-quantity-form" action="{% url 'cart:cart_add' item.product.id %}" method="post">
             {% csrf_token %}
             <div class="mob-text">
                <div class="row">
                   <div class="col-6">
-                     <p id="zpusob_vyroby-{{ forloop.counter }}">Zpusob</p>
+                     <p>{{ item.update_quantity_form.zpusob_vyroby }}</p>
                   </div>
                   <div class="col-6">
-                     {{ item.update_quantity_form.zpusob_vyroby }}
+                     
                   </div>
                </div>
                <div class="row">
                   <div class="col-6">
-                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Obvod prsa:</p>
+                     <p class="mob-text" id="obvod_prsa">Obvod prsa:</p>
                   </div>
                   <div class="col-6">
                      {{ item.update_quantity_form.obvod_prsa }}
@@ -82,7 +76,7 @@
                </div>
                <div class="row">
                   <div class="col-6">
-                     <p class="mob-text" id="obvod_hrudnik-{{ forloop.counter }}">Obvod hrudníku:</p>
+                     <p class="mob-text" id="obvod_hrudnik">Obvod hrudníku:</p>
                   </div>
                   <div class="col-6">
                      {{ item.update_quantity_form.obvod_hrudnik }}
@@ -90,29 +84,28 @@
                </div>
             </div>
             <div class="row text-right">
-               <div id="update-quantity-code-{{ forloop.counter }} mb-0" class="col-8">
+               <div id="update-quantity-code mb-0" class="col-6">
                   <div class="d-flex">
                      <div class="input-group">
-                        <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount({{ forloop.counter }})">
+                        <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount()" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">
                            <i class="bi bi-dash" style="line-height: 1;"></i>
                         </button>
                         {{ item.update_quantity_form.quantity }}
                         {{ item.update_quantity_form.override }}
-                        <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="increaseCount({{ forloop.counter }})">
+                        <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="increaseCount()" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">
                            <i class="bi bi-plus" style="line-height: 1;"></i>
                         </button>
                      </div>
                   </div>
-                  {% csrf_token %}
+        
                </div>
-               <div class="col-4">
+               <div class="col-6">
                   <h6 class="mob-text">{{ item.total_price|intcomma }} Kč</h6>
                </div>
             </div>
          </form>
-
+         
       </div>
-   
       {% endwith %}
       {% endfor %}
       <div class="row d-flex py-2 justify-content-center border-top">
@@ -121,34 +114,6 @@
          </div>
       </div>
    </div>
-
-
-   <section>
-   {% if cart.coupon %}
-  <tr class="subtotal">
-    <td>Subtotal</td>
-    <td colspan="4"></td>
-    <td class="num">${{ cart.get_total_price|floatformat:2 }}</td>
-  </tr>
-  <tr>
-    <td>
-      "{{ cart.coupon.code }}" coupon
-      ({{ cart.coupon.discount }}% off)
-    </td>
-    <td colspan="4"></td>
-    <td class="num neg">
-      - ${{ cart.get_discount|floatformat:2 }}
-    </td>
-  </tr>
-{% endif %}
-<tr class="total">
-  <td>Total</td>
-  <td colspan="4"></td>
-  <td class="num">
-    ${{ cart.get_total_price_after_discount|floatformat:2 }}
-  </td>
-</tr>
-</section>
 
    <div>
      
@@ -160,7 +125,6 @@
       </form>
    </div>
 
-
    <section class="jumbotron text-center">
       <div class="container">
          <a href="{% url 'orders:new_order' %}" type="submit" class="btn btn-dark my-2">Koupit</a>
@@ -170,40 +134,44 @@
    {% else %}
    Prozatím zde nic není. Vyberte si z katalogu.
    {% endif %}
+   
 </div>
-
-
-
-
-
 
 
 <script>
    // update-quantity-code
-   function decreaseCount(counter) {
+   var quantityInput = document.getElementById('id_quantity');
+
+   quantityInput.addEventListener('change', function() {
+     document.getElementById('id_override').value = 'True';
+     document.getElementById('obvod_hrudnik').textContent = this.value;
+     document.getElementById('obvod_prsa').textContent = this.value;
+     document.getElementById('zpusob_vyroby').textContent = this.value;
+     document.getElementById('update-quantity-form').submit();
+   });
+
+   function decreaseCount() {
      var input = document.getElementById('id_quantity');
      var value = parseInt(input.value);
      if (value > 1) {
        input.value = value - 1;
      }
-     updateQuantityForm(counter, input.value);
+     document.getElementById('id_override').value = 'True';
+     document.getElementById('obvod_hrudnik').textContent = input.value;
+     document.getElementById('obvod_prsa').textContent = input.value;
+     document.getElementById('zpusob_vyroby').textContent = input.value;
+     document.getElementById('update-quantity-form').submit();
    }
 
-   function increaseCount(counter) {
+   function increaseCount() {
      var input = document.getElementById('id_quantity');
      var value = parseInt(input.value);
      input.value = value + 1;
-     updateQuantityForm(counter, input.value);
-   }
-
-   function updateQuantityForm(counter, value) {
-     var formId = 'update-quantity-form-' + counter;
-     document.getElementById(formId).querySelector('#id_override').value = 'True';
-     document.getElementById('obvod_hrudnik-' + counter).textContent = value;
-     document.getElementById('obvod_prsa-' + counter).textContent = value;
-     document.getElementById('zpusob_vyroby-' + counter).textContent = value;
-     document.getElementById(formId).submit();
+     document.getElementById('id_override').value = 'True';
+     document.getElementById('obvod_hrudnik').textContent = input.value;
+     document.getElementById('obvod_prsa').textContent = input.value;
+     document.getElementById('zpusob_vyroby').textContent = input.value;
+     document.getElementById('update-quantity-form').submit();
    }
 </script>
-
 {% endblock %}

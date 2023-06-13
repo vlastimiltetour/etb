@@ -46,6 +46,9 @@ class Product(models.Model):
     headliner = models.BooleanField(default=False)
     product_return = models.BooleanField(default=False)
 
+    obvod_hrudnik = models.ManyToManyField("ObvodHrudnik")
+    obvod_prsa = models.ManyToManyField("ObvodPrsa")
+
     class Meta:
         ordering = ["name"]
         indexes = [

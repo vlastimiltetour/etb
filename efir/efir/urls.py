@@ -24,6 +24,7 @@ urlpatterns = [
     path("", include("catalog.urls")),
     path("cart/", include("cart.urls")),
     path("orders/", include("orders.urls")),
+    path("coupons/", include("coupons.urls")),
 ]
 
 # and is used to serve static files (such as images, CSS files, and JavaScript files) during development.

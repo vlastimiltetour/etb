@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "cart.apps.CartConfig",
     "django.contrib.humanize",
     "debug_toolbar",
+    "coupons.apps.CouponsConfig",
 ]
 
 

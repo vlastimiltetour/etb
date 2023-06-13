@@ -5,11 +5,30 @@
 {% block content %}
 <!-- Large Product Detail -->
 <style>
-   .miniature {
-   width: 100px;
-   height: auto;
-   margin-right: 10px;
-   }
+    @media screen and (max-width: 600px) {
+        .col {
+            width: 100%;
+        }
+        
+        .miniature {
+            max-width: 40px;
+            max-height: 50px;
+            margin-right: 2px;
+        }
+    }
+    
+    @media screen and (min-width: 601px) {
+        .col {
+            width: 100px;
+        }
+        
+        .miniature {
+            max-width: 100px;
+            max-height: 125px;
+            margin-right: 10px;
+        }
+    }
+
    #id_quantity {
    appearance: none;
    -webkit-appearance: none;
@@ -97,21 +116,21 @@
 
 </style>
 <section class="py-2">
-   <div class="container px-4 px-lg-5 my-5">
-   <div class="row gx-4 gx-lg-5 mb-5">
+   <div class="container px-4 px-lg-5 my-2">
+   <div class="row gx-4 gx-lg-5">
       <div class="col-md-6">
          <div class="slider">
             <div class="slide">
-               <img class="card-img-top mb-5 mb-md-0" src="{{product.image1.url}}" alt="..." />
+               <img class="card-img-top mb-md-0" src="{{product.image1.url}}" alt="..." />
             </div>
             <div class="slide">
-               <img class="card-img-top mb-5 mb-md-0" src="{{product.image2.url}}" alt="..." />
+               <img class="card-img-top mb-md-0" src="{{product.image2.url}}" alt="..." />
             </div>
             <div class="slide">
-               <img class="card-img-top mb-5 mb-md-0" src="{{product.image3.url}}" alt="..." />
+               <img class="card-img-top mb-md-0" src="{{product.image3.url}}" alt="..." />
             </div>
             <div class="slide">
-               <img class="card-img-top mb-5 mb-md-0" src="{{product.image4.url}}" alt="..." />
+               <img class="card-img-top mb-md-0" src="{{product.image4.url}}" alt="..." />
             </div>
             
          </div>
@@ -120,16 +139,16 @@
                <!-- Miniatures -->
             <div class="row mt-3">
                
-                     <div class="col" style="width: 100px;" >
+                     <div class="slide">
                         <img class="miniature" src="{{ product.image1.url }}" alt="Miniature 1" />
-                     </div>
-                     <div class="col" style="width: 100px;" >
+                
+                
                         <img class="miniature" src="{{ product.image2.url }}" alt="Miniature 2" />
-                     </div>
-                     <div class="col" style="width: 100px;" >
+                
+                
                         <img class="miniature" src="{{ product.image3.url }}" alt="Miniature 3" />
-                     </div>
-                     <div class="col" style="width: 100px;" >
+                
+                
                         <img class="miniature" src="{{ product.image4.url }}" alt="Miniature 4" />
                      </div>
             </div>
