@@ -95,6 +95,7 @@ class ObvodHrudnik(models.Model):
         max_length=20, help_text="Dostupné konfekční velikosti"
     )
     velikost_na_miru = models.PositiveIntegerField(editable=False, null=True)
+    available = models.BooleanField()
 
     def __str__(self):
         return self.konfekcni_velikost
@@ -105,6 +106,7 @@ class ObvodPrsa(models.Model):
         max_length=20, help_text="Dostupné konfekční velikosti"
     )
     velikost_na_miru = models.PositiveIntegerField(editable=False, null=True)
+    active = models.BooleanField()
 
     def __str__(self):
         return self.konfekcni_velikost

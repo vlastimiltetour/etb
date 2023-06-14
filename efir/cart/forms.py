@@ -1,13 +1,16 @@
 from django import forms
 
-from catalog.models import ObvodHrudnik, Product
+from catalog.models import Product
 
 # this snippet of code is to change integers to string for serialization purpose
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
 KONFEKCNI_OBVOD_PRSA = [
-    (obj.id, str(obj)) for obj in Product.objects.first().obvod_hrudnik.all()
+    (obj.id, str(obj)) for obj in Product.objects.get(id).obvod_hrudnik.all()
 ]
-KONFEKCNI_OBVOD_HRUDNIK = [(obj.id, str(obj)) for obj in ObvodHrudnik.objects.all()]
+KONFEKCNI_OBVOD_HRUDNIK = [
+    (obj.id, str(obj)) for obj in Product.objects.get(id).obvod_prsa.all()
+]
+
 
 ZPUSOB_VYROBY_CHOICES = [
     ("Na_Miru", "Na Míru"),
