@@ -7,10 +7,10 @@ ZPUSOB_VYROBY_CHOICES = [
     ("Na_Miru", "Na Míru"),
     ("Konfekce", "Konfekce"),
 ]
-OBVOD_PRSA_CHOICES = [(obj.id, str(obj)) for obj in ObvodHrudnik.objects.all()]
-OBVOD_HRUDNIK_CHOICES = [(obj.id, str(obj)) for obj in ObvodPrsa.objects.all()]
-#OBVOD_PRSA_CHOICES = [(i, str(i)) for i in range(1, 21)]
-#OBVOD_HRUDNIK_CHOICES = [(i, str(i)) for i in range(1, 21)]
+#OBVOD_PRSA_CHOICES = [(obj.id, str(obj)) for obj in ObvodHrudnik.objects.all()]
+#OBVOD_HRUDNIK_CHOICES = [(obj.id, str(obj)) for obj in ObvodPrsa.objects.all()]
+OBVOD_PRSA_CHOICES = [(i, str(i)) for i in range(1, 21)]
+OBVOD_HRUDNIK_CHOICES = [(i, str(i)) for i in range(1, 21)]
 
 
 class CartAddProductForm(forms.Form):
