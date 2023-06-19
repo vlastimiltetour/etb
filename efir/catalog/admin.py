@@ -25,15 +25,15 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ObvodHrudnik)
 class ObvodHrudnikAdmin(admin.ModelAdmin):
-    list_display = ["konfekcni_velikost"]
+    list_display = ["size"]
     ordering = [
-        "konfekcni_velikost",
+        "size",
     ]
 
 
 @admin.register(ObvodPrsa)
 class ObvodPrsaAdmin(admin.ModelAdmin):
-    list_display = ["konfekcni_velikost"]
+    list_display = ["size"]
     ordering = [
-        "konfekcni_velikost",
+        "size",
     ]

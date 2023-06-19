@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     "orders.apps.OrdersConfig",
     "cart.apps.CartConfig",
     "django.contrib.humanize",
-    "debug_toolbar",
     "coupons.apps.CouponsConfig",
 ]
 
@@ -62,7 +61,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "efir.urls"
@@ -175,11 +173,3 @@ DEFAULT_FROM_EMAIL = "objednavky@efirthebrand.cz"
 EMAIL_ENCRYPTION = "STARTTLS"
 
 ASGI_APPLICATION = "web.asgi.application"
-
-
-# django debug toolbar
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
-]

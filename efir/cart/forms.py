@@ -1,41 +1,30 @@
 from django import forms
 
-from catalog.models import Product
+from catalog.models import ObvodHrudnik, ObvodPrsa
 
-# this snippet of code is to change integers to string for serialization purpose
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
-KONFEKCNI_OBVOD_PRSA = [
-    (obj.id, str(obj)) for obj in Product.objects.get(id).obvod_hrudnik.all()
-]
-KONFEKCNI_OBVOD_HRUDNIK = [
-    (obj.id, str(obj)) for obj in Product.objects.get(id).obvod_prsa.all()
-]
-
-
 ZPUSOB_VYROBY_CHOICES = [
     ("Na_Miru", "Na Míru"),
     ("Konfekce", "Konfekce"),
 ]
+OBVOD_PRSA_CHOICES = [(obj.id, str(obj)) for obj in ObvodHrudnik.objects.all()]
+OBVOD_HRUDNIK_CHOICES = [(obj.id, str(obj)) for obj in ObvodPrsa.objects.all()]
+#OBVOD_PRSA_CHOICES = [(i, str(i)) for i in range(1, 21)]
+#OBVOD_HRUDNIK_CHOICES = [(i, str(i)) for i in range(1, 21)]
 
 
 class CartAddProductForm(forms.Form):
     quantity = forms.TypedChoiceField(
-        label="quantity", choices=PRODUCT_QUANTITY_CHOICES, coerce=int
+        label="Quantity", choices=PRODUCT_QUANTITY_CHOICES, coerce=int
     )
-
     obvod_prsa = forms.TypedChoiceField(
-        label="obvod_prsa",
-        choices=KONFEKCNI_OBVOD_PRSA,
-        coerce=int,
+        label="Obvod prsa", choices=OBVOD_PRSA_CHOICES, coerce=int
     )
     obvod_hrudnik = forms.TypedChoiceField(
-        label="obvod_hrudnik",
-        choices=KONFEKCNI_OBVOD_HRUDNIK,
-        coerce=int,
+        label="Obvod hrudník", choices=OBVOD_HRUDNIK_CHOICES, coerce=int
     )
-
     zpusob_vyroby = forms.ChoiceField(
-        label="zpusob_vyroby", choices=ZPUSOB_VYROBY_CHOICES
+        label="Způsob výroby", choices=ZPUSOB_VYROBY_CHOICES
     )
     override = forms.BooleanField(
         required=False, initial=False, widget=forms.HiddenInput

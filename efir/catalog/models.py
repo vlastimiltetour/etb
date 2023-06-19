@@ -91,22 +91,18 @@ class Category(models.Model):
 
 
 class ObvodHrudnik(models.Model):
-    konfekcni_velikost = models.CharField(
-        max_length=20, help_text="Dostupné konfekční velikosti"
+    size = models.CharField(
+        max_length=20, help_text="Dostupné konfekční velikosti", default=0
     )
-    velikost_na_miru = models.PositiveIntegerField(editable=False, null=True)
-    available = models.BooleanField()
 
     def __str__(self):
-        return self.konfekcni_velikost
+        return self.size
 
 
 class ObvodPrsa(models.Model):
-    konfekcni_velikost = models.CharField(
-        max_length=20, help_text="Dostupné konfekční velikosti"
+    size = models.CharField(
+        max_length=20, help_text="Dostupné konfekční velikosti", default=0
     )
-    velikost_na_miru = models.PositiveIntegerField(editable=False, null=True)
-    active = models.BooleanField()
 
     def __str__(self):
-        return self.konfekcni_velikost
+        return self.size
