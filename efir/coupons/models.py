@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Coupon(models.Model):
-    code = models.CharField(max_length=10, unique=True)
+    code = models.CharField(max_length=10, unique=True, help_text="Váš slevový kód:")
     valid_from = models.DateField()
     valid_to = models.DateField()
     discount = models.IntegerField(

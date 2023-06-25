@@ -5,7 +5,7 @@
 
 {% block content %}
 <style>
-   #id_quantity, #id_obvod_hrudnik, #id_obvod_prsa {
+   #id_quantity, #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_boky {
    appearance: none;
    -webkit-appearance: none;
    -moz-appearance: none;
@@ -66,9 +66,9 @@
             <div class="mob-text">
                <div class="row">
                   <div class="col-6">
-                     <p id="zpusob_vyroby-{{ forloop.counter }}">Zpusob</p>
+                     <p id="zpusob_vyroby-{{ forloop.counter }}">Druh kolekce:</p>
                   </div>
-                  <div class="col-6">
+                  <div class="col-6"  style="text-align: left;">
                      {{ item.update_quantity_form.zpusob_vyroby }}
                   </div>
                </div>
@@ -76,7 +76,7 @@
                   <div class="col-6">
                      <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Obvod prsa:</p>
                   </div>
-                  <div class="col-6">
+                  <div class="col-6"  style="text-align: left;">
                      {{ item.update_quantity_form.obvod_prsa }}
                   </div>
                </div>
@@ -84,13 +84,21 @@
                   <div class="col-6">
                      <p class="mob-text" id="obvod_hrudnik-{{ forloop.counter }}">Obvod hrudníku:</p>
                   </div>
-                  <div class="col-6">
+                  <div class="col-6"  style="text-align: left;">
                      {{ item.update_quantity_form.obvod_hrudnik }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_boky-{{ forloop.counter }}">Obvod boky:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_boky }}
                   </div>
                </div>
             </div>
             <div class="row text-right">
-               <div id="update-quantity-code-{{ forloop.counter }} mb-0" class="col-8">
+               <div id="update-quantity-code-{{ forloop.counter }} mb-0" class="col-6">
                   <div class="d-flex">
                      <div class="input-group">
                         <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount({{ forloop.counter }})">
@@ -105,7 +113,7 @@
                   </div>
                   {% csrf_token %}
                </div>
-               <div class="col-4">
+               <div class="col-6">
                   <h6 class="mob-text">{{ item.total_price|intcomma }} Kč</h6>
                </div>
             </div>
@@ -119,45 +127,45 @@
          <div class="row text-right" style="text-align: right;">
             <h6 class="mob-text">Total: {{ cart.get_total_price|intcomma }} Kč</h6>
          </div>
+         {% if cart.coupon %}
+
+         <div class="row text-right" style="text-align: right;">
+            <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount|intcomma }} Kč</h6>
+         </div>
+         <div class="row text-right" style="text-align: right;">
+            <h6 class="mob-text">Total po slevě: {{ cart.get_total_price_after_discount|intcomma }} Kč</h6>
+         </div>
+         {% endif %}
+
       </div>
-   </div>
+   </div>   
 
-
-   <section>
-   {% if cart.coupon %}
-  <tr class="subtotal">
-    <td>Subtotal</td>
-    <td colspan="4"></td>
-    <td class="num">${{ cart.get_total_price|floatformat:2 }}</td>
-  </tr>
-  <tr>
-    <td>
-      "{{ cart.coupon.code }}" coupon
-      ({{ cart.coupon.discount }}% off)
-    </td>
-    <td colspan="4"></td>
-    <td class="num neg">
-      - ${{ cart.get_discount|floatformat:2 }}
-    </td>
-  </tr>
-{% endif %}
-<tr class="total">
-  <td>Total</td>
-  <td colspan="4"></td>
-  <td class="num">
-    ${{ cart.get_total_price_after_discount|floatformat:2 }}
-  </td>
-</tr>
-</section>
-
+   <br>
    <div>
+      
+
+
+      {% if cart.coupon %}
+ 
+      {% else %}
+  
+
      
-      <p>Máte slevový kód?</p>
-      <form action="{% url 'coupons:apply' %}" method="post">
-         {{ coupon_form }}
-         <input type="submit" value="Apply">
+      <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
+         <div class="input-group">
+            {{ coupon_form }}
+               <button type="submit" class="btn btn-secondary">Uplatnit</button>
+     
+         </div>
          {% csrf_token %}
       </form>
+
+
+      {% endif %}
+
+
+      
+
    </div>
 
 
@@ -201,6 +209,7 @@
      document.getElementById(formId).querySelector('#id_override').value = 'True';
      document.getElementById('obvod_hrudnik-' + counter).textContent = value;
      document.getElementById('obvod_prsa-' + counter).textContent = value;
+     document.getElementById('obvod_boky-' + counter).textContent = value;
      document.getElementById('zpusob_vyroby-' + counter).textContent = value;
      document.getElementById(formId).submit();
    }

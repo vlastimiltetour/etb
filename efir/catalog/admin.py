@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, ObvodHrudnik, ObvodPrsa, Product
+from .models import Category, ObvodBoky, ObvodHrudnik, ObvodPrsa, Product
 
 # Register your models here.
 
@@ -33,6 +33,14 @@ class ObvodHrudnikAdmin(admin.ModelAdmin):
 
 @admin.register(ObvodPrsa)
 class ObvodPrsaAdmin(admin.ModelAdmin):
+    list_display = ["size"]
+    ordering = [
+        "size",
+    ]
+
+
+@admin.register(ObvodBoky)
+class ObvodBokyAdmin(admin.ModelAdmin):
     list_display = ["size"]
     ordering = [
         "size",

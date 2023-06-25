@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from catalog.models import Product
-from coupons.forms import CouponForms
+from coupons.forms import CouponForm
 
 from .cart import Cart
 from .forms import CartAddProductForm
@@ -21,6 +21,7 @@ def cart_add(request, product_id):
             quantity=cd["quantity"],
             obvod_hrudnik=cd["obvod_hrudnik"],
             obvod_prsa=cd["obvod_prsa"],
+            obvod_boky=cd["obvod_boky"],
             zpusob_vyroby=cd["zpusob_vyroby"],
             override=cd["override"],
         )
@@ -32,21 +33,22 @@ def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
+
     return redirect("cart:cart_detail")
 
 
 def cart_detail(request):
     cart = Cart(request)
-    coupon_form = CouponForms()
+    coupon_form = CouponForm()
 
     for item in cart:
         item["update_quantity_form"] = CartAddProductForm(
             initial={
                 "quantity": item["quantity"],
                 "obvod_prsa": item["obvod_prsa"],
-                "obvod_hrudnik": item[
-                    "obvod_hrudnik"
-                ],  # translates from cart_product_form to cart detail specifically with {{ item.update_quantity_form }}
+                "obvod_hrudnik": item["obvod_hrudnik"],
+                # translates from cart_product_form to cart detail specifically with {{ item.update_quantity_form }}
+                "obvod_boky": item["obvod_boky"],
                 "zpusob_vyroby": item["zpusob_vyroby"],
                 "override": True,
             }

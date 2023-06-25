@@ -43,6 +43,7 @@ class Cart:
         quantity=1,
         obvod_prsa=None,
         obvod_hrudnik=None,
+        obvod_boky=None,
         zpusob_vyroby=None,  # might be renamed to konfekcni
         override=False,
     ):
@@ -52,6 +53,7 @@ class Cart:
             self.cart[product_id] = {
                 "quantity": 0,
                 "price": str(product.price),
+                "obvod_boky":obvod_boky,
                 "obvod_prsa": obvod_prsa,
                 "obvod_hrudnik": obvod_hrudnik,
                 "zpusob_vyroby": str(zpusob_vyroby),
@@ -59,6 +61,7 @@ class Cart:
 
         if override:
             self.cart[product_id]["quantity"] = quantity
+            self.cart[product_id]["obvod_boky"] = obvod_boky
             self.cart[product_id]["obvod_prsa"] = obvod_prsa
             self.cart[product_id]["obvod_hrudnik"] = obvod_hrudnik
             self.cart[product_id]["zpusob_vyroby"] = str(zpusob_vyroby)

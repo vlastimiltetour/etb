@@ -48,6 +48,7 @@ class Product(models.Model):
 
     obvod_hrudnik = models.ManyToManyField("ObvodHrudnik")
     obvod_prsa = models.ManyToManyField("ObvodPrsa")
+    obvod_boky = models.ManyToManyField("ObvodBoky")
 
     class Meta:
         ordering = ["name"]
@@ -100,6 +101,15 @@ class ObvodHrudnik(models.Model):
 
 
 class ObvodPrsa(models.Model):
+    size = models.CharField(
+        max_length=20, help_text="Dostupné konfekční velikosti", default=0
+    )
+
+    def __str__(self):
+        return self.size
+
+
+class ObvodBoky(models.Model):
     size = models.CharField(
         max_length=20, help_text="Dostupné konfekční velikosti", default=0
     )

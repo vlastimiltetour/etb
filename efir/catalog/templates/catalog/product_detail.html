@@ -39,7 +39,7 @@
    text-align: center;
    border: 1px solid black; /* Add black square border */
    }
-   #id_obvod_hrudnik, #id_obvod_prsa {
+   #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_hrudnik {
    appearance: none;
    -webkit-appearance: none;
    -moz-appearance: none;
@@ -176,7 +176,7 @@
             <!-- select size buttons -->
             <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
                <div id="zpusob_vyroby" class="row mb-3">
-                  <label for="zpusob_vyroby"><b>Typ</b></label>
+                  <label for="zpusob_vyroby"><b>Druh kolekce</b></label>
                   <div class="col">
                      <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black;" aria-label="Default select example">
                         <option selected>---------</option>
@@ -186,20 +186,40 @@
                      </select>
                   </div>
                </div>
+               <b>Velikosti</b>
+
                <div class="d-flex mb-3">
+                  <div class="col-6">
+
                   <!-- Obvod hrudnik field -->
-                  <select id="obvod_hrudnik_selection" name="obvod_hrudnik" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black" aria-label="Default select example">
+                  <select id="obvod_hrudnik_selection" name="obvod_hrudnik" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
                      <option selected>Obvod hrudníku</option>
                      {% for obvod_hrudnik in cart_product_form.obvod_hrudnik %}
                      {{ obvod_hrudnik }}
                      {% endfor %}              
                   </select>
-                  <select id="obvod_prsa_selection" name="obvod_prsa" class="form-select flex-grow-1 ms-3 rounded-0" style="border-color: black" aria-label="Default select example">
-                     <option selected>Obvod prsa</option>
-                     {% for obvod_prsa in cart_product_form.obvod_prsa %}
-                     {{ obvod_prsa }}
-                     {% endfor %}                             
+                  </div>
+               </div>
+               <div class="d-flex mb-3">
+                  <div class="col-6">
+                     <select id="obvod_prsa_selection" name="obvod_prsa" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+                        <option selected>Obvod prsa</option>
+                        {% for obvod_prsa in cart_product_form.obvod_prsa %}
+                        {{ obvod_prsa }}
+                        {% endfor %}                             
+                     </select>
+                  </div>
+               </div>
+               <div class="d-flex mb-3">
+                  <div class="col-6">
+                  <!-- Obvod boky field -->
+                  <select id="obvod_boky_selection" name="obvod_boky" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+                     <option selected>Obvod boků</option>
+                     {% for obvod_boky in cart_product_form.obvod_boky %}
+                     {{ obvod_boky }}
+                     {% endfor %}              
                   </select>
+               </div>
                </div>
                <h2>
                   <a href="{{ product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
@@ -270,22 +290,3 @@
    
 </script>
 {% endblock %}
-<!-- // Get the select elements
-   const obvodHrudnikSelect = document.getElementById('obvod_hrudnik_selection');
-   const obvodPrsouSelect = document.getElementById('obvod_prsa_selection');
-   
-   // Function to handle form submission
-   function submitForm() {
-     const obvodHrudnikValue = obvodHrudnikSelect.value;
-     const obvodPrsouValue = obvodPrsouSelect.value;
-   
-     // Perform any necessary operations with the selected values before submitting the form
-   
-     // Submit the form
-     document.getElementById('add-to-cart-form').submit();
-   }
-   
-   // Listen for changes in the select elements
-   obvodHrudnikSelect.addEventListener('change', submitForm);
-   obvodPrsouSelect.addEventListener('change', submitForm);
-   </script>-->
