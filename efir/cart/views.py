@@ -23,6 +23,7 @@ def cart_add(request, product_id):
             obvod_prsa=cd["obvod_prsa"],
             obvod_boky=cd["obvod_boky"],
             zpusob_vyroby=cd["zpusob_vyroby"],
+            poznamka=cd["poznamka"],
             override=cd["override"],
         )
 
@@ -50,6 +51,7 @@ def cart_detail(request):
                 # translates from cart_product_form to cart detail specifically with {{ item.update_quantity_form }}
                 "obvod_boky": item["obvod_boky"],
                 "zpusob_vyroby": item["zpusob_vyroby"],
+                # "poznamka": item["poznamka"],
                 "override": True,
             }
         )

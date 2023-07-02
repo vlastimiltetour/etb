@@ -35,24 +35,28 @@
              <div class="container" style="border: 1px solid #b1b1b1; /* Set the border properties */
              padding: 10px;">
         
-        <h6 class="mob-text">Detaily:</h6>
+        <p>{{ order.created}}</p>
+        <h6 class="mob-text">Vaše jméno:</h6>
         <p class="mob-text"> {{ order.first_name }} {{ order.last_name }}</p>
+
+        <h6 class="mob-text">Váš email:</h6>
         <p>{{ order.email }}</p>
-        <p> {{ order.comments }}</p>
 
         <h6 class="mob-text">Doručovací adresa:</h6>
         <p> {{ order.address }}</p>
 
-        <h6 class="mob-text">Datum objednávky:</h6>
-        <p>{{ order.created}}</p>
+        
 
             
             <h6 class="mob-text">Způsob dopravy:</h6>
             <p> {{ order.get_shipping_display }}</p>
 
 
-            <h6 class="mob-text">Cislo objednavky:</h6>
+            <h6 class="mob-text">Telefonní číslo:</h6>
             <p> {{ order.number }}</p>
+
+            <h6 class="mob-text">Poznámka:</h6>
+            <p> {{ order.comments }}</p>
         
         </table>
     </div>
@@ -70,9 +74,15 @@
           <!-- Cart -->
           
           <div class="row d-flex py-2 justify-content-center border-top">
+
+   
             {% for item in order.items.all %}  
-            
-              <div class="col-2">
+            ---
+            {{ item.product.name }}
+            {{ item.product.price }}
+            {{ item.product.quantity }}
+            ---
+            <div class="col-2">
                   <div class="row d-flex">
                       <div class="book">
                           <img src="{{item.product.image.url}}" class="book-img" height="60px">
@@ -114,7 +124,10 @@
           </div>
           
           <!-- End Cart -->
+              <!-- 2CART-->
               
+              <!-- 2cart -->
+
           </div>
           
     
@@ -123,9 +136,14 @@
   </div>
   <!-- whole product-->
 
-  
+  <section class="jumbotron text-center">
+    <div class="container">
 
-  
+
+
+  <a href="{% url 'katalog' %}"><button class="btn btn-dark my-2 mb-4">Do obchodu</button></a>
+    </div>
+  </section>
 
   </div>
 </div>

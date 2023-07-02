@@ -15,10 +15,9 @@ services:
     build: .
     command: >
       sh -c "python ./efir/manage.py collectstatic --no-input &&
-            python ./efir/manage.py loaddata fixtures/dummdata.json &&
             python ./efir/manage.py makemigrations --no-input &&
             python ./efir/manage.py migrate --no-input &&
-             ./wait-for-it.sh db:5432 -- uwsgi --ini /code/config/uwsgi/uwsgi.ini"
+            ./wait-for-it.sh db:5432 -- uwsgi --ini /code/config/uwsgi/uwsgi.ini"
       
     restart: always
     volumes:

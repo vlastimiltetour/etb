@@ -49,6 +49,7 @@ class Product(models.Model):
     obvod_hrudnik = models.ManyToManyField("ObvodHrudnik")
     obvod_prsa = models.ManyToManyField("ObvodPrsa")
     obvod_boky = models.ManyToManyField("ObvodBoky")
+    poznamka = models.TextField(blank=True)
 
     class Meta:
         ordering = ["name"]

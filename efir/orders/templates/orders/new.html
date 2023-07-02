@@ -5,6 +5,7 @@
 {% block content %}
 <body data-new-gr-c-s-check-loaded="14.1107.0" data-gr-ext-installed="">
 
+
     <div class="container py-5">
   
         <!-- Shopping Cart Section-->
@@ -119,6 +120,8 @@
             <div class="mb-3">
               <label for="email">Adresa</label>
               {{ form.address }}
+              <input type="hidden" name="pickup_point" id="pickup_point_input">
+
                         <div class="invalid-feedback">
               </div>
             </div>
@@ -128,6 +131,40 @@
                         <div class="invalid-feedback">
               </div>
             </div>
+
+            <div class="mb-3">
+              <!-- Packeta script-->
+  <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
+
+  <script>
+    const packetaApiKey = 'e2ac633a88eca5e2';
+
+    const packetaOptions = {
+        valueFormat: "\"Packeta\",id,carrierId,carrierPickupPointId,name,city,street"
+    };
+
+    function showSelectedPickupPoint(point) {
+        // Add here an action on pickup point selection
+        const saveElement = document.querySelector(".packeta-selector-value");
+        const addressInput = document.querySelector("#id_address"); // invokes the variable 
+
+        saveElement.innerText = '';
+        if (point) {
+          console.log("Selected point", point);
+          saveElement.innerText = "Address: " + point.formatedValue; 
+          addressInput.value = point.formatedValue; //saves the value to the form          
+        };
+    }
+
+  </script>
+
+   <button class="btn btn-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
+   <div class="packeta-selector-value"></div>
+<!-- End Packeta Script-->
+            </div>
+
+
+            
           </div>
             <div class="mb-3">
               <label for="email">Komentáře</label>
@@ -149,7 +186,9 @@
             
             <section class="jumbotron text-center">
               <div class="container">
-                <button class="btn btn-dark my-2 mb-4">Zpět</button>
+
+                <a href="{% url 'cart:cart_detail' %}"><button class="btn btn-dark my-2 mb-4">Zpět</button></a>
+
 
             <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button>
               </div>
@@ -158,6 +197,7 @@
           </form>
           
         </div>
+        
         </div>
       </div>
       <!-- Form ends-->

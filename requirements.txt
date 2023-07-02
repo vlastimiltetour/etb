@@ -66,7 +66,7 @@ pyOpenSSL==23.1.1
 pyrsistent==0.19.3
 pysmi==0.3.4
 pysnmp==4.4.12
-python-dotenv==0.21.1
+python-decouple==3.8
 PyYAML==5.4.1
 requests==2.29.0
 rich==13.3.5

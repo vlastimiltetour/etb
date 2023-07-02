@@ -32,7 +32,7 @@ class OrderForm(forms.ModelForm):
             "comments": forms.Textarea(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Vložte své komentáře k objednávce",
+                    "placeholder": "Zde můžete vložit své komentáře k objednávce.",
                 }
             ),
             "shipping": forms.Select(

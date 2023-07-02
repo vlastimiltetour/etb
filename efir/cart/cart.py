@@ -41,10 +41,11 @@ class Cart:
         self,
         product,
         quantity=1,
-        obvod_prsa=None,
-        obvod_hrudnik=None,
-        obvod_boky=None,
+        obvod_prsa=0,
+        obvod_hrudnik=0,
+        obvod_boky=0,
         zpusob_vyroby=None,  # might be renamed to konfekcni
+        poznamka=None,
         override=False,
     ):
         product_id = str(product.id)
@@ -53,9 +54,10 @@ class Cart:
             self.cart[product_id] = {
                 "quantity": 0,
                 "price": str(product.price),
-                "obvod_boky":obvod_boky,
+                "obvod_boky": obvod_boky,
                 "obvod_prsa": obvod_prsa,
                 "obvod_hrudnik": obvod_hrudnik,
+                "poznamka": poznamka,
                 "zpusob_vyroby": str(zpusob_vyroby),
             }
 

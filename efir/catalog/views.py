@@ -45,12 +45,19 @@ def catalog_product_list(request, category_slug=None):
     )
 
 
-def product_detail(request, id, slug):
+def product_detail(
+    request,
+    id,
+    slug,
+):
     categories = (
         Category.objects.all()
     )  # this is only for the purpose of showing the variable in the menu and footer
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
-    cart_product_form = CartAddProductForm()  #
+
+    # this seems like it doesn't work, correct
+
+    form = CartAddProductForm()
 
     return render(
         request,
@@ -58,7 +65,7 @@ def product_detail(request, id, slug):
         {
             "categories": categories,
             "product": product,
-            "cart_product_form": cart_product_form,
+            "form": form,
         },
     )
 

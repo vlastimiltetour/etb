@@ -13,11 +13,28 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-load_dotenv(".env")
-
 DJANGO_SETTINGS_MODULE = "efir.settings.local"
+
+
+import logging
+
+# Set up the logging configuration
+logging.basicConfig(level=logging.DEBUG)
+
+try:
+    logging.info("Loading local Env Module")
+    import dotenv
+
+    dotenv.read_dotenv()
+except AttributeError:
+    logging.info("Exception raised")
+    logging.info("Loading Production Env Module")
+    from dotenv import load_dotenv
+
+    load_dotenv(".env")
+finally:
+    logging.info("The whole cycle of Env went through")
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
