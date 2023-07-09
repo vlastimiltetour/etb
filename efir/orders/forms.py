@@ -33,6 +33,7 @@ class OrderForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Zde můžete vložit své komentáře k objednávce.",
+                    "initial": "-",
                 }
             ),
             "shipping": forms.Select(

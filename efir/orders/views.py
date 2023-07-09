@@ -31,12 +31,10 @@ def new_order(request):
             cart.clear()
             order_id = order.id
 
-            customer_order_email_confirmation(order_id)
-
-            '''try:
+            try:
                 customer_order_email_confirmation(order_id)
             except ssl.SSLCertVerificationError:
-                logging.info(f"Local environment has no email sending{order_id}")'''
+                logging.info(f"Local environment has no email sending{order_id}")
 
             return render(request, "orders/objednavka_vytvorena.html", {"order": order})
     else:

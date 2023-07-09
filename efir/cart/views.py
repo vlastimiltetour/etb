@@ -12,7 +12,7 @@ from .forms import CartAddProductForm
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
-    form = CartAddProductForm(request.POST)
+    form = CartAddProductForm(id_from_product=product_id, data=request.POST)
 
     if form.is_valid():
         cd = form.cleaned_data
@@ -40,18 +40,19 @@ def cart_remove(request, product_id):
 
 def cart_detail(request):
     cart = Cart(request)
+
     coupon_form = CouponForm()
 
     for item in cart:
+        product_id = item["product"].id  # Get the product ID from the item
         item["update_quantity_form"] = CartAddProductForm(
+            id_from_product=product_id,
             initial={
                 "quantity": item["quantity"],
                 "obvod_prsa": item["obvod_prsa"],
                 "obvod_hrudnik": item["obvod_hrudnik"],
-                # translates from cart_product_form to cart detail specifically with {{ item.update_quantity_form }}
                 "obvod_boky": item["obvod_boky"],
                 "zpusob_vyroby": item["zpusob_vyroby"],
-                # "poznamka": item["poznamka"],
                 "override": True,
             }
         )

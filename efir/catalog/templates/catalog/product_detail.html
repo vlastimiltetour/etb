@@ -178,41 +178,66 @@
                <div id="zpusob_vyroby" class="row mb-3">
                   <label for="zpusob_vyroby"><b>Druh kolekce</b></label>
                   <div class="col">
-                     <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black;" aria-label="Default select example">
-                        
-                        
-                        {% for zv in form.zpusob_vyroby %}
-                        {{ zv }}
-                        {% endfor %}
-                     </select>
+                    <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black;" aria-label="Default select example">
+                     <option value="vyberte" selected>Vyberte</option>
+
+                     {% for zv in form.zpusob_vyroby %}
+                     {{ zv }}
+                     {% endfor %} 
+                    </select>
                   </div>
-               </div>
-
-
-
-               {% if zpusob_vyroby == "Konfekce" %}
-  <p>Způsob výroby: Konfekce</p>
-{% elif zpusob_vyroby == "Na_Miru" %}
-  <p>Způsob výroby: Na Míru</p>
-{% else %}
-  <p>Způsob výroby: Unknown</p>
-{% endif %}
-
-               {% if product.category.slug != "cele-sety" %}
+                </div>
+                
+                
+<script>
+   function updateZpusobVyroby() {
+     var selectElement = document.getElementById("zpusob_vyroby_selected");
+     var selectedValue = selectElement.value;
+   
+     if (selectedValue === "Konfekce") {
+       // Specific code for Konfekce
+       var elementToHide = document.getElementById("poznamka");
+       elementToHide.style.display = "none";
+       var elementToShow = document.getElementById("sizes");
+       elementToShow.style.display = "block";
+     } else if (selectedValue === "Na_Miru") {
+       // Specific code for Na Míru
+       var elementToShow = document.getElementById("poznamka");
+       elementToShow.style.display = "block";
+       var elementToHide = document.getElementById("sizes");
+       elementToHide.style.display = "none";
+     }
+   }
+   
+   // Add event listener to the select element
+   var selectElement = document.getElementById("zpusob_vyroby_selected");
+   selectElement.addEventListener("change", updateZpusobVyroby);
+   
+   // Call the updateZpusobVyroby() function initially to handle the default selected value
+   updateZpusobVyroby();
+   </script>
+                
+                
+<!-- Size Variables -->
+<div id="sizes">
+         <div>
+               {% if product.category.slug != "XXX" %}
 
                <b>Obvod hrudníku</b>
-         <!-- If Condtition starts here -->
+                  <!-- If Condtition starts here -->
                <div class="d-flex mb-3">
                   <div class="col-6">
-               
                   <!-- Obvod hrudnik field -->
                   <select id="obvod_hrudnik_selection" value="0" name="obvod_hrudnik" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+               
                      {% for obvod_hrudnik in form.obvod_hrudnik %}
                      {{ obvod_hrudnik }}
                      {% endfor %}              
                   </select>
                   </div>
                </div>
+            </div>
+         
 
                <b>Obvod prsou</b>
 
@@ -238,7 +263,8 @@
                      </select>
                   </div>
                </div>
-           
+            </div>
+            <div id="poznamka">
                <b>Poznámka</b>
 
                <div class="d-flex mb-3">
@@ -253,7 +279,7 @@
                   </small>
                   </div>
                 </div>
-                
+               </div>
                
 {% else %}
 <style>
@@ -376,4 +402,5 @@
 });
 
 </script>
+
 {% endblock %}

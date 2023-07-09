@@ -54,10 +54,7 @@ def product_detail(
         Category.objects.all()
     )  # this is only for the purpose of showing the variable in the menu and footer
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
-
-    # this seems like it doesn't work, correct
-
-    form = CartAddProductForm()
+    form = CartAddProductForm(id_from_product=id)
 
     return render(
         request,

@@ -8,8 +8,7 @@
 
     <div class="container py-5">
   
-        <!-- Shopping Cart Section-->
-        
+        <!-- Shopping Cart Section -->
       <div class="row">
         <div class="col-md-4 order-md-2 mb-4">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -83,7 +82,7 @@
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Objednávka</h4>
           <div class="form-group">
-          <form class="needs-validation" novalidate="" method="post">
+          <form id="update-order-form" class="needs-validation" novalidate="" method="post">
             {% csrf_token %}
             <div class="row">
               <div class="col-md-6 mb-3">
@@ -117,21 +116,38 @@
                       <div class="invalid-feedback">
               </div>
             </div>
-            <div class="mb-3">
-              <label for="email">Adresa</label>
-              {{ form.address }}
-              <input type="hidden" name="pickup_point" id="pickup_point_input">
+           
 
-                        <div class="invalid-feedback">
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="email">Doprava</label>
-              {{ form.shipping }}
-                        <div class="invalid-feedback">
-              </div>
-            </div>
+            <div class="mb-3" id="id_shipping" name="shipping">
+              <label for="shipping">Doprava</label>
+     {{ form.shipping }}
 
+              <div class="invalid-feedback"></div>
+            </div>
+            
+            <script>
+              function showPacketaButton() {
+                var selectElement = document.querySelector('form select[name="shipping"]');
+                var selectedValue = selectElement.value;
+
+
+
+                if (selectedValue === "Z") {
+                  var elementToShow = document.getElementById("packeta_button");
+                  elementToShow.style.display = "block";
+                } else {
+                  var elementToHide = document.getElementById("packeta_button");
+                  elementToHide.style.display = "none";
+                }
+              }
+              
+              var selectElement = document.getElementById("id_shipping");
+              selectElement.addEventListener("change", showPacketaButton);
+            
+              showPacketaButton();
+
+
+            </script>
             <div class="mb-3">
               <!-- Packeta script-->
   <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
@@ -158,20 +174,21 @@
 
   </script>
 
-   <button class="btn btn-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
-   <div class="packeta-selector-value"></div>
+   <button id="packeta_button" type="button" style="display: none;" class="btn btn-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
+   <div class="packeta-selector-value"></div> 
+  
 <!-- End Packeta Script-->
             </div>
-
-
-            
+            <div class="col-md-6 mb-3">
+              <label for="email">Adresa</label>
+              {{ form.address }}
+                      <div class="invalid-feedback">
+              </div>
+            </div>
           </div>
             <div class="mb-3">
               <label for="email">Komentáře</label>
-              
               {{ form.comments }}
-      
-            
                         <div class="invalid-feedback">
               </div>
             </div>
