@@ -44,6 +44,7 @@ class Cart:
         obvod_prsa=0,
         obvod_hrudnik=0,
         obvod_boky=0,
+        obvod_body=0,
         zpusob_vyroby=None,  # might be renamed to konfekcni
         poznamka=None,
         override=False,
@@ -57,6 +58,7 @@ class Cart:
                 "obvod_boky": obvod_boky,
                 "obvod_prsa": obvod_prsa,
                 "obvod_hrudnik": obvod_hrudnik,
+                "obvod_body": obvod_body,
                 "poznamka": poznamka,
                 "zpusob_vyroby": str(zpusob_vyroby),
             }
@@ -66,6 +68,7 @@ class Cart:
             self.cart[product_id]["obvod_boky"] = obvod_boky
             self.cart[product_id]["obvod_prsa"] = obvod_prsa
             self.cart[product_id]["obvod_hrudnik"] = obvod_hrudnik
+            self.cart[product_id]["obvod_body"] = obvod_body
             self.cart[product_id]["zpusob_vyroby"] = str(zpusob_vyroby)
 
         else:

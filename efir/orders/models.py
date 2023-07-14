@@ -17,6 +17,8 @@ class Order(models.Model):
     address = models.CharField(max_length=250)
 
     class Meta:
+        verbose_name = "Objednávky"
+        verbose_name_plural = "Objednávky"
         ordering = ["-created"]
         indexes = [
             models.Index(fields=["-created"]),
@@ -36,6 +38,11 @@ class OrderItem(models.Model):
     )
     price = models.DecimalField(decimal_places=2, max_digits=10)
     quantity = models.PositiveIntegerField(default=1)
+
+    obvod_hrudnik = models.CharField(max_length=255, default="-", blank=True)
+    obvod_prsa = models.CharField(max_length=255, default="-", blank=True)
+    obvod_boky = models.CharField(max_length=255, default="-", blank=True)
+    # obvod_body = models.CharField(max_length=255, default="-", blank=True)
 
     def __str__(self):
         return str(self.id)

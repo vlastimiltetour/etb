@@ -26,6 +26,10 @@ def new_order(request):
                     product=item["product"],
                     price=item["price"],
                     quantity=item["quantity"],
+                    obvod_hrudnik=item["obvod_hrudnik"],
+                    obvod_prsa=item["obvod_prsa"],
+                    obvod_boky=item["obvod_boky"],
+                    # obvod_body=item["obvod_body"],
                 )
             # clear the cart
             cart.clear()
@@ -44,6 +48,12 @@ def new_order(request):
 
 
 def objednavka_vytvorena(request):
-    id = 2
+    obvod_boky = OrderItem.objects.values_list("obvod_boky")
+    # order_items = OrderItem.objects.values_list('obvod_boky', flat=True)
+
+    print("=========")
+    print(obvod_boky)
+
+    id = 10
     order = get_object_or_404(Order, id=id)
     return render(request, "orders/objednavka_vytvorena.html", {"order": order})

@@ -22,6 +22,7 @@ def cart_add(request, product_id):
             obvod_hrudnik=cd["obvod_hrudnik"],
             obvod_prsa=cd["obvod_prsa"],
             obvod_boky=cd["obvod_boky"],
+            obvod_body=cd["obvod_body"],
             zpusob_vyroby=cd["zpusob_vyroby"],
             poznamka=cd["poznamka"],
             override=cd["override"],
@@ -52,9 +53,10 @@ def cart_detail(request):
                 "obvod_prsa": item["obvod_prsa"],
                 "obvod_hrudnik": item["obvod_hrudnik"],
                 "obvod_boky": item["obvod_boky"],
+                "obvod_body": item["obvod_body"],
                 "zpusob_vyroby": item["zpusob_vyroby"],
                 "override": True,
-            }
+            },
         )
 
     return render(

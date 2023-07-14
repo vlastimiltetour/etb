@@ -20,7 +20,18 @@
     <hr class="my-4">
     <h4 class="heading">Vaše objednávka #{{ order.id }} </h4>
 
-         
+         <!-- This template is used when redirecting after placing order in the browser-->
+         {% for item in order.items.all %}
+         <tr>
+           <td>{{ item.product }}</td>
+           <td>{{ item.price }}</td>
+           <td>{{ item.quantity }}</td>
+           <td>{{ item.obvod_hrudnik }}</td>
+           <td>{{ item.obvod_prsa }}</td>
+           <td>{{ item.obvod_boky }}</td>
+         </tr>
+         {% endfor %}
+<!-- END-->
           <p>
             {{ order.first_name }},<br>
             <br>
@@ -126,8 +137,7 @@
                     {% endif %}
                   </ul>
         
-                  
-                
+               
               <!-- 2cart -->
 
           </div>

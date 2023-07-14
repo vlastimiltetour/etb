@@ -32,11 +32,6 @@ class Product(models.Model):
     short_description = models.TextField(max_length=50, blank=True)
     long_description = models.TextField(blank=True)
 
-    zpusob_vyroby_options = (("K", "Konfekční velikost"), ("N", "Na míru"))
-    zpusob_vyroby = models.CharField(
-        max_length=100, choices=zpusob_vyroby_options, null=True
-    )
-
     # Time Specifics
     new = models.BooleanField(default=False)
     available = models.BooleanField(default=False)
@@ -44,14 +39,29 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     bestseller = models.BooleanField(default=False)
     headliner = models.BooleanField(default=False)
-    product_return = models.BooleanField(default=False)
 
-    obvod_hrudnik = models.ManyToManyField("ObvodHrudnik")
-    obvod_prsa = models.ManyToManyField("ObvodPrsa")
-    obvod_boky = models.ManyToManyField("ObvodBoky")
+    obvod_hrudnik = models.ManyToManyField(
+        "ObvodHrudnik", blank=True, verbose_name="velikost pasu", default="-"
+    )
+    obvod_prsa = models.ManyToManyField(
+        "ObvodPrsa", blank=True, verbose_name="velikost podprsenky", default="-"
+    )
+    obvod_boky = models.ManyToManyField(
+        "ObvodBoky", blank=True, verbose_name="velikost kalhotek", default="-"
+    )
+    obvod_body = models.ManyToManyField(
+        "Body", blank=True, verbose_name="velikost body", default="-"
+    )
+
+    zpusob_vyroby = models.ManyToManyField(
+        "ZpusobVyroby", blank=True, verbose_name="Druh kolekce"
+    )
+
     poznamka = models.TextField(blank=True)
 
     class Meta:
+        verbose_name = "Produkt"
+        verbose_name_plural = "Produkty"
         ordering = ["name"]
         indexes = [
             models.Index(fields=["id", "slug"]),
@@ -74,14 +84,14 @@ class Category(models.Model):
 
     # additional information about Category model
     class Meta:
+        verbose_name = "Kategorie"
+        verbose_name_plural = "Kategorie"
         ordering = ["name"]
         indexes = [
             models.Index(
                 fields=["name"]
             ),  # this piece of code improves query performance
         ]
-        verbose_name = "category"  # provides human readable names
-        verbose_name_plural = "categories"
 
     def __str__(self):
         return self.name
@@ -94,25 +104,79 @@ class Category(models.Model):
 
 class ObvodHrudnik(models.Model):
     size = models.CharField(
-        max_length=20, help_text="Dostupné konfekční velikosti", default=0
+        max_length=20,
+        help_text="Dostupné konfekční velikosti",
+        blank=True,
+        default="-",
     )
 
     def __str__(self):
         return self.size
+
+    class Meta:
+        verbose_name = "velikost pasu"
+        verbose_name_plural = "velikosti pasu"
 
 
 class ObvodPrsa(models.Model):
     size = models.CharField(
-        max_length=20, help_text="Dostupné konfekční velikosti", default=0
+        max_length=20,
+        help_text="Dostupné konfekční velikosti",
+        blank=True,
+        default="-",
     )
 
     def __str__(self):
         return self.size
 
+    class Meta:
+        verbose_name = "velikost podprsenky"
+        verbose_name_plural = "velikost podprsenky"
+
 
 class ObvodBoky(models.Model):
     size = models.CharField(
-        max_length=20, help_text="Dostupné konfekční velikosti", default=0
+        max_length=20,
+        help_text="Dostupné konfekční velikosti",
+        blank=True,
+        default="-",
+    )
+
+    def __str__(self):
+        return self.size
+
+    class Meta:
+        verbose_name = "velikost kalhotek"
+        verbose_name_plural = "velikosti kalhotek"
+
+
+class Body(models.Model):
+    size = models.CharField(
+        max_length=20,
+        help_text="Dostupné konfekční velikosti",
+        blank=True,
+        default="-",
+    )
+
+    def __str__(self):
+        return self.size
+
+    class Meta:
+        verbose_name = "velikost body"
+        verbose_name_plural = "velikosti body"
+
+
+class ZpusobVyroby(models.Model):
+    ZPUSOB_VYROBY_CHOICES = [
+        ("Konfekce", "Konfekce"),
+        ("Na Míru", "Na Míru"),
+    ]
+
+    size = models.CharField(
+        max_length=20,
+        choices=ZPUSOB_VYROBY_CHOICES,
+        default="Konfekční velikost",
+        blank=True,
     )
 
     def __str__(self):

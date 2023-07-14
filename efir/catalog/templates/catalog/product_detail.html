@@ -39,7 +39,7 @@
    text-align: center;
    border: 1px solid black; /* Add black square border */
    }
-   #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_hrudnik {
+   #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_hrudnik, #id_obvod_body {
    appearance: none;
    -webkit-appearance: none;
    -moz-appearance: none;
@@ -179,7 +179,7 @@
                   <label for="zpusob_vyroby"><b>Druh kolekce</b></label>
                   <div class="col">
                     <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0" style="border-color: black;" aria-label="Default select example">
-                     <option value="vyberte" selected>Vyberte</option>
+                     <option value="vyberte" selected>---- Vyberte ----</option>
 
                      {% for zv in form.zpusob_vyroby %}
                      {{ zv }}
@@ -189,47 +189,47 @@
                 </div>
                 
                 
-<script>
-   function updateZpusobVyroby() {
-     var selectElement = document.getElementById("zpusob_vyroby_selected");
-     var selectedValue = selectElement.value;
-   
-     if (selectedValue === "Konfekce") {
-       // Specific code for Konfekce
-       var elementToHide = document.getElementById("poznamka");
-       elementToHide.style.display = "none";
-       var elementToShow = document.getElementById("sizes");
-       elementToShow.style.display = "block";
-     } else if (selectedValue === "Na_Miru") {
-       // Specific code for Na Míru
-       var elementToShow = document.getElementById("poznamka");
-       elementToShow.style.display = "block";
-       var elementToHide = document.getElementById("sizes");
-       elementToHide.style.display = "none";
-     }
-   }
-   
-   // Add event listener to the select element
-   var selectElement = document.getElementById("zpusob_vyroby_selected");
-   selectElement.addEventListener("change", updateZpusobVyroby);
-   
-   // Call the updateZpusobVyroby() function initially to handle the default selected value
-   updateZpusobVyroby();
-   </script>
-                
+                <script>
+                  function updateZpusobVyroby() {
+                    var selectElement = document.getElementById("zpusob_vyroby_selected");
+                    var selectedValue = selectElement.value;
+                  
+                    if (selectedValue === "Konfekce") {
+                      // Specific code for Konfekce
+                      var elementToHide = document.getElementById("poznamka");
+                      elementToHide.style.display = "none";
+                      var elementToShow = document.getElementById("sizes");
+                      elementToShow.style.display = "block";
+                    } else if (selectedValue === "Na Míru") {
+                      // Specific code for Na Míru
+                      var elementToShow = document.getElementById("poznamka");
+                      elementToShow.style.display = "block";
+                      var elementToHide = document.getElementById("sizes");
+                      elementToHide.style.display = "none";
+                    }
+                  }
+                  
+                  // Add event listener to the select element
+                  var selectElement = document.getElementById("zpusob_vyroby_selected");
+                  selectElement.addEventListener("change", updateZpusobVyroby);
+                  
+                  // Call the updateZpusobVyroby() function initially to handle the default selected value
+                  updateZpusobVyroby();
+                  </script>
+                     
                 
 <!-- Size Variables -->
 <div id="sizes">
          <div>
                {% if product.category.slug != "XXX" %}
 
-               <b>Obvod hrudníku</b>
+               <b>Velikost pasu</b>
                   <!-- If Condtition starts here -->
                <div class="d-flex mb-3">
                   <div class="col-6">
                   <!-- Obvod hrudnik field -->
                   <select id="obvod_hrudnik_selection" value="0" name="obvod_hrudnik" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-               
+
                      {% for obvod_hrudnik in form.obvod_hrudnik %}
                      {{ obvod_hrudnik }}
                      {% endfor %}              
@@ -239,27 +239,40 @@
             </div>
          
 
-               <b>Obvod prsou</b>
+               <b>Obvod podprsenky</b>
 
                <div class="d-flex mb-3">
                   <div class="col-6">
                      <select id="obvod_prsa_selection" value="0" name="obvod_prsa" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+
                         {% for obvod_prsa in form.obvod_prsa %}
                         {{ obvod_prsa }}
                         {% endfor %}                             
                      </select>
                   </div>
                </div>
-               <b>Obvod boků</b>
+               <b>Velikost kalhotek</b>
 
                <div class="d-flex mb-3">
                   <div class="col-6">
                      <!-- Obvod boky field -->
                      <select id="obvod_boky_selection" name="obvod_boky" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-                       
+
                         {% for obvod_boky in form.obvod_boky %}
                         {{ obvod_boky }}
                         {% endfor %}              
+                     </select>
+                  </div>
+               </div>
+               <b>Velikost body</b>
+
+               <div class="d-flex mb-3">
+                  <div class="col-6">
+                     <select id="obvod_body_selection" value="0" name="obvod_body" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+
+                        {% for obvod_body in form.obvod_body %}
+                        {{ obvod_body }}
+                        {% endfor %}                             
                      </select>
                   </div>
                </div>

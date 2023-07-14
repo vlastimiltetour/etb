@@ -5,13 +5,27 @@ from .models import Order, OrderItem
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
-    raw_id_fields = ["product"]
+    readonly_fields = (
+        "order",
+        "product",
+        "price",
+        "quantity",
+        "obvod_hrudnik",
+        "obvod_prsa",
+        "obvod_boky",
+    )
+    can_delete = False
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "id",
+        "product_name",
+        "price",
+        "quantity",
+        "velikosti",
+        "price",
         "first_name",
         "last_name",
         "email",
@@ -21,3 +35,33 @@ class OrderAdmin(admin.ModelAdmin):
         "address",
     ]
     inlines = [OrderItemInline]
+
+    def get_total_cost(self, obj):
+        return obj.get_total_cost()  # Call the Order's get_total_cost() method
+
+    get_total_cost.short_description = (
+        "Total Cost"  # Set the column header in the admin site
+    )
+
+    def product_name(self, obj):
+        product_name = obj.items.first().product.name
+        return product_name
+
+    def price(self, obj):
+        price_value = obj.items.values_list("price").first()
+        return str(price_value[0])
+
+    def quantity(self, obj):
+        quantity_value = obj.items.values_list("quantity").first()
+        return str(quantity_value[0])
+
+    def velikosti(self, obj):
+        items = obj.items.all()
+        item_details = []
+        for item in items:
+            item_details.append(
+                f"Pas: {item.obvod_hrudnik}, Podprsenka: {item.obvod_prsa}, Kalhotky: {item.obvod_boky}, Body: "
+            )
+        return ", ".join(item_details)
+
+    velikosti.short_description = "Order Items"

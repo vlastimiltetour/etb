@@ -5,7 +5,7 @@
 
 {% block content %}
 <style>
-   #id_quantity, #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_boky {
+   #id_quantity, #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_boky, #id_obvod_body {
    appearance: none;
    -webkit-appearance: none;
    -moz-appearance: none;
@@ -74,7 +74,7 @@
                </div>
                <div class="row">
                   <div class="col-6">
-                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Obvod prsa:</p>
+                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost podprsenky:</p>
                   </div>
                   <div class="col-6"  style="text-align: left;">
                      {{ item.update_quantity_form.obvod_prsa }}
@@ -82,7 +82,7 @@
                </div>
                <div class="row">
                   <div class="col-6">
-                     <p class="mob-text" id="obvod_hrudnik-{{ forloop.counter }}">Obvod hrudníku:</p>
+                     <p class="mob-text" id="obvod_hrudnik-{{ forloop.counter }}">Velikost pasu:</p>
                   </div>
                   <div class="col-6"  style="text-align: left;">
                      {{ item.update_quantity_form.obvod_hrudnik }}
@@ -90,10 +90,18 @@
                </div>
                <div class="row">
                   <div class="col-6">
-                     <p class="mob-text" id="obvod_boky-{{ forloop.counter }}">Obvod boky:</p>
+                     <p class="mob-text" id="obvod_boky-{{ forloop.counter }}">Velikost kalhotek:</p>
                   </div>
                   <div class="col-6"  style="text-align: left;">
                      {{ item.update_quantity_form.obvod_boky }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_body-{{ forloop.counter }}">Velikost body:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_body }}
                   </div>
                </div>
                <div class="row">

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Category, ObvodBoky, ObvodHrudnik, ObvodPrsa, Product
+from .models import (Body, Category, ObvodBoky, ObvodHrudnik, ObvodPrsa,
+                     Product, ZpusobVyroby)
 
 # Register your models here.
 
@@ -15,12 +16,28 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
         "name",
-        "slug",
+        "category",
         "price",
         "available",
+        "display_obvod_hrudnik",
+        "display_obvod_prsa",
+        "display_obvod_boky",
     ]
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ["bestseller"]
+
+    def display_obvod_hrudnik(self, obj):
+        return ", ".join(str(obvod) for obvod in obj.obvod_hrudnik.all())
+
+    def display_obvod_prsa(self, obj):
+        return ", ".join(str(obvod) for obvod in obj.obvod_prsa.all())
+
+    def display_obvod_boky(self, obj):
+        return ", ".join(str(obvod) for obvod in obj.obvod_boky.all())
+
+    display_obvod_hrudnik.short_description = "Obvod Hrudnik"
+    display_obvod_prsa.short_description = "Obvod Prsa"
+    display_obvod_boky.short_description = "Obvod Boky"
 
 
 @admin.register(ObvodHrudnik)
@@ -45,3 +62,24 @@ class ObvodBokyAdmin(admin.ModelAdmin):
     ordering = [
         "size",
     ]
+
+
+@admin.register(Body)
+class BodyAdmin(admin.ModelAdmin):
+    list_display = ["size"]
+    ordering = [
+        "size",
+    ]
+
+
+@admin.register(ZpusobVyroby)
+class ZpusobVyrobyAdmin(admin.ModelAdmin):
+    list_display = ["size"]
+    ordering = ["size"]
+    actions = ["delete_selected"]
+
+    def delete_selected(self, request, queryset):
+        # Perform the delete operation on the selected queryset
+        queryset.delete()
+
+    delete_selected.short_description = "Delete selected ZpusobVyroby"
