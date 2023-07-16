@@ -68,7 +68,6 @@ INSTALLED_APPS = [
     "cart.apps.CartConfig",
     "django.contrib.humanize",
     "coupons.apps.CouponsConfig",
-    "django_extensions",
 ]
 
 
