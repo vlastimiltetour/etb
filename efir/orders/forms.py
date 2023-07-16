@@ -14,6 +14,7 @@ class OrderForm(forms.ModelForm):
             "comments",
             "shipping",
             "address",
+            "country",
         ]
 
         widgets = {
@@ -47,5 +48,11 @@ class OrderForm(forms.ModelForm):
                     "class": "form-control",
                     "placeholder": "Vložte adresu, kam doručit oblečení",
                 }
+            ),
+            "country": forms.Select(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Vložte adresu, kam doručit oblečení",
+                },
             ),
         }

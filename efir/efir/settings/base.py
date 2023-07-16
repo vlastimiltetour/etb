@@ -15,7 +15,6 @@ from pathlib import Path
 
 DJANGO_SETTINGS_MODULE = "efir.settings.local"
 
-
 import logging
 
 # Set up the logging configuration
@@ -26,14 +25,15 @@ try:
     import dotenv
 
     dotenv.read_dotenv()
+    environment = "local"
 except AttributeError:
-    logging.info("Exception raised")
-    logging.info("Loading Production Env Module")
     from dotenv import load_dotenv
 
     load_dotenv(".env")
+    logging.info("Exception raised, means Production Env should be executed.")
+    logging.info("Loading Production Env Module")
 finally:
-    logging.info("The whole cycle of Env went through")
+    logging.info("The whole cycle finished")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -63,10 +63,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "catalog.apps.CatalogConfig",
+    "payments.apps.PaymentsConfig",
     "orders.apps.OrdersConfig",
     "cart.apps.CartConfig",
     "django.contrib.humanize",
     "coupons.apps.CouponsConfig",
+    "django_extensions",
 ]
 
 
@@ -85,7 +87,7 @@ ROOT_URLCONF = "efir.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -190,3 +192,10 @@ DEFAULT_FROM_EMAIL = "objednavky@efirthebrand.cz"
 EMAIL_ENCRYPTION = "STARTTLS"
 
 ASGI_APPLICATION = "web.asgi.application"
+
+
+# PayU Config
+PAYU_POS_ID = 4298008
+PAYU_POS_AUTH_KEY = "fff76353d7249ea5a7e3ce86fe316bd2"
+PAYU_CLIENT_SECRET = "3715856bea104d102ec1a4e954f30c5c"
+PAYU_BASE_URL = "https://secure.snd.payu.com/api/v2_1"

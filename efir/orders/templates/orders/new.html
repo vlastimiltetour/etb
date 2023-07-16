@@ -82,7 +82,7 @@
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Objednávka</h4>
           <div class="form-group">
-          <form id="update-order-form" class="needs-validation" novalidate="" method="post">
+          <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="{{ payments:process }}">
             {% csrf_token %}
             <div class="row">
               <div class="col-md-6 mb-3">
@@ -116,7 +116,12 @@
                       <div class="invalid-feedback">
               </div>
             </div>
-           
+            <div class="col-md-6 mb-3">
+              <label for="email">Země</label>
+              {{ form.country }}
+                      <div class="invalid-feedback">
+              </div>
+            </div>
 
             <div class="mb-3" id="id_shipping" name="shipping">
               <label for="shipping">Doprava</label>

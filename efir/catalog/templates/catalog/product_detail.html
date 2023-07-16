@@ -116,41 +116,30 @@
 
 </style>
 <section class="py-2">
-   <div class="container px-4 px-lg-5 my-2">
+   <div class="container my-2">
    <div class="row gx-4 gx-lg-5">
       <div class="col-md-6">
          <div class="slider">
+            {% for photo in product.photos.all %}
+
             <div class="slide">
-               <img class="card-img-top mb-md-0" src="{{product.image1.url}}" alt="..." />
+               <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" />
             </div>
-            <div class="slide">
-               <img class="card-img-top mb-md-0" src="{{product.image2.url}}" alt="..." />
-            </div>
-            <div class="slide">
-               <img class="card-img-top mb-md-0" src="{{product.image3.url}}" alt="..." />
-            </div>
-            <div class="slide">
-               <img class="card-img-top mb-md-0" src="{{product.image4.url}}" alt="..." />
-            </div>
-            
+            {% endfor %}
          </div>
+         
          
 
                <!-- Miniatures -->
             <div class="row mt-3">
-               
-                     <div class="slide">
-                        <img class="miniature" src="{{ product.image1.url }}" alt="Miniature 1" />
-                
-                
-                        <img class="miniature" src="{{ product.image2.url }}" alt="Miniature 2" />
-                
-                
-                        <img class="miniature" src="{{ product.image3.url }}" alt="Miniature 3" />
-                
-                
-                        <img class="miniature" src="{{ product.image4.url }}" alt="Miniature 4" />
-                     </div>
+               <div class="slide">
+
+               {% for photo in product.photos.all %}
+                        <img class="miniature" src="{{ photo.photo.url }}" alt="{{ product.name }} Photo">
+            
+               {% endfor %}
+            </div>
+
             </div>
             
                <!--End of Miniatures -->

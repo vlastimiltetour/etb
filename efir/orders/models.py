@@ -10,7 +10,8 @@ class Order(models.Model):
     number = models.CharField(max_length=20)
     comments = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
-
+    COUNTRY_CHOICES = [("CZ", "Česko"), ("SK", "Slovensko"), ("ER", "EU")]
+    country = models.CharField(max_length=20, choices=COUNTRY_CHOICES)
     shipping_type = (("Z", "Zásilkovna"), ("O", "Osobní odběr"))
 
     shipping = models.CharField(max_length=100, choices=shipping_type)

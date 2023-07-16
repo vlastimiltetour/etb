@@ -8,8 +8,8 @@ ZPUSOB_VYROBY_CHOICES = [
     ("Konfekce", "Konfekce"),
     ("Na_Miru", "Na Míru"),
 ]
-# OBVOD_PRSA_CHOICES = [(obj.id, str(obj)) for obj in ObvodHrudnik.objects.all()]
-# OBVOD_HRUDNIK_CHOICES = [(obj.id, str(obj)) for obj in ObvodPrsa.objects.all()]
+"""OBVOD_PRSA_CHOICES = [(obj.id, str(obj)) for obj in ObvodHrudnik.objects.all()]
+OBVOD_HRUDNIK_CHOICES = [(obj.id, str(obj)) for obj in ObvodPrsa.objects.all()]
 
 OBVOD_PRSA_CHOICES = [
     (str(i) + j, str(i) + j) for i in range(70, 111, 5) for j in ["A", "B", "C"]
@@ -18,7 +18,7 @@ OBVOD_PRSA_CHOICES.append((0, "-"))
 OBVOD_HRUDNIK_CHOICES = [(i, str(i)) for i in ["XS", "S", "M", "L"]]
 OBVOD_HRUDNIK_CHOICES.append((0, "-"))
 OBVOD_BOKY_CHOICES = [(i, str(i)) for i in ["XS", "S", "M", "L"]]
-OBVOD_BOKY_CHOICES.append((0, "-"))
+OBVOD_BOKY_CHOICES.append((0, "-"))"""
 
 
 class CartAddProductForm(forms.Form):
@@ -54,8 +54,6 @@ class CartAddProductForm(forms.Form):
 
         zpusob_vyroby = tuple(product.zpusob_vyroby.values_list())
         zpusob_vyroby_list = [(i[1], str(i[1])) for i in zpusob_vyroby]
-
-        print(zpusob_vyroby_list)
 
         # zpusob_vyroby = tuple(product.zpusob_vyroby.values_list())
         # zpusob_vyroby_list = [(i, str(i)) for i in zpusob_vyroby]

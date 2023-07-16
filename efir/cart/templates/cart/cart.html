@@ -40,7 +40,13 @@
 
       <div class="my-auto col-3">
             <div class="book">
-               <img src="{{ product.image1.url }}" class="book-img" style="max-height: 100px; max-width: 50px;">
+               {% with first_photo=product.photos.first %}
+               {% if first_photo %}
+               <img src="{{ first_photo.photo.url }}" class="book-img" style="max-height: 100px; max-width: 50px;">
+
+               {% endif %}
+                {% endwith %}
+
             </div>
       </div>
       <div class="my-auto py-3 col-9">

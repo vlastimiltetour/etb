@@ -1,7 +1,8 @@
 import logging
 import ssl
 
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from cart.cart import Cart
 
@@ -40,11 +41,12 @@ def new_order(request):
             except ssl.SSLCertVerificationError:
                 logging.info(f"Local environment has no email sending{order_id}")
 
-            return render(request, "orders/objednavka_vytvorena.html", {"order": order})
+            # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
+            return redirect(reverse("payments:process"))
     else:
         form = OrderForm()
 
-    return render(request, "orders/new.html", {"cart": cart, "form": form})
+    return render(request, "payments/process.html", {"cart": cart, "form": form})
 
 
 def objednavka_vytvorena(request):
