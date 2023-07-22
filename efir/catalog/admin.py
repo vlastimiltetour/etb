@@ -1,11 +1,13 @@
 from django.contrib import admin
 
-from .models import (Body, Category, ObvodBoky, ObvodHrudnik, ObvodPrsa,
-                     Product, ZpusobVyroby, Photo)
+from .models import (Body, Category, ObvodBoky, ObvodHrudnik, ObvodPrsa, Photo,
+                     Product, ZpusobVyroby)
+
 
 # Register your models here.
 class PhotoAdmin(admin.StackedInline):
     model = Photo
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -40,11 +42,11 @@ class ProductAdmin(admin.ModelAdmin):
     display_obvod_prsa.short_description = "Obvod Prsa"
     display_obvod_boky.short_description = "Obvod Boky"
 
-
-    inlines = [PhotoAdmin] #this is creating inline to show photos
+    inlines = [PhotoAdmin]  # this is creating inline to show photos
 
     class Meta:
         model = Product
+
 
 @admin.register(ObvodHrudnik)
 class ObvodHrudnikAdmin(admin.ModelAdmin):
@@ -89,5 +91,3 @@ class ZpusobVyrobyAdmin(admin.ModelAdmin):
         queryset.delete()
 
     delete_selected.short_description = "Delete selected ZpusobVyroby"
-
-

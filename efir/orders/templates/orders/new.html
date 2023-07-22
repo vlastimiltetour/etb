@@ -82,7 +82,7 @@
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Objednávka</h4>
           <div class="form-group">
-          <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="{{ payments:process }}">
+          <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="#">
             {% csrf_token %}
             <div class="row">
               <div class="col-md-6 mb-3">
@@ -214,6 +214,18 @@
 
             <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button>
               </div>
+
+
+              <!-- Payment Instructions -->
+              <form method="post" action="{% url 'payments:process' %}">
+                <!-- Include the necessary form fields -->
+                {% csrf_token %}        
+                <!-- Add other form fields here -->
+                <button action="https://secure.payu.com/api/v2_1/orders" type="submit">Platit</button>
+              </form>
+            <!--end Payment Instructions -->
+
+            
             </section>
 
           </form>

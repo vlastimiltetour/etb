@@ -90,11 +90,13 @@ class Category(models.Model):
 
 
 class ObvodHrudnik(models.Model):
+    OBVOD_HRUDNIK_CHOICES = [(str(i), str(i)) for i in ["XS", "S", "M", "L"]]
+
     size = models.CharField(
         max_length=20,
         help_text="Dostupné konfekční velikosti",
         blank=True,
-        default="-",
+        choices=OBVOD_HRUDNIK_CHOICES,
     )
 
     def __str__(self):
@@ -106,11 +108,15 @@ class ObvodHrudnik(models.Model):
 
 
 class ObvodPrsa(models.Model):
+    OBVOD_PRSA_CHOICES = [
+        (str(i) + j, str(i) + j) for i in range(70, 110, 5) for j in ["A", "B", "C"]
+    ]
+
     size = models.CharField(
         max_length=20,
         help_text="Dostupné konfekční velikosti",
         blank=True,
-        default="-",
+        choices=OBVOD_PRSA_CHOICES,
     )
 
     def __str__(self):
@@ -122,11 +128,12 @@ class ObvodPrsa(models.Model):
 
 
 class ObvodBoky(models.Model):
+    OBVOD_BOKY_CHOICES = [(str(i), str(i)) for i in ["XS", "S", "M", "L"]]
     size = models.CharField(
         max_length=20,
         help_text="Dostupné konfekční velikosti",
         blank=True,
-        default="-",
+        choices=OBVOD_BOKY_CHOICES,
     )
 
     def __str__(self):
@@ -142,7 +149,6 @@ class Body(models.Model):
         max_length=20,
         help_text="Dostupné konfekční velikosti",
         blank=True,
-        default="-",
     )
 
     def __str__(self):

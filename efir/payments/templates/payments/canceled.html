@@ -1,1 +1,22 @@
-canceled
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+        
+    <div style="padding-bottom: 10%;">
+        <div class="container px-5 px-lg-5 mt-5">
+            <center>
+            <h1> {% trans "Vaše platba nebyla úspěšná." %} </h1>
+            <p> {% trans "Platba proběhla bez problémů." %} </p>
+                <br>
+                
+                <div><a href="#"><button class="btn btn-primary btn-lg text-white m-1" style="background-color:  #FF69B4; border-color: white;">Zpět do obchodu</button></a></div>
+            
+            </center>
+        </div>
+    </div>
+
+
+
+{% endblock %}

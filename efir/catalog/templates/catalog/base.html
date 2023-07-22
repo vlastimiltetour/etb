@@ -13,6 +13,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href='{% static "/css/styles.css" %}' rel="stylesheet" />
+    <link href='{% static "/css/cookie-consent.css" %}' rel="stylesheet" />
+    <link href='{% static "/css/shop-styles.css" %}' rel="stylesheet" />
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
@@ -303,6 +306,59 @@
       <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     </section>
   
+
+
+
+  <!-- Cookie Button Start -->
+  <div id="myDIV" class="cookiescript_injected">
+    <div class="wrapper">
+      <!-- <img src="#" alt=""> -->
+      <header>
+        <h2>{% trans "Souhlas se zpracováním Cookies" %}</h2>
+      </header>
+      <p>{% trans "Na této stránce používáme soubory cookie, abychom zlepšili váš uživatelský zážitek." %}</p>
+      <div class="buttons">
+        <button id="accept" class="item" onclick="acceptCookie()">{% trans "Přijmout" %}</button>
+        <button id="reject" class="item" onclick="rejectCookie()">{% trans "Odmítnout" %}</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function acceptCookie() {
+      //document.cookie = "CookieBy=zuzikoko; max-age=" + 60 * 60 * 24 * 30 + "; path=/"; // Setting cookie for 1 month
+      document.cookie = "CookieBy=efirthebrand; max-age=1; path=/"; // Setting cookie for 1 month
+
+      checkCookieConsent();
+    }
+  
+    function rejectCookie() {
+      hideCookieBanner();
+    }
+  
+    function checkCookieConsent() {
+      const pageShade = document.querySelector('.cookiescript_injected');
+      const cookieBox = document.querySelector(".wrapper");
+      let checkCookie = document.cookie.indexOf("CookieBy=efirthebrand"); // Check if our cookie is set
+      if (checkCookie != -1) { // If cookie is set, hide the cookie box
+        cookieBox.classList.add("hide");
+        pageShade.style.display = "none";
+      } else { // If cookie is not set, show the cookie box
+        cookieBox.classList.remove("hide");
+      }
+    }
+  
+    function hideCookieBanner() {
+      const cookieBox = document.querySelector(".wrapper");
+      const pageShade = document.querySelector('.cookiescript_injected');
+      cookieBox.style.display = "none";
+      pageShade.style.display = "none";
+    }
+  
+    // This code checks for the cookie and hides/shows the cookie box based on the cookie's presence.
+    checkCookieConsent();
+  </script>
+  
+
     <!-- JavaScript Code -->
     
     <!-- Bootstrap core JS-->

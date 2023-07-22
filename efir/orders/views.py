@@ -34,7 +34,10 @@ def new_order(request):
                 )
             # clear the cart
             cart.clear()
+
             order_id = order.id
+            # replacing order_id by request session
+            #!!!!!request.session["order_id"] = order.id
 
             try:
                 customer_order_email_confirmation(order_id)
@@ -46,7 +49,7 @@ def new_order(request):
     else:
         form = OrderForm()
 
-    return render(request, "payments/process.html", {"cart": cart, "form": form})
+    return render(request, "orders/new.html", {"cart": cart, "form": form})
 
 
 def objednavka_vytvorena(request):

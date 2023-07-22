@@ -4,117 +4,7 @@
 {% load humanize %}
 {% block content %}
 <!-- Large Product Detail -->
-<style>
-    @media screen and (max-width: 600px) {
-        .col {
-            width: 100%;
-        }
-        
-        .miniature {
-            max-width: 40px;
-            max-height: 50px;
-            margin-right: 2px;
-        }
-    }
-    
-    @media screen and (min-width: 601px) {
-        .col {
-            width: 100px;
-        }
-        
-        .miniature {
-            max-width: 100px;
-            max-height: 125px;
-            margin-right: 10px;
-        }
-    }
 
-   #id_quantity {
-   appearance: none;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   background-color: transparent;
-   font-size: 16px;
-   width: 42px; /* Adjust the width as needed */
-   text-align: center;
-   border: 1px solid black; /* Add black square border */
-   }
-   #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_hrudnik, #id_obvod_body {
-   appearance: none;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   background-color: transparent;
-   font-size: 16px;
-   height: 38px;
-   width: 121px; /* Adjust the width as needed */
-   text-align: center;
-   border: 1px solid black; /* Add black square border */
-   }
-   .maximized {
-   width: 300px;
-   height: 450px;
-   position: fixed;
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   z-index: 9999;
-   }
-
-   .slider {
-      position: relative;
-   }
-
-   .slick-prev {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      opacity: 0; /* Hide the arrows initially */
-      transition: opacity 0.3s ease-in-out; /* Add a smooth transition */
-   }
-   .slick-next {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0; /* Hide the arrows initially */
-      transition: opacity 0.3s ease-in-out; /* Add a smooth transition */
-}
-
-.slider:hover .slick-prev,
-.slider:hover .slick-next {
-    opacity: 1; /* Show the arrows on hover */
-}
-
-   .slick-prev {
-      left: 10px;
-   }
-
-   .slick-next {
-      right: 10px;
-   }
-
-</style>
 <section class="py-2">
    <div class="container my-2">
    <div class="row gx-4 gx-lg-5">
@@ -183,7 +73,21 @@
                     var selectElement = document.getElementById("zpusob_vyroby_selected");
                     var selectedValue = selectElement.value;
                   
-                    if (selectedValue === "Konfekce") {
+                    if (selectedValue === "" || selectedValue === "---- Vyberte ----") {
+                      // Specific code for Konfekce
+                      var elementToHide = document.getElementById("poznamka");
+                      elementToHide.style.display = "none";
+                      var elementToHide = document.getElementById("sizes");
+                      elementToShow.style.display = "none";
+                    } 
+                    else if (selectedValue === "---- Vyberte ----") {
+                      // Specific code for Konfekce
+                      var elementToHide = document.getElementById("poznamka");
+                      elementToHide.style.display = "none";
+                      var elementToHide = document.getElementById("sizes");
+                      elementToShow.style.display = "none";
+                    }
+                    else if (selectedValue === "Konfekce") {
                       // Specific code for Konfekce
                       var elementToHide = document.getElementById("poznamka");
                       elementToHide.style.display = "none";
@@ -208,7 +112,7 @@
                      
                 
 <!-- Size Variables -->
-<div id="sizes">
+<div id="sizes" style="display: none;">
          <div>
                {% if product.category.slug != "XXX" %}
 
@@ -266,7 +170,7 @@
                   </div>
                </div>
             </div>
-            <div id="poznamka">
+            <div id="poznamka" style="display: none;">
                <b>Poznámka</b>
 
                <div class="d-flex mb-3">

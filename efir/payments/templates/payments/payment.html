@@ -1,0 +1,5 @@
+{% if redirect_uri %}
+    <script>window.location.href = "{{ redirect_uri }}";</script>
+{% else %}
+    <p>Payment failed. Please try again.</p>
+{% endif %}

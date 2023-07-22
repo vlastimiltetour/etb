@@ -158,14 +158,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 
 
-STATIC_URL = "static/"
-STATIC_ROOT = (
-    BASE_DIR / "static"
-)  # this solves the issue of django.core.exceptions.ImproperlyConfigured: You're using the staticfiles app without having set the STATIC_ROOT setting to a filesystem path.
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# this solves the issue of django.core.exceptions.ImproperlyConfigured: You're using the staticfiles app without having set the STATIC_ROOT setting to a filesystem path.
 
-
-MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -191,10 +190,3 @@ DEFAULT_FROM_EMAIL = "objednavky@efirthebrand.cz"
 EMAIL_ENCRYPTION = "STARTTLS"
 
 ASGI_APPLICATION = "web.asgi.application"
-
-
-# PayU Config
-PAYU_POS_ID = 4298008
-PAYU_POS_AUTH_KEY = "fff76353d7249ea5a7e3ce86fe316bd2"
-PAYU_CLIENT_SECRET = "3715856bea104d102ec1a4e954f30c5c"
-PAYU_BASE_URL = "https://secure.snd.payu.com/api/v2_1"
