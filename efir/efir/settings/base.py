@@ -158,13 +158,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 
 
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-# this solves the issue of django.core.exceptions.ImproperlyConfigured: You're using the staticfiles app without having set the STATIC_ROOT setting to a filesystem path.
+STATIC_URL = "static/"
 
-MEDIA_URL = "/media/"
+# generating pdf
+STATIC_ROOT = BASE_DIR / "static"
+
 MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -181,12 +181,12 @@ CART_SESSION_ID = "cart"
 # Setting up email server FORPSI
 # https://support.forpsi.com/kb/a3147/konfigurace-smtp-serveru.aspx
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.forpsi.com"
-EMAIL_HOST_USER = "objednavky@efirthebrand.cz"
-EMAIL_HOST_PASSWORD = ",4d?SAF9A>Ra@f"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "objednavky@efirthebrand.cz"
-EMAIL_ENCRYPTION = "STARTTLS"
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT =os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+EMAIL_ENCRYPTION = os.getenv("EMAIL_ENCRYPTION")
 
 ASGI_APPLICATION = "web.asgi.application"
