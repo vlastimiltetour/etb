@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "cart.apps.CartConfig",
     "django.contrib.humanize",
     "coupons.apps.CouponsConfig",
+    "stripepayment.apps.StripepaymentConfig",
 ]
 
 
@@ -184,9 +185,14 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_PORT =os.getenv("EMAIL_PORT")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 EMAIL_ENCRYPTION = os.getenv("EMAIL_ENCRYPTION")
 
 ASGI_APPLICATION = "web.asgi.application"
+
+# stripe credentials
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_API_VERSION = os.getenv("STRIPE_API_VERSION")

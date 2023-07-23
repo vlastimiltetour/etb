@@ -209,15 +209,17 @@
             <section class="jumbotron text-center">
               <div class="container">
 
-                <a href="{% url 'cart:cart_detail' %}"><button class="btn btn-dark my-2 mb-4">Zpět</button></a>
 
+                <!-- BaCK BUTTON, would have to solve it using JS
+                <a href="javascript:history.back()"><button class="btn btn-dark my-2 mb-4">Zpět</button></a>
+                -->
 
             <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button>
               </div>
 
 
               <!-- Payment Instructions -->
-              <form method="post" action="{% url 'payments:process' %}">
+              <form method="post" action="{% url 'stripepayment:process' %}">
                 <!-- Include the necessary form fields -->
                 {% csrf_token %}        
                 <!-- Add other form fields here -->

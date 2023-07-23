@@ -45,9 +45,10 @@ def get_token():
 import requests
 from django.http import JsonResponse
 
+
 def payment_process(request):
     return render(request, "payments/canceled.html")
- 
+
 
 def payment_process3(request):
     url = "https://secure.snd.payu.com/api/v2_1/orders"

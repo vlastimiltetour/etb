@@ -12,7 +12,7 @@ class Product(models.Model):
     )  # one to many relationship, a product belongs to one category and a category contains multiple products
     # So if you have a Category instance cat, you can access all the related Product instances by calling
     # cat.products.all()
- 
+
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, null=False)
     price = models.DecimalField(max_digits=10, decimal_places=0)
@@ -187,7 +187,8 @@ from PIL import Image
 
 class Photo(models.Model):
     product = models.ForeignKey(
-        "Product", on_delete=models.CASCADE, related_name="photos")
+        "Product", on_delete=models.CASCADE, related_name="photos"
+    )
     photo = models.ImageField(upload_to="catalog/%Y/%m/%d")
 
     # resizing the image, you can change parameters like size and quality.

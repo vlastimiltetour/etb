@@ -35,17 +35,19 @@ def new_order(request):
             # clear the cart
             cart.clear()
 
-            order_id = order.id
-            # replacing order_id by request session
-            #!!!!!request.session["order_id"] = order.id
+            # order_id = order.id # this is replaced by the code below
+            request.session["order_id"] = order.id
 
             try:
+                order_id = order.id
                 customer_order_email_confirmation(order_id)
             except ssl.SSLCertVerificationError:
-                logging.info(f"Local environment has no email sending{order_id}")
+                logging.info(
+                    f"Local environment has no email backend set up.Order ID: {order_id}"
+                )
 
             # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
-            return redirect(reverse("payments:process"))
+            return redirect(reverse("stripepayment:process"))
     else:
         form = OrderForm()
 

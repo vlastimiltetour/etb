@@ -20,10 +20,11 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin", admin.site.urls),
-    path("", include("catalog.urls")),
+    path("", include(("catalog.urls", "catalog"), namespace="catalog")),
     path(
         "payments/", include(("payments.urls", "payments"), namespace="payments")
     ),  # this is very important, because the data structure is This code uses a 2-tuple with the URL patterns and app_name to include the 'payments' URLs.
+    path("stripepayment/", include(("stripepayment.urls", "stripepayment"), namespace="stripepayment")),
     path("cart/", include("cart.urls")),
     path("orders/", include("orders.urls")),
     path("coupons/", include("coupons.urls")),

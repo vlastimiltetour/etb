@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from catalog.models import Product
@@ -10,12 +11,19 @@ class Order(models.Model):
     number = models.CharField(max_length=20)
     comments = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
     COUNTRY_CHOICES = [("CZ", "Česko"), ("SK", "Slovensko"), ("ER", "EU")]
+
     country = models.CharField(max_length=20, choices=COUNTRY_CHOICES)
     shipping_type = (("Z", "Zásilkovna"), ("O", "Osobní odběr"))
 
     shipping = models.CharField(max_length=100, choices=shipping_type)
     address = models.CharField(max_length=250)
+
+    stripe_id = models.CharField(max_length=250, blank=True)
+    zasilkovna_id = models.CharField(max_length=250, blank=True)
+    paid = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Objednávky"
@@ -30,6 +38,19 @@ class Order(models.Model):
 
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
+
+    def get_stripe_url(self):
+        if not self.stripe_id:
+            return ""
+        elif "_test_" in settings.STRIPE_SECRET_KEY:
+            path = "/test/"
+        else:
+            path = "/"
+
+        return f"https://dashboard.stripe.com{path}payments/{self.stripe_id}"
+
+    def get_zasilkovna_url(self):
+        pass
 
 
 class OrderItem(models.Model):
