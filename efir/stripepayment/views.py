@@ -82,7 +82,6 @@ def payment_notification(request):
 
 
 def payment_completed(request):
-
     return render(request, "stripe/completed.html")
 
 
