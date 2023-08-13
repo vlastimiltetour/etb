@@ -174,6 +174,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # This is the key that is going to be used to store the cart in the user session.
 CART_SESSION_ID = "cart"
+ORDER_SESSION_ID = "order"
 
 
 # this is to make Django to write emails to the console
@@ -196,3 +197,8 @@ ASGI_APPLICATION = "web.asgi.application"
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_API_VERSION = os.getenv("STRIPE_API_VERSION")
+
+
+# zasilkovna
+ZASILKOVNA_API_KEY = os.getenv("ZASILKOVNA_API_KEY")
+ZASILKOVNA_SECRET = os.getenv("ZASILKOVNA_SECRET")

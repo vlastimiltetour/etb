@@ -4,31 +4,6 @@
 {% load humanize %}
 
 {% block content %}
-<style>
-   #id_quantity, #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_boky, #id_obvod_body {
-   appearance: none;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   background-color: transparent;
-   font-size: 0.8rem;
-   width: 30px; /* Adjust the width as needed */
-   text-align: center;
-   border: 1px solid black; /* Add black square border */
-   }
-
-   .mob-text {
-      font-size: 0.8rem;
-   }      
-
-   .btn-outline-dark {
-      width: 30px; 
-      height: 30px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-   }
-   
-</style>
 <div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
    <div class="row d-flex justify-content-center">
       <h4 class="heading">Objednávka</h4>
@@ -96,7 +71,7 @@
                </div>
                <div class="row">
                   <div class="col-6">
-                     <p class="mob-text" id="obvod_boky-{{ forloop.counter }}">Velikost kalhotek:</p>
+                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost kalhotek:</p>
                   </div>
                   <div class="col-6"  style="text-align: left;">
                      {{ item.update_quantity_form.obvod_boky }}

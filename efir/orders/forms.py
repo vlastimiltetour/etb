@@ -15,6 +15,7 @@ class OrderForm(forms.ModelForm):
             "shipping",
             "address",
             "country",
+            "vendor_id",
         ]
 
         widgets = {
@@ -49,6 +50,7 @@ class OrderForm(forms.ModelForm):
                     "placeholder": "Vložte adresu, kam doručit oblečení",
                 }
             ),
+            "vendor_id": forms.HiddenInput(),
             "country": forms.Select(
                 attrs={
                     "class": "form-control",

@@ -25,7 +25,8 @@
 
         <!-- Single Product -->
         <div class="col-md-4 mb-4">
-          <a href="{{ katalog_vse.product.get_absolute_url }}">
+          <a href="{{ product.get_absolute_url }}">
+            <div class="product-image-container">
 
 
           <div class="card mb-4 box-shadow">
@@ -37,6 +38,10 @@
             src="{{ first_photo.photo.url }}"
             data-holder-rendered="true">
             {% endif %}
+            {% if product.discount %}
+            <div class="discount-circle">{{ product.discount }} % </div>
+            {% endif %}
+          </div>
             {% endwith %}
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>

@@ -21,7 +21,11 @@
             {% with product=item.product %}
             <li class="list-group-item d-flex justify-content-between lh-condensed">
               <div class="d-flex align-items-center">
-                <img src="{{ product.image1.url }}" style="max-height: 70px; max-width: 27px; margin-right: 10px;">
+                {% with first_photo=product.photos.first %}
+                {% if first_photo %}   
+                <img src="{{ first_photo.photo.url }}" style="max-height: 70px; max-width: 27px; margin-right: 10px;">
+                {% endif %}
+                {% endwith %}
                 <div>
 
                   {% if item.quantity == 1 %}
@@ -29,18 +33,23 @@
                   {% else %}
                 <h6 class="my-0">{{ item.quantity }}x   {{ product.name }}       </h6>
                   {% endif %}
+                  {% if item.zpusob_vyroby == Konfekce  %}
+                  prd
+                  {% else %}
                 <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
-
                 <small class="text-muted">{{ item.obvod_prsa }}, </small>
                 <small class="text-muted">{{ item.obvod_hrudnik }}</small>
-
+                  {% endif %}
               </div>
               </div>
               <span>{{product.price|intcomma}} Kč</span>
             </li>
             {% endwith  %}
             {% endfor  %}
-           
+           <!-- start coupon -->
+
+
+
             {% if cart.coupon %}
             <li class="list-group-item d-flex justify-content-between">
               <span>  Celkem: </span>
@@ -62,12 +71,22 @@
 
             
             </li>
-
+            <!-- end coupon -->
             {% else %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+
+               <!-- <span>Doprava: </span> 
+                <strong>  Kč</strong>-->
+
+                <!-- this is how to get shipping price-->
+                <!-- <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> -->
+
+
+            </li>
             <li class="list-group-item d-flex justify-content-between bg-light">
              
-   
-              <span>Total: </span>
+             <!-- #TODO total  to be calculated-->
+              <span>Total: </span> 
               <strong>{{ cart.get_total_price|intcomma}} Kč</strong>
 
         
@@ -78,6 +97,9 @@
           
         </div>
  <!-- End Shopping Cart Section-->
+
+
+
         <!-- Form Template -->
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Objednávka</h4>
@@ -116,16 +138,16 @@
                       <div class="invalid-feedback">
               </div>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-3" id="countrySelected" onchange="updateOrderForm(this.value)"> <!--TODO this onchange is new-->
               <label for="email">Země</label>
-              {{ form.country }}
+              {{ form.country }} 
                       <div class="invalid-feedback">
               </div>
             </div>
 
             <div class="mb-3" id="id_shipping" name="shipping">
               <label for="shipping">Doprava</label>
-     {{ form.shipping }}
+               {{ form.shipping }}
 
               <div class="invalid-feedback"></div>
             </div>
@@ -157,23 +179,34 @@
               <!-- Packeta script-->
   <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
 
+<!-- Add an element to display the selected country -->
+<p id="selectedCountryDisplay"></p>
+
+<!-- Your JavaScript code -->
+
+
+
+    
+
   <script>
     const packetaApiKey = 'e2ac633a88eca5e2';
 
     const packetaOptions = {
-        valueFormat: "\"Packeta\",id,carrierId,carrierPickupPointId,name,city,street"
+        valueFormat: "name, street, city"
     };
 
     function showSelectedPickupPoint(point) {
         // Add here an action on pickup point selection
         const saveElement = document.querySelector(".packeta-selector-value");
         const addressInput = document.querySelector("#id_address"); // invokes the variable 
+        const vendorIdInput = document.querySelector("#id_vendor_id"); // invokes the variable 
 
         saveElement.innerText = '';
         if (point) {
           console.log("Selected point", point);
-          saveElement.innerText = "Address: " + point.formatedValue; 
-          addressInput.value = point.formatedValue; //saves the value to the form          
+          saveElement.innerText = "ID: " + point.id; // this is showing variable output, but we don't need it
+          addressInput.value = point.formatedValue; //saves the value to the form    
+          vendorIdInput.value = point.id;      
         };
     }
 
@@ -184,12 +217,16 @@
   
 <!-- End Packeta Script-->
             </div>
+
+            {{ form.vendor_id }}
+
+
             <div class="col-md-6 mb-3">
               <label for="email">Adresa</label>
               {{ form.address }}
                       <div class="invalid-feedback">
               </div>
-            </div>
+              
           </div>
             <div class="mb-3">
               <label for="email">Komentáře</label>
@@ -197,15 +234,7 @@
                         <div class="invalid-feedback">
               </div>
             </div>
-            
-           
 
-
-
-
-            
-            
-            
             <section class="jumbotron text-center">
               <div class="container">
 
@@ -214,7 +243,7 @@
                 <a href="javascript:history.back()"><button class="btn btn-dark my-2 mb-4">Zpět</button></a>
                 -->
 
-            <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button>
+  <!--          <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button> -->
               </div>
 
 
@@ -223,7 +252,7 @@
                 <!-- Include the necessary form fields -->
                 {% csrf_token %}        
                 <!-- Add other form fields here -->
-                <button action="https://secure.payu.com/api/v2_1/orders" type="submit">Platit</button>
+                <button class="btn btn-dark my-2 mb-4" action="https://secure.payu.com/api/v2_1/orders" type="submit">Potvrdit objednávku</button>
               </form>
             <!--end Payment Instructions -->
 
@@ -231,6 +260,7 @@
             </section>
 
           </form>
+          </div>
           
         </div>
         
@@ -239,6 +269,8 @@
       <!-- Form ends-->
       
     </div>
+
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

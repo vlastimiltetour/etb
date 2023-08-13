@@ -44,7 +44,9 @@ MarkupSafe==2.1.2
 mccabe==0.7.0
 mdurl==0.1.2
 mypy-extensions==1.0.0
+numpy==1.25.1
 packaging==23.1
+pandas==2.0.3
 paramiko==3.1.0
 pathspec==0.11.1
 payu==0.5.1
@@ -71,8 +73,10 @@ pyOpenSSL==23.1.1
 pyrsistent==0.19.3
 pysmi==0.3.4
 pysnmp==4.4.12
+python-dateutil==2.8.2
 python-decouple==3.8
 pytz==2023.3
+reportlab==4.0.4
 requests==2.29.0
 rich==13.3.5
 ruff==0.0.267
@@ -85,6 +89,7 @@ stripe==5.5.0
 terminaltables==3.1.10
 texttable==1.6.7
 tomli==2.0.1
+tzdata==2023.3
 up==0.2.1
 urllib3==1.26.15
 uWSGI==2.0.21

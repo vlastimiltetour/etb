@@ -60,16 +60,24 @@
 
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
       {% for bestseller in best_sellers %}        
+    
+
+
       <!-- Single Product -->
 
       <div class="col-md-4 mb-4">
         <a href="{{ bestseller.get_absolute_url }}">
         <div class="card mb-4 box-shadow">
+          
           <img class="card-img-top img-fluid" 
-          data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
-          alt="Thumbnail [100%x225]"
-          src="{{ bestseller.image1.url }}"
-          data-holder-rendered="true">
+          src="{{ bestseller.photos.first.photo.url }}" 
+          alt="{{ bestseller.name }}">
+          {% if bestseller.discount %}
+          <div class="discount-circle"> - {{ bestseller.discount }} % </div>
+          {% elif bestseller.new %}
+          <div class="discount-circle"> NEW </div>
+          {% endif %}
+   
           <div class="card-body d-flex flex-column" style="padding: 1rem;">
             <h5 class="fw-bolder"> {{ bestseller.name }}</h5>
             <p class="card-text">{{ bestseller.short_description }}</p>                
@@ -98,6 +106,7 @@
 
         <div class="col-md-4 mb-4">
           <a href="{{ product.get_absolute_url }}">
+            <div class="product-image-container">
 
           <div class="card mb-4 box-shadow">
              {% with first_photo=product.photos.first %}
@@ -108,6 +117,14 @@
             src="{{ first_photo.photo.url }}"
             data-holder-rendered="true">
             {% endif %}
+            {% if product.discount %}
+            <div class="discount-circle"> - {{ product.discount }} % </div>
+            {% elif product.new %}
+            <div class="discount-circle"> NEW </div>
+            {% endif %}
+
+
+          </div>
             {% endwith %}
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>

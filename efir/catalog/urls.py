@@ -7,6 +7,7 @@ app_name = "catalog"
 urlpatterns = [
     path("", views.home, name="home"),
     path("kontakty", views.kontakty, name="kontakty"),
+    path("ochrana-osobnich-udaju", views.ochrana, name="ochrana"),
     path("o-nas", views.about, name="about"),
     path("katalog", views.catalog_product_list, name="katalog_vse"),
     path(

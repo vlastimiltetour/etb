@@ -22,10 +22,12 @@ class Product(models.Model):
     # Time Specifics
     new = models.BooleanField(default=False)
     available = models.BooleanField(default=False)
-    discount = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     bestseller = models.BooleanField(default=False)
     headliner = models.BooleanField(default=False)
+    discount = models.DecimalField(
+        max_digits=2, decimal_places=0, blank=True, null=True
+    )
 
     obvod_hrudnik = models.ManyToManyField(
         "ObvodHrudnik", blank=True, verbose_name="velikost pasu", default="-"
@@ -41,7 +43,7 @@ class Product(models.Model):
     )
 
     zpusob_vyroby = models.ManyToManyField(
-        "ZpusobVyroby", blank=True, verbose_name="Druh kolekce"
+        "ZpusobVyroby", blank=False, verbose_name="Druh kolekce"
     )
 
     poznamka = models.TextField(blank=True)
@@ -91,7 +93,7 @@ class Category(models.Model):
     def get_absolute_url(
         self,
     ):
-        return reverse("product_list_by_category", args=[self.slug])
+        return reverse("catalog:product_list_by_category", args=[self.slug])
 
 
 class ObvodHrudnik(models.Model):

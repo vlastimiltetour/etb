@@ -68,7 +68,7 @@
                 class="nav-link"
                 {% endif %} class="dropdown-item">
                 
-                  <a class="nav-link" href="{{ catalog.c.get_absolute_url }}">{{ c.name }}</a>
+                  <a class="nav-link" href="{{ c.get_absolute_url }}">{{ c.name }}</a>
                 </li>
                 {% endfor %}
                
@@ -223,7 +223,7 @@
               <ul class="nav flex-column">
                 {% for c in categories %}
                 <li class="nav-item mb-2">
-                  <a href="{{ catalog.c.get_absolute_url }}" class="nav-link p-0 text-white">{{ c.name }}</a>
+                  <a href="{{ c.get_absolute_url }}" class="nav-link p-0 text-white">{{ c.name }}</a>
                 </li>
                 {% endfor %}
                
@@ -233,16 +233,19 @@
               <h5>Informace</h5>
               <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">Kontakty</a>
+                  <a href="https://efirthebrand.cz/kontakty" class="nav-link p-0 text-white">Kontakty</a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">O nás</a>
+                  <a href="https://efirthebrand.cz/#o-nas" class="nav-link p-0 text-white">O nás</a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">Doprava</a>
+                  <a href="https://efirthebrand.cz/#doprava" class="nav-link p-0 text-white">Doprava</a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">Reklamace</a>
+                  <a href="https://efirthebrand.cz/#reklamace" class="nav-link p-0 text-white">Reklamace</a>
+                </li>
+                <li class="nav-item mb-2">
+                  <a href="{% url 'catalog:ochrana' %}" class="nav-link p-0 text-white">Ochrana osobních údajů</a>
                 </li>
               </ul>
             </div>
@@ -316,17 +319,18 @@
       <header>
         <h2>{% trans "Souhlas se zpracováním Cookies" %}</h2>
       </header>
-      <p>{% trans "Na této stránce používáme soubory cookie, abychom zlepšili váš uživatelský zážitek." %}</p>
+      <p>{% trans "Používáme cookies, abychom Vám umožnili pohodlné prohlížení webu a díky analýze provozu webu neustále zlepšovali jeho funkce, výkon a použitelnost.." %}</p>
       <div class="buttons">
         <button id="accept" class="item" onclick="acceptCookie()">{% trans "Přijmout" %}</button>
         <button id="reject" class="item" onclick="rejectCookie()">{% trans "Odmítnout" %}</button>
+        <a href="{% url 'catalog:ochrana' %}"><button id="#" class="item" onclick="rejectCookie()">{% trans "Více informací" %}</button></a>
       </div>
     </div>
   </div>
   <script>
     function acceptCookie() {
       //document.cookie = "CookieBy=zuzikoko; max-age=" + 60 * 60 * 24 * 30 + "; path=/"; // Setting cookie for 1 month
-      document.cookie = "CookieBy=efirthebrand; max-age=1; path=/"; // Setting cookie for 1 month
+      document.cookie = "CookieBy=efirthebrand; max-age=3600; path=/"; // Setting cookie for 1 month
 
       checkCookieConsent();
     }

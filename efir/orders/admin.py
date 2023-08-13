@@ -22,10 +22,10 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "product_name",
-        "price",
+        "total_cost",
+        "discount",
         "quantity",
         "velikosti",
-        "price",
         "first_name",
         "last_name",
         "email",
@@ -64,4 +64,20 @@ class OrderAdmin(admin.ModelAdmin):
             )
         return ", ".join(item_details)
 
+    def druh_kolekce(self, obj):
+        value = 0
+        return str(value)
+
     velikosti.short_description = "Order Items"
+
+    # Override the has_add_permission method to deny adding new records
+    def has_add_permission(self, request):
+        return False
+
+    # Override the has_change_permission method to deny editing records
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    # Override the has_delete_permission method to deny deleting records
+    def has_delete_permission(self, request, obj=None):
+        return False

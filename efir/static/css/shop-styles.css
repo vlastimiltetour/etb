@@ -23,6 +23,27 @@
         }
     }
 
+    .discount-circle {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width:70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        top: 10px;
+        right: 10px;
+      }
+    
+    
+      .product-image-container {
+        position: relative;
+      }
+
    #id_quantity {
    appearance: none;
    -webkit-appearance: none;
@@ -33,14 +54,14 @@
    text-align: center;
    border: 1px solid black; /* Add black square border */
    }
-   #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_hrudnik, #id_obvod_body {
+   #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_boky, #id_obvod_body {
    appearance: none;
    -webkit-appearance: none;
    -moz-appearance: none;
    background-color: transparent;
    font-size: 16px;
    height: 38px;
-   width: 121px; /* Adjust the width as needed */
+   width: 42px; /* Adjust the width as needed */
    text-align: center;
    border: 1px solid black; /* Add black square border */
    }
@@ -107,4 +128,5 @@
    .slick-next {
       right: 10px;
    }
+
 

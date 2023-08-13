@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
 
@@ -5,25 +7,52 @@ from catalog.models import Product
 
 
 class Order(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    number = models.CharField(max_length=20)
-    comments = models.TextField(blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    first_name = models.CharField(max_length=50, verbose_name="Jméno")
+    last_name = models.CharField(max_length=50, verbose_name="Příjmení")
+    email = models.CharField(max_length=50, verbose_name="Email")
+    number = models.CharField(max_length=20, verbose_name="Telefonní číslo")
+    comments = models.TextField(blank=True, verbose_name="Komentáře")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Vytvořeno")
+    updated = models.DateTimeField(auto_now=True, verbose_name="Aktualizováno")
 
     COUNTRY_CHOICES = [("CZ", "Česko"), ("SK", "Slovensko"), ("ER", "EU")]
 
-    country = models.CharField(max_length=20, choices=COUNTRY_CHOICES)
+    country = models.CharField(
+        max_length=20, choices=COUNTRY_CHOICES, verbose_name="Země"
+    )
     shipping_type = (("Z", "Zásilkovna"), ("O", "Osobní odběr"))
+    shipping = models.CharField(
+        max_length=100, choices=shipping_type, verbose_name="Doprava"
+    )
+    shipping_price = models.DecimalField(
+        decimal_places=0,
+        max_digits=4,
+        blank=True,
+        default=Decimal("0.00"),
+        verbose_name="Cena dopravy (CZK)",
+    )
+    address = models.CharField(max_length=250, verbose_name="Adresa")
+    vendor_id = models.CharField(max_length=250, blank=True, verbose_name="ID prodejce")
+    discount = models.DecimalField(
+        decimal_places=0,
+        max_digits=10,
+        blank=True,
+        default=Decimal("0.00"),
+        verbose_name="Sleva (CZK)",
+    )
+    total_cost = models.DecimalField(
+        decimal_places=0,
+        max_digits=10,
+        blank=True,
+        default=Decimal("0.00"),
+        verbose_name="Celková cena (CZK)",
+    )
 
-    shipping = models.CharField(max_length=100, choices=shipping_type)
-    address = models.CharField(max_length=250)
-
-    stripe_id = models.CharField(max_length=250, blank=True)
-    zasilkovna_id = models.CharField(max_length=250, blank=True)
-    paid = models.BooleanField(default=False)
+    stripe_id = models.CharField(max_length=250, blank=True, verbose_name="Stripe ID")
+    zasilkovna_id = models.CharField(
+        max_length=250, blank=True, verbose_name="Zásilkovna ID"
+    )
+    paid = models.BooleanField(default=False, verbose_name="Zaplaceno")
 
     class Meta:
         verbose_name = "Objednávky"
@@ -34,10 +63,13 @@ class Order(models.Model):
         ]
 
     def __str__(self):
-        return f"Order {self.id}"
+        return f"Objednávka {self.id}"
 
     def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())
+        total_cost = (
+            sum(item.get_cost() for item in self.items.all()) + self.shipping_price
+        )
+        return total_cost
 
     def get_stripe_url(self):
         if not self.stripe_id:
@@ -52,18 +84,48 @@ class Order(models.Model):
     def get_zasilkovna_url(self):
         pass
 
+    def calculate_shipping_price(self):
+        if self.country == "CZ":
+            self.shipping_price = Decimal("79.00")
+        elif self.country == "SK":
+            self.shipping_price = Decimal("89.00")
+        elif self.country == "EU":
+            self.shipping_price = Decimal("0.00")
+        else:
+            self.shipping_price = Decimal("0.00")
+        return self.shipping_price
+
+    def save(self, *args, **kwargs):
+        self.shipping_price = self.calculate_shipping_price()
+
+        if "cart" in kwargs:
+            cart = kwargs.pop("cart")
+            total_price_after_discount = cart.get_total_price_after_discount()
+
+            self.total_cost = total_price_after_discount + self.shipping_price
+
+        super().save(*args, **kwargs)
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product, related_name="order_items", on_delete=models.CASCADE
     )
-    price = models.DecimalField(decimal_places=2, max_digits=10)
-    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(
+        decimal_places=2, max_digits=10, verbose_name="Cena za kus (CZK)"
+    )
+    quantity = models.PositiveIntegerField(default=1, verbose_name="Množství")
 
-    obvod_hrudnik = models.CharField(max_length=255, default="-", blank=True)
-    obvod_prsa = models.CharField(max_length=255, default="-", blank=True)
-    obvod_boky = models.CharField(max_length=255, default="-", blank=True)
+    obvod_hrudnik = models.CharField(
+        max_length=255, default="-", blank=True, verbose_name="Obvod hrudníku"
+    )
+    obvod_prsa = models.CharField(
+        max_length=255, default="-", blank=True, verbose_name="Obvod prsou"
+    )
+    obvod_boky = models.CharField(
+        max_length=255, default="-", blank=True, verbose_name="Obvod boků"
+    )
     # obvod_body = models.CharField(max_length=255, default="-", blank=True)
 
     def __str__(self):

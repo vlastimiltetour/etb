@@ -5,15 +5,16 @@ from orders.mail_confirmation import *
 
 from .models import Category, Product
 
-# Create your views here.
-
 
 # returns home landing page
 def home(request, category_slug=None):
+    # zasilkovna_create_package()
     category = None
     categories = Category.objects.all()
     products = Product.objects.all()
     best_sellers = Product.objects.filter(bestseller=True)
+
+    # print(packetLabelPdf(4382587054, format="A7 on A4", offset=0))
 
     return render(
         request,
@@ -75,3 +76,8 @@ def kontakty(request):
 def about(request):
     categories = Category.objects.all()
     return render(request, "catalog/about.html", {"categories": categories})
+
+
+def ochrana(request):
+    categories = Category.objects.all()
+    return render(request, "catalog/ochrana.html", {"categories": categories})

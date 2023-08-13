@@ -90,10 +90,30 @@ class Cart:
         del self.session[settings.CART_SESSION_ID]
         self.save()
 
+    def get_shipping_price(self):
+        # TODO this approach wouldn't work because I don't have the order ID yet.
+        # Get the OrderForm data associated with the current cart, if it exists
+        order_form_data = self.session.get("order_form_data")
+        if order_form_data:
+            country = order_form_data.get("order_country")
+        else:
+            country = "N/A"
+
+            if country == "CZ":
+                shipping_price = 79
+            elif country == "SK":
+                shipping_price = 89
+            elif country == "EU":
+                shipping_price = 0
+            else:
+                shipping_price = 0
+
+        return shipping_price
+
     def get_total_price(self):
         return sum(
             Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
-        )
+        ) + (self.get_shipping_price())
 
     @property
     def coupon(self):
@@ -106,8 +126,15 @@ class Cart:
 
     def get_discount(self):
         if self.coupon:
-            return (self.coupon.discount / Decimal(100)) * self.get_total_price()
+            discount = (self.coupon.discount / Decimal(100)) * self.get_total_price()
+
+            return discount
+
         return Decimal(0)
 
     def get_total_price_after_discount(self):
-        return self.get_total_price() - self.get_discount()
+        total_price = self.get_total_price()
+        discount = self.get_discount()
+        total_price_after_discount = total_price - discount
+
+        return total_price_after_discount
