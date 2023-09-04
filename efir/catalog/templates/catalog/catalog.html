@@ -11,7 +11,7 @@
 <!-- Catalog of Products -->
   <section class="jumbotron text-center">
     <div class="container">
-      <h1 class="jumbotron-heading">Katalog{% if category %}: {{category}} 
+      <h1 class="jumbotron-heading mt-5 mb-5">{% if category %}{{category}} 
         {% else %}
         {% endif %}</h1>
     </div>
@@ -29,7 +29,7 @@
             <div class="product-image-container">
 
 
-          <div class="card mb-4 box-shadow">
+          <div class="card mb-2 box-shadow">
             {% with first_photo=product.photos.first %}
             {% if first_photo %}
             <img class="card-img-top img-fluid" 
@@ -39,7 +39,12 @@
             data-holder-rendered="true">
             {% endif %}
             {% if product.discount %}
-            <div class="discount-circle">{{ product.discount }} % </div>
+            <div class="discount-circle"> - {{ product.discount }} % </div>
+            {% elif product.new %}
+            <div class="discount-circle"> NEW </div>
+            {% elif product.limited %}
+            <div class="discount-circle" style="font-size: 40%;"> LIMITOVANÁ EDICE </div>
+            
             {% endif %}
           </div>
             {% endwith %}
@@ -47,7 +52,7 @@
               <h5 class="fw-bolder"> {{ product.name }}</h5>
             
               <p class="card-text">{{ product.short_description }}</p>                
-                <b class="fw-bolder"> {{ product.price|intcomma }} Kč</b>
+                <b class="fw-semibold"> {{ product.price|intcomma }} Kč</b>
                 
 
             </div>

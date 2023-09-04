@@ -1,0 +1,40 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+        <!-- About section-->
+        <div class="container px-4 px-lg-5 my-5">
+          <div class="text-center"> <!-- Center the heading -->
+            <h1 class="jumbotron-heading mt-5 mb-5">{% trans "REKLAMACE" %}</h1>
+
+          </div>
+          <div class="row gx-4 gx-lg-5 align-items-center">
+              <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="img-fluid" style="max-width: 100%;">
+              
+      
+    <div class="album py-2 mt-4 bg-white">
+      <div class="container">
+          <p class="lead" style="text-align: center;">
+                  Vrácení produktů může být důležitým aspektem v každém e-commerce obchodě, včetně obchodů s dámským prádlem. V našem obchodě s dámským prádlem chápeme, že produkt, který obdržíte, se může neshodovat s vašimi očekáváními nebo vám nemusí sedět tak, jak jste si představovali. Proto nabízíme bezproblémovou politiku vrácení.
+
+                  Pokud nejste s vaším nákupem spokojeni z jakéhokoli důvodu, můžete zboží vrátit do 30 dnů od data doručení. Přijímáme vrácení nenosených, nepoužitých a nepoškozených výrobků v jejich originálním obalu se všemi štítky a štítky připojenými.
+                  
+                  Chcete-li zahájit vrácení, jednoduše se přihlaste na svůj účet na našem webu, přejděte na stránku historie objednávek a vyberte položky, které chcete vrátit. Následujte pokyny k vytisknutí nálepky na dopravu a odešlete nám zboží. Jakmile zboží obdržíme, vrácení peněz zpracujeme do 10 pracovních dnů.
+                  
+                  Chceme, aby jste byli s vaším nákupem zcela spokojeni a snažíme se vrácení co nejvíce zjednodušit. Pokud máte jakékoliv dotazy nebo obavy ohledně naší politiky vrácení, neváhejte kontaktovat náš tým zákaznického servisu.
+                        </p><br>
+            
+      
+        </div>
+    </div>
+          </div>
+  </section>
+            </div>
+        </section>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src='{% static "/js/scripts.js" %}'></script>
+    </body>
+</html>
+{% endblock %}

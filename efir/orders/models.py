@@ -2,11 +2,13 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 from catalog.models import Product
 
 
 class Order(models.Model):
+    etb_id = models.CharField(max_length=50, verbose_name="ID")
     first_name = models.CharField(max_length=50, verbose_name="Jméno")
     last_name = models.CharField(max_length=50, verbose_name="Příjmení")
     email = models.CharField(max_length=50, verbose_name="Email")
@@ -15,7 +17,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="Vytvořeno")
     updated = models.DateTimeField(auto_now=True, verbose_name="Aktualizováno")
 
-    COUNTRY_CHOICES = [("CZ", "Česko"), ("SK", "Slovensko"), ("ER", "EU")]
+    COUNTRY_CHOICES = [("CZ", "Česko"), ("SK", "Slovensko")]
 
     country = models.CharField(
         max_length=20, choices=COUNTRY_CHOICES, verbose_name="Země"
@@ -32,7 +34,9 @@ class Order(models.Model):
         verbose_name="Cena dopravy (CZK)",
     )
     address = models.CharField(max_length=250, verbose_name="Adresa")
-    vendor_id = models.CharField(max_length=250, blank=True, verbose_name="ID prodejce")
+    vendor_id = models.CharField(
+        max_length=250, blank=True, verbose_name="ID prodejce", default="-"
+    )
     discount = models.DecimalField(
         decimal_places=0,
         max_digits=10,
@@ -104,6 +108,13 @@ class Order(models.Model):
 
             self.total_cost = total_price_after_discount + self.shipping_price
 
+        if not self.etb_id:
+            today_date = timezone.now().strftime("%y%m%d")
+            today_order_count = Order.objects.filter(
+                created__date=timezone.now().date()
+            ).count()
+            self.etb_id = f"{today_date}{today_order_count:02d}"
+
         super().save(*args, **kwargs)
 
 
@@ -117,16 +128,11 @@ class OrderItem(models.Model):
     )
     quantity = models.PositiveIntegerField(default=1, verbose_name="Množství")
 
-    obvod_hrudnik = models.CharField(
-        max_length=255, default="-", blank=True, verbose_name="Obvod hrudníku"
-    )
-    obvod_prsa = models.CharField(
-        max_length=255, default="-", blank=True, verbose_name="Obvod prsou"
-    )
-    obvod_boky = models.CharField(
-        max_length=255, default="-", blank=True, verbose_name="Obvod boků"
-    )
-    # obvod_body = models.CharField(max_length=255, default="-", blank=True)
+    zpusob_vyroby = models.CharField(max_length=50)
+    obvod_hrudnik = models.CharField(max_length=50, null=True, blank=True)
+    obvod_prsa = models.CharField(max_length=50, null=True, blank=True)
+    obvod_boky = models.CharField(max_length=50, null=True, blank=True)
+    obvod_body = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return str(self.id)

@@ -33,7 +33,7 @@
                   {% else %}
                 <h6 class="my-0">{{ item.quantity }}x   {{ item.product.name }}       </h6>
                   {% endif %}
-                  {% if item.zpusob_vyroby == Konfekce  %}
+                  {% if item.zpusob_vyroby == Skladem  %}
                   prd
                   {% else %}
                 <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
@@ -47,7 +47,7 @@
             {% endfor  %}
            <!-- start coupon -->
 
-
+            {% if cart.coupon %}
 
             <li class="list-group-item d-flex justify-content-between bg-light">
               <div class="text-success">
@@ -56,7 +56,8 @@
               </div>
               <span class="text-success">-{{ cart.get_discount|intcomma }} Kč</span>
             </li>
-          
+            {% else %}
+          {% endif %}
       
             <!-- end coupon -->
       
@@ -95,7 +96,7 @@
             {% csrf_token %}
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="firstName">ID objednávky: {{ order.id }}     
+                <label for="firstName">ID objednávky: {{ order.etb_id }}     
              
               </div>
             </div>

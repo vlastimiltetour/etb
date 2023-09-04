@@ -3,6 +3,217 @@
 {% load humanize %}
 {% block content %}
 <head>
+  <style>
+    .lh-condensed > div {
+  display: flex;
+  align-items: center;
+}
+
+.lh-condensed img {
+  max-height: 70px;
+  max-width: 27px;
+  margin-right: 10px;
+}
+
+.lh-condensed h6 {
+  margin: 0;
+}
+    .list-group {
+  margin-bottom: 1.5rem;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: -1px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.lh-condensed > div {
+  display: flex;
+  align-items: center;
+}
+
+.lh-condensed img {
+  max-height: 70px;
+  max-width: 27px;
+  margin-right: 10px;
+}
+
+.lh-condensed h6 {
+  margin: 0;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.bg-light {
+  background-color: #f8f9fa;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.text-right {
+  text-align: right;
+}
+.list-group {
+  --bs-list-group-color: #212529;
+  --bs-list-group-bg: #fff;
+  --bs-list-group-border-color: rgba(0, 0, 0, 0.125);
+  --bs-list-group-border-width: 1px;
+  --bs-list-group-border-radius: 0.375rem;
+  --bs-list-group-item-padding-x: 1rem;
+  --bs-list-group-item-padding-y: 0.5rem;
+  --bs-list-group-action-color: #495057;
+  --bs-list-group-action-hover-color: #495057;
+  --bs-list-group-action-hover-bg: #f8f9fa;
+  --bs-list-group-action-active-color: #212529;
+  --bs-list-group-action-active-bg: #e9ecef;
+  --bs-list-group-disabled-color: #6c757d;
+  --bs-list-group-disabled-bg: #fff;
+  --bs-list-group-active-color: #fff;
+  --bs-list-group-active-bg: #0d6efd;
+  --bs-list-group-active-border-color: #0d6efd;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  border-radius: var(--bs-list-group-border-radius);
+}
+    
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+  color: var(--bs-list-group-color);
+  text-decoration: none;
+  background-color: var(--bs-list-group-bg);
+  border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+}
+.list-group-item:first-child {
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+.list-group-item:last-child {
+  border-bottom-right-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+.list-group-item.disabled, .list-group-item:disabled {
+  color: var(--bs-list-group-disabled-color);
+  pointer-events: none;
+  background-color: var(--bs-list-group-disabled-bg);
+}
+.list-group-item.active {
+  z-index: 2;
+  color: var(--bs-list-group-active-color);
+  background-color: var(--bs-list-group-active-bg);
+  border-color: var(--bs-list-group-active-border-color);
+}
+.list-group-item + .list-group-item {
+  border-top-width: 0;
+}
+.list-group-item + .list-group-item.active {
+  margin-top: calc(-1 * var(--bs-list-group-border-width));
+  border-top-width: var(--bs-list-group-border-width);
+}
+
+    
+    .table {
+  --bs-table-color: var(--bs-body-color);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--bs-border-color);
+  --bs-table-accent-bg: transparent;
+  --bs-table-striped-color: var(--bs-body-color);
+  --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
+  --bs-table-active-color: var(--bs-body-color);
+  --bs-table-active-bg: rgba(0, 0, 0, 0.1);
+  --bs-table-hover-color: var(--bs-body-color);
+  --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+  width: 100%;
+  margin-bottom: 1rem;
+  color: var(--bs-table-color);
+  vertical-align: top;
+  border-color: var(--bs-table-border-color);
+}
+.table > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem;
+  background-color: var(--bs-table-bg);
+  border-bottom-width: 1px;
+  box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+.table > tbody {
+  vertical-align: inherit;
+}
+.table > thead {
+  vertical-align: bottom;
+}
+
+.table-group-divider {
+  border-top: 2px solid currentcolor;
+}
+
+.caption-top {
+  caption-side: top;
+}
+
+.table-sm > :not(caption) > * > * {
+  padding: 0.25rem 0.25rem;
+}
+
+.table-bordered > :not(caption) > * {
+  border-width: 1px 0;
+}
+.table-bordered > :not(caption) > * > * {
+  border-width: 0 1px;
+}
+
+.table-borderless > :not(caption) > * > * {
+  border-bottom-width: 0;
+}
+.table-borderless > :not(:first-child) {
+  border-top-width: 0;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+  color: var(--bs-table-striped-color);
+}
+
+.table-striped-columns > :not(caption) > tr > :nth-child(even) {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+  color: var(--bs-table-striped-color);
+}
+
+.table-active {
+  --bs-table-accent-bg: var(--bs-table-active-bg);
+  color: var(--bs-table-active-color);
+}
+
+.table-hover > tbody > tr:hover > * {
+  --bs-table-accent-bg: var(--bs-table-hover-bg);
+  color: var(--bs-table-hover-color);
+}
+    /* Remove bottom border from table rows and cells */
+    table.table td,
+    table.table th,
+    table.table tr,
+    table.table thead,
+    table.table tbody {
+      border-bottom-width: 0; /* Remove bottom border from table rows and cells */
+    }
+    table.table {
+      border-bottom-width: 0; /* Remove bottom border from the table itself */
+    }
+
+
+  </style>
+
+  
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -24,10 +235,16 @@
   </head>
 
 <!-- Body -->
+ 
+
+<!-- test inline css online -->
+<!-- https://liveweave.com/# -->
+<!-- https://codepen.io/mobify/pen/DRyBoB -->
+  
 <div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
   <div class="row d-flex justify-content-center">
     
-    <div class="container justify-content-center text-center">
+    <div class="container justify-content-center text-center" align="center">
         <a class="navbar-brand" style="margin-top: 10px;" href="{% url 'catalog:home' %}">
             <img src="https://www.linkpicture.com/q/logo_99.png" height="50" alt="">
           </a>
@@ -39,131 +256,189 @@
             {{ order.first_name }},<br>
             <br>
             
-            Vaše objednávka #{{order.id}} nám byla doručena. Budeme se ji snažit zpracovat v co nejkratší době.
+            Vaše objednávka #{{order.etb_id}} nám byla doručena. Budeme se ji snažit zpracovat v co nejkratší době.
             
             Toto je automaticky generované potvrzení objednávky. Pokud máte jakékoli dotazy týkající se vaší objednávky, odepište, prosím, zpět na tento email.
             
              </p>
-
+<br>
              <!-- new sqr-->
-             <tr>
-              <td align="left" style="padding-top: 20px;">
-                  <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                      <tr>
-                          <td width="75%" align="left" bgcolor="#ffffff" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">
-                            Vaše objednávka # {{ order.id }}                              
-            
-                          </td>
-                          <td width="25%" align="left" bgcolor="#ffffff" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">
-                         
-                          </td>
-                      </tr>
-                      <tr> 
-        {% for item in order.items.all %}
+             <div class="table-container"> <!-- Apply margins to the table container -->
 
-                          <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                            <h6 class="mob-text">Vaše jméno:</h6>
-                    
-                          </td>
-                          <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                            <p class="mob-text"> {{ order.first_name }} {{ order.last_name }}</p>
-                          </td>
+              <table class="table mt-4 mb-4"> <!-- Create a table -->
+                <colgroup>
+                      <col style="width: 25%;">
+                      <col style="width: 75%;">
+            
+                  </colgroup>
+                  <thead>
+                      <th colspan="2"  align="left">                           Objednávka: {{ order.etb_id }}                              
+                      </th>
+                   
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td style="border-bottom-width: 0px">Vaše jméno:</td>
+                          <td>{{ order.first_name }} {{ order.last_name }}</td>
+                     
                       </tr>
                       <tr>
-                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <h6 class="mob-text">Email:</h6>
+                          <td>Email:</td>
+                          <td>{{ order.email }}</td>
                   
-                        </td>
-                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <p class="mob-text"> {{ order.email }}</p>
-                        </td>
                       </tr>
                       <tr>
-                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          
-                            <h6 class="mob-text">Doručovací adresa:</h6>
-                          
-                    </h6>
-                  
-                        </td>
-                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <p class="mob-text"> {{ order.address }}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <h6 class="mob-text"> Způsob dopravy:</h6>
-         
-                  
-                        </td>
-                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <p class="mob-text">     {{ order.get_shipping_display }}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <h6 class="mob-text">Telefonní číslo:</h6>
-                  
-                        </td>
-                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <p class="mob-text"> {{ order.number }}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <h6 class="mob-text">Poznámka:</h6>
-                  
-                        </td>
-                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <p class="mob-text"> {{ order.comments }}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <h6 class="mob-text">Doprava:</h6>
-                  
-                        </td>
-                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <p class="mob-text"> {{ order.shipping }}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <h6 class="mob-text">Celkem:</h6>
-                  
-                        </td>
-                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                          <p class="mob-text"> {{ order.total_cost }}</p>
-                        </td>
-                      </tr>
-                         
-        {% endfor %}
-                      </tr>
-                  </table>
-              </td>
-          </tr>
+                        <td>Doručovací adresa:</td>
+                        <td>{{ order.address }}</td>
+                
+                    </tr>
+                    <tr>
+                      <td>Způsob dopravy:</td>
+                      <td>{{ order.get_shipping_display }}</td>
+              
+                  </tr>
+                  <tr>
+                    <td>Telefonní číslo:</td>
+                    <td>{{ order.number }}</td>
+            
+                </tr>
+                <tr>
+                  <td>Poznámka:</td>
+                  <td>{{ order.comments }}</td>
+          
+              </tr>
+   
+          
+        
+                  </tbody>
+              </table>
+              </div>
+              
+             
 
   
-        </table>
+      
     </div>  
     <br>
-                <!-- Shopping Cart Section -->
+ <!-- Cart Inline Contents-->
+ <table class="table mt-4 mb-4">
+        <tbody>
+          {% for item in order.items.all %}
+            <tr>
+              <td>
+                <!-- photo
+                    <div class="d-flex align-items-center">
+                  {% with first_photo=product.photos.first %}
+                    {% if first_photo %}
+                      <img src="{{ first_photo.photo.url }}" style="max-height: 70px; max-width: 27px; margin-right: 10px;">
+                    {% endif %}
+                  {% endwith %}
+                  <div> -->
+                      <h6 class="my-0">{{ item.product.name }}</h6>
+                      <small class="text-muted">{{ item.product.category }}</small>
+                  </div>
+                </div>
+              </td>
+              <td align="center">{{ item.quantity }}<br><small class="text-muted">Počet kusů</small></td>
+              <td align="center">
+                {{ item.zpusob_vyroby }}
+                {{ item.obvod_prsa }}
+                {{ item.obvod_hrudnik }}<br>
+                <small class="text-muted">Velikost</small>
+              </td>
+              <td align="right">
+                {{ product.price|intcomma }} Kč<br>
+                <small class="text-muted">Cena za kus</small>
+              </td>
+            </tr>
+          {% endfor %}
+          <tr class="bg-light">
+            <td colspan="4" class="d-flex justify-content-between" align="right">
+              <span></span>
+              <strong class="text-right" >Celkem: {{ order.total_cost }} Kč</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+ <!-- End Cart Inline Contents -->
+
+    <!-- Cart Contents 
+    <ul class="list-group mb-3">
+      {% for item in order.items.all %}
+
+      {% with product=item.product %}
+      <li class="list-group-item d-flex justify-content-between lh-condensed">
+        <div class="d-flex align-items-center">
+          {% with first_photo=product.photos.first %}
+          {% if first_photo %}   
+          <img src="{{ first_photo.photo.url }}" style="max-height: 70px; max-width: 27px; margin-right: 10px;">
+          {% endif %}
+          {% endwith %}
+          <div>
+
+            {% if item.quantity == 1 %}
+          <h6 class="my-0">{{ item.product.name }}       </h6>
+            {% else %}
+          <h6 class="my-0">{{ item.quantity }}x   {{ product.name }}       </h6>
+            {% endif %}
+            {% if item.zpusob_vyroby == Skladem  %}
+            prd
+            {% else %}
+          
+          
+          <small class="text-muted">{{ item.product.category }}</small>
+            {% endif %}
+      
+        </div>
+        </div>
+        <span>   {{ item.quantity}}          <br> <small class="text-muted">Počet kusů</small>
+      
+        </span>
+        <span>         {{ item.zpusob_vyroby }}
+     {{ item.obvod_prsa }}
+  {{ item.obvod_hrudnik }}<br>
+          <small class="text-muted">Velikost</small>
+        </span>
+
+        <span>{{product.price|intcomma}} Kč<br>
+          <small class="text-muted">Cena za kus</small>
+        </span>
+        
+      </li>
+      {% endwith  %}
+
+      {% endfor %}
+
+      <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="d-flex justify-content-between w-100" align="right">
+          <span></span>
+          <strong class="text-right">Celkem: {{ order.total_cost }} Kč</strong>
+        </div>
+      </li>
+      
+      
+    </ul>
+   
+    
+  end cart contents -->
+    
+                <!-- Button
               <div class="row">
-                  <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex justify-content-center  mb-3">
                     
                   
                 
-              <!-- 2cart -->
            
-              <a href="{% url 'catalog:katalog_vse' %}"><button class="btn btn-dark my-2 mb-4">Do obchodu</button></a>
-             
+                    <a href="{% url 'catalog:katalog_vse' %}"><button class="btn btn-dark my-2 mb-4">Do obchodu</button></a>
+                  </div>
               </div>
+        end button -->
           
     
-      </div>
+    </div>
       
   </div>
-  <!-- whole product-->
 
   
 
@@ -172,23 +447,9 @@
   </div>
 </div>
 
-<script>
-  function decreaseCount() {
-      var input = document.getElementById("inputQuantity");
-      var value = parseInt(input.value);
-      if (value > 1) {
-          input.value = value - 1;
-      }
-  }
 
-  function increaseCount() {
-      var input = document.getElementById("inputQuantity");
-      var value = parseInt(input.value);
-      input.value = value + 1;
-  }
-
-</script>
-<div class="container px-4 py-5 mx-auto" style="max-width: 800px">
+<!-- Footer --> 
+<div class="container px-4 mx-auto" style="max-width: 800px">
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
   <tr>

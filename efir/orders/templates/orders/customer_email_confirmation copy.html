@@ -1,0 +1,276 @@
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% block content %}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>efir</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href='{% static "/assets/img/favicon.png" %}' />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href='{% static "/css/styles.css" %}' rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <script>
+      const csrftoken = Cookies.get('csrftoken');
+    </script>
+    
+  </head>
+
+<!-- Body -->
+<div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
+  <div class="row d-flex justify-content-center">
+    
+    <div class="container justify-content-center text-center">
+        <a class="navbar-brand" style="margin-top: 10px;" href="{% url 'catalog:home' %}">
+            <img src="https://www.linkpicture.com/q/logo_99.png" height="50" alt="">
+          </a>
+    </div>
+    <div class="container">
+    <hr class="my-4">
+
+          <p>
+            {{ order.first_name }},<br>
+            <br>
+            
+            Vaše objednávka #{{order.id}} nám byla doručena. Budeme se ji snažit zpracovat v co nejkratší době.
+            
+            Toto je automaticky generované potvrzení objednávky. Pokud máte jakékoli dotazy týkající se vaší objednávky, odepište, prosím, zpět na tento email.
+            
+             </p>
+
+             <!-- new sqr-->
+             <div class="table-container"> <!-- Apply margins to the table container -->
+
+              <table class="table mt-4"> <!-- Create a table -->
+                  <colgroup>
+                      <col style="width: 16.67%;">
+                      <col style="width: 16.67%;">
+            
+                  </colgroup>
+                  <thead>
+                      <th>Obvod pod prsama</th>
+                      <th colspan="5" class="text-center">Prsa, cm</th>
+                   
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>1</td>
+                          <td>2</td>
+                     
+                      </tr>
+                      <tr>
+                          <td>7</td>
+                          <td>8</td>
+                  
+                      </tr>
+                      <tr>
+                          <td>13</td>
+                          <td>14</td>
+                          <td>15</td>
+                          <td>16</td>
+                          <td>17</td>
+                          <td>18</td>
+                      </tr>
+                      <tr>
+                          <td>19</td>
+                          <td>20</td>
+                          <td>21</td>
+                          <td>22</td>
+                          <td>23</td>
+                          <td>24</td>
+                      </tr>
+                      <tr>
+                          <td>25</td>
+                          <td>26</td>
+                          <td>27</td>
+                          <td>28</td>
+                          <td>29</td>
+                          <td>30</td>
+                      </tr>
+                      <tr>
+                          <td>31</td>
+                          <td>32</td>
+                          <td>33</td>
+                          <td>34</td>
+                          <td>35</td>
+                          <td>36</td>
+                      </tr>
+                  </tbody>
+              </table>
+              </div>
+              
+             <tr>
+              <td align="left" style="padding-top: 20px;">
+                  <table cellspacing="0" cellpadding="0" border="0" width="50%">
+                      <tr>
+                          <td width="75%" align="left" bgcolor="#ffffff" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">
+                            Vaše objednávka # {{ order.id }}                              
+            
+                          </td>
+                          <td width="25%" align="left" bgcolor="#ffffff" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">
+                         
+                          </td>
+                      </tr>
+                      <tr> 
+
+                          <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                            <h6 class="mob-text">Vaše jméno:</h6>
+                    
+                          </td>
+                          <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                            <p class="mob-text"> {{ order.first_name }} {{ order.last_name }}</p>
+                          </td>
+                      </tr>
+                      <tr>
+                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <h6 class="mob-text">Email:</h6>
+                  
+                        </td>
+                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <p class="mob-text"> {{ order.email }}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          
+                            <h6 class="mob-text">Doručovací adresa:</h6>
+                          
+                    </h6>
+                  
+                        </td>
+                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <p class="mob-text"> {{ order.address }}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <h6 class="mob-text"> Způsob dopravy:</h6>
+         
+                  
+                        </td>
+                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <p class="mob-text">     {{ order.get_shipping_display }}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <h6 class="mob-text">Telefonní číslo:</h6>
+                  
+                        </td>
+                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <p class="mob-text"> {{ order.number }}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <h6 class="mob-text">Poznámka:</h6>
+                  
+                        </td>
+                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <p class="mob-text"> {{ order.comments }}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <h6 class="mob-text">Doprava:</h6>
+                  
+                        </td>
+                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <p class="mob-text"> {{ order.shipping }}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <h6 class="mob-text">Celkem:</h6>
+                  
+                        </td>
+                        <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                          <p class="mob-text"> {{ order.total_cost }}</p>
+                        </td>
+                      </tr>
+                         
+                      </tr>
+                  </table>
+              </td>
+          </tr>
+
+  
+        </table>
+    </div>  
+    <br>
+                <!-- Shopping Cart Section -->
+              <div class="row">
+                  <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    
+                  
+                
+              <!-- 2cart -->
+           
+              <a href="{% url 'catalog:katalog_vse' %}"><button class="btn btn-dark my-2 mb-4">Do obchodu</button></a>
+             
+              </div>
+          
+    
+      </div>
+      
+  </div>
+  <!-- whole product-->
+
+  
+
+
+
+  </div>
+</div>
+
+<script>
+  function decreaseCount() {
+      var input = document.getElementById("inputQuantity");
+      var value = parseInt(input.value);
+      if (value > 1) {
+          input.value = value - 1;
+      }
+  }
+
+  function increaseCount() {
+      var input = document.getElementById("inputQuantity");
+      var value = parseInt(input.value);
+      input.value = value + 1;
+  }
+
+</script>
+<div class="container px-4 py-5 mx-auto" style="max-width: 800px">
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
+  <tr>
+      <td align="center">
+          <img src="https://www.linkpicture.com/q/logo_99.png"  height="50px" style="display: block; border: 0px;"/>
+      </td>
+  </tr>
+  <tr>
+      <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 5px 0 10px 0;">
+          <p style="font-size: 14px; font-weight: 800; line-height: 18px; color: #333333;">
+              www.efirthebrand.cz <br>
+
+          </p>
+      </td>
+  </tr>
+  <tr>
+      <td align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+          <p style="font-size: 14px; font-weight: 400; line-height: 20px; color: #777777;">
+          {% trans "© 2023 efirthebrand. Všechna práva vyhrazena. Tuto zprávu jsme vám poslali, protože jste registrováni na www.efirthebrand.cz pod adresou" %} {{order.email}}. {% trans "Pokud si myslíte, že vám byla poslána omylem nebo vám nevyhovuje četnost našich emailů, můžete se " %}<a href="#" target="_blank" style="color: #777777;">{% trans "odhlásit" %}</a> {% trans "nebo změnit frekvenci zasílání." %}
+              <!--If you didn't create an account using this email address, please ignore this email or <a href="#" target="_blank" style="color: #777777;">unsusbscribe</a>.-->
+          </p>
+      </td>
+  </tr>
+</table>
+<!-- End Body -->
+</div>
+{% endblock %}

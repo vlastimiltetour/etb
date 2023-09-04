@@ -1,25 +1,44 @@
 {% extends 'catalog/base.html' %}
 {% load static %}
 {% load i18n %}
-
 {% block content %}
+
           <!-- About section-->
-          <section class="py-5" id="about">
-              <div class="container px-4 px-lg-5 my-5">
-                  <div class="row gx-4 gx-lg-5 align-items-center">
-                      <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{% static '/assets/img/zuza_about.jpg' %}" alt="..." /></div>
-                      <div class="col-md-6">
-                          
-                          <h1 class="display-5 fw-bolder">{% trans "O mně" %}</h1>
-                          <p class="lead">{% trans "Vítejte v mém e-shopu, kde najdete jedinečnou kolekci ručně ušitého oblečení. Moje značka se zrodila z vášně pro šití a touhy vytvářet oblečení, které je krásné i funkční.  Zuzi Koko šije již mnoho let a vyvinula bystrý smysl pro detail a hluboké porozumění látce a designu. Začala vyrábět oblečení pro svou rodinu a přátele a rychle si uvědomila, že existuje poptávka po vysoce kvalitním, ručně vyráběném oblečení, které je pohodlné i stylové. Při své práci používám jen ty nejlepší materiály a techniky. Věřím, že domácí oblečení nabízí něco skutečně výjimečného – každý kus je jedinečný a vyrobený s péčí a smyslem pro detail. Mým posláním je poskytovat zákazníkům oblečení, které nejen skvěle vypadá, ale také se skvěle nosí. Chci mít pozitivní dopad na svět propagací udržitelných módních postupů a podporou místních řemeslníků. Nabízím širokou škálu oblečení pro ženy, muže i děti, včetně šatů, sukní, topů, kalhot a doplňků. Každý kus je vyroben na zakázku, takže vám pokaždé perfektně sedne." %}</p><br>
-                          <h5>{% trans "Kontakt" %}</h5>
-                          <p class="bi bi-envelope"><a href = "mailto: zuzi@zuzikoko.com">  zuzi@zuzikoko.com</a></p>
-                      </div>
-                          
-  
-  
-                  </div>
-              </div>
+            <section id="about">
+                
+                    
+                <div class="container px-4 px-lg-5 my-5">
+                            <h1 class="display-5 fw-light mt-5 mb-5" style="text-align: center;">{% trans "O NÁS" %}</h1>
+                
+                <p class="lead mt-2 mb-2"> Erato Label je sofistikované spodní prádlo pro ženy, které oceňují eleganci a skvělý styl. Pro každou dámskou soupravu pečlivě vybíráme krajku, aby bylo prádlo neuvěřitelně pohodlné, krásné a odolné. </p>
+                    <h1 class="display-6 fw-light mt-2 mb-2">Na choulostivá místa používáme 100% bavlnu, která výrazně zvyšuje komfort souprav.</h1>
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+
+                        <div class="photo-container row">
+                             <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="animated-photo" style="max-width: 100%;">
+                        </div>
+
+                    <p class="lead  mt-2 mb-2"> Erato Label je sofistikované spodní prádlo pro ženy, které oceňují eleganci a skvělý styl. Pro každou dámskou soupravu pečlivě vybíráme krajku, aby bylo prádlo neuvěřitelně pohodlné, krásné a odolné. </p>
+                    <h1 class="display-6 fw-light mt-2 mb-2">Na choulostivá místa používáme 100% bavlnu, která výrazně zvyšuje komfort souprav.</h1>
+                    <div class="photo-container row">
+
+                    <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="animated-photo" style="max-width: 100%;">
+</div>
+                    <p class="lead  mt-2 mb-2"> Erato Label je sofistikované spodní prádlo pro ženy, které oceňují eleganci a skvělý styl. Pro každou dámskou soupravu pečlivě vybíráme krajku, aby bylo prádlo neuvěřitelně pohodlné, krásné a odolné. </p>
+                    <h1 class="display-6 fw-light mt-2 mb-2">Na choulostivá místa používáme 100% bavlnu, která výrazně zvyšuje komfort souprav.</h1>
+                    <div class="photo-container row">
+
+                    <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="animated-photo" style="max-width: 100%;">
+                    </div>
+                    <p class="lead  mt-2 mb-2"> Erato Label je sofistikované spodní prádlo pro ženy, které oceňují eleganci a skvělý styl. Pro každou dámskou soupravu pečlivě vybíráme krajku, aby bylo prádlo neuvěřitelně pohodlné, krásné a odolné. </p>
+                    <h1 class="display-6 fw-light mt-2 mb-2">Na choulostivá místa používáme 100% bavlnu, která výrazně zvyšuje komfort souprav.</h1>
+                    <div class="photo-container row">
+
+                    <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="animated-photo" style="max-width: 100%;">
+                    </div>
+                    </div>                
+                </div>
+            
           </section>
           <!-- Bootstrap core JS-->
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

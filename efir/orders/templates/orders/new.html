@@ -33,13 +33,14 @@
                   {% else %}
                 <h6 class="my-0">{{ item.quantity }}x   {{ product.name }}       </h6>
                   {% endif %}
-                  {% if item.zpusob_vyroby == Konfekce  %}
-                  prd
-                  {% else %}
+                 
                 <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
-                <small class="text-muted">{{ item.obvod_prsa }}, </small>
+                <small class="text-muted">{{ item.obvod_prsa }} </small>
                 <small class="text-muted">{{ item.obvod_hrudnik }}</small>
-                  {% endif %}
+                <small class="text-muted">{{ item.obvod_body }}</small>
+                <small class="text-muted">{{ item.obvod_boky }}</small>
+
+                  
               </div>
               </div>
               <span>{{product.price|intcomma}} Kč</span>
@@ -53,7 +54,7 @@
             {% if cart.coupon %}
             <li class="list-group-item d-flex justify-content-between">
               <span>  Celkem: </span>
-              {{ cart.get_total_price|intcomma }} Kč
+              {{ cart.get_total_price }} Kč
 
             
             </li>
@@ -62,32 +63,32 @@
                 <h6 class="my-0">Slevový kupón </h6>
                 <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% sleva)</small>
               </div>
-              <span class="text-success">-{{ cart.get_discount|intcomma }} Kč</span>
+              <span class="text-success">-{{ cart.get_discount }} Kč</span>
             </li>
           
             <li class="list-group-item d-flex justify-content-between">
               <span>  Celkem po slevě: </span>
-              <strong>{{ cart.get_total_price_after_discount|intcomma }} Kč</strong>
+              <strong>{{ cart.get_total_price_after_discount }} Kč</strong>
 
             
             </li>
             <!-- end coupon -->
             {% else %}
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
+            <!--<li class="list-group-item d-flex justify-content-between lh-condensed">
 
-               <!-- <span>Doprava: </span> 
+        <span>Doprava: </span> 
                 <strong>  Kč</strong>-->
 
                 <!-- this is how to get shipping price-->
-                <!-- <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> -->
+                <!-- <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
 
 
-            </li>
+            </li> -->
             <li class="list-group-item d-flex justify-content-between bg-light">
              
              <!-- #TODO total  to be calculated-->
               <span>Total: </span> 
-              <strong>{{ cart.get_total_price|intcomma}} Kč</strong>
+              <strong>{{ cart.get_total_price}} Kč</strong>
 
         
             </li>
@@ -252,7 +253,7 @@
                 <!-- Include the necessary form fields -->
                 {% csrf_token %}        
                 <!-- Add other form fields here -->
-                <button class="btn btn-dark my-2 mb-4" action="https://secure.payu.com/api/v2_1/orders" type="submit">Potvrdit objednávku</button>
+                <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" action="https://secure.payu.com/api/v2_1/orders" type="submit">Potvrdit objednávku</button>
               </form>
             <!--end Payment Instructions -->
 

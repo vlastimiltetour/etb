@@ -27,12 +27,12 @@
 
  <!-- About section-->
  
- 
+<br>
 <section id="o-nas" class="jumbotron text-center">
-    <div class="container py-2">
-      <h1 class="jumbotron-heading">O nás</h1>
-    </div>
-  <div class="album py-2 bg-white">
+  
+    <div class="horizontal-line mt-5 mb-5"></div>
+
+  <div class="album bg-white">
     <div class="container">
         <p class="lead" style="text-align: center;"> Efir The Brand je e-commerce, která se specializuje na luxusní spodní prádlo pro ženy. Naše značka se vyznačuje kvalitními materiály, precizním zpracováním a neokoukanými designy.
         
@@ -40,10 +40,11 @@
                 
                 V našem e-shopu si můžete vybrat prádlo podle vašich představ, ať už preferujete klasický střih nebo něco více výrazného. Naše spodní prádlo je navrženo tak, aby zdůrazňovalo krásu každé ženy a dodalo jí sebevědomí.
                 
-                Děkujeme vám za návštěvu naší stránky a těšíme se na to, že vás budeme moci oblékat do našich kvalitních a luxusních kousků.</p><br>
-          
-    
+                Děkujeme vám za návštěvu naší stránky a těšíme se na to, že vás budeme moci oblékat do našich kvalitních a luxusních kousků.</p>
       </div>
+      <div class="horizontal-line mt-5 mb-5"></div>
+      <br>
+
   </div>
 </section>
 
@@ -53,7 +54,7 @@
 <!-- Catalog of Products -->
 <section class="jumbotron text-center">
   <div class="container">
-    <h1 class="jumbotron-heading">Best Sellers</h1>
+    <h1 class="jumbotron-heading mt-5 mb-5">Best Sellers</h1>
   </div>
 <div class="album py-2 bg-white">
   <div class="container">
@@ -67,7 +68,7 @@
 
       <div class="col-md-4 mb-4">
         <a href="{{ bestseller.get_absolute_url }}">
-        <div class="card mb-4 box-shadow">
+        <div class="card mb-2 box-shadow">
           
           <img class="card-img-top img-fluid" 
           src="{{ bestseller.photos.first.photo.url }}" 
@@ -76,12 +77,14 @@
           <div class="discount-circle"> - {{ bestseller.discount }} % </div>
           {% elif bestseller.new %}
           <div class="discount-circle"> NEW </div>
+          {% elif bestseller.limited %}
+          <div class="discount-circle" style="font-size: 40%;"> LIMITOVANÁ EDICE </div>
           {% endif %}
    
           <div class="card-body d-flex flex-column" style="padding: 1rem;">
-            <h5 class="fw-bolder"> {{ bestseller.name }}</h5>
-            <p class="card-text">{{ bestseller.short_description }}</p>                
-              <b class="fw-bolder"> {{ bestseller.price|intcomma }} Kč</b>
+           <h5 class="fw-bolder">{{ bestseller.name }}</h5>
+ <p class="card-text">{{ bestseller.short_description }}</p>                
+           <b class="fw-semibold">  {{ bestseller.price|intcomma }} Kč</b>
           </div>
         </div>
         </a>
@@ -95,7 +98,7 @@
   <!-- Catalog of Products -->
   <section class="jumbotron text-center">
     <div class="container">
-      <h1 class="jumbotron-heading">Katalog</h1>
+      <h1 class="jumbotron-heading mt-5 mb-5">Katalog</h1>
     </div>
   <div class="album py-2 bg-white">
     <div class="container">
@@ -108,7 +111,7 @@
           <a href="{{ product.get_absolute_url }}">
             <div class="product-image-container">
 
-          <div class="card mb-4 box-shadow">
+          <div class="card mb-2 box-shadow">
              {% with first_photo=product.photos.first %}
                {% if first_photo %}             
             <img class="card-img-top img-fluid" 
@@ -121,6 +124,8 @@
             <div class="discount-circle"> - {{ product.discount }} % </div>
             {% elif product.new %}
             <div class="discount-circle"> NEW </div>
+            {% elif product.limited %}
+            <div class="discount-circle" style="font-size: 40%;"> LIMITOVANÁ EDICE </div>
             {% endif %}
 
 
@@ -129,7 +134,7 @@
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>
               <p class="card-text">{{ product.short_description }}</p>                
-                <b class="fw-bolder"> {{ product.price|intcomma }} Kč</b>
+                <b class="fw-semibold"> {{ product.price|intcomma }} Kč</b>
             </div>
           </div>
           </a>
@@ -145,69 +150,14 @@
     <div class="container">
      
      
-        <a href="{% url 'catalog:katalog_vse' %}" class="btn btn-dark my-2">Katalog</a>
+        <a href="{% url 'catalog:katalog_vse' %}" class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5">Katalog</a>
      
     </div>
   </section>
 
 
-  <section id="doprava" class="jumbotron text-center">
-    <div class="container">
-      <h1 class="jumbotron-heading">Doprava</h1>
-    </div>
- 
-    <div class="album py-2 bg-white">
-      <div class="container">
-          <p class="lead" style="text-align: center;">
-                  Vítejte u naší e-commerce stránky, kde se specializujeme na prodej spodního prádla. Chceme Vám poskytnout nejen skvělý výběr luxusního prádla, ale také kvalitní a spolehlivou dopravu a doručení.
-      
-        Jak probíhá doprava?
-        
-        Když objednáte spodní prádlo u nás, začíná náš tým pracovat na Vaší objednávce okamžitě. Během 1-2 pracovních dnů je Vaše objednávka připravena k odeslání. Poté ji předáme doručovací společnosti, která zajistí doručení Vašeho balíčku.
-        
-        Jak dlouho to trvá?
-        
-        Běžně doručujeme balíčky v průměrném čase 2-3 pracovních dnů, ale doba doručení se může lišit v závislosti na vaší poloze a vytíženosti doručovacích společností. V případě, že Vaše objednávka bude odeslána během víkendu nebo svátků, může doručení trvat déle.
-        
-        Co je s cenou dopravy?
-        
-        Při nákupu nad určitou částku je doprava zdarma. V opačném případě se cena dopravy řídí dle zvoleného typu dopravy a hmotnosti Vaší objednávky. Náklady na dopravu jsou uvedeny při nákupu v košíku a jsou přesně spočítány dle Vašich specifikací.
-        
-        Jak zkontrolovat stav Vaší objednávky?
-        
-        Po odeslání Vaší objednávky dostanete e-mail s potvrzením objednávky a s odkazem na sledování Vaší zásilky. Můžete také sledovat stav Vaší objednávky na našich webových stránkách.
-        
-        Pokud máte jakékoliv otázky ohledně dopravy Vašeho spodního prádla, neváhejte nás kontaktovat. Jsme tu pro Vás a rádi Vám pomůžeme s jakýmkoliv dotazem.
-                        </p><br>
-                       
-            
-      
-        </div>
-    </div>
-  </section>
-
- 
-  <section id="reklamace" class="jumbotron text-center">
-    <div class="container">
-      <h1 class="jumbotron-heading">Reklamace</h1>
-    </div>
- 
-    <div class="album py-2 bg-white">
-      <div class="container">
-          <p class="lead" style="text-align: center;">
-                  Vrácení produktů může být důležitým aspektem v každém e-commerce obchodě, včetně obchodů s dámským prádlem. V našem obchodě s dámským prádlem chápeme, že produkt, který obdržíte, se může neshodovat s vašimi očekáváními nebo vám nemusí sedět tak, jak jste si představovali. Proto nabízíme bezproblémovou politiku vrácení.
-
-                  Pokud nejste s vaším nákupem spokojeni z jakéhokoli důvodu, můžete zboží vrátit do 30 dnů od data doručení. Přijímáme vrácení nenosených, nepoužitých a nepoškozených výrobků v jejich originálním obalu se všemi štítky a štítky připojenými.
-                  
-                  Chcete-li zahájit vrácení, jednoduše se přihlaste na svůj účet na našem webu, přejděte na stránku historie objednávek a vyberte položky, které chcete vrátit. Následujte pokyny k vytisknutí nálepky na dopravu a odešlete nám zboží. Jakmile zboží obdržíme, vrácení peněz zpracujeme do 10 pracovních dnů.
-                  
-                  Chceme, aby jste byli s vaším nákupem zcela spokojeni a snažíme se vrácení co nejvíce zjednodušit. Pokud máte jakékoliv dotazy nebo obavy ohledně naší politiky vrácení, neváhejte kontaktovat náš tým zákaznického servisu.
-                        </p><br>
-            
-      
-        </div>
-    </div>
-  </section>
+  <br>
+  <br>
 </main>
 <!-- End Best Sellers -->
 {% endblock %}

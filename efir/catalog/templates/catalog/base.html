@@ -79,14 +79,17 @@
               <a class="nav-link active" aria-current="page" href="{% url 'catalog:kontakty' %}">Kontakty</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://efirthebrand.cz/#o-nas">O nás</a>
+              <a class="nav-link" href="{% url 'catalog:about' %}">O nás</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://efirthebrand.cz/#doprava">Doprava</a>
+              <a class="nav-link" href="{% url 'catalog:doprava' %}">Doprava</a>
             </li>
        
             <li class="nav-item">
-              <a class="nav-link" href="https://efirthebrand.cz/#reklamace">Reklamace</a>
+              <a class="nav-link" href="{% url 'catalog:reklamace' %}">Reklamace</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'catalog:rozmery' %}">Rozměry</a>
             </li>
           </ul>
           <!-- Social Media Icons -->
@@ -317,13 +320,12 @@
     <div class="wrapper">
       <!-- <img src="#" alt=""> -->
       <header>
-        <h2>{% trans "Souhlas se zpracováním Cookies" %}</h2>
+        <h2 style="font-size: 80%;">{% trans "Souhlas se zpracováním Cookies" %}</h2>
       </header>
-      <p>{% trans "Používáme cookies, abychom Vám umožnili pohodlné prohlížení webu a díky analýze provozu webu neustále zlepšovali jeho funkce, výkon a použitelnost.." %}</p>
-      <div class="buttons">
-        <button id="accept" class="item" onclick="acceptCookie()">{% trans "Přijmout" %}</button>
-        <button id="reject" class="item" onclick="rejectCookie()">{% trans "Odmítnout" %}</button>
-        <a href="{% url 'catalog:ochrana' %}"><button id="#" class="item" onclick="rejectCookie()">{% trans "Více informací" %}</button></a>
+      <p style="font-size: 80%;">{% trans "Používáme cookies, abychom Vám umožnili pohodlné prohlížení webu a díky analýze provozu webu neustále zlepšovali jeho funkce, výkon a použitelnost.." %}</p>
+      <div class="buttons" style="display: flex; justify-content: space-between; align-items: center;">        <button id="accept" class="item" onclick="acceptCookie()" style="font-size: 80%; border-radius: 0;">{% trans "Přijmout" %}</button>
+        <button id="reject" class="item" onclick="rejectCookie()" style="font-size: 80%; background-color: white; color: red; border: 1px solid black; border-radius: 0;">{% trans "Odmítnout" %}</button>
+        <a href="{% url 'catalog:ochrana' %}"><button id="#" class="item" onclick="rejectCookie()" style="font-size: 80%; background-color: white; color: red; border: 1px solid black; border-radius: 0;">{% trans "Více" %}</button></a>
       </div>
     </div>
   </div>

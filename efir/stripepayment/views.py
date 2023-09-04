@@ -36,7 +36,7 @@ def payment_process(request):
         # Stripe checkout session data
         session_data = {
             "mode": "payment",
-            "client_reference_id": order.id,
+            "client_reference_id": order.etb_id,
             "success_url": success_url,
             "cancel_url": cancel_url,
             "line_items": [],
@@ -49,12 +49,12 @@ def payment_process(request):
                         "unit_amount": int(order.total_cost * Decimal("100")),
                         "currency": "czk",
                         "product_data": {
-                            "name": f"Objednavka cislo {order.id}",
+                            "name": f"Objednavka cislo {order.etb_id}",
                         },
                     },
                     "quantity": 1,
                 },
-                 )
+            )
 
         # Create Stripe checkout session
 
@@ -75,12 +75,12 @@ def zasilkovna_create_package(order_id):
 
     api_password = ZASILKOVNA_SECRET
     endpoint = "https://www.zasilkovna.cz/api/rest"
-    order_id = str(order_id)
+    order_id = str(order.etb_id)
     order_name = order.first_name
     order_surname = order.last_name
     order_email = order.email
     vendor_id = order.vendor_id
-    order_price = str(order.get_total_cost)
+    order_price = str(order.total_cost)
     weight = "0.5"  # set up
 
     # Create a dictionary representing the order details
@@ -115,6 +115,7 @@ def zasilkovna_create_package(order_id):
 
     # print((endpoint, xml_data, headers))
 
+    print(xml_data)
     # download_label(request, order_id)
 
     # <response><status>ok</status><result><id>1898524069</id><barcode>Z1898524069</barcode><barcodeText>Z 189 8524 069</barcodeText></result></response>
@@ -122,23 +123,24 @@ def zasilkovna_create_package(order_id):
     response = requests.post(endpoint, data=xml_data, headers=headers)
 
     if response.status_code == 200:
-        # Handle the successful response here
         print("Order created successfully!")
         print("Response Content:")
         print(response.content)
-        xml_response = response.content
-        root = ET.fromstring(xml_response)
-        root.find("status").text
-        packetId = root.find("result/id").text
-        root.find("result/barcode").text
-        root.find("result/barcodeText").text
-        print(f"packetId:{packetId}")
 
-        packetLabelPdf(packetId=packetId, format="A7 on A4", offset=0)
+        try:
+            xml_response = response.content
+            root = ET.fromstring(xml_response)
+            status_text = root.find("status").text
+            packet_id = root.find("result/id").text
+            barcode_text = root.find("result/barcodeText").text
 
-    else:
-        # Handle the error response here
-        print("Failed to create the order.")
+            print(f"Status: {status_text}")
+            print(f"Packet ID: {packet_id}")
+            print(f"Barcode Text: {barcode_text}")
+
+            packetLabelPdf(packetId=packet_id, format="A7 on A4", offset=0)
+        except AttributeError as e:
+            print("An error occurred while parsing the XML response:", e)
 
 
 # TODO finish this packet label pdf download
@@ -254,7 +256,9 @@ def payment_notification(request):
 
 
 def payment_completed(request):
-    return render(request, "stripe/completed.html")
+    order_id = request.session.get("order_id")
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, "stripe/completed.html", {"order": order})
 
 
 def payment_canceled(request):

@@ -10,7 +10,7 @@ def customer_order_email_confirmation(order_id):
         "orders/customer_email_confirmation.html", {"order": order}
     )
     msg = EmailMultiAlternatives(
-        subject=(f"Vaše objednávka #{order.id} je potvrzena."),
+        subject=(f"Vaše objednávka #{order.etb_id} je potvrzena."),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email, "objednavky@efirthebrand.cz"],
     )

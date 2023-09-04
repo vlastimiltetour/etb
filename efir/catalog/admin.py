@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Body, Category, ObvodBoky, ObvodHrudnik, ObvodPrsa, Photo,
-                     Product, ZpusobVyroby)
+                     Product, ProductSize, ZpusobVyroby)
 
 
 # Register your models here.
@@ -21,11 +21,14 @@ class ProductAdmin(admin.ModelAdmin):
         "name",
         "category",
         "price",
-        "available",
+        "limited",
         "display_obvod_hrudnik",
         "display_obvod_prsa",
         "display_obvod_boky",
     ]
+
+    actions = ["delete_selected", "custom_edit_action"]
+
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ["bestseller"]
 
@@ -44,8 +47,22 @@ class ProductAdmin(admin.ModelAdmin):
 
     inlines = [PhotoAdmin]  # this is creating inline to show photos
 
-    class Meta:
-        model = Product
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        size_types = ["obvod_prsa", "obvod_hrudnik", "obvod_boky"]
+
+        if db_field.name in size_types:
+            existing_choices = db_field.get_choices(include_blank=False)
+            unique_choices_dict = {value: label for value, label in existing_choices}
+            unique_choices = [
+                (value, label) for value, label in unique_choices_dict.items()
+            ]
+
+            kwargs["choices"] = unique_choices
+
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+        class Meta:
+            model = Product
 
 
 @admin.register(ObvodHrudnik)
@@ -91,3 +108,8 @@ class ZpusobVyrobyAdmin(admin.ModelAdmin):
         queryset.delete()
 
     delete_selected.short_description = "Delete selected ZpusobVyroby"
+
+
+@admin.register(ProductSize)
+class ProductSizeAdmin(admin.ModelAdmin):
+    list_display = ["product"]

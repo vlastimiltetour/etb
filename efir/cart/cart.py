@@ -1,3 +1,4 @@
+import uuid  # Import the UUID module
 from decimal import Decimal
 
 from django.conf import settings
@@ -20,22 +21,26 @@ class Cart:
         self.coupon_id = self.session.get("coupon_id")
 
     def __iter__(self):
-        product_ids = self.cart.keys()
-        products = Product.objects.filter(id__in=product_ids)
+        item_ids = self.cart.keys()
+        items = []
 
-        cart = self.cart.copy()
+        self.cart.copy()
 
-        for product in products:
-            cart[str(product.id)]["product"] = product
+        for item_id in item_ids:
+            product_id = self.cart[item_id]["product_id"]
+            product = Product.objects.get(id=product_id)  # Use product_id
 
-        for item in cart.values():
-            item["price"] = Decimal(item["price"])
-            item["total_price"] = item["price"] * item["quantity"]
+            cart_item = self.cart[item_id]
+            cart_item["product"] = product
+            cart_item["price"] = Decimal(cart_item["price"])
+            cart_item["total_price"] = cart_item["price"] * cart_item["quantity"]
+            items.append(cart_item)
 
-            yield item
+        return iter(items)
 
     def __len__(self):
         return sum(item["quantity"] for item in self.cart.values())
+
 
     def add(
         self,
@@ -49,42 +54,50 @@ class Cart:
         poznamka=None,
         override=False,
     ):
-        product_id = str(product.id)
+        cart_item_id = str(uuid.uuid4())
 
-        if product_id not in self.cart:
-            self.cart[product_id] = {
-                "quantity": 0,
-                "price": str(product.price),
-                "obvod_boky": obvod_boky,
-                "obvod_prsa": obvod_prsa,
-                "obvod_hrudnik": obvod_hrudnik,
-                "obvod_body": obvod_body,
-                "poznamka": poznamka,
-                "zpusob_vyroby": str(zpusob_vyroby),
-            }
+        # Check if the product is already in the cart
+        for existing_cart_item_id, cart_item in self.cart.items():
+            if "product_id" in cart_item and cart_item["product_id"] == product.id:
+                if override:
+                    # If override is True, update the quantity directly
+                    cart_item["quantity"] = quantity
+                    self.save()
+                    return
 
-        if override:
-            self.cart[product_id]["quantity"] = quantity
-            self.cart[product_id]["obvod_boky"] = obvod_boky
-            self.cart[product_id]["obvod_prsa"] = obvod_prsa
-            self.cart[product_id]["obvod_hrudnik"] = obvod_hrudnik
-            self.cart[product_id]["obvod_body"] = obvod_body
-            self.cart[product_id]["zpusob_vyroby"] = str(zpusob_vyroby)
-
-        else:
-            self.cart[product_id]["quantity"] += quantity
+        # If the product is not in the cart or override is True, add it as a new item
+        self.cart[cart_item_id] = {
+            "product_id": product.id,  # Store the product_id
+            "quantity": quantity,
+            "price": str(product.price),
+            "obvod_boky": str(obvod_boky),
+            "obvod_prsa": str(obvod_prsa),
+            "obvod_hrudnik": str(obvod_hrudnik),
+            "obvod_body": str(obvod_body),
+            "poznamka": str(poznamka),
+            "zpusob_vyroby": str(zpusob_vyroby),
+        }
 
         self.save()
+
 
     def save(self):
         self.session.modified = True
 
     def remove(self, product):
-        product_id = str(product.id)
+        product_id = product.id  # Assuming product_id is an integer field
 
-        if product_id in self.cart:
-            del self.cart[product_id]
-            self.save()
+        for item_id, cart_item in self.cart.items():
+            """iterate over the dictionary, self.cart.items()
+            is not a dictionary or a list by itself; it's actually
+            an iterable view object in Python. It provides a way to access
+            key-value pairs from a dictionary, similar to how you would iterate over items in a list.
+            The key-value pairs are represented as tuples."""
+
+            if "product_id" in cart_item and cart_item["product_id"] == product_id:
+                del self.cart[item_id]
+                self.save()
+                break  # Exit the loop after removing the first matching item
 
     def clear(self):
         del self.session[settings.CART_SESSION_ID]
@@ -103,17 +116,21 @@ class Cart:
                 shipping_price = 79
             elif country == "SK":
                 shipping_price = 89
-            elif country == "EU":
-                shipping_price = 0
             else:
-                shipping_price = 0
+                shipping_price = 89
 
         return shipping_price
 
     def get_total_price(self):
-        return sum(
-            Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
-        ) + (self.get_shipping_price())
+        product_discount = 0  # TODO subtrackt the discount from product price
+        total_price = (
+            sum(
+                Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
+            )
+            + (self.get_shipping_price())
+            - product_discount
+        )
+        return total_price
 
     @property
     def coupon(self):

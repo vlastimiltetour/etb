@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from cart.cart import Cart
+from stripepayment.views import zasilkovna_create_package
 
 from .forms import OrderForm
 from .mail_confirmation import *
@@ -14,6 +15,7 @@ from .models import Order, OrderItem
 logging.basicConfig(level=logging.DEBUG)
 
 
+# todo this can be deleted
 def new_order(request):
     cart = Cart(request)
 
@@ -34,11 +36,13 @@ def new_order(request):
                     product=item["product"],
                     price=item["price"],
                     quantity=item["quantity"],
+                    zpusob_vyroby=item["zpusob_vyroby"],
                     obvod_hrudnik=item["obvod_hrudnik"],
                     obvod_prsa=item["obvod_prsa"],
                     obvod_boky=item["obvod_boky"],
-                    # obvod_body=item["obvod_body"],
+                    obvod_body=item["obvod_body"],
                 )
+
             # clear the cart
 
             cart.clear()
@@ -47,7 +51,7 @@ def new_order(request):
 
             try:
                 order_id = order.id
-                # TODO uncomment zasilkovna_create_package(order_id)
+                zasilkovna_create_package(order_id)
                 customer_order_email_confirmation(order_id)
 
             except ssl.SSLCertVerificationError:
@@ -76,7 +80,7 @@ def calculate_shipping_price(country_code):
 
 
 def objednavka_vytvorena(request):
-    obvod_boky = OrderItem.objects.values_list("obvod_boky")
+    obvod_boky = OrderItem.objects.values_list("obvod_prsa")
     # order_items = OrderItem.objects.values_list('obvod_boky', flat=True)
 
     print("=========")
@@ -84,4 +88,5 @@ def objednavka_vytvorena(request):
 
     id = 1
     order = get_object_or_404(Order, id=id)
+
     return render(request, "orders/customer_email_confirmation.html", {"order": order})
