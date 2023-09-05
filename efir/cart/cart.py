@@ -20,11 +20,11 @@ class Cart:
         # store applied coupon
         self.coupon_id = self.session.get("coupon_id")
 
-    def __iter__(self):
+    def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
-        items = []
+        items = []  # temporary data structure used to organize and prep cart data
 
-        self.cart.copy()
+        self.cart.copy()  # creating a copy to prevent changes to original cart data
 
         for item_id in item_ids:
             product_id = self.cart[item_id]["product_id"]
@@ -40,7 +40,6 @@ class Cart:
 
     def __len__(self):
         return sum(item["quantity"] for item in self.cart.values())
-
 
     def add(
         self,
@@ -79,7 +78,6 @@ class Cart:
         }
 
         self.save()
-
 
     def save(self):
         self.session.modified = True
