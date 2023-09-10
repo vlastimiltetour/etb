@@ -30,6 +30,12 @@ def new_order(request):
             In the save method of the Order model, you are accessing the cart instance through this passed keyword argument to calculate the total_cost for the order. This is a way to pass contextual information from the view (the cart instance) to the model (Order instance) when saving it.
             The combination of these lines ensures that the Order instance is created from the form data but not immediately saved, allowing you to calculate and set additional fields like total_cost before the final save."""
 
+            order_form_data = {
+                "order_id": order.id,
+                "country": order.country,
+                # Add any other data you want to include here...
+            }
+
             for item in cart:
                 OrderItem.objects.create(
                     order=order,
@@ -64,7 +70,11 @@ def new_order(request):
     else:
         form = OrderForm()
 
-    return render(request, "orders/new.html", {"cart": cart, "form": form})
+    return render(
+        request,
+        "orders/new.html",
+        {"cart": cart, "form": form, order_form_data: "order_form_data"},
+    )
 
 
 def calculate_shipping_price(country_code):

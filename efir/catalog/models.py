@@ -6,9 +6,7 @@ from django.urls import reverse  # this is when calling an address by name
 # Create your models here.
 class Product(models.Model):
     # Product specaifics
-    product_item_id = models.PositiveIntegerField(
-        default=1, verbose_name="Product_item_ID"
-    )
+
 
     category = models.ForeignKey(
         "Category",
@@ -48,7 +46,7 @@ class Product(models.Model):
     )
 
     zpusob_vyroby = models.ManyToManyField(
-        "ZpusobVyroby", blank=False, verbose_name="Druh kolekce"
+        "ZpusobVyroby", blank=False, default="Skladem", verbose_name="Druh kolekce"
     )
 
     poznamka = models.TextField(blank=True)
@@ -188,7 +186,7 @@ class ZpusobVyroby(models.Model):
     size = models.CharField(
         max_length=20,
         choices=ZPUSOB_VYROBY_CHOICES,
-        default="Konfekční velikost",
+        default="Skladem",
         blank=True,
     )
 

@@ -11,6 +11,7 @@ urlpatterns = [
     path("reklamace", views.reklamace, name="reklamace"),
     path("rozmery", views.rozmery, name="rozmery"),
     path("ochrana-osobnich-udaju", views.ochrana, name="ochrana"),
+    path("obchodni-podminky", views.obchodni_podminky, name="obchodni_podminky"),
     path("o-nas", views.about, name="about"),
     path("katalog", views.catalog_product_list, name="katalog_vse"),
     path(

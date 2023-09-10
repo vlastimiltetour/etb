@@ -20,9 +20,8 @@ class OrderItemInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
-        "product_name",
         "etb_id",
-        "velikosti",
+        "products",
         "total_cost",
         "discount",
         "quantity",
@@ -43,9 +42,9 @@ class OrderAdmin(admin.ModelAdmin):
         "Total Cost"  # Set the column header in the admin site
     )
 
-    def product_name(self, obj):
-        product_name = obj.items.first().product.name
-        return product_name
+    def products(self, obj):
+        product_names = [item.product.name for item in obj.items.all()]
+        return product_names
 
     def price(self, obj):
         price_value = obj.items.values_list("price").first()

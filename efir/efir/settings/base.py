@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "coupons.apps.CouponsConfig",
     "stripepayment.apps.StripepaymentConfig",
     "stock.apps.StockConfig",
+    "newsletter.apps.NewsletterConfig",
 ]
 
 

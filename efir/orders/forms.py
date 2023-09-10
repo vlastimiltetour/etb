@@ -4,6 +4,12 @@ from .models import Order
 
 
 class OrderForm(forms.ModelForm):
+    agree_to_terms = forms.BooleanField(
+        required=True,  # You can set this to False if it's optional
+        label="I agree to the terms and conditions",  # Change the label as needed
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )
+
     class Meta:
         model = Order
         fields = [

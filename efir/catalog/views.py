@@ -100,6 +100,11 @@ def ochrana(request):
     return render(request, "catalog/ochrana.html", {"categories": categories})
 
 
+def obchodni_podminky(request):
+    categories = Category.objects.all()
+    return render(request, "catalog/obchodni_podminky.html", {"categories": categories})
+
+
 from django.template.loader import render_to_string
 
 
@@ -124,6 +129,7 @@ def kontakty(request):
             msg.attach_alternative(html_content, "text/html")
             try:
                 msg.send()
+
             except ssl.SSLCertVerificationError:
                 logging.info(
                     f"Local environment has no email backend set up {name, email, message}. "

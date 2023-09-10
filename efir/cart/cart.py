@@ -19,6 +19,7 @@ class Cart:
 
         # store applied coupon
         self.coupon_id = self.session.get("coupon_id")
+        self.country = self.session.get("cart_country")
 
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
@@ -82,6 +83,23 @@ class Cart:
     def save(self):
         self.session.modified = True
 
+    def update(self, product, quantity, add=False):
+        product_id = product.id
+
+        for cart_item_id, cart_item in self.cart.items():
+            if "product_id" in cart_item and cart_item["product_id"] == product_id:
+                if add:
+                    cart_item["quantity"] += quantity
+                else:
+                    cart_item["quantity"] = quantity if quantity > 0 else 0
+
+                if cart_item["quantity"] <= 0:
+                    # If the quantity is 0 or negative, remove the item from the cart
+                    del self.cart[cart_item_id]
+
+                self.save()
+                break  # Exit the loop after updating/removing the item
+
     def remove(self, product):
         product_id = product.id  # Assuming product_id is an integer field
 
@@ -102,21 +120,17 @@ class Cart:
         self.save()
 
     def get_shipping_price(self):
-        # TODO this approach wouldn't work because I don't have the order ID yet.
-        # Get the OrderForm data associated with the current cart, if it exists
-        order_form_data = self.session.get("order_form_data")
-        if order_form_data:
-            country = order_form_data.get("order_country")
+        # Get the country from the cart data
+        country = self.country
+        print(f"country{country}")
+        if country == "CZ":
+            shipping_price = 89
+        elif country == "SK":
+            shipping_price = 99
         else:
-            country = "N/A"
+            shipping_price = 0
 
-            if country == "CZ":
-                shipping_price = 79
-            elif country == "SK":
-                shipping_price = 89
-            else:
-                shipping_price = 89
-
+        print(f"shipping_price{shipping_price}")
         return shipping_price
 
     def get_total_price(self):

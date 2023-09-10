@@ -85,9 +85,7 @@
               <a class="nav-link" href="{% url 'catalog:doprava' %}">Doprava</a>
             </li>
        
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'catalog:reklamace' %}">Reklamace</a>
-            </li>
+       
             <li class="nav-item">
               <a class="nav-link" href="{% url 'catalog:rozmery' %}">Rozměry</a>
             </li>
@@ -236,19 +234,22 @@
               <h5>Informace</h5>
               <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                  <a href="https://efirthebrand.cz/kontakty" class="nav-link p-0 text-white">Kontakty</a>
+                  <a href="{% url 'catalog:kontakty' %}" class="nav-link p-0 text-white">Kontakty</a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="https://efirthebrand.cz/#o-nas" class="nav-link p-0 text-white">O nás</a>
+                  <a href="{% url 'catalog:about' %}" class="nav-link p-0 text-white">O nás</a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="https://efirthebrand.cz/#doprava" class="nav-link p-0 text-white">Doprava</a>
+                  <a href="{% url 'catalog:doprava' %}" class="nav-link p-0 text-white">Doprava</a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="https://efirthebrand.cz/#reklamace" class="nav-link p-0 text-white">Reklamace</a>
+                  <a href="{% url 'catalog:reklamace' %}" class="nav-link p-0 text-white">Reklamace</a>
                 </li>
                 <li class="nav-item mb-2">
                   <a href="{% url 'catalog:ochrana' %}" class="nav-link p-0 text-white">Ochrana osobních údajů</a>
+                </li>
+                <li class="nav-item mb-2">
+                  <a href="{% url 'catalog:obchodni_podminky' %}" class="nav-link p-0 text-white">Obchodní podmínky</a>
                 </li>
               </ul>
             </div>
@@ -256,27 +257,31 @@
               <h5>Kontakty</h5>
               <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">Efir the Brand, ulice A 58 Praha</a>
+                  <a href="#" class="nav-link p-0 text-white">EFIR the brand
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">IČO 9084530985409</a>
+                  <a href="#" class="nav-link p-0 text-white">Sídlo: Příčná 1892/4, 110 00, Praha 1 Nové Město</a>
                 </li>
                 <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">DIČ 098098098423</a>
+                  <a href="#" class="nav-link p-0 text-white">IČO: 17092540</a>
                 </li>
                 
               </ul>
             </div>
+            <!-- subscribe form -->
             <div class="col-md-5 offset-md-1 mb-5">              
-              <form>
+              <form id="subscribe-form" action="{% url 'newsletter:subscribe' %}" method="post">
+                  {% csrf_token %}
                 <h5>Odebírejte novinky</h5>
-                <p class="p-0 text-white">Monthly digest of what's new and exciting from us.</p>
+                <p class="p-0 text-white">Nezmeškejte měsíční shrnutí novinek a vzrušujících událostí.                </p>
                 <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                  <label for="newsletter1" class="visually-hidden">Email address</label>
-                  <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
-                  <button class="btn btn-light" type="button">Subscribe</button>
+                  <label for="newsletter" class="visually-hidden">Email address</label>
+                  <input id="newsletter" name="email" type="text" class="form-control" placeholder="Email address">
+                  <button class="btn btn-light" type="submit">Subscribe</button>
                 </div>
               </form>
+              <!-- end subscribe form -->
             </div>
           </div>
           <div class="d-flex flex-column flex-sm-row justify-content-between py-4 border-top">

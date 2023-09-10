@@ -51,9 +51,28 @@ def cart_remove(request, product_id):
     return redirect("cart:cart_detail")
 
 
+def cart_update(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+
+    if request.method == "POST":
+        form = CartUpdateForm(request.POST)
+        if form.is_valid():
+            new_quantity = form.cleaned_data["quantity"]
+            cart.update(
+                product, new_quantity, add=False
+            )  # Set add=False to directly set the quantity
+            return redirect(
+                "cart_detail"
+            )  # Redirect to the cart detail page after the update
+    else:
+        form = CartUpdateForm()
+
+    return redirect("cart:cart_detail")
+
+
 def cart_detail(request):
     cart = Cart(request)
-
     coupon_form = CouponForm()
 
     for item in cart:
@@ -62,11 +81,6 @@ def cart_detail(request):
             id_from_product=product_id,
             initial={
                 "quantity": item["quantity"],
-                "obvod_prsa": item["obvod_prsa"],
-                "obvod_hrudnik": item["obvod_hrudnik"],
-                "obvod_boky": item["obvod_boky"],
-                "obvod_body": item["obvod_body"],
-                "zpusob_vyroby": item["zpusob_vyroby"],
                 "override": True,
             },
         )
@@ -129,3 +143,18 @@ def cart_detail(request):
             "form": form,
         },
     )
+
+
+from django.shortcuts import redirect
+
+
+def update_cart_country(request):
+    if request.method == "POST":
+        selected_country = request.POST.get(
+            "country"
+        )  # Get the selected country from the form
+
+        # Update the cart's country attribute with the selected value
+        request.session["cart_country"] = selected_country
+
+    return redirect("cart:cart_detail")
