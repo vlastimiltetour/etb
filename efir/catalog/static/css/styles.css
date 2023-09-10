@@ -603,12 +603,29 @@ progress {
   object-fit: cover;
   object-position: center;
   height: 450px; /* Default height for non-mobile devices */
+}
 
-  /* Media query for mobile devices */
-  @media (max-width: 767px) {
-    height: 300px; /* Adjusted height for mobile devices */
+/* Media query for laptops (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .img-fluid {
+    height: 350px; /* Adjusted height for laptops */
   }
 }
+
+/* Media query for tablets (768px to 991px) */
+@media (max-width: 767px) {
+  .img-fluid {
+    height: 280px; /* Adjusted height for tablets */
+  }
+}
+
+/* Media query for super narrow mobile devices (less than 360px) */
+@media (max-width: 389px) {
+  .img-fluid {
+    height: 220px; /* Adjusted height for super narrow mobile devices */
+  }
+}
+
 
 .img-thumbnail {
   padding: 0.25rem;

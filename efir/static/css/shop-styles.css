@@ -192,7 +192,6 @@
 }
 
 .col-vertical-line {
-    border-right-width: 1px solid black; /* Add a border to the right of the cell */
+    border-right: 1px solid gainsboro; /* Add a border to the right of the cell */
     padding-right: 10px; /* Add some padding to separate the border from content */
-
 }
