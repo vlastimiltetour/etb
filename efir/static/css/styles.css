@@ -602,27 +602,33 @@ progress {
 .img-fluid {
   object-fit: cover;
   object-position: center;
-  height: 450px; /* Default height for non-mobile devices */
+  height: 500px; /* Default height for non-mobile devices */
 }
 
 /* Media query for laptops (768px to 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
   .img-fluid {
-    height: 350px; /* Adjusted height for laptops */
+    height: 320px; /* Adjusted height for laptops */
   }
 }
 
 /* Media query for tablets (768px to 991px) */
 @media (max-width: 767px) {
   .img-fluid {
-    height: 280px; /* Adjusted height for tablets */
+    height: 250px; /* Adjusted height for tablets */
+  }
+}
+
+@media (max-width: 430px) {
+  .img-fluid {
+    height: 240px; /* Adjusted height for tablets */
   }
 }
 
 /* Media query for super narrow mobile devices (less than 360px) */
-@media (max-width: 359px) {
+@media  (min-width: 100px) and (max-width: 400px) {
   .img-fluid {
-    height: 180px; /* Adjusted height for super narrow mobile devices */
+    height: 240px; /* Adjusted height for super narrow mobile devices */
   }
 }
 
@@ -691,8 +697,19 @@ progress {
 @media (min-width: 1400px) {
   .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
     max-width: 1320px;
+    --bs-gutter-x: 3rem;
+    --bs-gutter-y: 0;
+    width: 100%;
+    height: auto;
+    /* just in case min-height: 100vh; */
+    padding-right: calc(var(--bs-gutter-x) * 1.5);
+    padding-left: calc(var(--bs-gutter-x) * 1.5);
+    margin-right: auto;
+    margin-left: auto;
+
   }
 }
+
 .row {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;

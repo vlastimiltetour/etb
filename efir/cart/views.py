@@ -51,22 +51,16 @@ def cart_remove(request, product_id):
     return redirect("cart:cart_detail")
 
 
-def cart_update(request, product_id):
+def cart_update(request):
     cart = Cart(request)
-    product = Product.objects.get(id=product_id)
 
     if request.method == "POST":
-        form = CartUpdateForm(request.POST)
-        if form.is_valid():
-            new_quantity = form.cleaned_data["quantity"]
-            cart.update(
-                product, new_quantity, add=False
-            )  # Set add=False to directly set the quantity
-            return redirect(
-                "cart_detail"
-            )  # Redirect to the cart detail page after the update
-    else:
-        form = CartUpdateForm()
+        product_id = int(request.POST.get("product_id"))
+        quantity = int(request.POST.get("quantity"))
+        cart.update(
+            product_id, quantity, add=False
+        )  # Set add=False to directly set the quantity
+        cart.save()
 
     return redirect("cart:cart_detail")
 
@@ -145,9 +139,6 @@ def cart_detail(request):
     )
 
 
-from django.shortcuts import redirect
-
-
 def update_cart_country(request):
     if request.method == "POST":
         selected_country = request.POST.get(
@@ -158,3 +149,26 @@ def update_cart_country(request):
         request.session["cart_country"] = selected_country
 
     return redirect("cart:cart_detail")
+
+
+def update_quantity(request):
+    cart = Cart(request)
+    CouponForm()
+
+    if request.method == "POST":
+        # Get the item and the updated quantity from the request
+        request.POST.get("item_id")
+        request.POST.get("new_quantity")
+
+        # Perform the update operation here, for example:
+        # item = YourItemModel.objects.get(id=item_id)
+        # item.quantity = new_quantity
+        # item.save()
+
+        for item in cart:
+            item["product"].id
+            imte["quantity"]
+    # You can return a JsonResponse to update the quantity on the front-end
+
+    return redirect("cart:cart_detail")
+

@@ -19,7 +19,7 @@ class Cart:
 
         # store applied coupon
         self.coupon_id = self.session.get("coupon_id")
-        self.country = self.session.get("cart_country")
+        self.country = self.session.get("country")
 
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
@@ -56,16 +56,22 @@ class Cart:
     ):
         cart_item_id = str(uuid.uuid4())
 
-        # Check if the product is already in the cart
         for existing_cart_item_id, cart_item in self.cart.items():
+            print("================")
             if "product_id" in cart_item and cart_item["product_id"] == product.id:
                 if override:
-                    # If override is True, update the quantity directly
+                    print(f"Updating quantity of product {product.id} to {quantity}")
                     cart_item["quantity"] = quantity
+                    self.save()
+                    return
+                else:
+                    print(f"Increasing quantity of product {product.id} by {quantity}")
+                    cart_item["quantity"] += quantity
                     self.save()
                     return
 
         # If the product is not in the cart or override is True, add it as a new item
+
         self.cart[cart_item_id] = {
             "product_id": product.id,  # Store the product_id
             "quantity": quantity,
@@ -82,23 +88,6 @@ class Cart:
 
     def save(self):
         self.session.modified = True
-
-    def update(self, product, quantity, add=False):
-        product_id = product.id
-
-        for cart_item_id, cart_item in self.cart.items():
-            if "product_id" in cart_item and cart_item["product_id"] == product_id:
-                if add:
-                    cart_item["quantity"] += quantity
-                else:
-                    cart_item["quantity"] = quantity if quantity > 0 else 0
-
-                if cart_item["quantity"] <= 0:
-                    # If the quantity is 0 or negative, remove the item from the cart
-                    del self.cart[cart_item_id]
-
-                self.save()
-                break  # Exit the loop after updating/removing the item
 
     def remove(self, product):
         product_id = product.id  # Assuming product_id is an integer field
@@ -122,15 +111,15 @@ class Cart:
     def get_shipping_price(self):
         # Get the country from the cart data
         country = self.country
-        print(f"country{country}")
-        if country == "CZ":
+
+        if country == "cz":
             shipping_price = 89
-        elif country == "SK":
+        elif country == "sk":
             shipping_price = 99
         else:
             shipping_price = 0
 
-        print(f"shipping_price{shipping_price}")
+        print(shipping_price)
         return shipping_price
 
     def get_total_price(self):

@@ -54,13 +54,17 @@ class OrderForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Vložte adresu, kam doručit oblečení",
+                     "readonly": True,  # Add the readonly attribute here
+
                 }
             ),
             "vendor_id": forms.HiddenInput(),
-            "country": forms.Select(
+            "country": forms.TextInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Vložte adresu, kam doručit oblečení",
+                    "readonly": True,  # Add the readonly attribute here
+
                 },
             ),
         }

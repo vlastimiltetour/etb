@@ -17,14 +17,17 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="Vytvořeno")
     updated = models.DateTimeField(auto_now=True, verbose_name="Aktualizováno")
 
-    COUNTRY_CHOICES = [("CZ", "Česko"), ("SK", "Slovensko")]
+    COUNTRY_CHOICES = [("CZ", "cz"), ("SK", "sk")]
 
     country = models.CharField(
-        max_length=20, choices=COUNTRY_CHOICES, verbose_name="Země"
+        max_length=20, verbose_name="Země"
     )
-    shipping_type = (("Z", "Zásilkovna"), ("O", "Osobní odběr"))
+    shipping_type = (("Z", "Zásilkovna"),)
     shipping = models.CharField(
-        max_length=100, choices=shipping_type, verbose_name="Doprava"
+        max_length=100,
+        choices=shipping_type,
+        verbose_name="Doprava",
+        default="Zásilkovna",
     )
     shipping_price = models.DecimalField(
         decimal_places=0,

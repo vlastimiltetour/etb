@@ -7,7 +7,6 @@ from django.urls import reverse  # this is when calling an address by name
 class Product(models.Model):
     # Product specaifics
 
-
     category = models.ForeignKey(
         "Category",
         related_name="products",

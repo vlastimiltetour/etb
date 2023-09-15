@@ -70,6 +70,21 @@
     border: 1px solid black;
 }
 
+select {
+    /* Style the dropdown background color */
+    background-color: transparent;
+    border: 1px solid black;
+    /* Other styles as needed */
+  }
+  
+  option {
+    /* Style the text color */
+    color: black;
+    /* Style the background color of selected option */
+    background-color: white;
+    /* Other styles as needed */
+  }
+  
 /* Adjust for mobile */
 @media screen and (max-width: 600px) {
     #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_boky, #id_obvod_body, #id_quantity {
@@ -160,15 +175,44 @@
  
 }
   
-.animated-photo {
+.animated-photo-left {
     position: absolute;
-    left: -100%;
+    left: -100; /* Start from the left */
     top: 50%;
     transform: translate(0, -50%);
-    animation: slide-in 2s ease-out forwards;
+    animation: slide-in-left 2s ease-out forwards;
     object-fit: cover;
     object-position: center;
     height: 450px;
+}
+
+.animated-photo-right {
+    position: absolute;
+    right: 0; /* Start from the right */
+    top: 50%;
+    transform: translate(0, -50%);
+    animation: slide-in-right 2s ease-out forwards;
+    object-fit: cover;
+    object-position: center;
+    height: 450px;
+}
+
+@keyframes slide-in-left {
+    0% {
+        left: -100%; /* Move from the left */
+    }
+    100% {
+        left: 0; /* Stop at 0 */
+    }
+}
+
+@keyframes slide-in-right {
+    0% {
+        right: -100%; /* Move from the right */
+    }
+    100% {
+        right: 0; /* Stop at 0 */
+    }
 }
 
 /* Media query for mobile devices */

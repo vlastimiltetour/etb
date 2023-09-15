@@ -119,8 +119,8 @@
 
 
 
-<!-- this is not correct-->
-{{ item.update_quantity_form.quantity }}
+                        <!-- this is not correct-->
+                        {{ item.update_quantity_form.quantity }}
 
                            {{ item.update_quantity_form.override }}
                            <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="increaseCount({{ forloop.counter }})">
@@ -244,11 +244,12 @@
                                     <i class="bi bi-dash" style="line-height: 1;"></i>
                                     </button>
                                     
-                                    {{ item.quantity }}
+                              
                                     <!-- quantity input <input type="number" name="update-quantity-form" id="id_quantity-{{ forloop.counter }}" min="1" max="20" value="{{ cart.quantity }}">
-
-                                    {{ item.update_quantity_form.override }}
                                     -->
+                                    {{ item.update_quantity_form.quantity }}
+                                    {{ item.update_quantity_form.override }}
+                                
                                     <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="increaseCount({{ forloop.counter }})">
                                     <i class="bi bi-plus" style="line-height: 1;"></i>
                                     </button>
@@ -262,7 +263,7 @@
                   </div>
                   <span>
                      <div>
-                        <div> {{product.price|intcomma}} Kč </div><br>
+                        <div> {{ item.total_price|intcomma}} Kč </div><br>
                         <!-- Cart Remove Function--> 
                         <div style="text-align: right;">
                            <form action="{% url 'cart:cart_remove' product.id %}" method="post">
@@ -288,6 +289,7 @@
           
                           <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
           
+                          
           
                       </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
@@ -305,7 +307,48 @@
                {% else %}
                <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <span>Doprava: </span> 
+
+
+
+             
+               
+         
+                      <!-- experiement with updating country 
+                  <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
+                     {% csrf_token %}
+                     <label for="country">Doprava:</label>
+                     <input name="country" name="cart_country" id="cart_country" >
+                       {{ cart.get_shipping_price }}
+                       <div class="invalid-feedback">
+                       </div>
+                     </input>
+                   </form>
+               
+                 <script>
+                 // Your JavaScript code here
+                
+                 document.addEventListener("DOMContentLoaded", function() {
+                   // Get the select element and form
+                   const selectCountry = document.getElementById("selected_country");
+                   const countryForm = document.getElementById("country-form");
+                 
+                   // Add an event listener to the select element
+                   selectCountry.addEventListener("change", function() {
+                     // Check if an option is selected
+                     if (selectCountry.value !== "") {
+                       // Submit the form
+                       countryForm.submit();
+                     }
+                   });
+                 });
+                </script> -->
+                  
+            <!-- experiment end updating country -->
+            <!-- html country input experiment -->
+ 
+ <!-- end html country input experiement -->
                   <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
+                  
                </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <!-- #TODO total  to be calculated-->
@@ -373,14 +416,49 @@
                         <div class="invalid-feedback">
                         </div>
                      </div>
-                   <div class="col-md-6 mb-3">
-               <!--TODO this onchange is new-->
-               <label for="country">Země</label>
-               <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)"> - </div>
-               {{ cart.get_shipping_price }}
-               <div class="invalid-feedback">
-               </div>
-            </div>
+                  </div>
+
+                     <div class="row">
+                        <div class="mb-3">
+                           <button id="packeta_button" type="button"  class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
+                           <div style="display:none" class="packeta-selector-value"></div> <!-- this value shows vendor ID -->
+                        </div>
+                     </div>
+
+
+
+
+                     <div class="row">
+                        <div class="col-md-6 mb-3">
+                           <label for="country">Země
+                           </label>
+                       <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
+                       {{ form.country }}
+                           <div class="invalid-feedback">
+                              Valid country name is required.
+                           </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                           <label for="email">Adresa</label>
+                           {{ form.address }}
+             
+                           <div class="invalid-feedback">
+                              Valid last name is required.
+                           </div>
+                        </div>
+                     </div>
+
+
+
+
+
+
+
+
+
+                    
+                        
+            
 
                      <div>
       
@@ -421,44 +499,41 @@
                         <!-- Your JavaScript code -->
                         <script>
                            const packetaApiKey = 'e2ac633a88eca5e2';
-                           
+                       
                            const packetaOptions = {
                                valueFormat: "name, street, city"
                            };
-                           
+                       
                            function showSelectedPickupPoint(point) {
                                // Add here an action on pickup point selection
                                const saveElement = document.querySelector(".packeta-selector-value");
-                               const addressInput = document.querySelector("#id_address"); // invokes the variable 
-                               const country = document.querySelector('#id_country_packeta')
-                               const cart_country = document.querySelector('#id_cart_country')
-                               const vendorIdInput = document.querySelector("#id_vendor_id"); // invokes the variable 
-                               const cartCountryElement = document.querySelector('#cart_country'); // Get the element for displaying cart_country
-
+                               const addressInput = document.querySelector("#id_address"); // invokes the variable
+                               const countryInput = document.querySelector("#id_country"); // Hidden input field for 'country'
+                               const cartCountryInput = document.querySelector('#cart_country'); // Get the element for displaying cart_country
+                              // const vendorIdInput = document.querySelector("#id_vendor_id"); // invokes the variable
+                       
                                saveElement.innerText = '';
                                if (point) {
-                                 console.log("Selected point", point);
-                                 saveElement.innerText = "ID: " + point.id; // this is showing variable output, but we don't need it
-                                 addressInput.value = point.formatedValue; //saves the value to the form   
-                                 country.innerText = point.country; 
-                                 cart_country.innerText = point.country; 
-                                 vendorIdInput.value = point.id;
-                                 cartCountryElement.innerText = point.country; // Update the display element for cart_country
-                               };
+                                   console.log("Selected point", point);
+                                   saveElement.innerText = "ID: " + point.id; // this is showing variable output, but we don't need it
+                                   addressInput.value = point.formatedValue; // saves the value to the form
+                                   countryInput.value = point.country; // Set the 'country' value in the hidden input field
+                                   cartCountryInput.value = point.country; // Update the display element for cart_country
+                                  // vendorIdInput.value = point.id;
+
+                                   
+                               }
+
+                            
                            }
-                           
-                        </script>
-                        <button id="packeta_button" type="button" style="display: none;" class="btn btn-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
-                        <div class="packeta-selector-value"></div>
+                       </script>
+                       
+                     
                         <!-- End Packeta Script-->
                      </div>
-                     {{ form.vendor_id }}
-                     <div class="col-md-6 mb-3">
-                        <label for="email">Adresa</label>
-                        {{ form.address }}
-                        <div class="invalid-feedback">
-                        </div>
-                     </div>
+                     
+                     
+                    
                      <div class="mb-3">
                         <label for="email">Komentáře</label>
                         {{ form.comments }}
@@ -470,7 +545,7 @@
                      <label class="custom-checkbox">
                         <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
                         <span class="checkmark"></span>
-                        Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</a>
+                        Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
                     </label>
                   </div>
                     
@@ -498,18 +573,7 @@
       </div>
       <!-- Form ends-->
        
-                 <!-- experiement with updating country -->
-                 <section> 
-                  <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
-                     {% csrf_token %}
-                     <label for="country">Select Country:</label>
-                     <input name="id_country" id="cart_country">
-                     <div id="cart_country"></div>
-                  </form>
 
-               </section>
-               
-           <!-- experiment end updating country -->
    </div>
    <div id="^(,rZvUx1683491487730"></div>
    <iframe name="" frameborder="0" id="fnlp-panel-iframe" style="display: none!important; position: fixed!important; top: 0px!important; right: -280px!important; z-index: 1000000000!important; width: 305px!important; height: 100vh!important; margin:0!important; border: 0px!important; outline: 0px!important;"></iframe>
@@ -568,7 +632,7 @@
 <script>
    // update-quantity-code
 function decreaseCount(counter) {
-  var select = document.getElementById('id_quantity-' + counter);
+  var select = document.getElementById('id_quantity');
   
 
   var value = parseInt(select.value);
@@ -580,7 +644,7 @@ function decreaseCount(counter) {
 }
 
 function increaseCount(counter) {
-  var select = document.getElementById('id_quantity-' + counter);
+  var select = document.getElementById('id_quantity' );
  
 
   var value = parseInt(select.value);
@@ -595,14 +659,16 @@ function updateQuantityForm(counter, value) {
 }
 
   // Function to update the selected country
-  function updateSelectedCountry(value) {
-    var formId = "country-form";  // Replace with the correct form ID
+ // function updateSelectedCountry(value) {
+   // var formId = "country-form";  // Replace with the correct form ID
 
     // Set the selected value of the country dropdown
 
     // Submit the form to update the selected country
-    document.getElementById(formId).submit();
-  }
+//    document.getElementById(formId).submit();
+  ///}
+
+
 
 </script>
 

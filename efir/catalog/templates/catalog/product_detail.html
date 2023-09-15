@@ -104,8 +104,15 @@
                      // Call the updateZpusobVyroby() function initially to handle the default selected value
                      updateZpusobVyroby();
                   </script>
-                  <!-- Size Variables -->
+
+
+
+
+                  <!-- Start Size Variables -->
                   <div id="sizes" style="display: none;">
+
+                     
+                     <!-- Category Definition -->
                      {% if product.category.name == "Kalhotky" %}
                      <div id="sizes">
                         <div style="display: none;">
@@ -182,6 +189,10 @@
             </div>
             </div>
             </div>
+
+
+
+            <!-- Category Definition  -->
             {% elif product.category.name == "Podprsenky" %}
             <div id="sizes">
             <div style="display: none;">
@@ -258,6 +269,9 @@
       </div>
       </div>
       </div>
+
+
+      <!-- Category Definition -->
       {% elif product.category.name == "Celé sety" %}
       <div id="sizes">
       <div style="display: block;">
