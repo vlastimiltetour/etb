@@ -19,9 +19,7 @@ class Order(models.Model):
 
     COUNTRY_CHOICES = [("CZ", "cz"), ("SK", "sk")]
 
-    country = models.CharField(
-        max_length=20, verbose_name="Země"
-    )
+    country = models.CharField(max_length=20, verbose_name="Země")
     shipping_type = (("Z", "Zásilkovna"),)
     shipping = models.CharField(
         max_length=100,

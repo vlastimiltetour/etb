@@ -31,12 +31,12 @@ def cart_add(request, product_id):
         cart.add(
             product=product,
             quantity=cd["quantity"],
+            poznamka=cd["poznamka"],
             obvod_hrudnik=cd["obvod_hrudnik"],
             obvod_prsa=cd["obvod_prsa"],
             obvod_boky=cd["obvod_boky"],
             obvod_body=cd["obvod_body"],
             zpusob_vyroby=cd["zpusob_vyroby"],
-            poznamka=cd["poznamka"],
             override=cd["override"],
         )
 
@@ -51,26 +51,37 @@ def cart_remove(request, product_id):
     return redirect("cart:cart_detail")
 
 
-def cart_update(request):
+def update_cart_quantity(request, item_id):
+    new_quantity = int(request.POST["quantity"])
     cart = Cart(request)
-
-    if request.method == "POST":
-        product_id = int(request.POST.get("product_id"))
-        quantity = int(request.POST.get("quantity"))
-        cart.update(
-            product_id, quantity, add=False
-        )  # Set add=False to directly set the quantity
-        cart.save()
-
+    cart.update_quantity(item_id, new_quantity)
     return redirect("cart:cart_detail")
 
 
 def cart_detail(request):
     cart = Cart(request)
+
     coupon_form = CouponForm()
 
+    # the value is taken from session
+    selected_country = request.session.get("cart_country")
+    selected_address = request.session.get("cart_address")
+
+    # the value is taken from session and saved here, where I can request it as form.initial.cart_country, etc.
+    form = OrderForm(
+        request.POST,
+        initial={
+            "order_country": selected_country,
+            "order_address": selected_address,
+        },
+    )
+
+    # Initialize the form without initial values
+
     for item in cart:
+        print(item)
         product_id = item["product"].id  # Get the product ID from the item
+
         item["update_quantity_form"] = CartAddProductForm(
             id_from_product=product_id,
             initial={
@@ -80,11 +91,19 @@ def cart_detail(request):
         )
 
     if request.method == "POST":
-        form = OrderForm(request.POST)
+        form = OrderForm(
+            request.POST,
+            initial={
+                "order_country": selected_country,
+                "order_address": selected_address,
+            },
+        )
+
         if form.is_valid():
             order = form.save(
                 commit=False
             )  # In this line, you are using a Django ModelForm (order_form) to create an Order instance. The commit=False argument prevents the instance from being saved to the database immediately. Instead, it returns an unsaved instance of the model. This allows you to make additional modifications to the instance before saving it to the database.
+
             order.save(cart=cart)
 
             """Once you have the unsaved order instance, you can call its save method to save it to the database. In this case, you are passing an additional keyword argument cart to the save method. This is where you are providing the cart instance to the save method of the Order model.
@@ -103,7 +122,7 @@ def cart_detail(request):
                     obvod_boky=item["obvod_boky"],
                     obvod_body=item["obvod_body"],
                 )
-                print("order is saved???")
+                print("================= order is saved???")
                 print(f"orderitem{order}")
                 print(f"item{item}")
 
@@ -125,8 +144,17 @@ def cart_detail(request):
 
             # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
             return redirect(reverse("stripepayment:process"))
-    else:
-        form = OrderForm()
+
+    # print(form.errors)
+
+    else:  # data has to be saved to the form, which happens
+        form = OrderForm(
+            request.POST,
+            initial={
+                "order_country": selected_country,
+                "order_address": selected_address,
+            },
+        )
 
     return render(
         request,
@@ -142,33 +170,13 @@ def cart_detail(request):
 def update_cart_country(request):
     if request.method == "POST":
         selected_country = request.POST.get(
-            "country"
-        )  # Get the selected country from the form
+            "cart_country"
+        )  # Get the selected country from the form, it has unique cart_address id and name
+        selected_address = request.POST.get("cart_address")
 
         # Update the cart's country attribute with the selected value
         request.session["cart_country"] = selected_country
 
-    return redirect("cart:cart_detail")
-
-
-def update_quantity(request):
-    cart = Cart(request)
-    CouponForm()
-
-    if request.method == "POST":
-        # Get the item and the updated quantity from the request
-        request.POST.get("item_id")
-        request.POST.get("new_quantity")
-
-        # Perform the update operation here, for example:
-        # item = YourItemModel.objects.get(id=item_id)
-        # item.quantity = new_quantity
-        # item.save()
-
-        for item in cart:
-            item["product"].id
-            imte["quantity"]
-    # You can return a JsonResponse to update the quantity on the front-end
+        request.session["cart_address"] = selected_address
 
     return redirect("cart:cart_detail")
-

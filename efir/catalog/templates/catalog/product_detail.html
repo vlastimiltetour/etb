@@ -54,6 +54,7 @@
                            {% endfor %} 
                         </select>
                      </div>
+
                   </div>
                   <script>
                      function updateZpusobVyroby() {
@@ -456,7 +457,10 @@
    <div>
    <p class="lead">{{ product.long_description|linebreaks }}</p>
    </div>
+   <p class="small muted-text">Jak určit svou velikost:<br>Pokud neznáte svou velikost, podívejte se do naší <u><a href="{% url 'catalog:rozmery' %}">velikostní tabulky</a></u></p>
+
    </div>
+
    </div>
    </div>
    </div>

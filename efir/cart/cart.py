@@ -19,7 +19,8 @@ class Cart:
 
         # store applied coupon
         self.coupon_id = self.session.get("coupon_id")
-        self.country = self.session.get("country")
+        self.country = self.session.get("cart_country")
+        self.address = self.session.get("cart_address")
 
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
@@ -35,6 +36,7 @@ class Cart:
             cart_item["product"] = product
             cart_item["price"] = Decimal(cart_item["price"])
             cart_item["total_price"] = cart_item["price"] * cart_item["quantity"]
+
             items.append(cart_item)
 
         return iter(items)
@@ -52,42 +54,55 @@ class Cart:
         obvod_body=0,
         zpusob_vyroby=None,  # might be renamed to konfekcni
         poznamka=None,
-        override=False,
+        override=None,
     ):
+        # Check if the product is already in the cart
+    
+        # Check if the product is already in the cart
+        for cart_item_id, cart_item_value in self.cart.items():
+            print(cart_item_value)
+        
+        '''for cart_item_id, cart_item_value in self.cart.items():
+            if cart_item_value["product_id"] == product.id:
+                # Product already in cart, update the quantity
+                print(f"Updating quantity of product {product.id} to {quantity}")
+                cart_item_value["quantity"] += quantity
+                self.save()
+                return'''
+        
+        # Generate a new cart item_id
         cart_item_id = str(uuid.uuid4())
-
-        for existing_cart_item_id, cart_item in self.cart.items():
-            print("================")
-            if "product_id" in cart_item and cart_item["product_id"] == product.id:
-                if override:
-                    print(f"Updating quantity of product {product.id} to {quantity}")
-                    cart_item["quantity"] = quantity
-                    self.save()
-                    return
-                else:
-                    print(f"Increasing quantity of product {product.id} by {quantity}")
-                    cart_item["quantity"] += quantity
-                    self.save()
-                    return
-
-        # If the product is not in the cart or override is True, add it as a new item
-
-        self.cart[cart_item_id] = {
-            "product_id": product.id,  # Store the product_id
-            "quantity": quantity,
-            "price": str(product.price),
-            "obvod_boky": str(obvod_boky),
-            "obvod_prsa": str(obvod_prsa),
-            "obvod_hrudnik": str(obvod_hrudnik),
-            "obvod_body": str(obvod_body),
-            "poznamka": str(poznamka),
-            "zpusob_vyroby": str(zpusob_vyroby),
-        }
+        
+        # If the item_id is already in the cart, allow adjusting the quantity
+        if cart_item_id in self.cart:
+            self.cart[cart_item_id]["quantity"] += quantity
+        else:
+            # Add the product as a new item
+            self.cart[cart_item_id] = {
+                "item_id": cart_item_id,
+                "product_id": product.id,
+                "quantity": quantity,
+                "price": str(product.price),
+                "obvod_boky": str(obvod_boky),
+                "obvod_prsa": str(obvod_prsa),
+                "obvod_hrudnik": str(obvod_hrudnik),
+                "obvod_body": str(obvod_body),
+                "poznamka": str(poznamka),
+                "zpusob_vyroby": str(zpusob_vyroby),
+                "override": override,
+            }
 
         self.save()
-
+        # Generate a new cart item_id
+        cart_item_id = str(uuid.uuid4())
+        
     def save(self):
         self.session.modified = True
+
+    def update_quantity(self, item_id, new_quantity):
+        if item_id in self.cart:
+            self.cart[item_id]["quantity"] = new_quantity
+            self.save()
 
     def remove(self, product):
         product_id = product.id  # Assuming product_id is an integer field
@@ -119,15 +134,24 @@ class Cart:
         else:
             shipping_price = 0
 
-        print(shipping_price)
         return shipping_price
+
+    def get_address(self):
+        address = self.address
+
+        if address is not None:
+            return address
+
+        return "-"
+
+    def get_country(self):
+        country = self.country
+        return country if country else "-"
 
     def get_total_price(self):
         product_discount = 0  # TODO subtrackt the discount from product price
         total_price = (
-            sum(
-                Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
-            )
+            sum((item["price"]) * item["quantity"] for item in self.cart.values())
             + (self.get_shipping_price())
             - product_discount
         )

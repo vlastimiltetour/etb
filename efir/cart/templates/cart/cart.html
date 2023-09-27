@@ -8,7 +8,7 @@
    .hide-form {
    display: none; 
    }
-   #id_quantity {
+   #quantity {
    appearance: none;
    -webkit-appearance: none;
    -moz-appearance: none;
@@ -17,196 +17,150 @@
    width: 30px; /* Adjust the width as needed */
    text-align: center;
    border: none; /* Add black square border */
-}
+   }
 </style>
 {% if cart|length > 0 %}
-   <div class="hide-form">
-
-
-      <div class="row d-flex py-2 justify-content-center border-top">
-         {% for item in cart %}
-         {% with product=item.product %}
-   
-         <div class="my-auto col-3">
-               <div class="book">
-                  {% with first_photo=product.photos.first %}
-                  {% if first_photo %}
-                  <img src="{{ first_photo.photo.url }}" class="book-img" style="max-height: 100px; max-width: 50px;">
-   
-                  {% endif %}
-                   {% endwith %}
-   
-               </div>
-         </div>
-         <div class="my-auto py-3 col-9">
-   
-            <div class="row text-right">
-               <div class="col-6">
-                  <h6 class="mob-text">{{ product.name }}</h6>
-               </div>
-               <div class="col-6">
-                  <!-- Cart Remove Function--> 
-                   <div style="text-align: left;">
-                     <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-close" aria-label="Close">
-                
-                        </button>
-                     </form>
-                  </div>
-               </div>
-            </div>
-            <form id="update-quantity-form-{{ forloop.counter }}" action="{% url 'cart:cart_add' item.product.id %}" method="post">
-               {% csrf_token %}
-               <div class="mob-text">
-                  <div class="row">
-                     <div class="col-6">
-                        <p id="zpusob_vyroby-{{ forloop.counter }}">Druh kolekce:</p>
-                     </div>
-                     <div class="col-6"  style="text-align: left;">
-                        {{ item.update_quantity_form.zpusob_vyroby }}
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-6">
-                        <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost podprsenky:</p>
-                     </div>
-                     <div class="col-6"  style="text-align: left;">
-                        {{ item.update_quantity_form.obvod_prsa }}
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-6">
-                        <p class="mob-text" id="obvod_hrudnik-{{ forloop.counter }}">Velikost pasu:</p>
-                     </div>
-                     <div class="col-6"  style="text-align: left;">
-                        {{ item.update_quantity_form.obvod_hrudnik }}
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-6">
-                        <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost kalhotek:</p>
-                     </div>
-                     <div class="col-6"  style="text-align: left;">
-                        {{ item.update_quantity_form.obvod_boky }}
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-6">
-                        <p class="mob-text" id="obvod_body-{{ forloop.counter }}">Velikost body:</p>
-                     </div>
-                     <div class="col-6"  style="text-align: left;">
-                        {{ item.update_quantity_form.obvod_body }}
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-6">
-                        <p class="mob-text" id="obvod_boky-{{ forloop.counter }}">Poznámka:</p>
-                     </div>
-                     <div class="col-6"  style="text-align: left;">
-                        {{ item.poznamka }}
-                     </div>
-                  </div>
-               </div>
-               <div class="row text-right">
-                  <div id="update-quantity-code-{{ forloop.counter }} mb-0" class="col-6">
-                     <div class="d-flex">
-                        <div class="input-group">
-                           <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount({{ forloop.counter }})">
-                              <i class="bi bi-dash" style="line-height: 1;"></i>
-                           </button>
 
 
 
-
-                        <!-- this is not correct-->
-                        {{ item.update_quantity_form.quantity }}
-
-                           {{ item.update_quantity_form.override }}
-                           <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="increaseCount({{ forloop.counter }})">
-                              <i class="bi bi-plus" style="line-height: 1;"></i>
-                           </button>
-                        </div>
-                     </div>
-
-                     {% csrf_token %}
-                  </div>
-                  <div class="col-6">
-                     <h6 class="mob-text">{{ item.total_price|intcomma }} Kč</h6>
-                  </div>
-               </div>
-            </form>
-   
-         </div>
-      
-         {% endwith %}
-         {% endfor %}
-         <div class="row d-flex py-2 justify-content-center border-top">
-            <div class="row text-right" style="text-align: right;">
-               <h6 class="mob-text">Total: {{ cart.get_total_price|intcomma }} Kč</h6>
-            </div>
-            {% if cart.coupon %}
-   
-            <div class="row text-right" style="text-align: right;">
-               <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount|intcomma }} Kč</h6>
-            </div>
-            <div class="row text-right" style="text-align: right;">
-               <h6 class="mob-text">Total po slevě: {{ cart.get_total_price_after_discount|intcomma }} Kč</h6>
-            </div>
-
-
+<div class="hide-form">
+   <div class="row d-flex py-2 justify-content-center border-top">
+      {% for item in cart %}
+      {% with product=item.product %}
+      <div class="my-auto col-3">
+         <div class="book">
+            {% with first_photo=product.photos.first %}
+            {% if first_photo %}
+            <img src="{{ first_photo.photo.url }}" class="book-img" style="max-height: 100px; max-width: 50px;">
             {% endif %}
-   
+            {% endwith %}
          </div>
-      </div>   
-   
-      <br>
-      <div>
-         
-   
-   
-         {% if cart.coupon %}
-    
-    
-         {% else %}
-     
-   
-        
-         <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
-            <div class="input-group">
-               {{ coupon_form }}
-                  <button type="submit" class="btn btn-secondary">Uplatnit</button>
-        
-            </div>
-            {% csrf_token %}
-         </form>
-   
-   
-         {% endif %}
-   
-   
-         
-   
       </div>
-   
-   
-      <section class="jumbotron text-center">
-         <div class="container">
-            <a href="{% url 'orders:new_order' %}" type="submit" class="btn btn-dark my-2">Koupit</a>
+      <div class="my-auto py-3 col-9">
+         <div class="row text-right">
+            <div class="col-6">
+               <h6 class="mob-text">{{ product.name }}</h6>
+            </div>
+            <div class="col-6">
+               <!-- Cart Remove Function--> 
+               <div style="text-align: left;">
+                  <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                     {% csrf_token %}
+                     <button type="submit" class="btn-close" aria-label="Close">
+                     </button>
+                  </form>
+               </div>
+            </div>
          </div>
-      </section>
-   
- 
+         <form id="update-quantity-form-{{ forloop.counter }}" action="#" method="post">
+            {% csrf_token %}
+            <div class="mob-text">
+               <div class="row">
+                  <div class="col-6">
+                     <p id="zpusob_vyroby-{{ forloop.counter }}">Druh kolekce:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.zpusob_vyroby }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost podprsenky:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_prsa }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_hrudnik-{{ forloop.counter }}">Velikost pasu:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_hrudnik }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost kalhotek:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_boky }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_body-{{ forloop.counter }}">Velikost body:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_body }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_boky-{{ forloop.counter }}">Poznámka:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.poznamka }}
+                  </div>
+               </div>
+            </div>
+            <div class="row text-right">
+               <div id="update-quantity-code-{{ forloop.counter }} mb-0" class="col-6">
+                  <div class="d-flex">
+                     <!-- this is old -->
+                     <div class="input-group">
+                       
+                        <!-- this is not correct
+                        {{ item.update_quantity_form.quantity }}
+                        {{ item.update_quantity_form.override }}-->
+                       
+                     </div>
+                  </div>
+                  {% csrf_token %}
+               </div>
+               <div class="col-6">
+                  <h6 class="mob-text">{{ item.total_price|intcomma }} Kč</h6>
+               </div>
+            </div>
+         </form>
+      </div>
+      {% endwith %}
+      {% endfor %}
+      <div class="row d-flex py-2 justify-content-center border-top">
+         <div class="row text-right" style="text-align: right;">
+            <h6 class="mob-text">Total: {{ cart.get_total_price|intcomma }} Kč</h6>
+         </div>
+         {% if cart.coupon %}
+         <div class="row text-right" style="text-align: right;">
+            <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount|intcomma }} Kč</h6>
+         </div>
+         <div class="row text-right" style="text-align: right;">
+            <h6 class="mob-text">Total po slevě: {{ cart.get_total_price_after_discount|intcomma }} Kč</h6>
+         </div>
+         {% endif %}
+      </div>
    </div>
-
-
-
-
-
-
-
+   <br>
+   <div>
+      {% if cart.coupon %}
+      {% else %}
+      <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
+         <div class="input-group">
+            {{ coupon_form }}
+            <button type="submit" class="btn btn-secondary">Uplatnit</button>
+         </div>
+         {% csrf_token %}
+      </form>
+      {% endif %}
    </div>
-      <!-- This is where hidden section ends -->
+   <section class="jumbotron text-center">
+      <div class="container">
+         <a href="{% url 'orders:new_order' %}" type="submit" class="btn btn-dark my-2">Koupit</a>
+      </div>
+   </section>
+</div>
+</div>
+<!-- This is where hidden section ends -->
 <body data-new-gr-c-s-check-loaded="14.1107.0" data-gr-ext-installed="">
    <div class="container py-5">
       <!-- Shopping Cart Section -->
@@ -229,6 +183,7 @@
                      {% endif %}
                      {% endwith %}
                      <div>
+
                         <h6 class="my-0">{{ product.name }}       </h6>
                         <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
                         <small class="text-muted">{{ item.obvod_prsa }} </small>
@@ -236,34 +191,35 @@
                         <small class="text-muted">{{ item.obvod_body }}</small>
                         <small class="text-muted">{{ item.obvod_boky }}</small>
                         <br>
-                        <div class="row text-left">
-                           <div id="update-quantity-code-{{ forloop.counter }} mb-0">
-                              <div class="d-flex">
-                                 <div class="input-group">
-                                    <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount({{ forloop.counter }})">
-                                    <i class="bi bi-dash" style="line-height: 1;"></i>
-                                    </button>
-                                    
-                              
-                                    <!-- quantity input <input type="number" name="update-quantity-form" id="id_quantity-{{ forloop.counter }}" min="1" max="20" value="{{ cart.quantity }}">
-                                    -->
-                                    {{ item.update_quantity_form.quantity }}
-                                    {{ item.update_quantity_form.override }}
-                                
-                                    <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="increaseCount({{ forloop.counter }})">
-                                    <i class="bi bi-plus" style="line-height: 1;"></i>
-                                    </button>
-                                 </div>
-                              </div>
-                              {% csrf_token %}
-                              
-                           </div>
-                        </div>
+
+                        <form method="post" id="cart-update-quantity-form-{{ item.item_id }}" action="{% url 'cart:update_cart_quantity' item.item_id %}">
+                           {% csrf_token %}
+                           <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount('{{ item.item_id }}')">
+                              <i class="bi bi-dash" style="line-height: 1;"></i>
+                           </button>
+                              <input type="number" 
+                              style=" appearance: none;
+                              -webkit-appearance: none;
+                              -moz-appearance: none;
+                              background-color: transparent;
+                              font-size: 0.8rem;
+                              width: 30px; /* Adjust the width as needed */
+                              text-align: center;
+                              border: none; "
+                              id="quantity-{{ item.item_id }}" name="quantity" value="{{ item.quantity }}" min="1" oninput="submitForm('{{ item.item_id }}')">
+                              <input type="hidden" name="override" value="True">
+                           <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="increaseCount('{{ item.item_id }}')">
+                              <i class="bi bi-plus" style="line-height: 1;"></i>
+                           </button>
+                           <button type="button" style="display: none;" onclick="submitForm('{{ item.item_id }}')">Update</button>
+                       </form>
+                       
                      </div>
                   </div>
                   <span>
                      <div>
-                        <div> {{ item.total_price|intcomma}} Kč </div><br>
+                        <div> {{ item.total_price|intcomma}} Kč </div>
+                        <br>
                         <!-- Cart Remove Function--> 
                         <div style="text-align: right;">
                            <form action="{% url 'cart:cart_remove' product.id %}" method="post">
@@ -272,8 +228,8 @@
                               </button>
                            </form>
                         </div>
-               </div>
-               </span>
+                     </div>
+                  </span>
                </li>
                {% endwith  %}
                {% endfor  %}
@@ -284,14 +240,9 @@
                   {{ cart.get_total_price }} Kč
                </li>
                <li class="list-group-item d-flex justify-content-between lh-condensed">
-
                   <span>Doprava: </span> 
-          
-                          <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
-          
-                          
-          
-                      </li>
+                  <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
+               </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <div class="text-success">
                      <h6 class="my-0">Slevový kupón </h6>
@@ -307,48 +258,31 @@
                {% else %}
                <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <span>Doprava: </span> 
-
-
-
-             
+                  <!-- experiement with updating country  -->
                
-         
-                      <!-- experiement with updating country 
-                  <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
-                     {% csrf_token %}
-                     <label for="country">Doprava:</label>
-                     <input name="country" name="cart_country" id="cart_country" >
-                       {{ cart.get_shipping_price }}
-                       <div class="invalid-feedback">
-                       </div>
-                     </input>
-                   </form>
-               
-                 <script>
-                 // Your JavaScript code here
-                
-                 document.addEventListener("DOMContentLoaded", function() {
-                   // Get the select element and form
-                   const selectCountry = document.getElementById("selected_country");
-                   const countryForm = document.getElementById("country-form");
+
+                     <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
+                        {% csrf_token %}
+                     
+                        <input type="hidden" name="cart_country" id="cart_country">
+                        <input type="hidden" name="cart_address" id="cart_address">
+
+                      <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
+                        <input type="hidden" name="address" value="{{ form.initial.address }}">-->
+
+                        
+
+                        <div class="invalid-feedback">
+                        </div>
+                        </input>
+                     </form>
+                   
                  
-                   // Add an event listener to the select element
-                   selectCountry.addEventListener("change", function() {
-                     // Check if an option is selected
-                     if (selectCountry.value !== "") {
-                       // Submit the form
-                       countryForm.submit();
-                     }
-                   });
-                 });
-                </script> -->
-                  
-            <!-- experiment end updating country -->
-            <!-- html country input experiment -->
- 
- <!-- end html country input experiement -->
+                
+                  <!-- experiment end updating country -->
+                  <!-- html country input experiment -->
+                  <!-- end html country input experiement -->
                   <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
-                  
                </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <!-- #TODO total  to be calculated-->
@@ -358,15 +292,12 @@
                {% endif %}
             </ul>
             {% if cart.coupon %}
-
-         <form class="card p-2" action="{% url 'coupons:delete' %}" method="post">
-            <div class="input-group">
-       
+            <form class="card p-2" action="{% url 'coupons:delete' %}" method="post">
+               <div class="input-group">
                   <button type="submit" class="btn btn-secondary">Smazat</button>
-        
-            </div>
-            {% csrf_token %}
-         </form>
+               </div>
+               {% csrf_token %}
+            </form>
             {% else %}
             <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
                <div class="input-group">
@@ -417,147 +348,131 @@
                         </div>
                      </div>
                   </div>
-
-                     <div class="row">
-                        <div class="mb-3">
-                           <button id="packeta_button" type="button"  class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
-                           <div style="display:none" class="packeta-selector-value"></div> <!-- this value shows vendor ID -->
-                        </div>
-                     </div>
-
-
-
-
-                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                           <label for="country">Země
-                           </label>
-                       <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
-                       {{ form.country }}
-                           <div class="invalid-feedback">
-                              Valid country name is required.
-                           </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                           <label for="email">Adresa</label>
-                           {{ form.address }}
-             
-                           <div class="invalid-feedback">
-                              Valid last name is required.
-                           </div>
-                        </div>
-                     </div>
-
-
-
-
-
-
-
-
-
-                    
-                        
-            
-
-                     <div>
-      
-                     </div>
-                     <div class="mb-3" id="id_shipping" name="shipping">
-                        <label for="shipping">Doprava</label>
-                        {{ form.shipping }}
-                        <div class="invalid-feedback"></div>
-                     </div>
-                     <script>
-                        function showPacketaButton() {
-                          var selectElement = document.querySelector('form select[name="shipping"]');
-                          var selectedValue = selectElement.value;
-                        
-                        
-                        
-                          if (selectedValue === "Z") {
-                            var elementToShow = document.getElementById("packeta_button");
-                            elementToShow.style.display = "block";
-                          } else {
-                            var elementToHide = document.getElementById("packeta_button");
-                            elementToHide.style.display = "none";
-                          }
-                        }
-                        
-                        var selectElement = document.getElementById("id_shipping");
-                        selectElement.addEventListener("change", showPacketaButton);
-                        
-                        showPacketaButton();
-                        
-                        
-                     </script>
+                  <div class="row">
                      <div class="mb-3">
-                        <!-- Packeta script-->
-                        <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
-                        <!-- Add an element to display the selected country -->
-                        <p id="selectedCountryDisplay"></p>
-                        <!-- Your JavaScript code -->
-                        <script>
-                           const packetaApiKey = 'e2ac633a88eca5e2';
-                       
-                           const packetaOptions = {
-                               valueFormat: "name, street, city"
-                           };
-                       
-                           function showSelectedPickupPoint(point) {
-                               // Add here an action on pickup point selection
-                               const saveElement = document.querySelector(".packeta-selector-value");
-                               const addressInput = document.querySelector("#id_address"); // invokes the variable
-                               const countryInput = document.querySelector("#id_country"); // Hidden input field for 'country'
-                               const cartCountryInput = document.querySelector('#cart_country'); // Get the element for displaying cart_country
-                              // const vendorIdInput = document.querySelector("#id_vendor_id"); // invokes the variable
-                       
-                               saveElement.innerText = '';
-                               if (point) {
-                                   console.log("Selected point", point);
-                                   saveElement.innerText = "ID: " + point.id; // this is showing variable output, but we don't need it
-                                   addressInput.value = point.formatedValue; // saves the value to the form
-                                   countryInput.value = point.country; // Set the 'country' value in the hidden input field
-                                   cartCountryInput.value = point.country; // Update the display element for cart_country
-                                  // vendorIdInput.value = point.id;
-
-                                   
-                               }
-
-                            
-                           }
-                       </script>
-                       
-                     
-                        <!-- End Packeta Script-->
+                        <button id="packeta_button" type="button"  class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
+                        <div style="display:none" class="packeta-selector-value"></div>
+                        <!-- this value shows vendor ID -->
                      </div>
-                     
-                     
-                    
-                     <div class="mb-3">
-                        <label for="email">Komentáře</label>
-                        {{ form.comments }}
-                        <div class="invalid-feedback">
-                        </div>
-                     </div>
-
-                     <div class="mb-3">
-                     <label class="custom-checkbox">
-                        <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
-                        <span class="checkmark"></span>
-                        Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
-                    </label>
                   </div>
-                    
-                     <section class="jumbotron text-center">
-                        <div class="container">
-                           <!-- BaCK BUTTON, would have to solve it using JS
-                              <a href="javascript:history.back()"><button class="btn btn-dark my-2 mb-4">Zpět</button></a>
-                              -->
-                           <!--          <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button> -->
+                  <div class="row">
+                     <div class="col-md-6 mb-3">
+                        <label for="country">Země
+                        </label>
+                        <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
+                       
+                        <div class="form-control"> {{ cart.get_country }}</div>
+                        <input type="hidden" name="country" id="id_country" value="{{ form.initial.order_country }}">
+
+        
+                        
+                        
+                        <div class="invalid-feedback">
+                           Valid country name is required.
                         </div>
-                        <!-- Payment Instructions -->
-   
+                     </div>
+                     <div class="col-md-6 mb-3">
+                        <label for="email">Doručovací místo</label>
+                  
+                        <div class="form-control"> {{ cart.get_address }}</div>
+                        <input type="hidden" name="address" id="id_address" value="{{ form.initial.order_address }}">
+
+                        <div class="invalid-feedback">
+                           Valid last name is required.
+                        </div>
+                     </div>
+                  </div>
+                  <div>
+                  </div>
+                  <div class="mb-3" id="id_shipping" name="shipping">
+                     <label for="shipping">Doprava</label>
+                     {{ form.shipping }}
+                     <div class="invalid-feedback"></div>
+                  </div>
+                  <script>
+                     function showPacketaButton() {
+                       var selectElement = document.querySelector('form select[name="shipping"]');
+                       var selectedValue = selectElement.value;
+                     
+                     
+                     
+                       if (selectedValue === "Z") {
+                         var elementToShow = document.getElementById("packeta_button");
+                         elementToShow.style.display = "block";
+                       } else {
+                         var elementToHide = document.getElementById("packeta_button");
+                         elementToHide.style.display = "none";
+                       }
+                     }
+                     
+                     var selectElement = document.getElementById("id_shipping");
+                     selectElement.addEventListener("change", showPacketaButton);
+                     
+                     showPacketaButton();
+                     
+                     
+                  </script>
+                  <div class="mb-3">
+                     <!-- Packeta script-->
+                     <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
+                     <!-- Add an element to display the selected country -->
+                     <p id="selectedCountryDisplay"></p>
+                     <!-- Your JavaScript code -->
+                     <script>
+                        const packetaApiKey = 'e2ac633a88eca5e2';
+                        
+                        const packetaOptions = {
+                            valueFormat: "name, street, city"
+                        };
+                        
+                        function showSelectedPickupPoint(point) {
+                            // Add here an action on pickup point selection
+                           const saveElement = document.querySelector(".packeta-selector-value");
+                           const addressInput = document.querySelector("#cart_address"); // invokes the variable
+                           const countryInput = document.querySelector("#cart_country"); // Hidden input field for 'country'
+                            //const cartCountryInput = document.querySelector('#cart_country'); // Get the element for displaying cart_country
+                           // const vendorIdInput = document.querySelector("#id_vendor_id"); // invokes the variable
+                           const cartForm = document.querySelector("#country-form");
+
+                           
+                           saveElement.innerText = '';
+                           if (point) {
+                              console.log("Selected point", point);
+                              saveElement.innerText = "ID: " + point.id; // this is showing variable output, but we don't need it
+                              addressInput.value = point.formatedValue; // saves the value to the form
+                              countryInput.value = point.country; // Set the 'country' value in the hidden input field
+                              // cartCountryInput.value = point.country; // Update the display element for cart_country
+                              // vendorIdInput.value = point.id;
+                     
+                              cartForm.submit();
+                           }
+                     
+                         
+                        }
+                     </script>
+                     <!-- End Packeta Script-->
+                  </div>
+                  <div class="mb-3">
+                     <label for="email">Komentáře</label>
+                     {{ form.comments }}
+                     <div class="invalid-feedback">
+                     </div>
+                  </div>
+                  <div class="mb-3">
+                     <label class="custom-checkbox">
+                     <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
+                     <span class="checkmark"></span>
+                     Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
+                     </label>
+                  </div>
+                  <section class="jumbotron text-center">
+                     <div class="container">
+                        <!-- BaCK BUTTON, would have to solve it using JS
+                           <a href="javascript:history.back()"><button class="btn btn-dark my-2 mb-4">Zpět</button></a>
+                           -->
+                        <!--          <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button> -->
+                     </div>
+                     <!-- Payment Instructions -->
                <form method="post" action="{% url 'stripepayment:process' %}">
                <!-- Include the necessary form fields -->
                {% csrf_token %}        
@@ -567,13 +482,11 @@
                <!--end Payment Instructions -->
                </section>
                </form>
-               </div>
             </div>
          </div>
       </div>
-      <!-- Form ends-->
-       
-
+   </div>
+   <!-- Form ends-->
    </div>
    <div id="^(,rZvUx1683491487730"></div>
    <iframe name="" frameborder="0" id="fnlp-panel-iframe" style="display: none!important; position: fixed!important; top: 0px!important; right: -280px!important; z-index: 1000000000!important; width: 305px!important; height: 100vh!important; margin:0!important; border: 0px!important; outline: 0px!important;"></iframe>
@@ -629,47 +542,28 @@
    })();
 </script>
 
+
 <script>
-   // update-quantity-code
-function decreaseCount(counter) {
-  var select = document.getElementById('id_quantity');
-  
+   function decreaseCount(itemId) {
+       var select = document.getElementById('quantity-' + itemId);
+       var value = parseInt(select.value);
+       if (value > 1) {
+           select.value = value - 1;
+           submitForm(itemId); // Submit the form when the quantity changes
+       }
+   }
 
-  var value = parseInt(select.value);
-  if (value > 1) {
-    select.value = value - 1;
+   function increaseCount(itemId) {
+       var select = document.getElementById('quantity-' + itemId);
+       var value = parseInt(select.value);
+       select.value = value + 1;
+       submitForm(itemId); // Submit the form when the quantity changes
+   }
 
-    updateQuantityForm(counter, select.value);
-  }
-}
-
-function increaseCount(counter) {
-  var select = document.getElementById('id_quantity' );
- 
-
-  var value = parseInt(select.value);
-  select.value = value + 1;
-
-  updateQuantityForm(counter, select.value);
-}
-
-function updateQuantityForm(counter, value) {
-  var formId = 'update-quantity-form-' + counter;
-  document.getElementById(formId).submit();
-}
-
-  // Function to update the selected country
- // function updateSelectedCountry(value) {
-   // var formId = "country-form";  // Replace with the correct form ID
-
-    // Set the selected value of the country dropdown
-
-    // Submit the form to update the selected country
-//    document.getElementById(formId).submit();
-  ///}
-
-
-
+   function submitForm(itemId) {
+       var form = document.getElementById('cart-update-quantity-form-' + itemId);
+       form.submit();
+   }
 </script>
 
 {% endblock %}

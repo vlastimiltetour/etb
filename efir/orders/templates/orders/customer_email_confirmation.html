@@ -272,7 +272,10 @@
             
                   </colgroup>
                   <thead>
-                      <th colspan="2"  align="left">                           Objednávka: {{ order.etb_id }}                              
+                      <th>                           Objednávka:                   
+                      </th>
+                      <th>
+                        {{ order.etb_id }}            
                       </th>
                    
                   </thead>
@@ -347,94 +350,29 @@
                 <small class="text-muted">Velikost</small>
               </td>
               <td align="right">
-                {{ product.price|intcomma }} Kč<br>
-                <small class="text-muted">Cena za kus</small>
+                {{ item.price|intcomma }} Kč<br>
+                <small class="text-muted">Cena</small>
               </td>
             </tr>
           {% endfor %}
+            <tr>
+              <td class="mt-4"><strong>Doprava</strong></td>
+              <td></td>
+              <td></td>
+              <td class="mt-4" align="right">{{ order.shipping_price }} Kč</td>
+            </tr>
+          
           <tr class="bg-light">
-            <td colspan="4" class="d-flex justify-content-between" align="right">
-              <span></span>
-              <strong class="text-right" >Celkem: {{ order.total_cost }} Kč</strong>
+            <td colspan="3" align="right">
+              
+              
             </td>
+            <td align="right">                <strong class="text-right">Celkem: {{ order.total_cost }} Kč</strong</td>
           </tr>
         </tbody>
       </table>
       <br>
  <!-- End Cart Inline Contents -->
-
-    <!-- Cart Contents 
-    <ul class="list-group mb-3">
-      {% for item in order.items.all %}
-
-      {% with product=item.product %}
-      <li class="list-group-item d-flex justify-content-between lh-condensed">
-        <div class="d-flex align-items-center">
-          {% with first_photo=product.photos.first %}
-          {% if first_photo %}   
-          <img src="{{ first_photo.photo.url }}" style="max-height: 70px; max-width: 27px; margin-right: 10px;">
-          {% endif %}
-          {% endwith %}
-          <div>
-
-            {% if item.quantity == 1 %}
-          <h6 class="my-0">{{ item.product.name }}       </h6>
-            {% else %}
-          <h6 class="my-0">{{ item.quantity }}x   {{ product.name }}       </h6>
-            {% endif %}
-            {% if item.zpusob_vyroby == Skladem  %}
-            prd
-            {% else %}
-          
-          
-          <small class="text-muted">{{ item.product.category }}</small>
-            {% endif %}
-      
-        </div>
-        </div>
-        <span>   {{ item.quantity}}          <br> <small class="text-muted">Počet kusů</small>
-      
-        </span>
-        <span>         {{ item.zpusob_vyroby }}
-     {{ item.obvod_prsa }}
-  {{ item.obvod_hrudnik }}<br>
-          <small class="text-muted">Velikost</small>
-        </span>
-
-        <span>{{product.price|intcomma}} Kč<br>
-          <small class="text-muted">Cena za kus</small>
-        </span>
-        
-      </li>
-      {% endwith  %}
-
-      {% endfor %}
-
-      <li class="list-group-item d-flex justify-content-between bg-light">
-        <div class="d-flex justify-content-between w-100" align="right">
-          <span></span>
-          <strong class="text-right">Celkem: {{ order.total_cost }} Kč</strong>
-        </div>
-      </li>
-      
-      
-    </ul>
-   
-    
-  end cart contents -->
-    
-                <!-- Button
-              <div class="row">
-                  <div class="d-flex justify-content-center  mb-3">
-                    
-                  
-                
-           
-                    <a href="{% url 'catalog:katalog_vse' %}"><button class="btn btn-dark my-2 mb-4">Do obchodu</button></a>
-                  </div>
-              </div>
-        end button -->
-          
     
     </div>
       

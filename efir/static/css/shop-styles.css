@@ -34,9 +34,8 @@
         font-size: 16px;
         top: 10px;
         right: 10px;
-    }
+   }
 }
-
 /* Styles for mobile */
 @media (max-width: 767px) {
     .discount-circle {
@@ -53,7 +52,7 @@
         font-size: 10px;
         top: 10px;
         right: 10px;
-    }
+   }
 }
 .product-image-container {
     position: relative;
@@ -69,30 +68,26 @@
     text-align-last: center;
     border: 1px solid black;
 }
-
 select {
-    /* Style the dropdown background color */
+   /* Style the dropdown background color */
     background-color: transparent;
     border: 1px solid black;
-    /* Other styles as needed */
-  }
-  
-  option {
-    /* Style the text color */
+   /* Other styles as needed */
+}
+option {
+   /* Style the text color */
     color: black;
-    /* Style the background color of selected option */
+   /* Style the background color of selected option */
     background-color: white;
-    /* Other styles as needed */
-  }
-  
+   /* Other styles as needed */
+}
 /* Adjust for mobile */
 @media screen and (max-width: 600px) {
     #id_obvod_hrudnik, #id_obvod_prsa, #id_obvod_boky, #id_obvod_body, #id_quantity {
         width: 32px;
         height: 38px;
-    }
+   }
 }
-
 .maximized {
     width: 300px;
     height: 450px;
@@ -155,87 +150,98 @@ select {
 .slick-next {
     right: 10px;
 }
-
 /* Style for the horizontal line */
 .horizontal-line {
-    width: calc(85% - 15%); /* Width of the line */
-    height: 1px; /* Height of the line */
-    background-color: rgba(0, 0, 0, 0.3);; /* Color of the line */
-    margin: 20px 15% 20px auto; /* Adjust the margins */
-  }
-
-  table.table td, th, tr, thead {
-    border-bottom-width: 0px; /* Remove bottom border from table rows */
+    width: calc(85% - 15%);
+   /* Width of the line */
+    height: 1px;
+   /* Height of the line */
+    background-color: rgba(0, 0, 0, 0.3);
+   ;
+   /* Color of the line */
+    margin: 20px 15% 20px auto;
+   /* Adjust the margins */
 }
-
+table.table td, th, tr, thead {
+    border-bottom-width: 0px;
+   /* Remove bottom border from table rows */
+}
 .photo-container {
     position: relative;
     width: 100%;
-    height: 450px; /* Default height for non-mobile devices */
- 
+    height: 450px;
+   /* Default height for non-mobile devices */
 }
-  
 .animated-photo-left {
     position: absolute;
-    left: -100; /* Start from the left */
+    left: -100;
+   /* Start from the left */
     top: 50%;
     transform: translate(0, -50%);
     animation: slide-in-left 2s ease-out forwards;
     object-fit: cover;
     object-position: center;
     height: 450px;
-}
+    margin-bottom: 20px; /* Add a margin of 20px at the bottom */
 
+}
 .animated-photo-right {
     position: absolute;
-    right: 0; /* Start from the right */
+    right: 0;
+   /* Start from the right */
     top: 50%;
     transform: translate(0, -50%);
     animation: slide-in-right 2s ease-out forwards;
     object-fit: cover;
     object-position: center;
     height: 450px;
-}
+    margin-bottom: 20px; /* Add a margin of 20px at the bottom */
 
+}
 @keyframes slide-in-left {
     0% {
-        left: -100%; /* Move from the left */
-    }
+        left: -100%;
+       /* Move from the left */
+   }
     100% {
-        left: 0; /* Stop at 0 */
-    }
+        left: 0;
+       /* Stop at 0 */
+   }
 }
-
 @keyframes slide-in-right {
     0% {
-        right: -100%; /* Move from the right */
-    }
+        right: -100%;
+       /* Move from the right */
+   }
     100% {
-        right: 0; /* Stop at 0 */
-    }
+        right: 0;
+       /* Stop at 0 */
+   }
 }
-
 /* Media query for mobile devices */
 @media (max-width: 767px) {
     .photo-container {
-        height: 300px; /* Adjusted height for mobile devices */
-    }
-
+        height: 300px;
+       /* Adjusted height for mobile devices */
+   }
     .animated-photo {
         height: 100%;
-    }
+   }
 }
-
 @keyframes slide-in {
     0% {
         left: -100%;
-    }
+   }
     100% {
         left: 0%;
-    }
+   }
 }
-
 .col-vertical-line {
-    border-right: 1px solid gainsboro; /* Add a border to the right of the cell */
-    padding-right: 10px; /* Add some padding to separate the border from content */
+    border-right: 1px solid gainsboro;
+   /* Add a border to the right of the cell */
+    padding-right: 10px;
+   /* Add some padding to separate the border from content */
+}
+input[type="number"] {
+    color: black;
 }

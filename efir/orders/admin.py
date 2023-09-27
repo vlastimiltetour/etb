@@ -61,7 +61,7 @@ class OrderAdmin(admin.ModelAdmin):
             item_details.append(
                 f"Pas: {item.obvod_hrudnik}, Podprsenka: {item.obvod_prsa}, Kalhotky: {item.obvod_boky}, Body: {item.obvod_body}"
             )
-        print(item_details)
+
         return ", ".join(item_details)
 
     def druh_kolekce(self, obj):
