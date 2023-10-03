@@ -69,8 +69,8 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "coupons.apps.CouponsConfig",
     "stripepayment.apps.StripepaymentConfig",
-    "stock.apps.StockConfig",
     "newsletter.apps.NewsletterConfig",
+    "inventory.apps.InventoryConfig",
 ]
 
 

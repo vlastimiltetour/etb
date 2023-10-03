@@ -8,7 +8,7 @@
    .hide-form {
    display: none; 
    }
-   #id_quantity {
+   #quantity {
    appearance: none;
    -webkit-appearance: none;
    -moz-appearance: none;
@@ -52,7 +52,7 @@
                </div>
             </div>
          </div>
-         <form id="update-quantity-form-{{ forloop.counter }}" action="{% url 'cart:cart_add' item.product.id %}" method="post">
+         <form id="update-quantity-form-{{ forloop.counter }}" action="#" method="post">
             {% csrf_token %}
             <div class="mob-text">
                <div class="row">
@@ -107,16 +107,13 @@
             <div class="row text-right">
                <div id="update-quantity-code-{{ forloop.counter }} mb-0" class="col-6">
                   <div class="d-flex">
+                     <!-- this is old -->
                      <div class="input-group">
-                        <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount({{ forloop.counter }})">
-                        <i class="bi bi-dash" style="line-height: 1;"></i>
-                        </button>
-                        <!-- this is not correct-->
+                       
+                        <!-- this is not correct
                         {{ item.update_quantity_form.quantity }}
-                        {{ item.update_quantity_form.override }}
-                        <button class="btn btn-outline-dark rounded-0" name="update-quantity-form" type="button" onclick="increaseCount({{ forloop.counter }})">
-                        <i class="bi bi-plus" style="line-height: 1;"></i>
-                        </button>
+                        {{ item.update_quantity_form.override }}-->
+                       
                      </div>
                   </div>
                   {% csrf_token %}
@@ -186,6 +183,7 @@
                      {% endif %}
                      {% endwith %}
                      <div>
+
                         <h6 class="my-0">{{ product.name }}       </h6>
                         <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
                         <small class="text-muted">{{ item.obvod_prsa }} </small>
@@ -193,25 +191,33 @@
                         <small class="text-muted">{{ item.obvod_body }}</small>
                         <small class="text-muted">{{ item.obvod_boky }}</small>
                         <br>
-                        <div class="row text-left">
-                           <div id="update-quantity-code-{{ forloop.counter }} mb-0">
-                              <div class="d-flex">
-                                 <div class="input-group">
-                                    <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount({{ forloop.counter }})">
-                                    <i class="bi bi-dash" style="line-height: 1;"></i>
-                                    </button>
-                                    <!-- quantity input <input type="number" name="update-quantity-form" id="id_quantity-{{ forloop.counter }}" min="1" max="20" value="{{ cart.quantity }}">
-                                       -->
-                                    {{ item.update_quantity_form.quantity }}
-                                    {{ item.update_quantity_form.override }}
-                                    <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="increaseCount({{ forloop.counter }})">
-                                    <i class="bi bi-plus" style="line-height: 1;"></i>
-                                    </button>
-                                 </div>
-                              </div>
-                              {% csrf_token %}
-                           </div>
-                        </div>
+
+                        <form method="post" id="cart-update-quantity-form-{{ item.item_id }}" action="{% url 'cart:update_cart_quantity' item.item_id %}">
+                           {% csrf_token %}
+                           <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount('{{ item.item_id }}')">
+                              <i class="bi bi-dash" style="line-height: 1;"></i>
+                           </button>
+                          <small> {{ item.quantity}}</small>
+                              <input type="hidden" 
+                              style="
+                              -webkit-appearance: none;
+                          margin: 0;
+                          -moz-appearance: textfield;
+                          background-color: transparent;
+                          font-size: 0.8rem;
+                          width: 30px;
+                          margin: 0 auto;
+                          text-align: center;
+                          border: none;"
+                              
+                              id="quantity-{{ item.item_id }}" name="quantity" value="{{ item.quantity }}" min="1" oninput="submitForm('{{ item.item_id }}')">
+                              <input type="hidden" name="override" value="True">
+                           <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="increaseCount('{{ item.item_id }}')">
+                              <i class="bi bi-plus" style="line-height: 1;"></i>
+                           </button>
+                           <button type="button" style="display: none;" onclick="submitForm('{{ item.item_id }}')">Update</button>
+                       </form>
+                       
                      </div>
                   </div>
                   <span>
@@ -539,35 +545,29 @@
      }, false);
    })();
 </script>
+
+
 <script>
-   // update-quantity-code
-   function decreaseCount(counter) {
-   var select = document.getElementById('id_quantity');
-   
-   
-   var value = parseInt(select.value);
-   if (value > 1) {
-    select.value = value - 1;
-   
-    updateQuantityForm(counter, select.value);
+   function decreaseCount(itemId) {
+       var select = document.getElementById('quantity-' + itemId);
+       var value = parseInt(select.value);
+       if (value > 1) {
+           select.value = value - 1;
+           submitForm(itemId); // Submit the form when the quantity changes
+       }
    }
+
+   function increaseCount(itemId) {
+       var select = document.getElementById('quantity-' + itemId);
+       var value = parseInt(select.value);
+       select.value = value + 1;
+       submitForm(itemId); // Submit the form when the quantity changes
    }
-   
-   function increaseCount(counter) {
-   var select = document.getElementById('id_quantity' );
-   
-   
-   var value = parseInt(select.value);
-   select.value = value + 1;
-   
-   updateQuantityForm(counter, select.value);
+
+   function submitForm(itemId) {
+       var form = document.getElementById('cart-update-quantity-form-' + itemId);
+       form.submit();
    }
-   
-   function updateQuantityForm(counter, value) {
-   var formId = 'update-quantity-form-' + counter;
-   document.getElementById(formId).submit();
-   }
-      
 </script>
 
 {% endblock %}

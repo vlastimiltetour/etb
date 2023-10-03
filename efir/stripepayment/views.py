@@ -27,8 +27,8 @@ import xml.etree.ElementTree as ET
 
 
 def payment_process(request):
-    # order_id = request.session.get("order_id")
-    order_id = 21
+    order_id = request.session.get("order_id")
+    # order_id = 4
 
     order = get_object_or_404(Order, id=order_id)
 
@@ -44,7 +44,7 @@ def payment_process(request):
             "cancel_url": cancel_url,
             "line_items": [],
         }
-        # Add order items to the Stripe checkout session
+        # Add order items to the Stripe checkout session, this is going to loop over the data structure
         for item in order.items.all():
             session_data["line_items"].append(
                 {
@@ -58,6 +58,8 @@ def payment_process(request):
                     "quantity": 1,
                 },
             )
+            # but as the price is given from order.total_cost, I break the loop sooner
+            break
 
         # Create Stripe checkout session
 

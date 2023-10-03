@@ -5,12 +5,21 @@
     <!-- About section-->
     <section id="about">
         <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center"> <!-- Center the heading -->
+            <div class="text-left"> <!-- Center the heading -->
                 <h1 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">{% trans "Rozměry" %}</h1>
+                
+                <p> V našem závazku zajistit, aby naše autorské spodní prádlo perfektně sedělo na vašem těle, jsme vytvořili detailní velikostní tabulky pro každý typ výrobku, který nabízíme. Chápeme, že každý z nás má jedinečné proporce a preference, a proto se snažíme poskytovat co nejvíce informací, abyste si mohli vybrat správnou velikost a cítili se v našem prádle pohodlně a sebevědomě.</p>
+                <p>Pokud byste měli jakékoliv dotazy ohledně velikosti nebo potřebovali radu, neváhejte se obrátit na náš zákaznický servis objednavky@efirthebrand.cz. Vaše pohodlí a spokojenost jsou pro nás na prvním místě.</p>
+                <br>
+                <div>
 
+                    <p>Pokud potřebujete poradit s výběrem velikosti, napište nám na e-mail objednavky@efirthebrand.cz nebo vyplňte <a href>kontaktní formulář</a>.
+                    </p>
+                </div>
             </div>
             <div class="row gx-4 gx-lg-5 align-items-center">
                 <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="img-fluid" style="max-width: 100%;">
+
                 
                 <div class="text-center"> <!-- Center the heading -->
                     <h1 class="display-5 fw-light mt-5 mb-5" style="text-align: center;">{% trans "Kalhotky/Podvazkový pas" %}</h1>
@@ -187,7 +196,23 @@
                     </div>
             </div>
         </div>
+        
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center"> <!-- Center the heading -->
+                 
+                    
+                 
+
+            <p><b>Pokud potřebujete poradit s výběrem velikosti, napište nám na e-mail objednavky@efirthebrand.cz nebo vyplňte <a href="{% url 'catalog:kontakty' %}">kontaktní formulář</a>.
+            </b></p>
+                </div>
+            </div>
+        
+    
+        
     </section>
+    
+    
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->

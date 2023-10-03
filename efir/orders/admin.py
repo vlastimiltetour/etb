@@ -10,9 +10,7 @@ class OrderItemInline(admin.TabularInline):
         "product",
         "price",
         "quantity",
-        "obvod_hrudnik",
-        "obvod_prsa",
-        "obvod_boky",
+        "velikost",
     )
     can_delete = False
 
@@ -58,9 +56,7 @@ class OrderAdmin(admin.ModelAdmin):
         items = obj.items.all()
         item_details = []
         for item in items:
-            item_details.append(
-                f"Pas: {item.obvod_hrudnik}, Podprsenka: {item.obvod_prsa}, Kalhotky: {item.obvod_boky}, Body: {item.obvod_body}"
-            )
+            item_details.append(f"{item.velikost}")
 
         return ", ".join(item_details)
 

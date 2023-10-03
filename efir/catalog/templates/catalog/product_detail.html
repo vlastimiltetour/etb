@@ -114,318 +114,50 @@
 
                      
                      <!-- Category Definition -->
-                     {% if product.category.name == "Kalhotky" %}
-                     <div id="sizes">
-                        <div style="display: none;">
-                           <b>Velikost pasu</b>
-                           <!-- If Condtition starts here -->
-                           <div class="d-flex mb-3">
-                              <div class="col-6">
-                                 <!-- Obvod hrudnik field -->
-                                 <select id="obvod_hrudnik_selection" value="0" name="obvod_hrudnik" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-                                 {% for obvod_hrudnik in form.obvod_hrudnik %}
-                                 {{ obvod_hrudnik }}
-                                 {% endfor %}              
-                                 </select>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div style="display: none;">
-                        <b>Obvod podprsenky</b>
+                    
+                     
+                        
+                        
+                        <div style="display: display;">
+                        <b>Velikost</b>
                         <div class="d-flex mb-3">
-                           <div class="col-6">
-                              <select id="obvod_prsa_selection" value="0" name="obvod_prsa" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-                              {% for obvod_prsa in form.obvod_prsa %}
-                              {{ obvod_prsa }}
-                              {% endfor %}                             
-                              </select>
-                           </div>
+                        <div class="col-6">
+                        <!-- Obvod boky field -->
+                        <select id="velikost" name="velikost" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+                        {% for velikost_produktu in form.velikost %}
+                        {{ velikost_produktu }}
+                        {% endfor %}              
+                        </select>
                         </div>
-                     </div>
-                     <div style="display: block;">
-                        <b>Velikost kalhotek</b>
-                        <div class="d-flex mb-3">
-                           <div class="col-6">
-                              <!-- Obvod boky field -->
-                              <select id="obvod_boky_selection" name="obvod_boky" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-                              {% for obvod_boky in form.obvod_boky %}
-                              {{ obvod_boky }}
-                              {% endfor %}              
-                              </select>
-                           </div>
                         </div>
-                     </div>
-                     <div style="display: none;">
-                        <b>Velikost body</b>
-                        <div class="d-flex mb-3">
-                           <div class="col-6">
-                              <select id="obvod_body_selection" value="0" name="obvod_body" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-                              {% for obvod_body in form.obvod_body %}
-                              {{ obvod_body }}
-                              {% endfor %}                             
-                              </select>
-                           </div>
                         </div>
-                     </div>
+                        
+                     
                   </div>
-            </div>
-            <style>
-            .hidden-div {
-            display: none;
-            }
-            </style>
-            <div id="poznamka" style="display: none;">
-            <b>Poznámka</b>
-            <div class="d-flex mb-3">
-            <div class="col-6">
-            {{ form.poznamka }}
-            <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
-            Obvod hrudníku<br>
-            Obvod pod hrudníkem<br> 
-            Obvod jednoho prsa<br>
-            Obvod pasu<br>
-            Obvod boku<br>
-            </small>
-            </div>
-            </div>
-            </div>
+                  <style>
+                  .hidden-div {
+                  display: none;
+                  }
+                  </style>
+                  <div id="poznamka" style="display: none;">
+                  <b>Poznámka</b>
+                  <div class="d-flex mb-3">
+                  <div class="col-6">
+                  {{ form.poznamka }}
+                  <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
+                  Obvod hrudníku<br>
+                  Obvod pod hrudníkem<br> 
+                  Obvod jednoho prsa<br>
+                  Obvod pasu<br>
+                  Obvod boku<br>
+                  </small>
+                  </div>
+                  </div>
+                  </div>
+            
 
 
-
-            <!-- Category Definition  -->
-            {% elif product.category.name == "Podprsenky" %}
-            <div id="sizes">
-            <div style="display: none;">
-            <b>Velikost pasu</b>
-            <!-- If Condtition starts here -->
-            <div class="d-flex mb-3">
-            <div class="col-6">
-            <!-- Obvod hrudnik field -->
-            <select id="obvod_hrudnik_selection" value="0" name="obvod_hrudnik" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-            {% for obvod_hrudnik in form.obvod_hrudnik %}
-            {{ obvod_hrudnik }}
-            {% endfor %}              
-            </select>
-            </div>
-            </div>
-            </div>
-            </div>
-            <div style="display: block;">
-            <b>Obvod podprsenky</b>
-            <div class="d-flex mb-3">
-            <div class="col-6">
-            <select id="obvod_prsa_selection" value="0" name="obvod_prsa" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-            {% for obvod_prsa in form.obvod_prsa %}
-            {{ obvod_prsa }}
-            {% endfor %}                             
-            </select>
-            </div>
-            </div>
-            </div>
-            <div style="display: none;">
-            <b>Velikost kalhotek</b>
-            <div class="d-flex mb-3">
-            <div class="col-6">
-            <!-- Obvod boky field -->
-            <select id="obvod_boky_selection" name="obvod_boky" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-            {% for obvod_boky in form.obvod_boky %}
-            {{ obvod_boky }}
-            {% endfor %}              
-            </select>
-            </div>
-            </div>
-            </div>
-            <div style="display: none;">
-            <b>Velikost body</b>
-            <div class="d-flex mb-3">
-            <div class="col-6">
-            <select id="obvod_body_selection" value="0" name="obvod_body" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-            {% for obvod_body in form.obvod_body %}
-            {{ obvod_body }}
-            {% endfor %}                             
-            </select>
-            </div>
-            </div>
-            </div>
-         </div>
-      </div>
-      <style>
-      .hidden-div {
-      display: none;
-      }
-      </style>
-      <div id="poznamka" style="display: none;">
-      <b>Poznámka</b>
-      <div class="d-flex mb-3">
-      <div class="col-6">
-      {{ form.poznamka }}
-      <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
-      Obvod hrudníku<br>
-      Obvod pod hrudníkem<br> 
-      Obvod jednoho prsa<br>
-      Obvod pasu<br>
-      Obvod boku<br>
-      </small>
-      </div>
-      </div>
-      </div>
-
-
-      <!-- Category Definition -->
-      {% elif product.category.name == "Celé sety" %}
-      <div id="sizes">
-      <div style="display: block;">
-      <b>Velikost pasu</b>
-      <!-- If Condtition starts here -->
-      <div class="d-flex mb-3">
-      <div class="col-6">
-      <!-- Obvod hrudnik field -->
-      <select id="obvod_hrudnik_selection" value="0" name="obvod_hrudnik" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-      {% for obvod_hrudnik in form.obvod_hrudnik %}
-      {{ obvod_hrudnik }}
-      {% endfor %}              
-      </select>
-      </div>
-      </div>
-      </div>
-      </div>
-      <div style="display: block;">
-      <b>Obvod podprsenky</b>
-      <div class="d-flex mb-3">
-      <div class="col-6">
-      <select id="obvod_prsa_selection" value="0" name="obvod_prsa" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-      {% for obvod_prsa in form.obvod_prsa %}
-      {{ obvod_prsa }}
-      {% endfor %}                             
-      </select>
-      </div>
-      </div>
-      </div>
-      <div style="display: block;">
-      <b>Velikost kalhotek</b>
-      <div class="d-flex mb-3">
-      <div class="col-6">
-      <!-- Obvod boky field -->
-      <select id="obvod_boky_selection" name="obvod_boky" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-      {% for obvod_boky in form.obvod_boky %}
-      {{ obvod_boky }}
-      {% endfor %}              
-      </select>
-      </div>
-      </div>
-      </div>
-      <div style="display: block;">
-      <b>Velikost body</b>
-      <div class="d-flex mb-3">
-      <div class="col-6">
-      <select id="obvod_body_selection" value="0" name="obvod_body" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-      {% for obvod_body in form.obvod_body %}
-      {{ obvod_body }}
-      {% endfor %}                             
-      </select>
-      </div>
-      </div>
-      </div>
-   </div>
-   </div>
-   <style>
-   .hidden-div {
-   display: none;
-   }
-   </style>
-   <div id="poznamka" style="display: none;">
-   <b>Poznámka</b>
-   <div class="d-flex mb-3">
-   <div class="col-6">
-   {{ form.poznamka }}
-   <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
-   Obvod hrudníku<br>
-   Obvod pod hrudníkem<br> 
-   Obvod jednoho prsa<br>
-   Obvod pasu<br>
-   Obvod boku<br>
-   </small>
-   </div>
-   </div>
-   </div>
-   {% else %}
-   <div style="display: none;">
-   <b>Velikost pasu</b>
-   <!-- If Condtition starts here -->
-   <div class="d-flex mb-3">
-   <div class="col-6">
-   <!-- Obvod hrudnik field -->
-   <select id="obvod_hrudnik_selection" value="0" name="obvod_hrudnik" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-   {% for obvod_hrudnik in form.obvod_hrudnik %}
-   {{ obvod_hrudnik }}
-   {% endfor %}              
-   </select>
-   </div>
-   </div>
-   </div>
-   </div>
-   <div style="display: none;">
-   <b>Obvod podprsenky</b>
-   <div class="d-flex mb-3">
-   <div class="col-6">
-   <select id="obvod_prsa_selection" value="0" name="obvod_prsa" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-   {% for obvod_prsa in form.obvod_prsa %}
-   {{ obvod_prsa }}
-   {% endfor %}                             
-   </select>
-   </div>
-   </div>
-   </div>
-   <div style="display: none;">
-   <b>Velikost kalhotek</b>
-   <div class="d-flex mb-3">
-   <div class="col-6">
-   <!-- Obvod boky field -->
-   <select id="obvod_boky_selection" name="obvod_boky" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-   {% for obvod_boky in form.obvod_boky %}
-   {{ obvod_boky }}
-   {% endfor %}              
-   </select>
-   </div>
-   </div>
-   </div>
-   <div style="display: none;">
-   <b>Velikost body</b>
-   <div class="d-flex mb-3">
-   <div class="col-6">
-   <select id="obvod_body_selection" value="0" name="obvod_body" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-   {% for obvod_body in form.obvod_body %}
-   {{ obvod_body }}
-   {% endfor %}                             
-   </select>
-   </div>
-   </div>
-   </div>
-   </div>
-   <style>
-   .hidden-div {
-   display: none;
-   }
-   </style>
-   <div id="poznamka" style="display: none;">
-   <b>Poznámka</b>
-   <div class="d-flex mb-3">
-   <div class="col-6">
-   {{ form.poznamka }}
-   <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
-   Obvod hrudníku<br>
-   Obvod pod hrudníkem<br> 
-   Obvod jednoho prsa<br>
-   Obvod pasu<br>
-   Obvod boku<br>
-   </small>
-   </div>
-   </div>
-   </div>
-   
-   {% endif %}
-   <!-- If Condition Ends here-->
+            
    
    <h2>
    <a href="{{ katalog_vse.product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->

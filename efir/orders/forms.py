@@ -58,6 +58,7 @@ class OrderForm(forms.ModelForm):
                 }
             ),
             "vendor_id": forms.HiddenInput(),
+            "shipping_price": forms.HiddenInput(),
             "country": forms.TextInput(
                 attrs={
                     "class": "form-control",

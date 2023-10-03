@@ -1,12 +1,18 @@
 from django.contrib import admin
 
-from .models import (Body, Category, ObvodBoky, ObvodHrudnik, ObvodPrsa, Photo,
-                     Product, ProductSize, ZpusobVyroby)
+from inventory.models import Inventory
+
+from .models import Category, Photo, Product, ZpusobVyroby
 
 
 # Register your models here.
 class PhotoAdmin(admin.StackedInline):
     model = Photo
+
+
+class InventoryInline(admin.TabularInline):
+    model = Inventory
+    extra = 1
 
 
 @admin.register(Category)
@@ -22,33 +28,27 @@ class ProductAdmin(admin.ModelAdmin):
         "category",
         "price",
         "limited",
-        "display_obvod_hrudnik",
-        "display_obvod_prsa",
-        "display_obvod_boky",
+        "get_available_sizes_display"
+        # "display_velikost_produktu",
     ]
+    exclude = ("poznamka",)  # Add this line to exclude the 'velikost' field
 
     actions = ["delete_selected", "custom_edit_action"]
 
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ["bestseller"]
 
-    def display_obvod_hrudnik(self, obj):
-        return ", ".join(str(obvod) for obvod in obj.obvod_hrudnik.all())
+    inlines = [PhotoAdmin, InventoryInline]  # this is creating inline to show photos
 
-    def display_obvod_prsa(self, obj):
-        return ", ".join(str(obvod) for obvod in obj.obvod_prsa.all())
+    def get_available_sizes_display(self, obj):
+        # Display a comma-separated string of available sizes for each product
+        sizes = obj.get_available_sizes()
+        return ", ".join(sizes)
 
-    def display_obvod_boky(self, obj):
-        return ", ".join(str(obvod) for obvod in obj.obvod_boky.all())
-
-    display_obvod_hrudnik.short_description = "Obvod Hrudnik"
-    display_obvod_prsa.short_description = "Obvod Prsa"
-    display_obvod_boky.short_description = "Obvod Boky"
-
-    inlines = [PhotoAdmin]  # this is creating inline to show photos
+    get_available_sizes_display.short_description = "Available Sizes"
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
-        size_types = ["obvod_prsa", "obvod_hrudnik", "obvod_boky"]
+        size_types = ["velikost"]
 
         if db_field.name in size_types:
             existing_choices = db_field.get_choices(include_blank=False)
@@ -61,40 +61,14 @@ class ProductAdmin(admin.ModelAdmin):
 
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-        class Meta:
-            model = Product
+    class Meta:
+        model = Product
 
+    """ def display_velikost_produktu(self, obj):
+        return ", ".join(str(obvod) for obvod in obj.velikost.all())
 
-@admin.register(ObvodHrudnik)
-class ObvodHrudnikAdmin(admin.ModelAdmin):
-    list_display = ["size"]
-    ordering = [
-        "size",
-    ]
-
-
-@admin.register(ObvodPrsa)
-class ObvodPrsaAdmin(admin.ModelAdmin):
-    list_display = ["size"]
-    ordering = [
-        "size",
-    ]
-
-
-@admin.register(ObvodBoky)
-class ObvodBokyAdmin(admin.ModelAdmin):
-    list_display = ["size"]
-    ordering = [
-        "size",
-    ]
-
-
-@admin.register(Body)
-class BodyAdmin(admin.ModelAdmin):
-    list_display = ["size"]
-    ordering = [
-        "size",
-    ]
+    display_velikost_produktu.short_description = "Velikost Produktu"
+    """
 
 
 @admin.register(ZpusobVyroby)
@@ -108,8 +82,3 @@ class ZpusobVyrobyAdmin(admin.ModelAdmin):
         queryset.delete()
 
     delete_selected.short_description = "Delete selected ZpusobVyroby"
-
-
-@admin.register(ProductSize)
-class ProductSizeAdmin(admin.ModelAdmin):
-    list_display = ["product"]

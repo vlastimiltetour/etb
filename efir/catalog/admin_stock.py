@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from stock.models import Stock
 
 from .models import (Body, Category, ObvodBoky, ObvodHrudnik, ObvodPrsa, Photo,

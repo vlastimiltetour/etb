@@ -1,6 +1,7 @@
 from django.core.validators import EmailValidator
 from django.db import models
 from django.urls import reverse  # this is when calling an address by name
+from PIL import Image
 
 
 # Create your models here.
@@ -31,18 +32,7 @@ class Product(models.Model):
         max_digits=2, decimal_places=0, blank=True, null=True
     )
 
-    obvod_hrudnik = models.ManyToManyField(
-        "ObvodHrudnik", blank=True, verbose_name="velikost pasu", default="-"
-    )
-    obvod_prsa = models.ManyToManyField(
-        "ObvodPrsa", blank=True, verbose_name="velikost podprsenky", default="-"
-    )
-    obvod_boky = models.ManyToManyField(
-        "ObvodBoky", blank=True, verbose_name="velikost kalhotek", default="-"
-    )
-    obvod_body = models.ManyToManyField(
-        "Body", blank=True, verbose_name="velikost body", default="-"
-    )
+    # velikost = models.ManyToManyField(Inventory, blank=True, verbose_name="velikost")
 
     zpusob_vyroby = models.ManyToManyField(
         "ZpusobVyroby", blank=False, default="Skladem", verbose_name="Druh kolekce"
@@ -59,6 +49,11 @@ class Product(models.Model):
             models.Index(fields=["name"]),
             models.Index(fields=["-created"]),
         ]
+
+    def get_available_sizes(self):
+        # Retrieve the available sizes for this product from the associated inventory
+        sizes = self.inventory.values_list("size", flat=True).distinct()
+        return list(sizes)
 
     def __str__(self):
         return self.name
@@ -102,80 +97,6 @@ class Category(models.Model):
         return reverse("catalog:product_list_by_category", args=[self.slug])
 
 
-class ObvodHrudnik(models.Model):
-    OBVOD_HRUDNIK_CHOICES = [(str(i), str(i)) for i in ["XS", "S", "M", "L"]]
-
-    size = models.CharField(
-        max_length=20,
-        help_text="Dostupné konfekční velikosti",
-        blank=True,
-        choices=OBVOD_HRUDNIK_CHOICES,
-        unique=True,  # This line will ensure unique values
-    )
-
-    def __str__(self):
-        return self.size
-
-    class Meta:
-        verbose_name = "velikost pasu"
-        verbose_name_plural = "velikosti pasu"
-
-
-class ObvodPrsa(models.Model):
-    OBVOD_PRSA_CHOICES = [
-        (str(i) + j, str(i) + j) for i in range(70, 110, 5) for j in ["A", "B", "C"]
-    ]
-
-    size = models.CharField(
-        max_length=20,
-        help_text="Dostupné konfekční velikosti",
-        blank=True,
-        choices=OBVOD_PRSA_CHOICES,
-        unique=True,  # This line will ensure unique values
-    )
-
-    def __str__(self):
-        return self.size
-
-    class Meta:
-        verbose_name = "velikost podprsenky"
-        verbose_name_plural = "velikost podprsenky"
-
-
-class ObvodBoky(models.Model):
-    OBVOD_BOKY_CHOICES = [(str(i), str(i)) for i in ["XS", "S", "M", "L"]]
-    size = models.CharField(
-        max_length=20,
-        help_text="Dostupné konfekční velikosti",
-        blank=True,
-        choices=OBVOD_BOKY_CHOICES,
-        unique=True,  # This line will ensure unique values
-    )
-
-    def __str__(self):
-        return self.size
-
-    class Meta:
-        verbose_name = "velikost kalhotek"
-        verbose_name_plural = "velikosti kalhotek"
-
-
-class Body(models.Model):
-    size = models.CharField(
-        max_length=20,
-        help_text="Dostupné konfekční velikosti",
-        blank=True,
-        unique=True,  # This line will ensure unique values
-    )
-
-    def __str__(self):
-        return self.size
-
-    class Meta:
-        verbose_name = "velikost body"
-        verbose_name_plural = "velikosti body"
-
-
 class ZpusobVyroby(models.Model):
     ZPUSOB_VYROBY_CHOICES = [
         ("Skladem", "Skladem"),
@@ -185,16 +106,19 @@ class ZpusobVyroby(models.Model):
     size = models.CharField(
         max_length=20,
         choices=ZPUSOB_VYROBY_CHOICES,
-        default="Skladem",
         blank=True,
     )
 
     def __str__(self):
         return self.size
 
+    def save(self, *args, **kwargs):
+        if not self.size:
+            self.size = "Skladem"
+        super().save(*args, **kwargs)
+
 
 # import PIL for image resizing
-from PIL import Image
 
 
 class Photo(models.Model):
@@ -222,28 +146,3 @@ class ContactForm(models.Model):
 
     def __str__(self):
         return self.message
-
-
-class ProductSize(models.Model):
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name="product_size_model"
-    )
-    price = models.DecimalField(
-        decimal_places=2, max_digits=10, verbose_name="Cena za kus (CZK)"
-    )
-    quantity = models.PositiveIntegerField(default=1, verbose_name="Množství")
-
-    zpusob_vyroby = models.CharField(max_length=50)
-    obvod_hrudnik = models.OneToOneField(ObvodHrudnik, on_delete=models.CASCADE)
-    obvod_prsa = models.OneToOneField(ObvodPrsa, on_delete=models.CASCADE)
-    obvod_boky = models.OneToOneField(ObvodBoky, on_delete=models.CASCADE)
-    obvod_body = models.OneToOneField(Body, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.product.name} - {self.size}"
-
-    class Meta:
-        unique_together = (
-            "product",
-            "obvod_hrudnik",
-        )  # Each size for a product should be unique

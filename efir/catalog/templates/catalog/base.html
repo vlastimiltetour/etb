@@ -339,13 +339,16 @@
   <script>
     function acceptCookie() {
       //document.cookie = "CookieBy=zuzikoko; max-age=" + 60 * 60 * 24 * 30 + "; path=/"; // Setting cookie for 1 month
-      document.cookie = "CookieBy=efirthebrand; max-age=3600; path=/"; // Setting cookie for 1 month
+      document.cookie = "CookieBy=efirthebrand; max-age=" + 60 * 60 * 24 * 30 + "; path=/"; // Setting cookie for 1 month
 
       checkCookieConsent();
     }
   
     function rejectCookie() {
       hideCookieBanner();
+      document.cookie = "CookieBy=efirthebrand; max-age=" + 60 * 60 * 24 * 30 + "; path=/"; // Setting cookie for 1 month
+
+      checkCookieConsent();
     }
   
     function checkCookieConsent() {

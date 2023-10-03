@@ -210,7 +210,10 @@
       border-bottom-width: 0; /* Remove bottom border from the table itself */
     }
 
-
+table.table td:nth-child(1), table.table th:nth-child(1),
+table.table td:nth-child(2), table.table th:nth-child(2) {
+  text-align: left;
+}
   </style>
 
   
@@ -246,7 +249,7 @@
     
     <div class="container justify-content-center text-center" align="center">
         <a class="navbar-brand" style="margin-top: 10px;" href="{% url 'catalog:home' %}">
-            <img src="https://www.linkpicture.com/q/logo_99.png" height="50" alt="">
+            <img src="https://www.linkpicture.com/q/image0_5.png" type="image" height="150" alt="">
           </a>
     </div>
     <div class="container">
@@ -262,117 +265,94 @@
             
              </p>
 <br>
-             <!-- new sqr-->
-             <div class="table-container"> <!-- Apply margins to the table container -->
 
-              <table class="table mt-4 mb-4"> <!-- Create a table -->
-                <colgroup>
-                      <col style="width: 25%;">
-                      <col style="width: 75%;">
-            
-                  </colgroup>
-                  <thead>
-                      <th>                           Objednávka:                   
-                      </th>
-                      <th>
-                        {{ order.etb_id }}            
-                      </th>
-                   
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td style="border-bottom-width: 0px">Vaše jméno:</td>
-                          <td>{{ order.first_name }} {{ order.last_name }}</td>
-                     
-                      </tr>
-                      <tr>
-                          <td>Email:</td>
-                          <td>{{ order.email }}</td>
-                  
-                      </tr>
-                      <tr>
-                        <td>Doručovací adresa:</td>
-                        <td>{{ order.address }}</td>
-                
-                    </tr>
-                    <tr>
-                      <td>Způsob dopravy:</td>
-                      <td>{{ order.get_shipping_display }}</td>
-              
-                  </tr>
-                  <tr>
-                    <td>Telefonní číslo:</td>
-                    <td>{{ order.number }}</td>
-            
-                </tr>
-                <tr>
-                  <td>Poznámka:</td>
-                  <td>{{ order.comments }}</td>
-          
-              </tr>
-   
-          
-        
-                  </tbody>
-              </table>
-              </div>
-              
-             
 
-  
+
+
+
+               <!-- Order Details Table -->
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+          <tr>
+              <th style="text-align: left; padding: 8px;">Objednávka:</th>
+              <th style="text-align: left; padding: 8px;">  {{ order.etb_id }}            </th>
+          </tr>
+          <tr>
+              <td style="text-align: left; padding: 8px;">Vaše jméno:</td>
+              <td style="text-align: left; padding: 8px;">{{ order.first_name }} {{ order.last_name }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: left; padding: 8px;">Email:</td>
+            <td style="text-align: left; padding: 8px;">{{ order.email }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: left; padding: 8px;">Adresa:</td>
+            <td style="text-align: left; padding: 8px;">{{ order.address }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: left; padding: 8px;">Způsob dopravy:</td>
+            <td style="text-align: left; padding: 8px;">{{ order.get_shipping_display }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: left; padding: 8px;">Telefonní číslo:</td>
+            <td style="text-align: left; padding: 8px;">{{ order.number }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: left; padding: 8px;">Poznámka:</td>
+            <td style="text-align: left; padding: 8px;">{{ order.comments }}</td>
+          </tr>
+          
+      </table>
+
+          
+    
       
     </div>  
     <br>
- <!-- Cart Inline Contents-->
- <table class="table mt-4 mb-4">
-        <tbody>
-          {% for item in order.items.all %}
-            <tr>
-              <td>
-                <!-- photo
-                    <div class="d-flex align-items-center">
-                  {% with first_photo=product.photos.first %}
-                    {% if first_photo %}
-                      <img src="{{ first_photo.photo.url }}" style="max-height: 70px; max-width: 27px; margin-right: 10px;">
-                    {% endif %}
-                  {% endwith %}
-                  <div> -->
-                      <h6 class="my-0">{{ item.product.name }}</h6>
-                      <small class="text-muted">{{ item.product.category }}</small>
-                  </div>
-                </div>
-              </td>
-              <td align="center">{{ item.quantity }}<br><small class="text-muted">Počet kusů</small></td>
-              <td align="center">
-                {{ item.zpusob_vyroby }}
-                {{ item.obvod_prsa }}
-                {{ item.obvod_hrudnik }}<br>
-                <small class="text-muted">Velikost</small>
-              </td>
-              <td align="right">
-                {{ item.price|intcomma }} Kč<br>
-                <small class="text-muted">Cena</small>
-              </td>
-            </tr>
-          {% endfor %}
-            <tr>
-              <td class="mt-4"><strong>Doprava</strong></td>
-              <td></td>
-              <td></td>
-              <td class="mt-4" align="right">{{ order.shipping_price }} Kč</td>
-            </tr>
-          
-          <tr class="bg-light">
-            <td colspan="3" align="right">
-              
-              
-            </td>
-            <td align="right">                <strong class="text-right">Celkem: {{ order.total_cost }} Kč</strong</td>
+    <!-- Product Table -->
+    <table style="width: 100%; border-collapse: collapse; margin-top: 50px;">
+      <thead>
+          <tr>
+              <th style="text-align: left; padding: 8px;">Obsah košíku</th>
+              <th style="text-align: center; padding: 8px;"></th>
+              <th style="text-align: center; padding: 8px;"></th>
+              <th style="text-align: right; padding: 8px;"></th>
           </tr>
-        </tbody>
-      </table>
-      <br>
- <!-- End Cart Inline Contents -->
+      </thead>
+      <tbody>
+
+        <!-- cart contents -->
+        {% for item in order.items.all %}
+
+          <tr>
+              <td style="text-align: left; padding: 8px;">
+                  <h6 style="margin: 0; font-size: 16px;">{{ item.product.name }}</h6>
+                  <small style="font-size: 14px; color: #777;">{{ item.product.category }}</small>
+              </td>
+              <td style="text-align: center; padding: 8px;">{{ item.quantity }}<br><small style="font-size: 14px; color: #777;">Počet kusů</small></td>
+              <td style="text-align: center; padding: 8px;">
+                {{ item.velikost }}
+                <br><small style="font-size: 14px; color: #777;">Velikost</small>
+              </td>
+              <td style="text-align: right; padding: 8px;"> {{ item.price|intcomma }} Kč<br><small style="font-size: 14px; color: #777;">Cena</small></td>
+          </tr>
+          <!-- Add more rows for other products -->
+          {% endfor %}
+      </tbody>
+  </table>
+
+        <!-- Total -->
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+          <tr>
+              <td style="text-align: left; padding: 8px; font-weight: bold;">Doprava</td>
+              <td style="text-align: right; padding: 8px;">{{ order.shipping_price }} Kč</td>
+          </tr>
+          <tr style="background-color: #f8f9fa;">
+              <td colspan="3" style="text-align: right; padding: 8px;">
+                  <strong style="text-align: right;">Celkem: {{ order.total_cost  }} Kč</strong>
+              </td>
+          </tr>
+        </table>
+        </div>
     
     </div>
       
@@ -392,7 +372,7 @@
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
   <tr>
       <td align="center">
-          <img src="https://www.linkpicture.com/q/logo_99.png"  height="50px" style="display: block; border: 0px;"/>
+          <img src="https://www.linkpicture.com/q/image0_5.png"  height="130" style="display: block; border: 0px;"/>
       </td>
   </tr>
   <tr>

@@ -89,25 +89,15 @@ class Order(models.Model):
     def get_zasilkovna_url(self):
         pass
 
-    def calculate_shipping_price(self):
-        if self.country == "CZ":
-            self.shipping_price = Decimal("79.00")
-        elif self.country == "SK":
-            self.shipping_price = Decimal("89.00")
-        elif self.country == "EU":
-            self.shipping_price = Decimal("0.00")
-        else:
-            self.shipping_price = Decimal("0.00")
-        return self.shipping_price
-
     def save(self, *args, **kwargs):
-        self.shipping_price = self.calculate_shipping_price()
+        # self.shipping_price = self.calculate_shipping_price()
 
         if "cart" in kwargs:
             cart = kwargs.pop("cart")
             total_price_after_discount = cart.get_total_price_after_discount()
 
-            self.total_cost = total_price_after_discount + self.shipping_price
+            self.total_cost = total_price_after_discount
+            self.shipping_price = cart.get_shipping_price()
 
         if not self.etb_id:
             today_date = timezone.now().strftime("%y%m%d")
@@ -130,10 +120,7 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1, verbose_name="Množství")
 
     zpusob_vyroby = models.CharField(max_length=50)
-    obvod_hrudnik = models.CharField(max_length=50, null=True, blank=True)
-    obvod_prsa = models.CharField(max_length=50, null=True, blank=True)
-    obvod_boky = models.CharField(max_length=50, null=True, blank=True)
-    obvod_body = models.CharField(max_length=50, null=True, blank=True)
+    velikost = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return str(self.id)

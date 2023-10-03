@@ -119,7 +119,7 @@
                   {% csrf_token %}
                </div>
                <div class="col-6">
-                  <h6 class="mob-text">{{ item.total_price|intcomma }} Kč</h6>
+                  <h6 class="mob-text">{{ item.total_price }} Kč</h6>
                </div>
             </div>
          </form>
@@ -128,14 +128,14 @@
       {% endfor %}
       <div class="row d-flex py-2 justify-content-center border-top">
          <div class="row text-right" style="text-align: right;">
-            <h6 class="mob-text">Total: {{ cart.get_total_price|intcomma }} Kč</h6>
+            <h6 class="mob-text">Total: {{ cart.get_total_price }} Kč</h6>
          </div>
          {% if cart.coupon %}
          <div class="row text-right" style="text-align: right;">
-            <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount|intcomma }} Kč</h6>
+            <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount }} Kč</h6>
          </div>
          <div class="row text-right" style="text-align: right;">
-            <h6 class="mob-text">Total po slevě: {{ cart.get_total_price_after_discount|intcomma }} Kč</h6>
+            <h6 class="mob-text">Total po slevě: {{ cart.get_total_price_after_discount }} Kč</h6>
          </div>
          {% endif %}
       </div>
@@ -186,10 +186,8 @@
 
                         <h6 class="my-0">{{ product.name }}       </h6>
                         <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
-                        <small class="text-muted">{{ item.obvod_prsa }} </small>
-                        <small class="text-muted">{{ item.obvod_hrudnik }}</small>
-                        <small class="text-muted">{{ item.obvod_body }}</small>
-                        <small class="text-muted">{{ item.obvod_boky }}</small>
+                        <small class="text-muted">{{ item.velikost }} </small>
+                      
                         <br>
 
                         <form method="post" id="cart-update-quantity-form-{{ item.item_id }}" action="{% url 'cart:update_cart_quantity' item.item_id %}">
@@ -197,15 +195,19 @@
                            <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount('{{ item.item_id }}')">
                               <i class="bi bi-dash" style="line-height: 1;"></i>
                            </button>
-                              <input type="number" 
-                              style=" appearance: none;
+                          <small> {{ item.quantity}}</small>
+                              <input type="hidden" 
+                              style="
                               -webkit-appearance: none;
-                              -moz-appearance: none;
-                              background-color: transparent;
-                              font-size: 0.8rem;
-                              width: 30px; /* Adjust the width as needed */
-                              text-align: center;
-                              border: none; "
+                          margin: 0;
+                          -moz-appearance: textfield;
+                          background-color: transparent;
+                          font-size: 0.8rem;
+                          width: 30px;
+                          margin: 0 auto;
+                          text-align: center;
+                          border: none;"
+                              
                               id="quantity-{{ item.item_id }}" name="quantity" value="{{ item.quantity }}" min="1" oninput="submitForm('{{ item.item_id }}')">
                               <input type="hidden" name="override" value="True">
                            <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="increaseCount('{{ item.item_id }}')">
@@ -218,7 +220,7 @@
                   </div>
                   <span>
                      <div>
-                        <div> {{ item.total_price|intcomma}} Kč </div>
+                        <div> {{ item.total_price}} Kč </div>
                         <br>
                         <!-- Cart Remove Function--> 
                         <div style="text-align: right;">
@@ -241,7 +243,7 @@
                </li>
                <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <span>Doprava: </span> 
-                  <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
+                  <strong> {{ cart.get_shipping_price }} Kč</strong> 
                </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <div class="text-success">
@@ -282,7 +284,7 @@
                   <!-- experiment end updating country -->
                   <!-- html country input experiment -->
                   <!-- end html country input experiement -->
-                  <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> 
+                  <strong> {{ cart.get_shipping_price }} Kč</strong> 
                </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <!-- #TODO total  to be calculated-->

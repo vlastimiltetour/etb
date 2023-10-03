@@ -42,11 +42,7 @@ def new_order(request):
                     product=item["product"],
                     price=item["price"],
                     quantity=item["quantity"],
-                    zpusob_vyroby=item["zpusob_vyroby"],
-                    obvod_hrudnik=item["obvod_hrudnik"],
-                    obvod_prsa=item["obvod_prsa"],
-                    obvod_boky=item["obvod_boky"],
-                    obvod_body=item["obvod_body"],
+                    velikost=item["velikost"],
                 )
 
             # clear the cart
@@ -89,14 +85,10 @@ def calculate_shipping_price(country_code):
     # Add other country prices here
 
 
+
+
 def objednavka_vytvorena(request):
-    obvod_boky = OrderItem.objects.values_list("obvod_prsa")
-    # order_items = OrderItem.objects.values_list('obvod_boky', flat=True)
-
-    print("=========")
-    print(obvod_boky)
-
-    id = 1
+    id = 12
     order = get_object_or_404(Order, id=id)
 
     return render(request, "orders/customer_email_confirmation.html", {"order": order})

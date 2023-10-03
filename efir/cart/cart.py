@@ -48,31 +48,28 @@ class Cart:
         self,
         product,
         quantity=1,
-        obvod_prsa=0,
-        obvod_hrudnik=0,
-        obvod_boky=0,
-        obvod_body=0,
+        velikost=0,
         zpusob_vyroby=None,  # might be renamed to konfekcni
         poznamka=None,
         override=None,
     ):
         # Check if the product is already in the cart
-    
+
         # Check if the product is already in the cart
         for cart_item_id, cart_item_value in self.cart.items():
             print(cart_item_value)
-        
-        '''for cart_item_id, cart_item_value in self.cart.items():
+
+        """for cart_item_id, cart_item_value in self.cart.items():
             if cart_item_value["product_id"] == product.id:
                 # Product already in cart, update the quantity
                 print(f"Updating quantity of product {product.id} to {quantity}")
                 cart_item_value["quantity"] += quantity
                 self.save()
-                return'''
-        
+                return"""
+
         # Generate a new cart item_id
         cart_item_id = str(uuid.uuid4())
-        
+
         # If the item_id is already in the cart, allow adjusting the quantity
         if cart_item_id in self.cart:
             self.cart[cart_item_id]["quantity"] += quantity
@@ -83,10 +80,7 @@ class Cart:
                 "product_id": product.id,
                 "quantity": quantity,
                 "price": str(product.price),
-                "obvod_boky": str(obvod_boky),
-                "obvod_prsa": str(obvod_prsa),
-                "obvod_hrudnik": str(obvod_hrudnik),
-                "obvod_body": str(obvod_body),
+                "velikost": str(velikost),
                 "poznamka": str(poznamka),
                 "zpusob_vyroby": str(zpusob_vyroby),
                 "override": override,
@@ -95,7 +89,7 @@ class Cart:
         self.save()
         # Generate a new cart item_id
         cart_item_id = str(uuid.uuid4())
-        
+
     def save(self):
         self.session.modified = True
 

@@ -1,6 +1,7 @@
 import logging
 import ssl
 
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -8,6 +9,7 @@ from django.views.decorators.http import require_POST
 from cart.cart import Cart
 from catalog.models import Product
 from coupons.forms import CouponForm
+from inventory.models import Inventory
 from orders.forms import OrderForm
 from orders.mail_confirmation import *
 from orders.models import OrderItem
@@ -32,10 +34,7 @@ def cart_add(request, product_id):
             product=product,
             quantity=cd["quantity"],
             poznamka=cd["poznamka"],
-            obvod_hrudnik=cd["obvod_hrudnik"],
-            obvod_prsa=cd["obvod_prsa"],
-            obvod_boky=cd["obvod_boky"],
-            obvod_body=cd["obvod_body"],
+            velikost=cd["velikost"],
             zpusob_vyroby=cd["zpusob_vyroby"],
             override=cd["override"],
         )
@@ -79,7 +78,6 @@ def cart_detail(request):
     # Initialize the form without initial values
 
     for item in cart:
-        print(item)
         product_id = item["product"].id  # Get the product ID from the item
 
         item["update_quantity_form"] = CartAddProductForm(
@@ -117,10 +115,7 @@ def cart_detail(request):
                     price=item["price"],
                     quantity=item["quantity"],
                     zpusob_vyroby=item["zpusob_vyroby"],
-                    obvod_hrudnik=item["obvod_hrudnik"],
-                    obvod_prsa=item["obvod_prsa"],
-                    obvod_boky=item["obvod_boky"],
-                    obvod_body=item["obvod_body"],
+                    velikost=item["velikost"],
                 )
                 print("================= order is saved???")
                 print(f"orderitem{order}")
@@ -129,6 +124,28 @@ def cart_detail(request):
             # clear the cart
 
             cart.clear()
+
+            order_items = OrderItem.objects.filter(order=order)
+
+            for order_item in order_items:
+                product = order_item.product
+                size = order_item.velikost
+                quantity = order_item.quantity
+
+                try:
+                    inventory = Inventory.objects.get(product=product, size=size)
+                    inventory.quantity -= quantity
+                    inventory.save()
+
+                except IntegrityError as e:
+                    # Handle the specific IntegrityError related to the CHECK constraint
+                    print(f"IntegrityError: {e}. Not enough items to sell.")
+                    # You might want to log the error or take appropriate action
+                except Inventory.DoesNotExist:
+                    # Handle the case where the inventory record does not exist
+                    print(
+                        f"Inventory record not found for product {product} and size {size}"
+                    )
 
             request.session["order_id"] = order.id
 
