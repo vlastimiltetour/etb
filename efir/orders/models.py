@@ -106,6 +106,11 @@ class Order(models.Model):
             ).count()
             self.etb_id = f"{today_date}{today_order_count:02d}"
 
+        """ vendor_id = kwargs.pop("vendor_id", None)
+        if vendor_id:
+            self.vendor_id = vendor_id
+
+        print(f"model order printing vendor_id{vendor_id}")"""
         super().save(*args, **kwargs)
 
 

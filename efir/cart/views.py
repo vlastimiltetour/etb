@@ -9,6 +9,7 @@ from django.views.decorators.http import require_POST
 from cart.cart import Cart
 from catalog.models import Product
 from coupons.forms import CouponForm
+from coupons.views import coupon_create
 from inventory.models import Inventory
 from orders.forms import OrderForm
 from orders.mail_confirmation import *
@@ -22,14 +23,22 @@ from .forms import CartAddProductForm
 logging.basicConfig(level=logging.DEBUG)
 
 
+from django.http import HttpResponseBadRequest
+
+
 @require_POST
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     form = CartAddProductForm(id_from_product=product_id, data=request.POST)
 
+    inventory = Inventory.objects.filter(product=product).first()
+
     if form.is_valid():
         cd = form.cleaned_data
+        if cd["quantity"] > inventory.quantity:
+            return HttpResponseBadRequest("Quantity exceeds available inventory")
+
         cart.add(
             product=product,
             quantity=cd["quantity"],
@@ -57,14 +66,24 @@ def update_cart_quantity(request, item_id):
     return redirect("cart:cart_detail")
 
 
-def cart_detail(request):
+def cart_detail(request, zasilkovna=False):
     cart = Cart(request)
+    """ print("Cart Session Contents:", request.session.get("cart"))
+    print("Cart Contents:")
+    print("Cart:", cart.cart)
+    print("Coupon ID:", cart.coupon_id)
+    print("Country:", cart.country)
+    print("Address:", cart.address)
+    print("Vendor ID:", cart.vendor_id)"""
+
+ 
 
     coupon_form = CouponForm()
 
     # the value is taken from session
     selected_country = request.session.get("cart_country")
     selected_address = request.session.get("cart_address")
+    selected_vendor_id = request.session.get("cart_vendor")
 
     # the value is taken from session and saved here, where I can request it as form.initial.cart_country, etc.
     form = OrderForm(
@@ -72,8 +91,10 @@ def cart_detail(request):
         initial={
             "order_country": selected_country,
             "order_address": selected_address,
+            "vendor_id": selected_vendor_id,
         },
     )
+    # print("Form data:", form.data)
 
     # Initialize the form without initial values
 
@@ -94,6 +115,7 @@ def cart_detail(request):
             initial={
                 "order_country": selected_country,
                 "order_address": selected_address,
+                "vendor_id": selected_vendor_id,
             },
         )
 
@@ -117,18 +139,16 @@ def cart_detail(request):
                     zpusob_vyroby=item["zpusob_vyroby"],
                     velikost=item["velikost"],
                 )
-                print("================= order is saved???")
-                print(f"orderitem{order}")
-                print(f"item{item}")
 
             # clear the cart
-
-            cart.clear()
 
             order_items = OrderItem.objects.filter(order=order)
 
             for order_item in order_items:
                 product = order_item.product
+
+                if product.category == 'Dárkové certifikáty':
+                    coupon_create(request)
                 size = order_item.velikost
                 quantity = order_item.quantity
 
@@ -141,18 +161,27 @@ def cart_detail(request):
                     # Handle the specific IntegrityError related to the CHECK constraint
                     print(f"IntegrityError: {e}. Not enough items to sell.")
                     # You might want to log the error or take appropriate action
+                    return redirect("cart:cart_detail")
+
                 except Inventory.DoesNotExist:
                     # Handle the case where the inventory record does not exist
                     print(
                         f"Inventory record not found for product {product} and size {size}"
                     )
+                    return redirect("cart:cart_detail")
+
+            cart.clear()
 
             request.session["order_id"] = order.id
 
             try:
                 order_id = order.id
-                zasilkovna_create_package(order_id)
                 customer_order_email_confirmation(order_id)
+                if zasilkovna:
+                    print("Zasilkovna turned on")
+                    zasilkovna_create_package(order_id)
+                else:
+                    print("Zasilkovna turned off")
 
             except ssl.SSLCertVerificationError:
                 logging.info(
@@ -164,12 +193,13 @@ def cart_detail(request):
 
     # print(form.errors)
 
-    else:  # data has to be saved to the form, which happens
+    else:  # data has to be saved to the form, and if the form is reastarted, it's brought back again here
         form = OrderForm(
             request.POST,
             initial={
                 "order_country": selected_country,
                 "order_address": selected_address,
+                "vendor_id": selected_vendor_id,
             },
         )
 
@@ -190,10 +220,11 @@ def update_cart_country(request):
             "cart_country"
         )  # Get the selected country from the form, it has unique cart_address id and name
         selected_address = request.POST.get("cart_address")
+        selected_vendor_id = request.POST.get("cart_vendor")
 
         # Update the cart's country attribute with the selected value
         request.session["cart_country"] = selected_country
-
         request.session["cart_address"] = selected_address
+        request.session["cart_vendor"] = selected_vendor_id
 
     return redirect("cart:cart_detail")

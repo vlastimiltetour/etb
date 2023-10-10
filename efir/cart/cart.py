@@ -21,6 +21,7 @@ class Cart:
         self.coupon_id = self.session.get("coupon_id")
         self.country = self.session.get("cart_country")
         self.address = self.session.get("cart_address")
+        self.vendor_id = self.session.get("cart_vendor")
 
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
@@ -141,6 +142,10 @@ class Cart:
     def get_country(self):
         country = self.country
         return country if country else "-"
+
+    def get_vendor(self):
+        vendor = self.vendor_id
+        return vendor
 
     def get_total_price(self):
         product_discount = 0  # TODO subtrackt the discount from product price

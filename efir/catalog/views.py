@@ -15,7 +15,7 @@ from .models import Category, Product
 
 # returns home landing page
 def home(request, category_slug=None):
-    # zasilkovna_create_package()
+    # zasilkovna_create_package(order_id=13)
     category = None
     categories = Category.objects.all()
     products = Product.objects.all()
@@ -64,6 +64,7 @@ def product_detail(
     product = get_object_or_404(Product, id=id, slug=slug)
 
     form = CartAddProductForm(id_from_product=id)
+
     return render(
         request,
         "catalog/product_detail.html",

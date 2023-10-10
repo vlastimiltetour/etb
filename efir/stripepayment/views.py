@@ -70,8 +70,8 @@ def payment_process(request):
         except stripe.error.InvalidRequestError:
             return render(request, "stripe/canceled.html")
 
-    else:
-        return render(request, "stripe/process.html", locals())
+    # else:
+    return render(request, "stripe/process.html", locals())
 
 
 def zasilkovna_create_package(order_id):
@@ -102,6 +102,9 @@ def zasilkovna_create_package(order_id):
             "eshop": "efirthebrand.cz",
         },
     }
+
+    print(f"vendor_id {order.vendor_id}")
+    print(f"address id: {order_details}")
 
     # Convert the dictionary to XML
     root = ET.Element("createPacket")
@@ -262,7 +265,9 @@ def payment_notification(request):
 
 def payment_completed(request):
     order_id = request.session.get("order_id")
-    coupon_delete(request)
+    #todo finish coupon delete
+    '''if coupon: 
+        coupon_delete(request)'''
 
     order = get_object_or_404(Order, id=order_id)
     return render(request, "stripe/completed.html", {"order": order})

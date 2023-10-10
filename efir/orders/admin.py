@@ -21,6 +21,7 @@ class OrderAdmin(admin.ModelAdmin):
         "etb_id",
         "products",
         "total_cost",
+        "paid",
         "discount",
         "quantity",
         "first_name",
@@ -30,6 +31,7 @@ class OrderAdmin(admin.ModelAdmin):
         "comments",
         "shipping",
         "address",
+        "created",
     ]
     inlines = [OrderItemInline]
 
@@ -50,7 +52,11 @@ class OrderAdmin(admin.ModelAdmin):
 
     def quantity(self, obj):
         quantity_value = obj.items.values_list("quantity").first()
-        return str(quantity_value[0])
+        if quantity_value is not None and quantity_value:  # Check for both None and an empty list
+            return str(quantity_value[0])
+        else:
+            return "N/A"  # or some default value
+        
 
     def velikosti(self, obj):
         items = obj.items.all()

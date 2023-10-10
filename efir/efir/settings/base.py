@@ -33,7 +33,7 @@ except AttributeError:
     logging.info("Exception raised, means Production Env should be executed.")
     logging.info("Loading Production Env Module")
 finally:
-    logging.info("The whole cycle finished")
+    logging.info("The whole dotenv cycle finished")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -199,6 +199,7 @@ ASGI_APPLICATION = "web.asgi.application"
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_API_VERSION = os.getenv("STRIPE_API_VERSION")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 
 # zasilkovna

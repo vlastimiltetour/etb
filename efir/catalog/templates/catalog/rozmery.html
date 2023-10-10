@@ -5,21 +5,24 @@
     <!-- About section-->
     <section id="about">
         <div class="container px-4 px-lg-5 my-5">
-            <div class="text-left"> <!-- Center the heading -->
                 <h1 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">{% trans "Rozměry" %}</h1>
-                
-                <p> V našem závazku zajistit, aby naše autorské spodní prádlo perfektně sedělo na vašem těle, jsme vytvořili detailní velikostní tabulky pro každý typ výrobku, který nabízíme. Chápeme, že každý z nás má jedinečné proporce a preference, a proto se snažíme poskytovat co nejvíce informací, abyste si mohli vybrat správnou velikost a cítili se v našem prádle pohodlně a sebevědomě.</p>
-                <p>Pokud byste měli jakékoliv dotazy ohledně velikosti nebo potřebovali radu, neváhejte se obrátit na náš zákaznický servis objednavky@efirthebrand.cz. Vaše pohodlí a spokojenost jsou pro nás na prvním místě.</p>
+            
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="img-fluid" style="max-width: 100%;">
+    
+        <div class="text-left mt-5"><!-- Center the heading -->
+
+                <p class="lead" style="text-align: justify;"> V našem závazku zajistit, aby naše autorské spodní prádlo perfektně sedělo na vašem těle, jsme vytvořili detailní velikostní tabulky pro každý typ výrobku, který nabízíme. Chápeme, že každý z nás má jedinečné proporce a preference, a proto se snažíme poskytovat co nejvíce informací, abyste si mohli vybrat správnou velikost a cítili se v našem prádle pohodlně a sebevědomě.</p>
+                <p class="lead" style="text-align: justify;">Pokud byste měli jakékoliv dotazy ohledně velikosti nebo potřebovali radu, neváhejte se obrátit na náš zákaznický servis objednavky@efirthebrand.cz. Vaše pohodlí a spokojenost jsou pro nás na prvním místě.</p>
                 <br>
                 <div>
 
-                    <p>Pokud potřebujete poradit s výběrem velikosti, napište nám na e-mail objednavky@efirthebrand.cz nebo vyplňte <a href>kontaktní formulář</a>.
+                    <p class="lead" style="text-align: justify;">Pokud potřebujete poradit s výběrem velikosti, napište nám na e-mail objednavky@efirthebrand.cz nebo vyplňte <a href>kontaktní formulář</a>.
                     </p>
                 </div>
-            </div>
-            <div class="row gx-4 gx-lg-5 align-items-center">
-                <img src="{% static 'assets/img/intro_column_2.jpeg' %}" class="img-fluid" style="max-width: 100%;">
-
+        </div>
+        
+          
                 
                 <div class="text-center"> <!-- Center the heading -->
                     <h1 class="display-5 fw-light mt-5 mb-5" style="text-align: center;">{% trans "Kalhotky/Podvazkový pas" %}</h1>
@@ -203,7 +206,7 @@
                     
                  
 
-            <p><b>Pokud potřebujete poradit s výběrem velikosti, napište nám na e-mail objednavky@efirthebrand.cz nebo vyplňte <a href="{% url 'catalog:kontakty' %}">kontaktní formulář</a>.
+            <p class="lead"><b>Pokud potřebujete poradit s výběrem velikosti, napište nám na e-mail objednavky@efirthebrand.cz nebo vyplňte <u><a href="{% url 'catalog:kontakty' %}">kontaktní formulář</a></u>.
             </b></p>
                 </div>
             </div>

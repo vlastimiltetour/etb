@@ -1,23 +1,20 @@
 import logging
-import ssl
 
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 
-from cart.cart import Cart
-from stripepayment.views import zasilkovna_create_package
-
-from .forms import OrderForm
 from .mail_confirmation import *
-from .models import Order, OrderItem
+from .models import Order
 
 # Set up the logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
+""
+
 
 # todo this can be deleted
 def new_order(request):
-    cart = Cart(request)
+    pass
+    ''' cart = Cart(request)
 
     if request.method == "POST":
         form = OrderForm(request.POST)
@@ -71,6 +68,7 @@ def new_order(request):
         "orders/new.html",
         {"cart": cart, "form": form, order_form_data: "order_form_data"},
     )
+'''
 
 
 def calculate_shipping_price(country_code):
@@ -85,6 +83,7 @@ def calculate_shipping_price(country_code):
     # Add other country prices here
 
 
+""
 
 
 def objednavka_vytvorena(request):

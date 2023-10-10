@@ -263,11 +263,13 @@
                   <!-- experiement with updating country  -->
                
 
+
                      <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
                         {% csrf_token %}
                      
                         <input type="hidden" name="cart_country" id="cart_country">
                         <input type="hidden" name="cart_address" id="cart_address">
+                        <input type="hidden" name="cart_vendor" id="cart_vendor">
 
                       <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
                         <input type="hidden" name="address" value="{{ form.initial.address }}">-->
@@ -383,6 +385,9 @@
                            Valid last name is required.
                         </div>
                      </div>
+                     <div>
+                        <input type="hidden" name="vendor_id" id="id_vendor_id" value="{{ form.initial.vendor_id }}">
+                     </div>
                   </div>
                   <div>
                   </div>
@@ -433,7 +438,7 @@
                            const addressInput = document.querySelector("#cart_address"); // invokes the variable
                            const countryInput = document.querySelector("#cart_country"); // Hidden input field for 'country'
                             //const cartCountryInput = document.querySelector('#cart_country'); // Get the element for displaying cart_country
-                           // const vendorIdInput = document.querySelector("#id_vendor_id"); // invokes the variable
+                           const vendorIdInput = document.querySelector("#cart_vendor"); // invokes the variable
                            const cartForm = document.querySelector("#country-form");
 
                            
@@ -444,7 +449,7 @@
                               addressInput.value = point.formatedValue; // saves the value to the form
                               countryInput.value = point.country; // Set the 'country' value in the hidden input field
                               // cartCountryInput.value = point.country; // Update the display element for cart_country
-                              // vendorIdInput.value = point.id;
+                              vendorIdInput.value = point.id;
                      
                               cartForm.submit();
                            }

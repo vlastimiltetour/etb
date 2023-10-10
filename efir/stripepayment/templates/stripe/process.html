@@ -1,9 +1,12 @@
-{% extends 'catalog/base.html' %}
-{% load static %}
-{% load i18n %}
-{% load humanize %}
-{% block content %}
-<body data-new-gr-c-s-check-loaded="14.1107.0" data-gr-ext-installed="">
+
+<style>
+  .hidden {
+      display: none;
+  }
+</style>
+
+<div class="hidden">
+  <body data-new-gr-c-s-check-loaded="14.1107.0" data-gr-ext-installed="">
 
 
     <div class="container py-5">
@@ -42,7 +45,7 @@
                   {% endif %}
               </div>
               </div>
-              <span>{{item.get_cost|intcomma}} Kč</span>
+              <span>{{item.get_cost}} Kč</span>
             </li>
             {% endfor  %}
            <!-- start coupon -->
@@ -54,7 +57,7 @@
                 <h6 class="my-0">Slevový kupón </h6>
                 <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% sleva)</small>
               </div>
-              <span class="text-success">-{{ cart.get_discount|intcomma }} Kč</span>
+              <span class="text-success">-{{ cart.get_discount }} Kč</span>
             </li>
             {% else %}
           {% endif %}
@@ -64,10 +67,10 @@
             <li class="list-group-item d-flex justify-content-between lh-condensed">
 
                 <span>Doprava: </span> 
-                <strong> {{ order.shipping_price|intcomma }} Kč</strong>
+                <strong> {{ order.shipping_price }} Kč</strong>
 
                 <!-- this is how to get shipping price-->
-                <!-- <strong> {{ cart.get_shipping_price|intcomma }} Kč</strong> -->
+                <!-- <strong> {{ cart.get_shipping_price }} Kč</strong> -->
 
 
             </li>
@@ -75,7 +78,7 @@
              
              <!-- #TODO total  to be calculated-->
               <span>Total: </span> 
-              <strong>{{ order.total_cost|intcomma}} Kč</strong>
+              <strong>{{ order.total_cost}} Kč</strong>
 
         
             </li>
@@ -213,7 +216,7 @@
 
 
               <!-- Payment Instructions -->
-              <form method="post" action="{% url 'stripepayment:process' %}">
+              <form id="trigger-payment" method="post" action="{% url 'stripepayment:process' %}">
                 <!-- Include the necessary form fields -->
                 {% csrf_token %}        
                 <!-- Add other form fields here -->
@@ -241,4 +244,12 @@
 
 <div id="^(,rZvUx1683491487730"></div><iframe name="" frameborder="0" id="fnlp-panel-iframe" style="display: none!important; position: fixed!important; top: 0px!important; right: -280px!important; z-index: 1000000000!important; width: 305px!important; height: 100vh!important; margin:0!important; border: 0px!important; outline: 0px!important;"></iframe></body>
 
-{% endblock %}
+</div>
+
+<!-- this will automatically proceed to payment-->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Automatically submit the form when the page is loaded
+      document.getElementById('trigger-payment').submit();
+  });
+</script>

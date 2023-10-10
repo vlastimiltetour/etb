@@ -1,9 +1,15 @@
+import random
+import string
+from datetime import datetime, timedelta
+
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .forms import CouponForm
 from .models import Coupon
+from django.http import HttpResponse
+
 
 
 @require_POST
@@ -36,3 +42,35 @@ def coupon_delete(request):
     # Remove the coupon_id from the session
     request.session["coupon_id"] = None
     return redirect("cart:cart_detail")
+
+
+def coupon_create(request):
+    code = generate_voucher_code(8)
+    valid_from = datetime.now()
+    valid_to = valid_from + timedelta(days=180)
+    discount = 50
+    active = True
+    redeemed = False
+    
+
+    coupon = Coupon.objects.create(
+        code=code,
+        valid_from=valid_from,
+        valid_to=valid_to,
+        discount=discount,
+        active=active,
+        redeemed=redeemed,
+    )
+
+    print(f"this is the newly created voucher code! {coupon}")
+
+    return HttpResponse(f"Coupon created successfully! {coupon}")
+ 
+
+
+def generate_voucher_code(length):
+    characters = (
+        string.ascii_uppercase + string.digits
+    )  # Use uppercase letters and numbers
+    voucher_code = "".join(random.choice(characters) for _ in range(length))
+    return voucher_code
