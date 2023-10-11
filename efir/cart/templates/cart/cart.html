@@ -248,7 +248,7 @@
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <div class="text-success">
                      <h6 class="my-0">Slevový kupón </h6>
-                     <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% sleva)</small>
+                     <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount }} Kč sleva)</small>
                   </div>
                   <strong><span class="text-success">-{{ cart.get_discount }} Kč</span></strong>
                </li>
@@ -382,7 +382,7 @@
                         <input type="hidden" name="address" id="id_address" value="{{ form.initial.order_address }}">
 
                         <div class="invalid-feedback">
-                           Valid last name is required.
+                           Vložte validní příjmení.
                         </div>
                      </div>
                      <div>

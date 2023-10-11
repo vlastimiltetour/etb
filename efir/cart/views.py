@@ -28,6 +28,7 @@ from django.http import HttpResponseBadRequest
 
 @require_POST
 def cart_add(request, product_id):
+    inventory_capacity = False
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     form = CartAddProductForm(id_from_product=product_id, data=request.POST)
@@ -36,8 +37,13 @@ def cart_add(request, product_id):
 
     if form.is_valid():
         cd = form.cleaned_data
-        if cd["quantity"] > inventory.quantity:
-            return HttpResponseBadRequest("Quantity exceeds available inventory")
+
+        if inventory_capacity:
+            if cd["quantity"] > inventory.quantity:
+                form.add_error("quantity", "Quantity exceeds available inventory")
+                return HttpResponseBadRequest(
+                    "Zvolený počet daného produktu přesahuje kapacitu skladu."
+                )
 
         cart.add(
             product=product,
@@ -75,8 +81,6 @@ def cart_detail(request, zasilkovna=False):
     print("Country:", cart.country)
     print("Address:", cart.address)
     print("Vendor ID:", cart.vendor_id)"""
-
- 
 
     coupon_form = CouponForm()
 
@@ -146,12 +150,17 @@ def cart_detail(request, zasilkovna=False):
 
             for order_item in order_items:
                 product = order_item.product
-
-                if product.category == 'Dárkové certifikáty':
-                    coupon_create(request)
-                size = order_item.velikost
+            
+                if str(product.category) == "Dárkové certifikáty":
+                   
+                    coupon_create(request, discount=product.price)
+                    print(" coupn create should have happened")
+                
+                #this is inventory sotluiont
+                '''size = order_item.velikost
                 quantity = order_item.quantity
 
+                
                 try:
                     inventory = Inventory.objects.get(product=product, size=size)
                     inventory.quantity -= quantity
@@ -168,7 +177,7 @@ def cart_detail(request, zasilkovna=False):
                     print(
                         f"Inventory record not found for product {product} and size {size}"
                     )
-                    return redirect("cart:cart_detail")
+                    return redirect("cart:cart_detail")'''
 
             cart.clear()
 

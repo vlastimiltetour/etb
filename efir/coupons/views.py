@@ -2,14 +2,13 @@ import random
 import string
 from datetime import datetime, timedelta
 
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .forms import CouponForm
 from .models import Coupon
-from django.http import HttpResponse
-
 
 
 @require_POST
@@ -44,14 +43,14 @@ def coupon_delete(request):
     return redirect("cart:cart_detail")
 
 
-def coupon_create(request):
+def coupon_create(request, discount):
     code = generate_voucher_code(8)
     valid_from = datetime.now()
     valid_to = valid_from + timedelta(days=180)
-    discount = 50
+    discount = discount
+    print(f"this is coupon create function, and this is discount {discount}")
     active = True
     redeemed = False
-    
 
     coupon = Coupon.objects.create(
         code=code,
@@ -65,7 +64,6 @@ def coupon_create(request):
     print(f"this is the newly created voucher code! {coupon}")
 
     return HttpResponse(f"Coupon created successfully! {coupon}")
- 
 
 
 def generate_voucher_code(length):

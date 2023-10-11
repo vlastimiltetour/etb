@@ -254,9 +254,9 @@ table.table td, th, tr, thead {
    /* Add some padding to separate the border from content */
 }
 input[type="number"] {
-    color: black;
+    color: black !important;
 }
-
+  
 .about-row {
     --bs-gutter-x: 0;
     --bs-gutter-y: 0;

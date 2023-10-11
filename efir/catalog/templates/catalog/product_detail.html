@@ -170,7 +170,14 @@
    </button>
    <!-- this jinja snippet has id_quantity id-->
    
-   {{ form.quantity}}
+   <div>{{ form.quantity}}</div>
+
+   <div class="invalid-feedback">
+      Nedostatečná kapacita skladu.
+   </div>
+   {% if form.errors.quantity %}
+    <p style="color: red;">{{ form.errors.quantity }}</p>
+{% endif %}
    {{ form.override}}
    <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
    <i class="bi bi-plus"></i>

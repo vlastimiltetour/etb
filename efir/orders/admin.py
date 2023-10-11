@@ -52,11 +52,12 @@ class OrderAdmin(admin.ModelAdmin):
 
     def quantity(self, obj):
         quantity_value = obj.items.values_list("quantity").first()
-        if quantity_value is not None and quantity_value:  # Check for both None and an empty list
+        if (
+            quantity_value is not None and quantity_value
+        ):  # Check for both None and an empty list
             return str(quantity_value[0])
         else:
             return "N/A"  # or some default value
-        
 
     def velikosti(self, obj):
         items = obj.items.all()
