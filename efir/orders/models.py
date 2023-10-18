@@ -111,7 +111,7 @@ class Order(models.Model):
             self.vendor_id = vendor_id
 
         print(f"model order printing vendor_id{vendor_id}")"""
-        
+
         super().save(*args, **kwargs)
 
 

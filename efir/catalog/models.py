@@ -35,7 +35,10 @@ class Product(models.Model):
     # velikost = models.ManyToManyField(Inventory, blank=True, verbose_name="velikost")
 
     zpusob_vyroby = models.ManyToManyField(
-        "ZpusobVyroby", blank=False, default="Skladem", verbose_name="Druh kolekce"
+        "ZpusobVyroby",
+        blank=False,
+        default="Skladem",
+        verbose_name="Druh kolekce",
     )
 
     poznamka = models.TextField(blank=True)
@@ -101,6 +104,7 @@ class ZpusobVyroby(models.Model):
     ZPUSOB_VYROBY_CHOICES = [
         ("Skladem", "Skladem"),
         ("Na Míru", "Na Míru"),
+        ("-", "-"),
     ]
 
     size = models.CharField(
@@ -146,3 +150,32 @@ class ContactForm(models.Model):
 
     def __str__(self):
         return self.message
+
+
+class ProductSet(models.Model):
+    # Common and specific fields for ProductSet
+    product = models.ForeignKey(
+        "catalog.Product",
+        related_name="product_set",
+        on_delete=models.CASCADE,
+    )  # one to one relationship, each product has one inventory record
+    kalhotky = models.ManyToManyField("Product", related_name="kalhotky", blank=True)
+    podprsenky = models.ManyToManyField(
+        "Product", related_name="podprsenky", blank=True
+    )
+    podvazkove_pasy = models.ManyToManyField(
+        "Product", related_name="podvazkove_pasy", blank=True
+    )
+
+    class Meta:
+        verbose_name = "Product Set"
+        verbose_name_plural = "Product Sets"
+
+    def __str__(self):
+        kalhotky_names = ", ".join(kalhotky.name for kalhotky in self.kalhotky.all())
+        podprsenky_names = ", ".join(
+            podprsenky.name for podprsenky in self.podprsenky.all()
+        )
+        kalhotky_velikost = self.kalhotky
+
+        return f"{self.product.name} - Kalhotky: {kalhotky_names, kalhotky_velikost}, Podprsenky: {podprsenky_names}"

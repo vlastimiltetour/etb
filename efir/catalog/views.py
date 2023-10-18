@@ -10,7 +10,7 @@ from catalog.forms import ContactForm
 from orders.mail_confirmation import *
 from stripepayment.views import *
 
-from .models import Category, Product
+from .models import Category, Product, ProductSet
 
 
 # returns home landing page
@@ -20,6 +20,9 @@ def home(request, category_slug=None):
     categories = Category.objects.all()
     products = Product.objects.all()
     best_sellers = Product.objects.filter(bestseller=True)
+    productsets = ProductSet.objects.all()
+
+    print(productsets)
 
     # print(packetLabelPdf(4382587054, format="A7 on A4", offset=0))
 
@@ -31,6 +34,7 @@ def home(request, category_slug=None):
             "categories": categories,
             "products": products,
             "best_sellers": best_sellers,
+            "productsets": productsets,
         },
     )
 
@@ -61,8 +65,11 @@ def product_detail(
     categories = (
         Category.objects.all()
     )  # this is only for the purpose of showing the variable in the menu and footer
-    product = get_object_or_404(Product, id=id, slug=slug)    
+    product = get_object_or_404(Product, id=id, slug=slug)
     form = CartAddProductForm(id_from_product=id)
+    productsets = ProductSet.objects.all()
+
+    print(productsets)
 
     return render(
         request,
@@ -71,6 +78,7 @@ def product_detail(
             "categories": categories,
             "product": product,
             "form": form,
+            "productsets": productsets,
         },
     )
 

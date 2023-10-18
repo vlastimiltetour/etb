@@ -1,7 +1,6 @@
 import logging
 import ssl
 
-from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -35,6 +34,9 @@ def cart_add(request, product_id):
 
     inventory = Inventory.objects.filter(product=product).first()
 
+    if str(product.category) == "Dárkové certifikáty":
+        print("jojojjo darkove certifikaty shitt")
+        # Disable size selection
     if form.is_valid():
         cd = form.cleaned_data
 
@@ -74,6 +76,8 @@ def update_cart_quantity(request, item_id):
 
 def cart_detail(request, zasilkovna=False):
     cart = Cart(request)
+    for item in cart:
+        print(f"cart item is this {item}")
     """ print("Cart Session Contents:", request.session.get("cart"))
     print("Cart Contents:")
     print("Cart:", cart.cart)
@@ -150,14 +154,13 @@ def cart_detail(request, zasilkovna=False):
 
             for order_item in order_items:
                 product = order_item.product
-            
+
                 if str(product.category) == "Dárkové certifikáty":
-                   
                     coupon_create(request, discount=product.price)
                     print(" coupn create should have happened")
-                
-                #this is inventory sotluiont
-                '''size = order_item.velikost
+
+                # this is inventory sotluiont
+                """size = order_item.velikost
                 quantity = order_item.quantity
 
                 
@@ -177,7 +180,7 @@ def cart_detail(request, zasilkovna=False):
                     print(
                         f"Inventory record not found for product {product} and size {size}"
                     )
-                    return redirect("cart:cart_detail")'''
+                    return redirect("cart:cart_detail")"""
 
             cart.clear()
 
@@ -237,3 +240,9 @@ def update_cart_country(request):
         request.session["cart_vendor"] = selected_vendor_id
 
     return redirect("cart:cart_detail")
+
+
+def clean_cart_session(request):
+    cart = Cart(request)
+    cart.clean_cart_session()
+    return redirect("catalog:home")

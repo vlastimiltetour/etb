@@ -28,7 +28,7 @@ def coupon_apply(request):
     return redirect("cart:cart_detail")
 
 
-def coupon_delete(request):
+def coupon_deactivate(request):
     coupon_id = request.session["coupon_id"]
 
     coupon = get_object_or_404(Coupon, id=coupon_id)

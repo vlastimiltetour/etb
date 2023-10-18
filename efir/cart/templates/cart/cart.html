@@ -186,7 +186,10 @@
 
                         <h6 class="my-0">{{ product.name }}       </h6>
                         <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
+                        <!-- if skladem-->
                         <small class="text-muted">{{ item.velikost }} </small>
+                        <!-- if na miru -->
+                        <small class="text-muted">{{ item.poznamka }} </small>
                       
                         <br>
 
@@ -296,7 +299,7 @@
                {% endif %}
             </ul>
             {% if cart.coupon %}
-            <form class="card p-2" action="{% url 'coupons:delete' %}" method="post">
+            <form class="card p-2" action="{% url 'coupons:coupon_deactivate' %}" method="post">
                <div class="input-group">
                   <button type="submit" class="btn btn-secondary">Smazat</button>
                </div>

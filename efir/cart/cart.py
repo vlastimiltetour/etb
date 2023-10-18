@@ -147,6 +147,15 @@ class Cart:
         vendor = self.vendor_id
         return vendor
 
+    def clean_cart_session(self):
+        # Clean up the cart session
+        del self.session[settings.CART_SESSION_ID]
+        del self.session["coupon_id"]
+        del self.session["cart_country"]
+        del self.session["cart_address"]
+        del self.session["cart_vendor"]
+        self.save()
+
     def get_total_price(self):
         product_discount = 0  # TODO subtrackt the discount from product price
         total_price = (

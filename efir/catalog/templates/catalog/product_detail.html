@@ -4,6 +4,8 @@
 {% load humanize %}
 {% block content %}
 <!-- Large Product Detail -->
+
+
 <section class="py-2">
    <div class="container my-2">
       <div class="row gx-4 gx-lg-5">
@@ -48,7 +50,7 @@
                      <label for="zpusob_vyroby" class="mb-2"><b>Na míru nebo skladem?</b></label>
                      <div class="col">
                         <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0 mb-1" style="border-color: black;" aria-label="Default select example">
-                           <option value="vyberte" selected>---- Vyberte ----</option>
+                           
                            {% for zv in form.zpusob_vyroby %}
                            {{ zv }}
                            {% endfor %} 
@@ -61,56 +63,112 @@
                        var selectElement = document.getElementById("zpusob_vyroby_selected");
                        var selectedValue = selectElement.value;
                      
-                       if (selectedValue === "" || selectedValue === "---- Vyberte ----") {
-                         // Specific code for Konfekce
-                         var elementToHide = document.getElementById("poznamka");
-                         elementToHide.style.display = "none";
-                         var elementToHide = document.getElementById("sizes");
-                         elementToShow.style.display = "none";
-                       } 
-                       else if (selectedValue === "---- Vyberte ----") {
-                         // Specific code for Konfekce
-                         var elementToHide = document.getElementById("poznamka");
-                         elementToHide.style.display = "none";
-                         var elementToHide = document.getElementById("sizes");
-                         elementToShow.style.display = "none";
-                       }
-                       else if (selectedValue === "Skladem") {
-                         // Specific code for Konfekce
-                         var elementToHide = document.getElementById("poznamka");
-                         elementToHide.style.display = "none";
-                         var elementToShow = document.getElementById("sizes");
-                         elementToShow.style.display = "block";
-                     
-                       } else if (selectedValue === "Na Míru") {
-                         // Specific code for Na Míru
-                         var elementToShow = document.getElementById("poznamka");
-                         elementToShow.style.display = "block";
-                         var elementToHide = document.getElementById("sizes");
-                         elementToHide.style.display = "none";
-                       } //
-                       else if (selectedValue === "Na Míru" || selectedValue === "") {
-                         // Specific code for Na Míru
-                         var elementToShow = document.getElementById("poznamka");
-                         elementToShow.style.display = "block";
-                         var elementToHide = document.getElementById("sizes");
-                         elementToHide.style.display = "none";
-                       }
+                   
+                        if (selectedValue === "Na Míru") {
+                           // Specific code for Na Míru
+                           var elementToShow = document.getElementById("poznamka");
+                           elementToShow.style.display = "block";
+                           var elementToHide = document.getElementById("sizes");
+                           elementToHide.style.display = "none";
+                        } //
+
                      }
                      
-                     // Add event listener to the select element
-                     var selectElement = document.getElementById("zpusob_vyroby_selected");
-                     selectElement.addEventListener("change", updateZpusobVyroby);
+                  // Add event listener to the select element
+                  var selectElement = document.getElementById("zpusob_vyroby_selected");
+                  selectElement.addEventListener("change", updateZpusobVyroby);
+
+                  // Call the updateZpusobVyroby() function initially to handle the default selected value
+                  updateZpusobVyroby();
                      
-                     // Call the updateZpusobVyroby() function initially to handle the default selected value
-                     updateZpusobVyroby();
                   </script>
+
+
+
+<!-- start product set-->
+{% if product.category.name == 'Celé sety' %}
+  {% for productset in productsets %}
+    <h1>{{ productset.name }}</h1>
+    <p>Detaily Setu:</p>
+    <ul>
+      <li>
+        <label for="kalhotky-select">Kalhotky:</label>
+        <select id="kalhotky-select" name="kalhotky">
+          {% for kalhotky in productset.kalhotky.all %}
+            <option value="{{ kalhotky.id }}" data-photo="{{ kalhotky.photos.first.photo.url }}">{{ kalhotky.name }} {{ kalhotky.velikost }}</option>
+          
+
+          
+         {% endfor %}
+
+
+         {% for velikost_produktu in kalhotky.velikost %}
+         {{ velikost_produktu }}
+         {% endfor %} 
+        </select>
+        <img id="kalhotky-photo" src="" alt="Kalhotky Photo">
+      </li>
+      <li>
+        <label for="podprsenky-select">Podprsenky:</label>
+        <select id="podprsenky-select" name="podprsenky">
+          {% for podprsenky in productset.podprsenky.all %}
+            <option value="{{ podprsenky.id }}" data-photo="{{ podprsenky.photos.first.photo.url }}">{{ podprsenky.name }}</option>
+          {% endfor %}
+        </select>
+        <img id="podprsenky-photo" src="" alt="Podprsenky Photo">
+      </li>
+    </ul>
+  {% endfor %}
+{% endif %}
+<!-- end product set-->
+
+<script>
+  // JavaScript to update the photo when the selection changes
+  document.getElementById('kalhotky-select').addEventListener('change', function () {
+    var selectedOption = this.options[this.selectedIndex];
+    var photoUrl = selectedOption.getAttribute('data-photo');
+    document.getElementById('kalhotky-photo').src = photoUrl;
+  });
+
+  document.getElementById('podprsenky-select').addEventListener('change', function () {
+    var selectedOption = this.options[this.selectedIndex];
+    var photoUrl = selectedOption.getAttribute('data-photo');
+    document.getElementById('podprsenky-photo').src = photoUrl;
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
                   <!-- Start Size Variables -->
-                  <div id="sizes" style="display: none;">
+                  <div id="sizes">
 
                      
                      <!-- Category Definition -->
@@ -260,20 +318,5 @@ quantityElement.style.alignItems = "center";
 
 
 
-<script>
-    // Get the select element
-    const selectElement = document.getElementById('obvod_prsa_selection');
-    
-    // Get all the option elements
-    const options = Array.from(selectElement.options);
-    
-    // Sort the options based on their values
-    options.sort((a, b) => a.value.localeCompare(b.value));
-    
-    // Remove existing options from the select element
-    selectElement.innerHTML = '';
-    
-    // Append the sorted options back to the select element
-    options.forEach(option => selectElement.appendChild(option));
-</script>
+
 {% endblock %}

@@ -13,6 +13,7 @@ from reportlab.lib.pagesizes import A4, A6, A7, A8
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 
+from coupons.views import coupon_deactivate
 from efir.settings.base import ZASILKOVNA_SECRET
 from orders.models import Order
 
@@ -264,9 +265,8 @@ def payment_notification(request):
 
 def payment_completed(request):
     order_id = request.session.get("order_id")
-    # todo finish coupon delete
-    """if coupon: 
-        coupon_delete(request)"""
+
+    coupon_deactivate(request)
 
     order = get_object_or_404(Order, id=order_id)
     return render(request, "stripe/completed.html", {"order": order})

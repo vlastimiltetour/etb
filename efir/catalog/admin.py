@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from inventory.models import Inventory
 
-from .models import Category, Photo, Product, ZpusobVyroby
+from .models import Category, Photo, Product, ProductSet, ZpusobVyroby
 
 
 # Register your models here.
@@ -61,14 +61,32 @@ class ProductAdmin(admin.ModelAdmin):
 
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
+    def save_model(self, request, obj, form, change):
+        # Customize saving behavior based on the selected category
+
+        if obj.category and obj.category.name == "Dárkové certifikáty":
+            # If the category is "Dárkové certifikáty", create the product first
+            super().save_model(request, obj, form, change)
+
+            # Then, create or update the Inventory with size "-"
+            inventory, created = Inventory.objects.get_or_create(
+                product=obj, size="-", defaults={"quantity": 1}
+            )
+
+            if not created:
+                # If the inventory entry already exists, update the quantity
+                # Manually set ZpusobVyroby to "-"
+
+                inventory.quantity = 1
+                inventory.save()
+            else:
+                # For other categories, proceed with the default saving behavior
+                super().save_model(request, obj, form, change)
+        else:
+            super().save_model(request, obj, form, change)
+
     class Meta:
         model = Product
-
-    """ def display_velikost_produktu(self, obj):
-        return ", ".join(str(obvod) for obvod in obj.velikost.all())
-
-    display_velikost_produktu.short_description = "Velikost Produktu"
-    """
 
 
 @admin.register(ZpusobVyroby)
@@ -82,3 +100,8 @@ class ZpusobVyrobyAdmin(admin.ModelAdmin):
         queryset.delete()
 
     delete_selected.short_description = "Delete selected ZpusobVyroby"
+
+
+@admin.register(ProductSet)
+class ProductSetAdmin(admin.ModelAdmin):
+    list_display = ["product"]

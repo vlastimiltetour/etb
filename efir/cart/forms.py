@@ -105,6 +105,7 @@ class CartAddProductForm(forms.Form):
             label="Způsob výroby",
             choices=zpusob_vyroby_list,
             initial="Kofekční velikost",
+            required=False,
         )
         self.fields["override"] = forms.BooleanField(
             required=False, initial=False, widget=forms.HiddenInput

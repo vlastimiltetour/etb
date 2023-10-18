@@ -1,0 +1,321 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% block content %}
+<!-- Large Product Detail -->
+
+
+<section class="py-2">
+   <div class="container my-2">
+      <div class="row gx-4 gx-lg-5">
+         <div class="col-md-6">
+            <div class="product-image-container">
+               <div class="slider">
+                  {% for photo in product.photos.all %}
+                  <div class="slide">
+                     <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" />
+                  </div>
+                  {% endfor %}
+               </div>
+               {% if product.discount %}
+               <div class="discount-circle">{{ product.discount }} % </div>
+               {% endif %}
+            </div>
+            <!-- Miniatures -->
+            <div class="row mt-3">
+               <div class="slide">
+                  {% for photo in product.photos.all %}
+                  <img class="miniature" src="{{ photo.photo.url }}" alt="{{ product.name }} Photo">
+                  {% endfor %}
+               </div>
+            </div>
+            <!--End of Miniatures -->
+         </div>
+         <div class="col-md-6">
+            <div class="row mt-3">
+               <div id="category" class="small mb-1"> {{ product.category }} </div>
+               <h1 class="display-5 fw-bold">{{ product.name }}</h1>
+               <div class="fs-5">
+                  <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
+               </div>
+               <!--<div style="color: #39571B; font-style: italic; border-radius: 0;">
+                  Ušijeme do 2 týdnů!
+               </div> -->
+
+               <p class="lead">{{ product.short_description|linebreaks }}</p>
+               <!-- select size buttons -->
+               <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
+                  <div id="zpusob_vyroby" class="row mb-3">
+                     <label for="zpusob_vyroby" class="mb-2"><b>Na míru nebo skladem?</b></label>
+                     <div class="col">
+                        <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0 mb-1" style="border-color: black;" aria-label="Default select example">
+                           
+                           {% for zv in form.zpusob_vyroby %}
+                           {{ zv }}
+                           {% endfor %} 
+                        </select>
+                     </div>
+
+                  </div>
+                  <script>
+                     function updateZpusobVyroby() {
+                       var selectElement = document.getElementById("zpusob_vyroby_selected");
+                       var selectedValue = selectElement.value;
+                     
+                   
+                        if (selectedValue === "Na Míru") {
+                           // Specific code for Na Míru
+                           var elementToShow = document.getElementById("poznamka");
+                           elementToShow.style.display = "block";
+                           var elementToHide = document.getElementById("sizes");
+                           elementToHide.style.display = "none";
+                        } //
+
+                     }
+                     
+                  // Add event listener to the select element
+                  var selectElement = document.getElementById("zpusob_vyroby_selected");
+                  selectElement.addEventListener("change", updateZpusobVyroby);
+
+                  // Call the updateZpusobVyroby() function initially to handle the default selected value
+                  updateZpusobVyroby();
+                     
+                  </script>
+
+
+
+<!-- start product set-->
+{% if product.category.name == 'Celé sety' %}
+  {% for productset in productsets %}
+    <h1>{{ productset.name }}</h1>
+    <p>Detaily Setu:</p>
+    <ul>
+      <li>
+        <label for="kalhotky-select">Kalhotky:</label>
+        <select id="kalhotky-select" name="kalhotky">
+          {% for kalhotky in productset.kalhotky.all %}
+            <option value="{{ kalhotky.id }}" data-photo="{{ kalhotky.photos.first.photo.url }}">{{ kalhotky.name }} {{ kalhotky.velikost }}</option>
+          
+          
+         
+            {% for velikost_produktu in form.velikost %}
+            {{ velikost_produktu }}
+            {% endfor %} 
+          
+         {% endfor %}
+        </select>
+        <img id="kalhotky-photo" src="" alt="Kalhotky Photo">
+      </li>
+      <li>
+        <label for="podprsenky-select">Podprsenky:</label>
+        <select id="podprsenky-select" name="podprsenky">
+          {% for podprsenky in productset.podprsenky.all %}
+            <option value="{{ podprsenky.id }}" data-photo="{{ podprsenky.photos.first.photo.url }}">{{ podprsenky.name }}</option>
+          {% endfor %}
+        </select>
+        <img id="podprsenky-photo" src="" alt="Podprsenky Photo">
+      </li>
+    </ul>
+  {% endfor %}
+{% endif %}
+<!-- end product set-->
+
+<script>
+  // JavaScript to update the photo when the selection changes
+  document.getElementById('kalhotky-select').addEventListener('change', function () {
+    var selectedOption = this.options[this.selectedIndex];
+    var photoUrl = selectedOption.getAttribute('data-photo');
+    document.getElementById('kalhotky-photo').src = photoUrl;
+  });
+
+  document.getElementById('podprsenky-select').addEventListener('change', function () {
+    var selectedOption = this.options[this.selectedIndex];
+    var photoUrl = selectedOption.getAttribute('data-photo');
+    document.getElementById('podprsenky-photo').src = photoUrl;
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <!-- Start Size Variables -->
+                  <div id="sizes">
+
+                     
+                     <!-- Category Definition -->
+                    
+                     
+                        
+                        
+                        <div style="display: display;">
+                        <b>Velikost</b>
+                        <div class="d-flex mb-3">
+                        <div class="col-6">
+                        <!-- Obvod boky field -->
+                        <select id="velikost" name="velikost" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+                        {% for velikost_produktu in form.velikost %}
+                        {{ velikost_produktu }}
+                        {% endfor %}              
+                        </select>
+                        </div>
+                        </div>
+                        </div>
+                        
+                     
+                  </div>
+                  <style>
+                  .hidden-div {
+                  display: none;
+                  }
+                  </style>
+                  <div id="poznamka" style="display: none;">
+                  <b>Poznámka</b>
+                  <div class="d-flex mb-3">
+                  <div class="col-6">
+                  {{ form.poznamka }}
+                  <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
+                  Obvod hrudníku<br>
+                  Obvod pod hrudníkem<br> 
+                  Obvod jednoho prsa<br>
+                  Obvod pasu<br>
+                  Obvod boku<br>
+                  </small>
+                  </div>
+                  </div>
+                  </div>
+            
+
+
+            
+   
+   <h2>
+   <a href="{{ katalog_vse.product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
+   </h2>
+   <div>
+   <div class="d-flex">
+   <div class="input-group">
+   <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
+   <i class="bi bi-dash"></i>
+   </button>
+   <!-- this jinja snippet has id_quantity id-->
+   
+   <div>{{ form.quantity}}</div>
+
+   <div class="invalid-feedback">
+      Nedostatečná kapacita skladu.
+   </div>
+   {% if form.errors.quantity %}
+    <p style="color: red;">{{ form.errors.quantity }}</p>
+{% endif %}
+   {{ form.override}}
+   <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
+   <i class="bi bi-plus"></i>
+   </button>
+   </div>
+   </div>
+   <p></p>
+   <div>
+   <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" type="submit">
+   <i class="bi bi-cart-fill me-1"></i>
+   Do košíku
+   </button>
+   {% csrf_token %}        
+   </form>
+   </div>
+   <div>
+   <p class="lead">{{ product.long_description|linebreaks }}</p>
+   </div>
+   <p class="small muted-text">Jak určit svou velikost:<br>Pokud neznáte svou velikost, podívejte se do naší <u><a href="{% url 'catalog:rozmery' %}">velikostní tabulky</a></u></p>
+
+   </div>
+
+   </div>
+   </div>
+   </div>
+</section>
+<script> // JavaScript Code
+   // update quantity code
+   // using id_quantity
+   // Get the element
+var quantityElement = document.getElementById("id_quantity");
+
+// Reset default styles
+quantityElement.style.padding = "0";
+quantityElement.style.border = "1px solid black";
+quantityElement.style.webkitAppearance = "none";
+quantityElement.style.mozAppearance = "none";
+quantityElement.style.appearance = "none";
+quantityElement.style.backgroundColor = "transparent";
+quantityElement.style.fontSize = "16px";
+quantityElement.style.width = "42px";
+quantityElement.style.textAlign = "center";
+
+// Centering styles
+quantityElement.style.display = "flex";
+quantityElement.style.justifyContent = "center";
+quantityElement.style.alignItems = "center";
+
+   var quantityInput = document.getElementById('id_quantity');
+   
+     quantityInput.addEventListener('change', function(){
+   
+     });
+   
+   // Increase Decrease Buttons
+   function decreaseCount(){
+     var input = document.getElementById('id_quantity')
+     var value = parseInt(input.value);
+     if (value > 1) {
+       input.value = value - 1;
+     }
+   };
+   
+   function increaseCount(){
+     var input = document.getElementById('id_quantity')
+     var value = parseInt(input.value);
+     input.value = value + 1;
+   };
+   
+   
+   $(document).ready(function() {
+   $('.slider').slick({
+      // Slick Carousel options and settings here
+      prevArrow: '<button type="button" class="slick-prev"><i class="bi bi-arrow-left"></i></button>',
+      nextArrow: '<button type="button" class="slick-next"><i class="bi bi-arrow-right"></i></button>'
+   });
+   });
+   
+</script>
+
+
+
+
+{% endblock %}
