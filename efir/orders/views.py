@@ -87,7 +87,7 @@ def calculate_shipping_price(country_code):
 
 
 def objednavka_vytvorena(request):
-    id = 12
+    id = 1
     order = get_object_or_404(Order, id=id)
 
     return render(request, "orders/customer_email_confirmation.html", {"order": order})

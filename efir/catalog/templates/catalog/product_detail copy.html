@@ -84,7 +84,6 @@
                   </script>
 
 
-
 <!-- start product set-->
 {% if product.category.name == 'Celé sety' %}
   {% for productset in productsets %}
@@ -94,16 +93,56 @@
       <li>
         <label for="kalhotky-select">Kalhotky:</label>
         <select id="kalhotky-select" name="kalhotky">
+          {% for kalhotky_size in productset.get_kalhotky_sizes %}
+            <option value="{{ kalhotky_size }}">{{ kalhotky_size }}</option>
+          {% endfor %}
+        </select>
+      </li>
+      <li>
+         <label for="kalhotky-select">Podprsenky:</label>
+         <select id="kalhotky-select" name="kalhotky">
+           {% for podprsenky_size in productset.get_podprsenky_sizes %}
+             <option value="{{ podprsenky_size }}">{{ podprsenky_size }}</option>
+           {% endfor %}
+         </select>
+       </li>
+       <li>
+         <label for="pas-select">Podvazkový pas:</label>
+         <select id="pas-select" name="pas">
+           {% for pas_size in productset.get_pas_sizes %}
+             <option value="{{ pas_size }}">{{ pas_size }}</option>
+           {% endfor %}
+         </select>
+       </li>
+    </ul>
+  {% endfor %}
+
+<!-- end product set-->
+
+
+
+
+
+<!-- start product set
+{% if product.category.name == 'Celé sety' %}
+  {% for productset in productsets %}
+    <h1>{{ productset.name }}</h1>
+    <p>Detaily Setu:</p>
+    <ul>
+      <li>
+        <label for="kalhotky-select">Kalhotky:</label>
+        <select id="kalhotky-select" name="kalhotky">
+      
           {% for kalhotky in productset.kalhotky.all %}
             <option value="{{ kalhotky.id }}" data-photo="{{ kalhotky.photos.first.photo.url }}">{{ kalhotky.name }} {{ kalhotky.velikost }}</option>
-          
-          
-         
-            {% for velikost_produktu in form.velikost %}
-            {{ velikost_produktu }}
-            {% endfor %} 
-          
+        
+        
+        
          {% endfor %}
+
+         
+       
+   
         </select>
         <img id="kalhotky-photo" src="" alt="Kalhotky Photo">
       </li>
@@ -119,7 +158,7 @@
     </ul>
   {% endfor %}
 {% endif %}
-<!-- end product set-->
+
 
 <script>
   // JavaScript to update the photo when the selection changes
@@ -134,7 +173,8 @@
     var photoUrl = selectedOption.getAttribute('data-photo');
     document.getElementById('podprsenky-photo').src = photoUrl;
   });
-</script>
+</script>-->
+<!-- end product set-->
 
 
 
@@ -163,8 +203,7 @@
 
 
 
-
-
+                  {% else %}
 
                   <!-- Start Size Variables -->
                   <div id="sizes">
@@ -189,7 +228,7 @@
                         </div>
                         </div>
                         
-                     
+                        {% endif %}
                   </div>
                   <style>
                   .hidden-div {

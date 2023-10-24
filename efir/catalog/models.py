@@ -1,7 +1,7 @@
 from django.core.validators import EmailValidator
 from django.db import models
 from django.urls import reverse  # this is when calling an address by name
-from PIL import Image
+from PIL import Image, ImageOps
 
 
 # Create your models here.
@@ -137,6 +137,10 @@ class Photo(models.Model):
         img = Image.open(self.photo.path)
         if img.height > 1125 or img.width > 1125:
             img.thumbnail((1125, 1125))
+         # Force the image to be in an upright position (vertical)
+        img = ImageOps.exif_transpose(img)
+        img = img.rotate(0, expand=True)
+
         img.save(self.photo.path, quality=70, optimize=True)
 
 
@@ -171,11 +175,23 @@ class ProductSet(models.Model):
         verbose_name = "Product Set"
         verbose_name_plural = "Product Sets"
 
-    def __str__(self):
-        kalhotky_names = ", ".join(kalhotky.name for kalhotky in self.kalhotky.all())
-        podprsenky_names = ", ".join(
-            podprsenky.name for podprsenky in self.podprsenky.all()
-        )
-        kalhotky_velikost = self.kalhotky
+    def get_kalhotky_sizes(self):
+        kalhotky_sizes = self.kalhotky.values_list(
+            "inventory__size", flat=True
+        ).distinct()
+        return list(kalhotky_sizes)
 
-        return f"{self.product.name} - Kalhotky: {kalhotky_names, kalhotky_velikost}, Podprsenky: {podprsenky_names}"
+    def get_podprsenky_sizes(self):
+        podprsenky_sizes = self.podprsenky.values_list(
+            "inventory__size", flat=True
+        ).distinct()
+        return list(podprsenky_sizes)
+
+    def get_pas_sizes(self):
+        pas_sizes = self.podvazkove_pasy.values_list(
+            "inventory__size", flat=True
+        ).distinct()
+        return list(pas_sizes)
+
+    def __str__(self):
+        return f"{self.product.name}"

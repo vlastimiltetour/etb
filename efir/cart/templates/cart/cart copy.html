@@ -323,6 +323,39 @@
                <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="#">
                   {% csrf_token %}
                   <div class="row">
+                     <div class="col-md-6 mb-3">
+                        <label for="firstName">Jméno    
+                        </label>
+                        {{ form.first_name }}
+                        <div class="invalid-feedback">
+                           Valid first name is required.
+                        </div>
+                     </div>
+                     <div class="col-md-6 mb-3">
+                        <label for="lastName">
+                        Příjmení
+                        </label>
+                        {{ form.last_name }}
+                        <div class="invalid-feedback">
+                           Valid last name is required.
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6 mb-3">
+                        <label for="email">E-mail</label>
+                        {{ form.email }}
+                        <div class="invalid-feedback">
+                        </div>
+                     </div>
+                     <div class="col-md-6 mb-3">
+                        <label for="email">Telefonní číslo</label>
+                        {{ form.number }}
+                        <div class="invalid-feedback">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
                      <div class="mb-3">
                         <button id="packeta_button" type="button"  class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
                         <div style="display:none" class="packeta-selector-value"></div>
@@ -429,41 +462,6 @@
                      </script>
                      <!-- End Packeta Script-->
                   </div>
-                  <div class="row">
-                     <div class="col-md-6 mb-3">
-                        <label for="firstName">Jméno    
-                        </label>
-                        {{ form.first_name }}
-                        <div class="invalid-feedback">
-                           Vyplňte své jméno.
-                        </div>
-                     </div>
-                     <div class="col-md-6 mb-3">
-                        <label for="lastName">
-                        Příjmení
-                        </label>
-                        {{ form.last_name }}
-                        <div class="invalid-feedback">
-                           Vyplňte své příjmení.
-                        </div>
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-md-6 mb-3">
-                        <label for="email">E-mail</label>
-                        {{ form.email }}
-                        <div class="invalid-feedback">
-                           Vyplňte svůj email
-                        </div>
-                     </div>
-                     <div class="col-md-6 mb-3">
-                        <label for="email">Telefonní číslo</label>
-                        {{ form.number }}
-                        <div class="invalid-feedback">
-                           Vyplňte své číslo.
-                        </div>
-                     </div>
-                  </div>
                   <div class="mb-3">
                      <label for="email">Komentáře</label>
                      {{ form.comments }}
@@ -472,13 +470,10 @@
                   </div>
                   <div class="mb-3">
                      <label class="custom-checkbox">
-                           <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
-                           <span class="checkmark"></span>
+                     <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
+                     <span class="checkmark"></span>
                      Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
                      </label>
-                     <div class="invalid-feedback">
-                        Musíte souhlasit s obchodními podmínkami.
-                     </div>
                   </div>
                   <section class="jumbotron text-center">
                      <div class="container">

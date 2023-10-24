@@ -1,7 +1,7 @@
 from django import forms
 from django.shortcuts import get_object_or_404
 
-from catalog.models import Product
+from catalog.models import Product, ProductSet
 
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
 """ZPUSOB_VYROBY_CHOICES = [
@@ -27,10 +27,27 @@ class CartAddProductForm(forms.Form):
         product_id = id_from_product
 
         product = get_object_or_404(Product, id=product_id)
+
+        try:
+            productset = ProductSet.objects.get(product_id=product_id)
+
+            kalhotky_available_sizes = []
+            kalhotky_velikost = productset.get_kalhotky_sizes()
+            for kalhotky_size in kalhotky_velikost:
+                kalhotky_available_sizes.append(kalhotky_size)
+            kalhotky_available_sizes = tuple(kalhotky_available_sizes)
+            kalhotky_available_sizes = [(i, i) for i in kalhotky_available_sizes]
+
+        except ProductSet.DoesNotExist:
+            # Handle the case where the product set doesn't exist
+            productset = None
+            kalhotky_available_sizes = []
+
         available_sizes = []
         velikost = product.get_available_sizes()  # list
         for one_size in velikost:
             available_sizes.append(one_size)
+        available_sizes.append(" ")
         available_sizes = tuple(sorted(available_sizes))
         available_sizes = [(i, i) for i in available_sizes]
 
@@ -115,4 +132,10 @@ class CartAddProductForm(forms.Form):
             widget=forms.Textarea,
             required=False,
             help_text="Vyplňte tyto hodnoty: Obvod hrudníku Obvod pod hrudníkem Obvod jednoho prsa Obvod pasu Obvod boku",
+        )
+
+        self.fields["kalhotky_velikost_set"] = forms.TypedChoiceField(
+            label="Velikost kalhotek v setu",
+            choices=kalhotky_available_sizes,
+            required=False,
         )

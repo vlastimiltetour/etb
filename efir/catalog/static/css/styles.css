@@ -598,6 +598,26 @@ progress {
   content: "— ";
 }
 
+.img-fluid-rozmery {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  /* Medium screens and above */
+  .img-fluid-rozmery {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* Large screens and above */
+  .img-fluid-rozmery {
+    width: 50%;
+  }
+}
+
 
 .img-fluid {
   object-fit: cover;
