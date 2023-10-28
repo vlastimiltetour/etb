@@ -602,8 +602,6 @@ progress {
   object-fit: cover;
   object-position: center;
   width: 100%;
-  margin: 0 auto; /* Center the image horizontally */
-
 }
 
 @media (min-width: 768px) {

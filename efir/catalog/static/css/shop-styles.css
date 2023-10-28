@@ -68,7 +68,7 @@
     text-align-last: center;
     border: 1px solid black;
 }
-select {
+select * { 
    /* Style the dropdown background color */
     background-color: transparent;
     border: 1px solid black;

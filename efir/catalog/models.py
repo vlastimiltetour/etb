@@ -137,7 +137,7 @@ class Photo(models.Model):
         img = Image.open(self.photo.path)
         if img.height > 1125 or img.width > 1125:
             img.thumbnail((1125, 1125))
-         # Force the image to be in an upright position (vertical)
+        # Force the image to be in an upright position (vertical)
         img = ImageOps.exif_transpose(img)
         img = img.rotate(0, expand=True)
 

@@ -38,10 +38,27 @@ class CartAddProductForm(forms.Form):
             kalhotky_available_sizes = tuple(kalhotky_available_sizes)
             kalhotky_available_sizes = [(i, i) for i in kalhotky_available_sizes]
 
+            podprsenka_available_sizes = []
+            podprsenka_velikost = productset.get_podprsenky_sizes()
+            for podprsenka_size in podprsenka_velikost:
+                podprsenka_available_sizes.append(podprsenka_size)
+            podprsenka_available_sizes = tuple(podprsenka_available_sizes)
+            podprsenka_available_sizes = [(i, i) for i in podprsenka_available_sizes]
+
+            pas_available_sizes = []
+            pas_velikost = productset.get_pas_sizes()
+            for pas in pas_velikost:
+                pas_available_sizes.append(pas)
+            pas_available_sizes = tuple(pas_available_sizes)
+            pas_available_sizes = [(i,i) for i in pas_available_sizes]
+
         except ProductSet.DoesNotExist:
             # Handle the case where the product set doesn't exist
             productset = None
             kalhotky_available_sizes = []
+            podprsenka_available_sizes = []
+            pas_available_sizes = []
+
 
         available_sizes = []
         velikost = product.get_available_sizes()  # list
@@ -115,7 +132,10 @@ class CartAddProductForm(forms.Form):
             widget=forms.Select(attrs={"id": "id_quantity"}),
         )
         self.fields["velikost"] = forms.TypedChoiceField(
-            label="Velikost", choices=available_sizes, initial="-"
+            label="Velikost",
+            choices=available_sizes,
+            initial="-",
+            required=False,
         )
 
         self.fields["zpusob_vyroby"] = forms.TypedChoiceField(
@@ -137,5 +157,17 @@ class CartAddProductForm(forms.Form):
         self.fields["kalhotky_velikost_set"] = forms.TypedChoiceField(
             label="Velikost kalhotek v setu",
             choices=kalhotky_available_sizes,
+            required=False,
+        )
+
+        self.fields["podprsenka_velikost_set"] = forms.TypedChoiceField(
+            label="Velikost podprsenky v setu",
+            choices=podprsenka_available_sizes,
+            required=False,
+        )
+
+        self.fields["pas_velikost_set"] = forms.TypedChoiceField(
+            label="Velikost pasu v setu",
+            choices=pas_available_sizes,
             required=False,
         )

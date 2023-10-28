@@ -52,9 +52,15 @@ def cart_add(request, product_id):
             quantity=cd["quantity"],
             poznamka=cd["poznamka"],
             velikost=cd["velikost"],
+            kalhotky_velikost_set=cd["kalhotky_velikost_set"],
+            podprsenka_velikost_set=cd["podprsenka_velikost_set"],
+            pas_velikost_set=cd["pas_velikost_set"],
             zpusob_vyroby=cd["zpusob_vyroby"],
             override=cd["override"],
         )
+
+    print(form)
+
 
     return redirect("cart:cart_detail")
 
@@ -77,14 +83,7 @@ def update_cart_quantity(request, item_id):
 def cart_detail(request, zasilkovna=False):
     cart = Cart(request)
     for item in cart:
-        print(f"cart item is this {item}")
-    """ print("Cart Session Contents:", request.session.get("cart"))
-    print("Cart Contents:")
-    print("Cart:", cart.cart)
-    print("Coupon ID:", cart.coupon_id)
-    print("Country:", cart.country)
-    print("Address:", cart.address)
-    print("Vendor ID:", cart.vendor_id)"""
+        print(f"cart item is this {item}") 
 
     coupon_form = CouponForm()
 
@@ -133,7 +132,6 @@ def cart_detail(request, zasilkovna=False):
             )  # In this line, you are using a Django ModelForm (order_form) to create an Order instance. The commit=False argument prevents the instance from being saved to the database immediately. Instead, it returns an unsaved instance of the model. This allows you to make additional modifications to the instance before saving it to the database.
 
             order.save(cart=cart)
-            
 
             """Once you have the unsaved order instance, you can call its save method to save it to the database. In this case, you are passing an additional keyword argument cart to the save method. This is where you are providing the cart instance to the save method of the Order model.
             In the save method of the Order model, you are accessing the cart instance through this passed keyword argument to calculate the total_cost for the order. This is a way to pass contextual information from the view (the cart instance) to the model (Order instance) when saving it.

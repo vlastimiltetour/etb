@@ -29,17 +29,20 @@ def coupon_apply(request):
 
 
 def coupon_deactivate(request):
-    coupon_id = request.session["coupon_id"]
+    try:
+        coupon_id = request.session["coupon_id"]
+        coupon = get_object_or_404(Coupon, id=coupon_id)
 
-    coupon = get_object_or_404(Coupon, id=coupon_id)
+        # Set the coupon's 'active' field to False
+        coupon.active = False
+        coupon.redeemed = True
+        coupon.save()
 
-    # Set the coupon's 'active' field to False
-    coupon.active = False
-    coupon.redeemed = True
-    coupon.save()
+        # Remove the coupon_id from the session
+        request.session["coupon_id"] = None
+    except KeyError:
+        return redirect("cart:cart_detail")
 
-    # Remove the coupon_id from the session
-    request.session["coupon_id"] = None
     return redirect("cart:cart_detail")
 
 
