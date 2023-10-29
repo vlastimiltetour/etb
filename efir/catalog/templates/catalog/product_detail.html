@@ -249,6 +249,31 @@
                         <i class="bi bi-dash"></i>
                         </button>
                         <!-- this jinja snippet has id_quantity id-->
+                        
+                        <style>
+                           /* This will hide the entire mob-text section */
+                           #id_quantity {
+                           appearance: none;
+                           -webkit-appearance: none;
+                           -moz-appearance: none;
+                           background-color: transparent;
+                           font-size: 0.8rem;
+                           width: 30px; /* Adjust the width as needed */
+                           text-align: center;
+                           border: none; /* Add black square border */
+                        }
+
+                        @media only screen and (max-width: 600px) {
+  my-selector {  
+    all: initial;
+  }
+
+  my-selector * {
+   all: unset
+  }
+}
+                        </style>
+
                         <div>{{ form.quantity}}</div>
                         <div class="invalid-feedback">
                            Nedostatečná kapacita skladu.
