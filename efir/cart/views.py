@@ -61,7 +61,6 @@ def cart_add(request, product_id):
 
     print(form)
 
-
     return redirect("cart:cart_detail")
 
 
@@ -83,7 +82,7 @@ def update_cart_quantity(request, item_id):
 def cart_detail(request, zasilkovna=False):
     cart = Cart(request)
     for item in cart:
-        print(f"cart item is this {item}") 
+        print(f"cart item is this {item}")
 
     coupon_form = CouponForm()
 

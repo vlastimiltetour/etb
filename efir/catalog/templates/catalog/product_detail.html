@@ -148,58 +148,8 @@
                     </div>
                  </div>
                <!-- end product set-->
-               <!-- start product set
-                  {% if product.category.name == 'Celé sety' %}
-                    {% for productset in productsets %}
-                      <h1>{{ productset.name }}</h1>
-                      <p>Detaily Setu:</p>
-                      <ul>
-                        <li>
-                          <label for="kalhotky-select">Kalhotky:</label>
-                          <select id="kalhotky-select" name="kalhotky">
-                        
-                            {% for kalhotky in productset.kalhotky.all %}
-                              <option value="{{ kalhotky.id }}" data-photo="{{ kalhotky.photos.first.photo.url }}">{{ kalhotky.name }} {{ kalhotky.velikost }}</option>
-                          
-                          
-                          
-                           {% endfor %}
-                  
-                           
-                         
-                     
-                          </select>
-                          <img id="kalhotky-photo" src="" alt="Kalhotky Photo">
-                        </li>
-                        <li>
-                          <label for="podprsenky-select">Podprsenky:</label>
-                          <select id="podprsenky-select" name="podprsenky">
-                            {% for podprsenky in productset.podprsenky.all %}
-                              <option value="{{ podprsenky.id }}" data-photo="{{ podprsenky.photos.first.photo.url }}">{{ podprsenky.name }}</option>
-                            {% endfor %}
-                          </select>
-                          <img id="podprsenky-photo" src="" alt="Podprsenky Photo">
-                        </li>
-                      </ul>
-                    {% endfor %}
-                  {% endif %}
-                  
-                  
-                  <script>
-                    // JavaScript to update the photo when the selection changes
-                    document.getElementById('kalhotky-select').addEventListener('change', function () {
-                      var selectedOption = this.options[this.selectedIndex];
-                      var photoUrl = selectedOption.getAttribute('data-photo');
-                      document.getElementById('kalhotky-photo').src = photoUrl;
-                    });
-                  
-                    document.getElementById('podprsenky-select').addEventListener('change', function () {
-                      var selectedOption = this.options[this.selectedIndex];
-                      var photoUrl = selectedOption.getAttribute('data-photo');
-                      document.getElementById('podprsenky-photo').src = photoUrl;
-                    });
-                  </script>-->
-               <!-- end product set-->
+             
+            
                {% else %}
                <!-- Start Size Variables -->
                <div id="sizes">

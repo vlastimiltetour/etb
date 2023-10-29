@@ -607,14 +607,7 @@ progress {
 @media (min-width: 768px) {
   /* Medium screens and above */
   .img-fluid-rozmery {
-    width: 50%;
-  }
-}
-
-@media (min-width: 1200px) {
-  /* Large screens and above */
-  .img-fluid-rozmery {
-    width: 50%;
+    width: 75%;
   }
 }
 

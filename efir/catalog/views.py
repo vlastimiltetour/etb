@@ -17,7 +17,6 @@ from .models import Category, Product, ProductSet
 def home(request, category_slug=None):
     # zasilkovna_create_package(order_id=13)
 
-
     category = None
     categories = Category.objects.all()
     products = Product.objects.all()

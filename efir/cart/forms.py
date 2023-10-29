@@ -50,7 +50,7 @@ class CartAddProductForm(forms.Form):
             for pas in pas_velikost:
                 pas_available_sizes.append(pas)
             pas_available_sizes = tuple(pas_available_sizes)
-            pas_available_sizes = [(i,i) for i in pas_available_sizes]
+            pas_available_sizes = [(i, i) for i in pas_available_sizes]
 
         except ProductSet.DoesNotExist:
             # Handle the case where the product set doesn't exist
@@ -58,7 +58,6 @@ class CartAddProductForm(forms.Form):
             kalhotky_available_sizes = []
             podprsenka_available_sizes = []
             pas_available_sizes = []
-
 
         available_sizes = []
         velikost = product.get_available_sizes()  # list
