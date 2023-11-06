@@ -1,5 +1,3 @@
-import base64
-import io
 import json
 import logging
 from decimal import Decimal
@@ -9,9 +7,6 @@ import stripe
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
-from reportlab.lib.pagesizes import A4, A6, A7, A8
-from reportlab.lib.units import mm
-from reportlab.pdfgen import canvas
 
 from efir.settings.base import ZASILKOVNA_SECRET
 from orders.models import Order
@@ -150,8 +145,11 @@ def zasilkovna_create_package(order_id):
             print("An error occurred while parsing the XML response:", e)
 
 
-# TODO finish this packet label pdf download
+from django.http import HttpResponse
+
+
 def packetLabelPdf(packetId, format="A7 on A4", offset=0):
+    packetId = 2336806921
     api_password = ZASILKOVNA_SECRET
     endpoint = "https://www.zasilkovna.cz/api/rest"
     xml_data = f"""
@@ -165,77 +163,21 @@ def packetLabelPdf(packetId, format="A7 on A4", offset=0):
 
     headers = {"Content-Type": "application/xml"}
     response = requests.post(endpoint, data=xml_data, headers=headers)
-    response_contents = response.text
-    decoded_data = base64.b64decode(response_contents)
 
-    # write the decoded data back to original format in  file
-    img_file = open("image.jpeg", "wb")
-    img_file.write(decoded_data)
-    img_file.close()
+    pdf_content = response.content
 
-    return decoded_data
+    # Create an HTTP response with the PDF content
+    pdf_response = HttpResponse(pdf_content, content_type="application/pdf")
+    pdf_response["Content-Disposition"] = 'inline; filename="packet_label.pdf"'
 
+    # Assuming Zasilkovna API returns XML data
+    xml_content = response.content
 
-# ----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----
+    # Create an HTTP response with the XML content
+    xml_response = HttpResponse(xml_content, content_type="application/xml")
+    xml_response["Content-Disposition"] = 'attachment; filename="packet_label.xml"'
 
-
-def packetLabelPdf2(packetId, format="A7 on A4", offset=0):
-    # Validate the format parameter
-    allowed_formats = {
-        "A6 on A6": (A6, A6),
-        "A7 on A7": (A7, A7),
-        "A6 on A4": (A6, A4),
-        "A7 on A4": (A7, A4),
-        "105x35mm on A4": ((105 * mm, 35 * mm), A4),
-        "A8 on A8": (A8, A8),
-    }
-
-    if format not in allowed_formats:
-        raise UnknownLabelFormatFault("Unknown label format")
-
-    packet_data = f"Packet ID: {packetId}\nOther details: ..."  # Replace with actual packet details
-
-    # Create the PDF using ReportLab
-    packet_width, packet_height = allowed_formats[format][0]
-    page_width, page_height = allowed_formats[format][1]
-
-    buffer = io.BytesIO()
-    c = canvas.Canvas(
-        buffer,
-        pagesize=(page_width, page_height)
-        if offset == 0
-        else (page_height, page_width),
-    )
-    if offset > 0:
-        c.translate(offset * mm, 0)
-
-    # Draw the label
-    c.setFont("Helvetica", 12)
-    c.drawString(10 * mm, page_height - 20 * mm, packet_data)
-
-    corner_radius = 5  # Adjust the corner radius as needed
-    c.roundRect(
-        5 * mm, page_height - 25 * mm, packet_width, packet_height, corner_radius
-    )
-
-    c.save()
-
-    # Save the PDF to a file
-    pdf_filename = f"label_{packetId}.pdf"
-    with open(pdf_filename, "wb") as pdf_file:
-        pdf_file.write(buffer.getvalue())
-
-    # Set the content type and filename for the response
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="{pdf_filename}"'
-    response.write(buffer.getvalue())
-
-    buffer.close()
-
-    return response
-
-
-# ----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----#----
+    return pdf_response
 
 
 def payment_notification(request):

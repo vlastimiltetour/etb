@@ -4,328 +4,279 @@
 {% load humanize %}
 {% block content %}
 <!-- Large Product Detail -->
-
-
 <section class="py-2">
    <div class="container my-2">
-      <div class="row gx-4 gx-lg-5">
-         <div class="col-md-6">
-            <div class="product-image-container">
-               <div class="slider">
-                  {% for photo in product.photos.all %}
-                  <div class="slide">
-                     <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" />
-                  </div>
-                  {% endfor %}
-               </div>
-               {% if product.discount %}
-               <div class="discount-circle">{{ product.discount }} % </div>
-               {% endif %}
-            </div>
-            <!-- Miniatures -->
-            <div class="row mt-3">
+   <div class="row gx-4 gx-lg-5">
+      <div class="col-md-6">
+         <div class="product-image-container">
+            <div class="slider">
+               {% for photo in product.photos.all %}
                <div class="slide">
-                  {% for photo in product.photos.all %}
-                  <img class="miniature" src="{{ photo.photo.url }}" alt="{{ product.name }} Photo">
-                  {% endfor %}
+                  <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" />
                </div>
+               {% endfor %}
             </div>
-            <!--End of Miniatures -->
+            {% if product.discount %}
+            <div class="discount-circle">{{ product.discount }} % </div>
+            {% endif %}
          </div>
-         <div class="col-md-6">
-            <div class="row mt-3">
-               <div id="category" class="small mb-1"> {{ product.category }} </div>
-               <h1 class="display-5 fw-bold">{{ product.name }}</h1>
-               <div class="fs-5">
-                  <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
-               </div>
-               <!--<div style="color: #39571B; font-style: italic; border-radius: 0;">
-                  Ušijeme do 2 týdnů!
+         <!-- Miniatures -->
+         <div class="row mt-3">
+            <div class="slide">
+               {% for photo in product.photos.all %}
+               <img class="miniature" src="{{ photo.photo.url }}" alt="{{ product.name }} Photo">
+               {% endfor %}
+            </div>
+         </div>
+         <!--End of Miniatures -->
+      </div>
+      <div class="col-md-6">
+         <div class="row mt-3">
+            <div id="category" class="small mb-1"> {{ product.category }} </div>
+            <h1 class="display-5 fw-bold">{{ product.name }}</h1>
+            <div class="fs-5">
+               <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
+            </div>
+            <!--<div style="color: #39571B; font-style: italic; border-radius: 0;">
+               Ušijeme do 2 týdnů!
                </div> -->
-
-               <p class="lead">{{ product.short_description|linebreaks }}</p>
-               <!-- select size buttons -->
-               <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
-                  <div id="zpusob_vyroby" class="row mb-3">
-                     <label for="zpusob_vyroby" class="mb-2"><b>Na míru nebo skladem?</b></label>
-                     <div class="col">
-                        <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0 mb-1" style="border-color: black;" aria-label="Default select example">
-                           
-                           {% for zv in form.zpusob_vyroby %}
-                           {{ zv }}
-                           {% endfor %} 
-                        </select>
-                     </div>
-
+            <p class="lead">{{ product.short_description|linebreaks }}</p>
+            <!-- select size buttons -->
+            <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
+               <div id="zpusob_vyroby" class="row mb-3">
+                  <label for="zpusob_vyroby" class="mb-2"><b>Na míru nebo skladem?</b></label>
+                  <div class="col">
+                     <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0 mb-1" style="border-color: black;" aria-label="Default select example">
+                     {% for zv in form.zpusob_vyroby %}
+                     {{ zv }}
+                     {% endfor %} 
+                     </select>
                   </div>
-                  <script>
-                     function updateZpusobVyroby() {
-                       var selectElement = document.getElementById("zpusob_vyroby_selected");
-                       var selectedValue = selectElement.value;
-                     
-                   
-                        if (selectedValue === "Na Míru") {
-                           // Specific code for Na Míru
-                           var elementToShow = document.getElementById("poznamka");
-                           elementToShow.style.display = "block";
-                           var elementToHide = document.getElementById("sizes");
-                           elementToHide.style.display = "none";
-                        } //
-
-                     }
-                     
+               </div>
+               <script>
+                  function updateZpusobVyroby() {
+                    var selectElement = document.getElementById("zpusob_vyroby_selected");
+                    var selectedValue = selectElement.value;
+                  
+                    var elementToShow;
+                    var elementToHide;
+                  
+                    if (selectedValue === "Na Míru") {
+                        // Specific code for Na Míru
+                        elementToShow = document.getElementById("poznamka");
+                        elementToHide = document.getElementById("sizes");
+                    } else {
+                        // Code for other values
+                        elementToShow = document.getElementById("sizes");
+                        elementToHide = document.getElementById("poznamka");
+                    }
+                  
+                    elementToShow.style.display = "block";
+                    elementToHide.style.display = "none";
+                  }
+                  
                   // Add event listener to the select element
                   var selectElement = document.getElementById("zpusob_vyroby_selected");
                   selectElement.addEventListener("change", updateZpusobVyroby);
-
+                  
                   // Call the updateZpusobVyroby() function initially to handle the default selected value
                   updateZpusobVyroby();
-                     
-                  </script>
+                  
+                      
+               </script>
+               <!-- start product set-->
+               {% if product.category.name == 'Celé sety' %}
+               {% for productset in productsets %}
+               <h1>{{ productset.name }}</h1>
 
-
-<!-- start product set-->
-{% if product.category.name == 'Celé sety' %}
-  {% for productset in productsets %}
-    <h1>{{ productset.name }}</h1>
-    <p>Detaily Setu:</p>
-    <ul>
-      <li>
-        <label for="kalhotky-select">Kalhotky:</label>
-        <select id="kalhotky-select" name="kalhotky">
-          {% for kalhotky_size in productset.get_kalhotky_sizes %}
-            <option value="{{ kalhotky_size }}">{{ kalhotky_size }}</option>
-          {% endfor %}
-        </select>
-      </li>
-      <li>
-         <label for="kalhotky-select">Podprsenky:</label>
-         <select id="kalhotky-select" name="kalhotky">
-           {% for podprsenky_size in productset.get_podprsenky_sizes %}
-             <option value="{{ podprsenky_size }}">{{ podprsenky_size }}</option>
-           {% endfor %}
-         </select>
-       </li>
-       <li>
-         <label for="pas-select">Podvazkový pas:</label>
-         <select id="pas-select" name="pas">
-           {% for pas_size in productset.get_pas_sizes %}
-             <option value="{{ pas_size }}">{{ pas_size }}</option>
-           {% endfor %}
-         </select>
-       </li>
-    </ul>
-  {% endfor %}
-
-<!-- end product set-->
-
-
-
-
-
-<!-- start product set
-{% if product.category.name == 'Celé sety' %}
-  {% for productset in productsets %}
-    <h1>{{ productset.name }}</h1>
-    <p>Detaily Setu:</p>
-    <ul>
-      <li>
-        <label for="kalhotky-select">Kalhotky:</label>
-        <select id="kalhotky-select" name="kalhotky">
-      
-          {% for kalhotky in productset.kalhotky.all %}
-            <option value="{{ kalhotky.id }}" data-photo="{{ kalhotky.photos.first.photo.url }}">{{ kalhotky.name }} {{ kalhotky.velikost }}</option>
-        
-        
-        
-         {% endfor %}
-
-         
-       
-   
-        </select>
-        <img id="kalhotky-photo" src="" alt="Kalhotky Photo">
-      </li>
-      <li>
-        <label for="podprsenky-select">Podprsenky:</label>
-        <select id="podprsenky-select" name="podprsenky">
-          {% for podprsenky in productset.podprsenky.all %}
-            <option value="{{ podprsenky.id }}" data-photo="{{ podprsenky.photos.first.photo.url }}">{{ podprsenky.name }}</option>
-          {% endfor %}
-        </select>
-        <img id="podprsenky-photo" src="" alt="Podprsenky Photo">
-      </li>
-    </ul>
-  {% endfor %}
-{% endif %}
-
-
-<script>
-  // JavaScript to update the photo when the selection changes
-  document.getElementById('kalhotky-select').addEventListener('change', function () {
-    var selectedOption = this.options[this.selectedIndex];
-    var photoUrl = selectedOption.getAttribute('data-photo');
-    document.getElementById('kalhotky-photo').src = photoUrl;
-  });
-
-  document.getElementById('podprsenky-select').addEventListener('change', function () {
-    var selectedOption = this.options[this.selectedIndex];
-    var photoUrl = selectedOption.getAttribute('data-photo');
-    document.getElementById('podprsenky-photo').src = photoUrl;
-  });
-</script>-->
-<!-- end product set-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  {% else %}
-
-                  <!-- Start Size Variables -->
-                  <div id="sizes">
-
-                     
-                     <!-- Category Definition -->
-                    
-                     
+                    <!-- Start Size Variables -->
+                    <div id="sizes">
+                      <!-- Category Definition -->
+                      <div style="display: display;">
                         
-                        
-                        <div style="display: display;">
-                        <b>Velikost</b>
-                        <div class="d-flex mb-3">
+                 
+               <p>Detaily Setu:</p>
+               <ul>
+                  <li>
+                     <label for="kalhotky-select">Kalhotky:</label>
+                     <select id="kalhotky_velikost_set" name="kalhotky_velikost_set"> <!-- id has to be same as varible in django view  -->
+                     {% for kalhotky_velikost_set_size in form.kalhotky_velikost_set %}
+                     {{ kalhotky_velikost_set_size }}
+                     {% endfor %}
+                     </select>
+                  </li>
+                  <li>
+                     <label for="podprsenky-select">Podprsenky:</label>
+                     <select id="podprsenka_velikost_set" name="podprsenka_velikost_set">
+                        {% for podprsenka_velikost_set_size in form.podprsenka_velikost_set %}
+                        {{ podprsenka_velikost_set_size }}
+                        {% endfor %}
+                     </select>
+                  </li>
+                  <li>
+                     <label for="pas-select">Podvazkový pas:</label>
+                     <select id="pas_velikost_set" name="pas_velikost_set">
+                        {% for pas_velikost_set_size in form.pas_velikost_set %}
+                        {{ pas_velikost_set_size }}
+                        {% endfor %}
+                     </select>
+                  </li>
+               </ul>
+              </div>
+            </div>
+               {% endfor %}
+               
+              
+                 <style>
+                    .hidden-div {
+                    display: none;
+                    }
+                 </style>
+                 <div id="poznamka" style="display: none;">
+                    <b>Poznámka</b>
+                    <div class="d-flex mb-3">
+                       <div class="col-6">
+                          {{ form.poznamka }}
+                          <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
+                          Obvod hrudníku<br>
+                          Obvod pod hrudníkem<br> 
+                          Obvod jednoho prsa<br>
+                          Obvod pasu<br>
+                          Obvod boku<br>
+                          </small>
+                       </div>
+                    </div>
+                 </div>
+               <!-- end product set-->
+             
+            
+               {% else %}
+               <!-- Start Size Variables -->
+               <div id="sizes">
+                  <!-- Category Definition -->
+                  <div style="display: display;">
+                     <b>Velikost</b>
+                     <div class="d-flex mb-3">
                         <div class="col-6">
-                        <!-- Obvod boky field -->
-                        <select id="velikost" name="velikost" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
-                        {% for velikost_produktu in form.velikost %}
-                        {{ velikost_produktu }}
-                        {% endfor %}              
-                        </select>
+                           <!-- Obvod boky field -->
+                           <select id="velikost" name="velikost" class="form-select flex-grow-1 rounded-0" style="border-color: black" aria-label="Default select example">
+                           {% for velikost_produktu in form.velikost %}
+                           {{ velikost_produktu }}
+                           {% endfor %}              
+                           </select>
                         </div>
-                        </div>
-                        </div>
-                        
-                        {% endif %}
+                     </div>
                   </div>
-                  <style>
+               </div>
+               <style>
                   .hidden-div {
                   display: none;
                   }
-                  </style>
-                  <div id="poznamka" style="display: none;">
+               </style>
+               <div id="poznamka" style="display: none;">
                   <b>Poznámka</b>
                   <div class="d-flex mb-3">
-                  <div class="col-6">
-                  {{ form.poznamka }}
-                  <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
-                  Obvod hrudníku<br>
-                  Obvod pod hrudníkem<br> 
-                  Obvod jednoho prsa<br>
-                  Obvod pasu<br>
-                  Obvod boku<br>
-                  </small>
+                     <div class="col-6">
+                        {{ form.poznamka }}
+                        <small class="form-text text-muted">Vyplňte tyto hodnoty:<br>
+                        Obvod hrudníku<br>
+                        Obvod pod hrudníkem<br> 
+                        Obvod jednoho prsa<br>
+                        Obvod pasu<br>
+                        Obvod boku<br>
+                        </small>
+                     </div>
                   </div>
+               </div>
+               {% endif %}
+               <h2>
+                  <a href="{{ katalog_vse.product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
+               </h2>
+               <div>
+                  <div class="d-flex">
+                     <div class="input-group">
+                        <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
+                        <i class="bi bi-dash"></i>
+                        </button>
+                        <!-- this jinja snippet has id_quantity id-->
+                        
+                        <style>
+                           /* This will hide the entire mob-text section */
+                           #id_quantity {
+                           appearance: none;
+                           -webkit-appearance: none;
+                           -moz-appearance: none;
+                           background-color: transparent;
+                           font-size: 0.8rem;
+                           width: 30px; /* Adjust the width as needed */
+                           text-align: center;
+                           border: none; /* Add black square border */
+                        }
+
+                        @media only screen and (max-width: 600px) {
+  my-selector {  
+    all: initial;
+  }
+
+  my-selector * {
+   all: unset
+  }
+}
+                        </style>
+
+                        <div>{{ form.quantity}}</div>
+                        <div class="invalid-feedback">
+                           Nedostatečná kapacita skladu.
+                        </div>
+                        {% if form.errors.quantity %}
+                        <p style="color: red;">{{ form.errors.quantity }}</p>
+                        {% endif %}
+                        {{ form.override}}
+                        <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
+                        <i class="bi bi-plus"></i>
+                        </button>
+                     </div>
                   </div>
-                  </div>
-            
-
-
-            
-   
-   <h2>
-   <a href="{{ katalog_vse.product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
-   </h2>
-   <div>
-   <div class="d-flex">
-   <div class="input-group">
-   <button class="btn btn-outline-dark rounded-0" type="button" onclick="decreaseCount()">
-   <i class="bi bi-dash"></i>
-   </button>
-   <!-- this jinja snippet has id_quantity id-->
-   
-   
-  <style> 
-  </style>
-   <div>{{ form.quantity}}</div>
-    
-
-   <div class="invalid-feedback">
-      Nedostatečná kapacita skladu.
-   </div>
-   {% if form.errors.quantity %}
-    <p style="color: red;">{{ form.errors.quantity }}</p>
-{% endif %}
-   {{ form.override}}
-   <button class="btn btn-outline-dark rounded-0" type="button" onclick="increaseCount()">
-   <i class="bi bi-plus"></i>
-   </button>
-   </div>
-   </div>
-   <p></p>
-   <div>
-   <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" type="submit">
-   <i class="bi bi-cart-fill me-1"></i>
-   Do košíku
-   </button>
-   {% csrf_token %}        
-   </form>
-   </div>
-   <div>
-   <p class="lead">{{ product.long_description|linebreaks }}</p>
-   </div>
-   <p class="small muted-text">Jak určit svou velikost:<br>Pokud neznáte svou velikost, podívejte se do naší <u><a href="{% url 'catalog:rozmery' %}">velikostní tabulky</a></u></p>
-
-   </div>
-
-   </div>
-   </div>
+                  <p></p>
+                  <div>
+                     <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" type="submit">
+                     <i class="bi bi-cart-fill me-1"></i>
+                     Do košíku
+                     </button>
+                     {% csrf_token %}        
+            </form>
+            </div>
+            <div>
+            <p class="lead">{{ product.long_description|linebreaks }}</p>
+            </div>
+            <p class="small muted-text">Jak určit svou velikost:<br>Pokud neznáte svou velikost, podívejte se do naší <u><a href="{% url 'catalog:rozmery' %}">velikostní tabulky</a></u></p>
+            </div>
+         </div>
+      </div>
    </div>
 </section>
 <script> // JavaScript Code
    // update quantity code
    // using id_quantity
    // Get the element
-var quantityElement = document.getElementById("id_quantity");
-
-// Reset default styles
-quantityElement.style.padding = "0";
-quantityElement.style.border = "1px solid black";
-quantityElement.style.webkitAppearance = "none";
-quantityElement.style.mozAppearance = "none";
-quantityElement.style.appearance = "none";
-quantityElement.style.backgroundColor = "transparent";
-quantityElement.style.fontSize = "16px";
-quantityElement.style.width = "42px";
-quantityElement.style.textAlign = "center";
-
-// Centering styles
-quantityElement.style.display = "flex";
-quantityElement.style.justifyContent = "center";
-quantityElement.style.alignItems = "center";
-
+   var quantityElement = document.getElementById("id_quantity");
+   
+   // Reset default styles
+   quantityElement.style.padding = "0";
+   quantityElement.style.border = "1px solid black";
+   quantityElement.style.webkitAppearance = "none";
+   quantityElement.style.mozAppearance = "none";
+   quantityElement.style.appearance = "none";
+   quantityElement.style.backgroundColor = "transparent";
+   quantityElement.style.fontSize = "16px";
+   quantityElement.style.width = "42px";
+   quantityElement.style.textAlign = "center";
+   
+   // Centering styles
+   quantityElement.style.display = "flex";
+   quantityElement.style.justifyContent = "center";
+   quantityElement.style.alignItems = "center";
+   
    var quantityInput = document.getElementById('id_quantity');
    
      quantityInput.addEventListener('change', function(){
@@ -357,8 +308,4 @@ quantityElement.style.alignItems = "center";
    });
    
 </script>
-
-
-
-
 {% endblock %}

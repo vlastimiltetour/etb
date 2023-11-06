@@ -195,3 +195,37 @@ class ProductSet(models.Model):
 
     def __str__(self):
         return f"{self.product.name}"
+
+
+class Certificate(models.Model):
+    product = models.ForeignKey(
+        "catalog.Product",
+        related_name="certificate",
+        on_delete=models.CASCADE,
+    )  # one
+
+    DISCOUNT_TYPES = [
+        ("Procento", "Procento"),
+        ("Částka", "Částka"),
+    ]
+    discount_type = models.CharField(
+        max_length=255,
+        choices=DISCOUNT_TYPES,
+        verbose_name="Typ slevy",
+        blank=True,
+    )
+    discount_value = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Zadejte hodnotu 0. anebo absolutní hodnotu částky",
+        blank=True,
+        default=0,
+    )
+    discount_threshold = models.DecimalField(
+        verbose_name="Minimální částka pro uplatnění slevy",
+        max_digits=10,
+        decimal_places=0,
+        blank=True,
+        default=0,
+        null=True,
+    )

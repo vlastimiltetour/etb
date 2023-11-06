@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from inventory.models import Inventory
 
-from .models import Category, Photo, Product, ProductSet, ZpusobVyroby
+from .models import (Category, Certificate, Photo, Product, ProductSet,
+                     ZpusobVyroby)
 
 
 # Register your models here.
@@ -103,5 +104,10 @@ class ZpusobVyrobyAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProductSet)
+class ProductSetAdmin(admin.ModelAdmin):
+    list_display = ["product"]
+
+
+@admin.register(Certificate)
 class ProductSetAdmin(admin.ModelAdmin):
     list_display = ["product"]

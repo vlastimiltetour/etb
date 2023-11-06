@@ -144,6 +144,9 @@ def cart_detail(request, zasilkovna=False):
                     quantity=item["quantity"],
                     zpusob_vyroby=item["zpusob_vyroby"],
                     velikost=item["velikost"],
+                    kalhotky_velikost_set=item["kalhotky_velikost_set"],
+                    podprsenka_velikost_set=item["kalhotky_velikost_set"],
+                    pas_velikost_set=item["kalhotky_velikost_set"],
                 )
 
             # clear the cart
@@ -154,8 +157,13 @@ def cart_detail(request, zasilkovna=False):
                 product = order_item.product
 
                 if str(product.category) == "Dárkové certifikáty":
-                    coupon_create(request, discount=product.price)
-                    print(" coupn create should have happened")
+                    if product.certificate.discount_type == "Procento":
+                        discount = product.price * product.value
+                    elif product.certificate.discount_type == "Částka":
+                        discount = product.price - product.value
+
+                coupon_create(request, discount)
+                print(" coupn create should have happened")
 
                 # this is inventory sotluiont
                 """size = order_item.velikost

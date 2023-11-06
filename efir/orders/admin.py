@@ -8,11 +8,14 @@ class OrderItemInline(admin.TabularInline):
     readonly_fields = (
         "order",
         "product",
+        "velikost",
         "price",
         "quantity",
-        "velikost",
     )
     can_delete = False
+
+    class Meta:
+        ordering = ("product", "velikost", "price", "quantity", "order")
 
 
 @admin.register(Order)
@@ -64,6 +67,11 @@ class OrderAdmin(admin.ModelAdmin):
         item_details = []
         for item in items:
             item_details.append(f"{item.velikost}")
+            item_details.append(f"kalhotky_velikost_set: {item.kalhotky_velikost_set}")
+            item_details.append(
+                f"podprsenka_velikost_set: {item.podprsenka_velikost_set}"
+            )
+            item_details.append(f"pas_velikost_set: {item.pas_velikost_set}")
 
         return ", ".join(item_details)
 
@@ -71,7 +79,7 @@ class OrderAdmin(admin.ModelAdmin):
         value = 0
         return str(value)
 
-    velikosti.short_description = "Order Items"
+    velikosti.short_description = "Položky v objednávce"
 
     # Override the has_add_permission method to deny adding new records
     def has_add_permission(self, request):

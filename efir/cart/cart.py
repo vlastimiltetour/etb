@@ -53,6 +53,9 @@ class Cart:
         kalhotky_velikost_set=0,
         podprsenka_velikost_set=0,
         pas_velikost_set=0,
+        discount_type=None,
+        discount_value=None,
+        discount_threshold=None,
         zpusob_vyroby=None,  # might be renamed to konfekcni
         poznamka=None,
         override=None,
@@ -88,6 +91,9 @@ class Cart:
                 "kalhotky_velikost_set": str(kalhotky_velikost_set),
                 "podprsenka_velikost_set": str(podprsenka_velikost_set),
                 "pas_velikost_set": str(pas_velikost_set),
+                "discount_type": str(discount_type),
+                "discount_value": str(discount_value),
+                "discount_threshold": str(discount_threshold),
                 "poznamka": str(poznamka),
                 "zpusob_vyroby": str(zpusob_vyroby),
                 "override": override,
@@ -191,6 +197,11 @@ class Cart:
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
+
+        # if discount_type == absolute:
+        # absolute discount value
         total_price_after_discount = total_price - discount
+        # elif % discount_type == percentage:
+        # total_price_after_discount = total_price * discount
 
         return total_price_after_discount

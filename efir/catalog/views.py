@@ -15,7 +15,8 @@ from .models import Category, Product, ProductSet
 
 # returns home landing page
 def home(request, category_slug=None):
-    # zasilkovna_create_package(order_id=13)
+    # zasilkovna_create_package(order_id=1)
+    # packetLabelPdf(2336806921, format="A7 on A4", offset=0)
 
     category = None
     categories = Category.objects.all()
@@ -23,7 +24,6 @@ def home(request, category_slug=None):
     best_sellers = Product.objects.filter(bestseller=True)
     productsets = ProductSet.objects.all()
 
-    print(productsets)
 
     # print(packetLabelPdf(4382587054, format="A7 on A4", offset=0))
 
@@ -69,8 +69,6 @@ def product_detail(
     product = get_object_or_404(Product, id=id, slug=slug)
     form = CartAddProductForm(id_from_product=id)
     productsets = ProductSet.objects.all()
-
-    print(productsets)
 
     return render(
         request,

@@ -126,7 +126,12 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1, verbose_name="Množství")
 
     zpusob_vyroby = models.CharField(max_length=50)
-    velikost = models.CharField(max_length=50, null=True, blank=True)
+    velikost = models.CharField(
+        max_length=50, null=True, blank=True, verbose_name="Individuální velikost"
+    )
+    kalhotky_velikost_set = models.CharField(max_length=50, null=True, blank=True)
+    podprsenka_velikost_set = models.CharField(max_length=50, null=True, blank=True)
+    pas_velikost_set = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return str(self.id)
