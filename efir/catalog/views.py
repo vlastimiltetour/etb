@@ -24,7 +24,6 @@ def home(request, category_slug=None):
     best_sellers = Product.objects.filter(bestseller=True)
     productsets = ProductSet.objects.all()
 
-
     # print(packetLabelPdf(4382587054, format="A7 on A4", offset=0))
 
     return render(

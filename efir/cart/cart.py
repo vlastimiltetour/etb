@@ -53,9 +53,6 @@ class Cart:
         kalhotky_velikost_set=0,
         podprsenka_velikost_set=0,
         pas_velikost_set=0,
-        discount_type=None,
-        discount_value=None,
-        discount_threshold=None,
         zpusob_vyroby=None,  # might be renamed to konfekcni
         poznamka=None,
         override=None,
@@ -91,9 +88,6 @@ class Cart:
                 "kalhotky_velikost_set": str(kalhotky_velikost_set),
                 "podprsenka_velikost_set": str(podprsenka_velikost_set),
                 "pas_velikost_set": str(pas_velikost_set),
-                "discount_type": str(discount_type),
-                "discount_value": str(discount_value),
-                "discount_threshold": str(discount_threshold),
                 "poznamka": str(poznamka),
                 "zpusob_vyroby": str(zpusob_vyroby),
                 "override": override,
@@ -188,20 +182,48 @@ class Cart:
 
     def get_discount(self):
         if self.coupon:
-            discount = self.coupon.discount
+            discount = self.coupon.discount_value
 
             return discount
 
         return Decimal(0)
+    
+    def get_discount_percentage(self):
+        if self.coupon:
+            discount = self.coupon.discount_value
+
+            return discount * 100
+
+        return Decimal(0)
+    
+    def get_discount_threshold(self):
+        if self.coupon:
+            threshold = self.coupon.discount_threshold
+
+            return threshold
+
+        return None
+
+    def get_discount_type(self):
+        if self.coupon:
+            type = self.coupon.discount_type
+
+            return type
+
+        return None
 
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
 
-        # if discount_type == absolute:
-        # absolute discount value
-        total_price_after_discount = total_price - discount
-        # elif % discount_type == percentage:
-        # total_price_after_discount = total_price * discount
+        if total_price >= self.get_discount_threshold():
+            if self.get_discount_type() == "Procento":
+                total_price_after_discount = total_price * (1 - discount)
+            elif self.get_discount_type() == "Částka":
+                total_price_after_discount = total_price - discount
+
+        else:
+            return f'Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}'
+
 
         return total_price_after_discount

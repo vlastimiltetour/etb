@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from cart.cart import Cart
-from catalog.models import Product
+from catalog.models import Product, Certificate
 from coupons.forms import CouponForm
 from coupons.views import coupon_create
 from inventory.models import Inventory
@@ -31,12 +31,13 @@ def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     form = CartAddProductForm(id_from_product=product_id, data=request.POST)
-
     inventory = Inventory.objects.filter(product=product).first()
+    certificate = Certificate.objects.filter(product=product).first()
+
 
     if str(product.category) == "Dárkové certifikáty":
-        print("jojojjo darkove certifikaty shitt")
-        # Disable size selection
+        print('produkt jsou darkove certifikaty jo')
+
     if form.is_valid():
         cd = form.cleaned_data
 
@@ -59,7 +60,7 @@ def cart_add(request, product_id):
             override=cd["override"],
         )
 
-    print(form)
+
 
     return redirect("cart:cart_detail")
 
@@ -83,7 +84,9 @@ def cart_detail(request, zasilkovna=False):
     cart = Cart(request)
     for item in cart:
         print(f"cart item is this {item}")
+   
 
+    
     coupon_form = CouponForm()
 
     # the value is taken from session
@@ -146,24 +149,27 @@ def cart_detail(request, zasilkovna=False):
                     velikost=item["velikost"],
                     kalhotky_velikost_set=item["kalhotky_velikost_set"],
                     podprsenka_velikost_set=item["kalhotky_velikost_set"],
-                    pas_velikost_set=item["kalhotky_velikost_set"],
+                    pas_velikost_set=item["kalhotky_velikost_set"], 
                 )
+              
+        
 
-            # clear the cart
+            
 
             order_items = OrderItem.objects.filter(order=order)
+
+           
 
             for order_item in order_items:
                 product = order_item.product
 
+                #conditions to check for discount
+                #this to be repaierd
                 if str(product.category) == "Dárkové certifikáty":
-                    if product.certificate.discount_type == "Procento":
-                        discount = product.price * product.value
-                    elif product.certificate.discount_type == "Částka":
-                        discount = product.price - product.value
-
-                coupon_create(request, discount)
-                print(" coupn create should have happened")
+                  
+                
+                    #coupon_create(request, certificate_discount)
+                    print(" coupn create should have happened")
 
                 # this is inventory sotluiont
                 """size = order_item.velikost
@@ -188,6 +194,7 @@ def cart_detail(request, zasilkovna=False):
                     )
                     return redirect("cart:cart_detail")"""
 
+            # clear the cart
             cart.clear()
 
             request.session["order_id"] = order.id

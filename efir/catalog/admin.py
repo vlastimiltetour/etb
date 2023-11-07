@@ -109,5 +109,6 @@ class ProductSetAdmin(admin.ModelAdmin):
 
 
 @admin.register(Certificate)
-class ProductSetAdmin(admin.ModelAdmin):
+class CertificateAdmin(admin.ModelAdmin):
     list_display = ["product"]
+

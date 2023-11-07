@@ -131,9 +131,18 @@
             <h6 class="mob-text">Total: {{ cart.get_total_price }} Kč</h6>
          </div>
          {% if cart.coupon %}
-         <div class="row text-right" style="text-align: right;">
-            <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount }} Kč</h6>
-         </div>
+
+
+            {% if cart.coupon.discount_type == "Procento" %}
+            <div class="row text-right" style="text-align: right;">
+               <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount }} Kč</h6>
+            </div>
+            {% elif cart.coupon.discount_type == "Částka"  %}
+            <div class="row text-right" style="text-align: right;">
+               <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount }} Kč</h6>
+            </div>
+            {% endif %}
+
          <div class="row text-right" style="text-align: right;">
             <h6 class="mob-text">Total po slevě: {{ cart.get_total_price_after_discount }} Kč</h6>
          </div>
@@ -249,11 +258,19 @@
                   <strong> {{ cart.get_shipping_price }} Kč</strong> 
                </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
+                  {% if cart.coupon.discount_type == "Procento" %}
                   <div class="text-success">
                      <h6 class="my-0">Slevový kupón </h6>
-                     <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount }} Kč sleva)</small>
+                     <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount_value }} % sleva)</small>                    
+                  </div>
+                  <strong><span class="text-success">-{{ cart.get_discount_percentage }} %</span></strong>
+                  {% elif cart.coupon.discount_type == "Částka"  %}
+                  <div class="text-success">
+                     <h6 class="my-0">Slevový kupón </h6>
+                     <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount_value }} Kč sleva)</small>
                   </div>
                   <strong><span class="text-success">-{{ cart.get_discount }} Kč</span></strong>
+                  {% endif %}
                </li>
                <li class="list-group-item d-flex justify-content-between">
                   <span>  Celkem po slevě: </span>
@@ -301,7 +318,7 @@
             {% if cart.coupon %}
             <form class="card p-2" action="{% url 'coupons:coupon_deactivate' %}" method="post">
                <div class="input-group">
-                  <button type="submit" class="btn btn-secondary">Smazat</button>
+                  <button type="submit" class="btn btn-secondary">Odebrat</button>
                </div>
                {% csrf_token %}
             </form>

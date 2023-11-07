@@ -17,14 +17,18 @@ def coupon_apply(request):
     form = CouponForm(request.POST)
     if form.is_valid():
         code = form.cleaned_data["code"]
+        print(code)
         try:
             coupon = Coupon.objects.get(
                 code__iexact=code, valid_from__lte=now, valid_to__gte=now, active=True
             )
-            request.session["coupon_id"] = coupon.id
+            if coupon.capacity > 0:
+                request.session["coupon_id"] = coupon.id
 
         except Coupon.DoesNotExist:
             request.session["coupon_id"] = None
+
+
     return redirect("cart:cart_detail")
 
 
@@ -34,8 +38,11 @@ def coupon_deactivate(request):
         coupon = get_object_or_404(Coupon, id=coupon_id)
 
         # Set the coupon's 'active' field to False
-        coupon.active = False
-        coupon.redeemed = True
+        coupon.capacity -= 1
+        if coupon.capacity == 0:
+            coupon.active = False
+            coupon.redeemed = True
+        
         coupon.save()
 
         # Remove the coupon_id from the session
