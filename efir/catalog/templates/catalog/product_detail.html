@@ -70,39 +70,43 @@
                   </div>
                </div>
                <script>
-                  function updateZpusobVyroby() {
-                    var selectElement = document.getElementById("zpusob_vyroby_selected");
-                    var selectedValue = selectElement.value;
-                  
-                    var elementToShow;
-                    var elementToHide;
-                  
-                    if (selectedValue === "Na Míru") {
-                        // Specific code for Na Míru
+                  // Function to handle the display of elements based on the selected value
+                  function handleZpusobVyrobyDisplay() {
+                     // Get the select element by its ID
+                     var selectElement = document.getElementById("zpusob_vyroby_selected");
+               
+                     // Trim and convert the selected value to lowercase for case-insensitive comparison
+                     var selectedValue = selectElement.value.trim().toLowerCase();
+               
+                     // Variables to store elements to show and hide
+                     var elementToShow;
+                     var elementToHide;
+               
+                     // Check the selected value and set elements accordingly
+                     if (selectedValue === "na míru") {
                         elementToShow = document.getElementById("poznamka");
                         elementToHide = document.getElementById("sizes");
-                    } else {
-                        // Code for other values
+                     } else {
                         elementToShow = document.getElementById("sizes");
                         elementToHide = document.getElementById("poznamka");
-                    }
-                  
-                    elementToShow.style.display = "block";
-                    elementToHide.style.display = "none";
+                     }
+               
+                     // Set the display style of elements
+                     elementToShow.style.display = "block";
+                     elementToHide.style.display = "none";
                   }
-                  
-                  // Add event listener to the select element
+               
+                  // Event listener for when the DOM is fully loaded
+                  document.addEventListener("DOMContentLoaded", handleZpusobVyrobyDisplay);
+               
+                  // Event listener for the change event on the select element
                   var selectElement = document.getElementById("zpusob_vyroby_selected");
-                  selectElement.addEventListener("change", updateZpusobVyroby);
-                  
-                  // Call the updateZpusobVyroby() function initially to handle the default selected value
-                  updateZpusobVyroby();
-                  
-                      
+                  selectElement.addEventListener("change", handleZpusobVyrobyDisplay);
                </script>
+               
                <!-- start product set-->
                {% if product.category.name == 'Celé sety' %}
-               {% for productset in productsets %}
+             
                <h1>{{ productset.name }}</h1>
 
                     <!-- Start Size Variables -->
@@ -140,7 +144,7 @@
                </ul>
               </div>
             </div>
-               {% endfor %}
+          
                
               
                  <style>
@@ -245,6 +249,18 @@
             <p class="lead">{{ product.long_description|linebreaks }}</p>
             </div>
             <p class="small muted-text">Jak určit svou velikost:<br>Pokud neznáte svou velikost, podívejte se do naší <u><a href="{% url 'catalog:rozmery' %}">velikostní tabulky</a></u></p>
+            
+           
+            <p class="small muted-text" style="font-size: 0.7em;">Návod na péči o spodní prádlo:<br>
+
+               1. <b>Ruční praní</b>: Vždy pracujte ručně v studené nebo mírně teplé vodě s jemným pracím prostředkem.<br>
+               2. <b>Namáčení</b>: Nechte spodní prádlo namočit a odpočinout si několik minut.<br>
+               3. <b>Jemné tření</b>: Pokud jsou skvrny, jemně třete prsty, ale nepřehánějte to.<br>
+               4. <b>Opláchnutí</b>: Důkladně opláchněte čistou vodou.<br>
+               5. <b>Sušení</b>:  Neusušujte spodní prádlo v sušičce, raději položte na vodorovný povrch, ne na slunce nebo radiátor.<br>
+               6. <b>Úschova</b>: Uchovávejte odděleně od ostatního oblečení.<br>
+               <br>
+               Důležité je vždy sledovat pokyny na štítku, který vždy nejdete na spodním prádle.</p>
             </div>
          </div>
       </div>

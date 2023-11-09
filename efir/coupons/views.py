@@ -28,7 +28,6 @@ def coupon_apply(request):
         except Coupon.DoesNotExist:
             request.session["coupon_id"] = None
 
-
     return redirect("cart:cart_detail")
 
 
@@ -42,7 +41,7 @@ def coupon_deactivate(request):
         if coupon.capacity == 0:
             coupon.active = False
             coupon.redeemed = True
-        
+
         coupon.save()
 
         # Remove the coupon_id from the session

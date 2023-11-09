@@ -187,7 +187,7 @@ class Cart:
             return discount
 
         return Decimal(0)
-    
+
     def get_discount_percentage(self):
         if self.coupon:
             discount = self.coupon.discount_value
@@ -195,7 +195,7 @@ class Cart:
             return discount * 100
 
         return Decimal(0)
-    
+
     def get_discount_threshold(self):
         if self.coupon:
             threshold = self.coupon.discount_threshold
@@ -223,7 +223,6 @@ class Cart:
                 total_price_after_discount = total_price - discount
 
         else:
-            return f'Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}'
-
+            return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
 
         return total_price_after_discount

@@ -67,7 +67,13 @@ def product_detail(
     )  # this is only for the purpose of showing the variable in the menu and footer
     product = get_object_or_404(Product, id=id, slug=slug)
     form = CartAddProductForm(id_from_product=id)
-    productsets = ProductSet.objects.all()
+    
+    
+    try:
+        productset = ProductSet.objects.get(product=product)
+    except ProductSet.DoesNotExist:
+        productset = None
+    
 
     return render(
         request,
@@ -76,7 +82,7 @@ def product_detail(
             "categories": categories,
             "product": product,
             "form": form,
-            "productsets": productsets,
+            "productset": productset,
         },
     )
 
