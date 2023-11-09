@@ -2,6 +2,8 @@ import uuid  # Import the UUID module
 from decimal import Decimal
 
 from django.conf import settings
+from django.shortcuts import get_object_or_404, redirect, render
+
 
 from catalog.forms import *
 from catalog.models import Product
@@ -31,7 +33,13 @@ class Cart:
 
         for item_id in item_ids:
             product_id = self.cart[item_id]["product_id"]
-            product = Product.objects.get(id=product_id)  # Use product_id
+
+            
+            try:
+                product = Product.objects.get(id=product_id)  # Use product_id
+            except Product.DoesNotExist:
+                return self.clean_cart_session()
+
 
             cart_item = self.cart[item_id]
             cart_item["product"] = product
@@ -156,10 +164,16 @@ class Cart:
     def clean_cart_session(self):
         # Clean up the cart session
         del self.session[settings.CART_SESSION_ID]
-        del self.session["coupon_id"]
-        del self.session["cart_country"]
-        del self.session["cart_address"]
-        del self.session["cart_vendor"]
+        
+        try:
+            del self.session["coupon_id"]
+            del self.session["cart_country"]
+            del self.session["cart_address"]
+            del self.session["cart_vendor"]
+        except KeyError:
+            print('all good')
+
+       
         self.save()
 
     def get_total_price(self):

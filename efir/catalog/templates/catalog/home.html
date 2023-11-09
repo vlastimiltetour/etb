@@ -72,6 +72,7 @@
           <img class="card-img-top img-fluid" 
           src="{{ bestseller.photos.first.photo.url }}" 
           alt="{{ bestseller.name }}">
+          <div class="discount-circle" style="font-size: 0%;"> BESTSELLER </div>
           {% if bestseller.discount %}
           <div class="discount-circle"> - {{ bestseller.discount }} % </div>
           {% elif bestseller.new %}

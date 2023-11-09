@@ -1,6 +1,7 @@
 import logging
 import ssl
 
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -13,6 +14,11 @@ from orders.forms import OrderForm
 from orders.mail_confirmation import *
 from orders.models import OrderItem
 from stripepayment.views import zasilkovna_create_package
+
+from django.http import HttpResponseServerError
+import logging
+
+logger = logging.getLogger(__name__)
 
 from .cart import Cart
 from .forms import CartAddProductForm
@@ -66,6 +72,8 @@ def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
 
+    messages.info(request, f"{product.name} has been removed from your cart.")
+
     return redirect("cart:cart_detail")
 
 
@@ -77,10 +85,20 @@ def update_cart_quantity(request, item_id):
 
 
 def cart_detail(request, zasilkovna=False):
-    cart = Cart(request)
-    for item in cart:
-        print(f"cart item is this {item}")
 
+    try:
+        cart = Cart(request)
+        for item in cart:
+            # Your existing code for processing cart items
+            print(f"this is the cart contents, item: {item}")
+
+        # Rest of your view logic
+       
+    except TypeError as e:
+        logger.error(f"An error occurred in the cart_detail view: {e}")
+        clean_cart_session(request)
+       
+    cart = Cart(request)
     coupon_form = CouponForm()
 
     # the value is taken from session
@@ -102,7 +120,9 @@ def cart_detail(request, zasilkovna=False):
     # Initialize the form without initial values
 
     for item in cart:
+        
         product_id = item["product"].id  # Get the product ID from the item
+        
 
         item["update_quantity_form"] = CartAddProductForm(
             id_from_product=product_id,
