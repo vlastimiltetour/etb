@@ -2,8 +2,6 @@ import uuid  # Import the UUID module
 from decimal import Decimal
 
 from django.conf import settings
-from django.shortcuts import get_object_or_404, redirect, render
-
 
 from catalog.forms import *
 from catalog.models import Product
@@ -34,12 +32,10 @@ class Cart:
         for item_id in item_ids:
             product_id = self.cart[item_id]["product_id"]
 
-            
             try:
                 product = Product.objects.get(id=product_id)  # Use product_id
             except Product.DoesNotExist:
                 return self.clean_cart_session()
-
 
             cart_item = self.cart[item_id]
             cart_item["product"] = product
@@ -164,16 +160,15 @@ class Cart:
     def clean_cart_session(self):
         # Clean up the cart session
         del self.session[settings.CART_SESSION_ID]
-        
+
         try:
             del self.session["coupon_id"]
             del self.session["cart_country"]
             del self.session["cart_address"]
             del self.session["cart_vendor"]
         except KeyError:
-            print('all good')
+            print("all good")
 
-       
         self.save()
 
     def get_total_price(self):
@@ -229,14 +224,14 @@ class Cart:
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
+        if discount:
+            if total_price >= self.get_discount_threshold():
+                if self.get_discount_type() == "Procento":
+                    total_price * (1 - discount)
+                elif self.get_discount_type() == "Částka":
+                    total_price - discount
 
-        if total_price >= self.get_discount_threshold():
-            if self.get_discount_type() == "Procento":
-                total_price_after_discount = total_price * (1 - discount)
-            elif self.get_discount_type() == "Částka":
-                total_price_after_discount = total_price - discount
+            else:
+                return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
 
-        else:
-            return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
-
-        return total_price_after_discount
+        return total_price

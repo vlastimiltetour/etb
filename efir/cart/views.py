@@ -15,9 +15,6 @@ from orders.mail_confirmation import *
 from orders.models import OrderItem
 from stripepayment.views import zasilkovna_create_package
 
-from django.http import HttpResponseServerError
-import logging
-
 logger = logging.getLogger(__name__)
 
 from .cart import Cart
@@ -85,7 +82,6 @@ def update_cart_quantity(request, item_id):
 
 
 def cart_detail(request, zasilkovna=False):
-
     try:
         cart = Cart(request)
         for item in cart:
@@ -93,11 +89,11 @@ def cart_detail(request, zasilkovna=False):
             print(f"this is the cart contents, item: {item}")
 
         # Rest of your view logic
-       
+
     except TypeError as e:
         logger.error(f"An error occurred in the cart_detail view: {e}")
         clean_cart_session(request)
-       
+
     cart = Cart(request)
     coupon_form = CouponForm()
 
@@ -120,9 +116,7 @@ def cart_detail(request, zasilkovna=False):
     # Initialize the form without initial values
 
     for item in cart:
-        
         product_id = item["product"].id  # Get the product ID from the item
-        
 
         item["update_quantity_form"] = CartAddProductForm(
             id_from_product=product_id,

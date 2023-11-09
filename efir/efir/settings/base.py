@@ -205,3 +205,9 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 # zasilkovna
 ZASILKOVNA_API_KEY = os.getenv("ZASILKOVNA_API_KEY")
 ZASILKOVNA_SECRET = os.getenv("ZASILKOVNA_SECRET")
+
+
+# Example settings for storing backups in the 'backups' directory of your project
+DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
+DBBACKUP_STORAGE_OPTIONS = {"location": "backups/"}
+DBBACKUP_CLEANUP_KEEP = 2  # Number of backups to keep
