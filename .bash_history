@@ -356,3 +356,73 @@ ls
 cd ..
 ls
 sudo docker compose up
+l
+ls
+ls
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+docker compose down
+docker compose up
+ls
+cd data
+ls
+cd ..
+docker compose up -d
+ls
+docker exec -it etb-app-1 bash
+docker compose down
+docker compose up
+docker compose down
+git init
+ls
+git config --global user.name "vlk"
+git config --global user.email "v.tetour@gmail.com"
+git init
+sudo git config --global user.name "vlk"
+git config --global user.email "v.tetour@gmail.com"
+git init
+git config --global user.name "vlk"
+git config --global user.email "v.tetour@gmail.com"
+git init
+git add . 
+sudo git add . 
+sudo git commit -m "initial"
+git remote add origin https://github.com/vlastimiltetour/etb.git
+ls
+sudo git push origin main
+ls
+cd data
+ls
+cd ..
+ls
+docker network ls
+ls
+docker compose up -d
+ls
+docker exec -it etb-app-1 bash
+ls
+docker compose down
+git init
+git add . 
+sudo git add . 
+git commit -m "db"
+sudo git push origin main
+ls
+docker compose down
+git init
+git pull origin main
+sudo git pull origin main
+ls
+docker compose up
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+docker compose down
+docker compose up
