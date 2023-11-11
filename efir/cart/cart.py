@@ -229,14 +229,20 @@ class Cart:
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
+      
+        if self.get_discount_threshold():
 
-        if total_price >= self.get_discount_threshold():
-            if self.get_discount_type() == "Procento":
-                total_price_after_discount = total_price * (1 - discount)
-            elif self.get_discount_type() == "Částka":
-                total_price_after_discount = total_price - discount
+            if total_price >= self.get_discount_threshold():
+                if self.get_discount_type() == "Procento":
+                    total_price_after_discount = total_price * (1 - discount)
+                    return total_price_after_discount
+                elif self.get_discount_type() == "Částka":
+                    total_price_after_discount = total_price - discount
+                    return total_price_after_discount
 
-        else:
-            return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
-
+            else:
+                return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
+        
+        total_price_after_discount = self.get_total_price()
+        
         return total_price_after_discount
