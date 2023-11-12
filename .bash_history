@@ -1,98 +1,3 @@
-ls
-cd ..
-ls
-cd home
-cd etb
-ls
-cd data
-ls
-cd ..
-ls
-pwd
-cd dat
-cd dat
-cd data
-ls
-pwd
-cp -r /home/etb/data/db /home/etb/data/db_backup
-sudo cp -r /home/etb/data/db /home/etb/data/db_backup
-ls
-cd ..
-ls
-docker compose down
-sudo git stash
-sudo rm data/db/postmaster.pid
-sudo git pull https://github.com/vlastimiltetour/etb.git
-docker compose up
-ls
-cd data
-ls
-ls
-pwd
-ls
-cp -r /home/etb/data/db_backup /home/etb/data/db_backup_valzije
-sudo cp -r /home/etb/data/db_backup /home/etb/data/db_backup_valzije
-ls
-ls
-sudo rm -r db
-ls
-sudo mv db_backup db
-ls
-cd ..
-ls
-docker compose up
-;s
-ls
-cd data
-ls
-cd ..
-ls
-docker compose up
-sudo docker compose up
-sudo chmod -r 777
-sudo chmod -R 777
-ls
-cd data
-sudo chmod -R 777
-ls
-cd ..
-sudo chmod -R 777
-cd ..
-ls
-sudo chmod -R 777
-sudo chmod -R 777 etb
-ls
-cd etb
-ls
-docker compose up
-ping db
-ls
-cd data
-ls
-ping db
-sudo nano db
-sudo nano db_copy_new
-cd ..
-ls
-sudo chmod -R 777 data
-docker compose up
-ls
-cd efir
-ls
-cd efir
-ls
-cd settings
-ls
-sudo nano base.py
-sudo nano prod.py
-ls
-cd ..
-ls
-cd ..
-ls
-cd ..
-ls
-git init
 git add . 
 ls
 	git config --global --add safe.directory /home/etb
@@ -425,4 +330,171 @@ ls
 cd etb
 ls
 docker compose down
+docker compose up
+ls
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+docker compose down
+ls
+sudo rm -r venvv
+ls
+ls
+docker compose up -d
+docker exec -it etb-app-1 bash
+ls
+cd efir
+ls
+sudo rm -r db_backup_2023_10_11.json
+ls
+cd ..
+ls
+git init
+git push origin git add . 
+sudo git add . 
+git commit -m "database prod"
+git push origin main
+sudo git push origin main
+docker compose down
+ls
+git pull origin main
+sudo git pull origin main
+git stash
+sudo git pull origin main
+sudo git stash
+sudo git pull origin main
+docker compose up -d
+ls
+ls
+cd efir
+ls
+cd cart
+ls
+sudo nano cart.py
+sudo nano cart.py
+sudo nano cart.py
+ls
+cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up -d
+ls
+cd efir
+ls
+cd ..
+ls
+docker exec -it etb-app-1 bash
+ls
+cd efir
+ls
+cd ..
+ls
+git init
+sudo git add . 
+ls
+sudo git commit -m "dalsi produkt z produkce"
+sudo git push origin main
+ls
+cd efir
+ls
+sudo rm -r db_backup_2023_10_11.jso
+sudo rm -r db_backup_2023_10_11_test.json
+sudo rm -r  db_backup_prod_efir_1111.json
+ls
+sudo rm -r  db_backup_prod_efir_1111_2.json
+sudo rm -r db_backup_test.json
+ls
+sudo rm -r db_backup_prod_efir_11_11_v1.json
+ls
+cd ..
+ls
+docker exec -it etb-app-1 bash
+;s
+ls
+cd efir
+ls
+cd .
+cd ..
+ls
+git init
+sudo git add . 
+sudo git commit -m "permissions"
+sudo git push origin main
+ls
+docker compose down
+ls
+git init
+sudo git pull origin main
+sudo git stash
+sudo git pull origin main
+ls
+docker compose up
+ls
+ls
+cd efir
+cd ..
+sudo nano .env
+sudo nano .env
+ls
+cd efir
+ls
+cd settings
+ls
+cd efir
+ls
+cd settings
+ls
+sudo nano .env
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+docker compose up
+ls
+cd ..
+ls
+cd home
+ls
+cd etb
+docker compose down
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo nano home.html
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+docker compose up
+ls
+cd efir
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo nano home.html
+cd ..
+cd ..
+cd ..
+cd ..
+ls
 docker compose up
