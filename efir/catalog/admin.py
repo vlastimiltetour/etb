@@ -28,8 +28,11 @@ class ProductAdmin(admin.ModelAdmin):
         "name",
         "category",
         "price",
+        "get_available_sizes_display",
+        "new",
+        "bestseller",
+        "headliner",
         "limited",
-        "get_available_sizes_display"
         # "display_velikost_produktu",
     ]
     exclude = ("poznamka",)  # Add this line to exclude the 'velikost' field
@@ -37,7 +40,16 @@ class ProductAdmin(admin.ModelAdmin):
     actions = ["delete_selected", "custom_edit_action"]
 
     prepopulated_fields = {"slug": ("name",)}
-    list_filter = ["bestseller"]
+    list_filter = [
+        "name",
+        "category",
+        "price",
+        "new",
+        "bestseller",
+        "headliner",
+        "limited",
+        # "display_velikost_produktu",
+    ]
 
     inlines = [PhotoAdmin, InventoryInline]  # this is creating inline to show photos
 

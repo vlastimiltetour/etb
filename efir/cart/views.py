@@ -84,7 +84,7 @@ def update_cart_quantity(request, item_id):
     return redirect("cart:cart_detail")
 
 
-def cart_detail(request, zasilkovna=False):
+def cart_detail(request, zasilkovna=True):
 
     try:
         cart = Cart(request)
@@ -162,8 +162,8 @@ def cart_detail(request, zasilkovna=False):
                     zpusob_vyroby=item["zpusob_vyroby"],
                     velikost=item["velikost"],
                     kalhotky_velikost_set=item["kalhotky_velikost_set"],
-                    podprsenka_velikost_set=item["kalhotky_velikost_set"],
-                    pas_velikost_set=item["kalhotky_velikost_set"],
+                    podprsenka_velikost_set=item["podprsenka_velikost_set"],
+                    pas_velikost_set=item["pas_velikost_set"],
                 )
 
             order_items = OrderItem.objects.filter(order=order)

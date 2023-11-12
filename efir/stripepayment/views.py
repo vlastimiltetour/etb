@@ -140,7 +140,7 @@ def zasilkovna_create_package(order_id):
             print(f"Packet ID: {packet_id}")
             print(f"Barcode Text: {barcode_text}")
 
-            packetLabelPdf(packetId=packet_id, format="A7 on A4", offset=0)
+            #packetLabelPdf(packetId=packet_id, format="A7 on A4", offset=0)
         except AttributeError as e:
             print("An error occurred while parsing the XML response:", e)
 
