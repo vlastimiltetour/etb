@@ -1,6 +1,7 @@
 import json
 import logging
 from decimal import Decimal
+import unidecode
 
 import requests
 import stripe
@@ -82,6 +83,9 @@ def zasilkovna_create_package(order_id):
     order_price = str(order.total_cost)
     weight = "0.5"  # set up
 
+
+    order_name = unidecode.unidecode(order_name)
+    order_surname = unidecode.unidecode(order_surname)
     # Create a dictionary representing the order details
     order_details = {
         "apiPassword": api_password,

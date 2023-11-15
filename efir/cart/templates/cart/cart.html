@@ -255,8 +255,26 @@
                </li>
                <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <span>Doprava: </span> 
+
+                  <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
+                     {% csrf_token %}
+                  
+                     <input type="hidden" name="cart_country" id="cart_country">
+                     <input type="hidden" name="cart_address" id="cart_address">
+                     <input type="hidden" name="cart_vendor" id="cart_vendor">
+
+                   <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
+                     <input type="hidden" name="address" value="{{ form.initial.address }}">-->
+
+                     
+
+                     <div class="invalid-feedback">
+                     </div>
+                     </input>
+                  </form>
                   <strong> {{ cart.get_shipping_price }} Kč</strong> 
-               </li>
+                </li>
+
                <li class="list-group-item d-flex justify-content-between bg-light">
                   {% if cart.coupon.discount_type == "Procento" %}
                   <div class="text-success">

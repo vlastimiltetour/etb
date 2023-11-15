@@ -91,4 +91,4 @@ class OrderAdmin(admin.ModelAdmin):
 
     # Override the has_delete_permission method to deny deleting records
     def has_delete_permission(self, request, obj=None):
-        return False
+        return True
