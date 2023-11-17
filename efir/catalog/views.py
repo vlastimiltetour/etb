@@ -20,7 +20,7 @@ def home(request, category_slug=None):
 
     category = None
     categories = Category.objects.all()
-    products = Product.objects.all()
+    products = Product.objects.all()[:9]
     best_sellers = Product.objects.filter(bestseller=True)
     productsets = ProductSet.objects.all()
 
