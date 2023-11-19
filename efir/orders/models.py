@@ -133,6 +133,8 @@ class OrderItem(models.Model):
     podprsenka_velikost_set = models.CharField(max_length=50, null=True, blank=True)
     pas_velikost_set = models.CharField(max_length=50, null=True, blank=True)
 
+    poznamka = models.TextField(blank=True)
+
     def __str__(self):
         return str(self.id)
 

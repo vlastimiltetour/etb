@@ -158,6 +158,7 @@ def cart_detail(request, zasilkovna=True):
                     kalhotky_velikost_set=item["kalhotky_velikost_set"],
                     podprsenka_velikost_set=item["podprsenka_velikost_set"],
                     pas_velikost_set=item["pas_velikost_set"],
+		    poznamka=item["poznamka"],
                 )
 
             order_items = OrderItem.objects.filter(order=order)

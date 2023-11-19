@@ -9,6 +9,7 @@ class OrderItemInline(admin.TabularInline):
         "order",
         "product",
         "velikost",
+        "poznamka",
         "price",
         "quantity",
     )

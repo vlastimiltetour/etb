@@ -82,6 +82,7 @@ def zasilkovna_create_package(order_id):
     vendor_id = order.vendor_id
     order_price = str(order.total_cost)
     weight = "0.5"  # set up
+    currency = "CZK"
 
 
     order_name = unidecode.unidecode(order_name)
@@ -95,6 +96,7 @@ def zasilkovna_create_package(order_id):
             "surname": order_surname,
             "email": order_email,
             "addressId": vendor_id,
+            "currency": currency,
             "value": order_price,
             "weight": weight,
             "eshop": "efirthebrand.cz",
