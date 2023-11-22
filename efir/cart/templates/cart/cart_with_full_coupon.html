@@ -1,0 +1,601 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% block content %}
+<style>
+   /* This will hide the entire mob-text section */
+   .hide-form {
+   display: none; 
+   }
+   #quantity {
+   appearance: none;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   background-color: transparent;
+   font-size: 0.8rem;
+   width: 30px; /* Adjust the width as needed */
+   text-align: center;
+   border: none; /* Add black square border */
+   }
+</style>
+{% if cart|length > 0 %}
+
+
+<div class="hide-form">
+   <div class="row d-flex py-2 justify-content-center border-top">
+      {% for item in cart %}
+      {% with product=item.product %}
+      <div class="my-auto col-3">
+         <div class="book">
+            {% with first_photo=product.photos.first %}
+            {% if first_photo %}
+            <img src="{{ first_photo.photo.url }}" class="book-img" style="max-height: 100px; max-width: 50px;">
+            {% endif %}
+            {% endwith %}
+         </div>
+      </div>
+      <div class="my-auto py-3 col-9">
+         <div class="row text-right">
+            <div class="col-6">
+               <h6 class="mob-text">{{ product.name }} </h6> 
+            </div>
+            <div class="col-6">
+               <!-- Cart Remove Function--> 
+               <div style="text-align: left;">
+                  <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                     {% csrf_token %}
+                     <button type="submit" class="btn-close" aria-label="Close">
+                     </button>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <form id="update-quantity-form-{{ forloop.counter }}" action="#" method="post">
+            {% csrf_token %}
+            <div class="mob-text">
+               <div class="row">
+                  <div class="col-6">
+                     <p id="zpusob_vyroby-{{ forloop.counter }}">Druh kolekce:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.zpusob_vyroby }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost podprsenky:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_prsa }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_hrudnik-{{ forloop.counter }}">Velikost pasu:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_hrudnik }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_prsa-{{ forloop.counter }}">Velikost kalhotek:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_boky }} 
+                     
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_body-{{ forloop.counter }}">Velikost body:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.update_quantity_form.obvod_body }}
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-6">
+                     <p class="mob-text" id="obvod_boky-{{ forloop.counter }}">Poznámka:</p>
+                  </div>
+                  <div class="col-6"  style="text-align: left;">
+                     {{ item.poznamka }}
+                  </div>
+               </div>
+            </div>
+            <div class="row text-right">
+               <div id="update-quantity-code-{{ forloop.counter }} mb-0" class="col-6">
+                  <div class="d-flex">
+                     <!-- this is old -->
+                     <div class="input-group">
+                       
+                        <!-- this is not correct
+                        {{ item.update_quantity_form.quantity }}
+                        {{ item.update_quantity_form.override }}-->
+                       
+                     </div>
+                  </div>
+                  {% csrf_token %}
+               </div>
+               <div class="col-6">
+                  <h6 class="mob-text">{{ item.total_price }} Kč</h6>
+               </div>
+            </div>
+         </form>
+      </div>
+      {% endwith %}
+      {% endfor %}
+      <div class="row d-flex py-2 justify-content-center border-top">
+         <div class="row text-right" style="text-align: right;">
+            <h6 class="mob-text">Total: {{ cart.get_total_price }} Kč</h6>
+         </div>
+         {% if cart.coupon %}
+
+
+            {% if cart.coupon.discount_type == "Procento" %}
+            <div class="row text-right" style="text-align: right;">
+               <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount }} Kč</h6>
+            </div>
+            {% elif cart.coupon.discount_type == "Částka"  %}
+            <div class="row text-right" style="text-align: right;">
+               <h6 class="text-success" style="font-size:0.8rem">Slevový kupón  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) -{{ cart.get_discount }} Kč</h6>
+            </div>
+            {% endif %}
+
+         <div class="row text-right" style="text-align: right;">
+            <h6 class="mob-text">Total po slevě: {{ cart.get_total_price_after_discount }} Kč</h6>
+         </div>
+         {% endif %}
+      </div>
+   </div>
+   <br>
+   <div>
+      {% if cart.coupon %}
+      {% else %}
+      <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
+         <div class="input-group">
+            {{ coupon_form }}
+            <button type="submit" class="btn btn-secondary">Uplatnit</button>
+         </div>
+         {% csrf_token %}
+      </form>
+      {% endif %}
+   </div>
+   <section class="jumbotron text-center">
+      <div class="container">
+         <a href="{% url 'orders:new_order' %}" type="submit" class="btn btn-dark my-2">Koupit</a>
+      </div>
+   </section>
+</div>
+</div>
+<!-- This is where hidden section ends -->
+<body data-new-gr-c-s-check-loaded="14.1107.0" data-gr-ext-installed="">
+   <div class="container py-5">
+      <!-- Shopping Cart Section -->
+      <div class="row">
+         <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+               <span>Váš nákupní košík</span>
+               <span class="badge badge-secondary badge-pill">3</span>
+            </h4>
+            <ul class="list-group mb-3">
+               {% for item in cart %}
+               {% with product=item.product %}
+               <li class="list-group-item d-flex justify-content-between lh-condensed">
+                  <div class="d-flex align-items-center">
+                     {% with first_photo=product.photos.first %}
+                     {% if first_photo %}   
+                     <div style="position: relative">
+                        <img src="{{ first_photo.photo.url }}" style="max-height: 90px; margin-right: 10px; ">
+                     </div>
+                     {% endif %}
+                     {% endwith %}
+                     <div>
+
+                        <h6 class="my-0">{{ product.name }}       </h6>
+                        <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
+                        <!-- if skladem-->
+                        <small class="text-muted">{{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }}</small>
+                        <!-- if na miru -->
+                        <small class="text-muted">{{ item.poznamka }} </small>
+                      
+                        <br>
+
+                        <form method="post" id="cart-update-quantity-form-{{ item.item_id }}" action="{% url 'cart:update_cart_quantity' item.item_id %}">
+                           {% csrf_token %}
+                           <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount('{{ item.item_id }}')">
+                              <i class="bi bi-dash" style="line-height: 1;"></i>
+                           </button>
+                          <small> {{ item.quantity}}</small>
+                              <input type="hidden" 
+                              style="
+                              -webkit-appearance: none;
+                          margin: 0;
+                          -moz-appearance: textfield;
+                          background-color: transparent;
+                          font-size: 0.8rem;
+                          width: 30px;
+                          margin: 0 auto;
+                          text-align: center;
+                          border: none;"
+                              
+                              id="quantity-{{ item.item_id }}" name="quantity" value="{{ item.quantity }}" min="1" oninput="submitForm('{{ item.item_id }}')">
+                              <input type="hidden" name="override" value="True">
+                           <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="increaseCount('{{ item.item_id }}')">
+                              <i class="bi bi-plus" style="line-height: 1;"></i>
+                           </button>
+                           <button type="button" style="display: none;" onclick="submitForm('{{ item.item_id }}')">Update</button>
+                       </form>
+                       
+                     </div>
+                  </div>
+                  <span>
+                     <div>
+                        <div> {{ item.total_price}} Kč </div>
+                        <br>
+                        <!-- Cart Remove Function--> 
+                        <div style="text-align: right;">
+                           <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                              {% csrf_token %}
+                              <button type="submit" class="btn-close" aria-label="Close">
+                              </button>
+                           </form>
+                        </div>
+                     </div>
+                  </span>
+               </li>
+               {% endwith  %}
+               {% endfor  %}
+               <!-- start coupon -->
+               {% if cart.coupon %}
+               <li class="list-group-item d-flex justify-content-between">
+                  <span>  Celkem: </span>
+                  {{ cart.get_total_price }} Kč
+               </li>
+               <li class="list-group-item d-flex justify-content-between lh-condensed">
+                  <span>Doprava: </span> 
+                  <strong> {{ cart.get_shipping_price }} Kč</strong> 
+               </li>
+               <li class="list-group-item d-flex justify-content-between bg-light">
+                  {% if cart.coupon.discount_type == "Procento" %}
+                  <div class="text-success">
+                     <h6 class="my-0">Slevový kupón </h6>
+                     <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount_value }} % sleva)</small>                    
+                  </div>
+                  <strong><span class="text-success">-{{ cart.get_discount_percentage }} %</span></strong>
+                  {% elif cart.coupon.discount_type == "Částka"  %}
+                  <div class="text-success">
+                     <h6 class="my-0">Slevový kupón </h6>
+                     <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount_value }} Kč sleva)</small>
+                  </div>
+                  <strong><span class="text-success">-{{ cart.get_discount }} Kč</span></strong>
+                  {% endif %}
+               </li>
+               <li class="list-group-item d-flex justify-content-between">
+                  <span>  Celkem po slevě: </span>
+                  <strong>{{ cart.get_total_price_after_discount }} Kč</strong>
+               </li>
+               <!-- end coupon -->
+               {% else %}
+               <li class="list-group-item d-flex justify-content-between lh-condensed">
+                  <span>Doprava: </span> 
+                  <!-- experiement with updating country  -->
+               
+
+
+                     <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
+                        {% csrf_token %}
+                     
+                        <input type="hidden" name="cart_country" id="cart_country">
+                        <input type="hidden" name="cart_address" id="cart_address">
+                        <input type="hidden" name="cart_vendor" id="cart_vendor">
+
+                      <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
+                        <input type="hidden" name="address" value="{{ form.initial.address }}">-->
+
+                        
+
+                        <div class="invalid-feedback">
+                        </div>
+                        </input>
+                     </form>
+                   
+                 
+                
+                  <!-- experiment end updating country -->
+                  <!-- html country input experiment -->
+                  <!-- end html country input experiement -->
+                  <strong> {{ cart.get_shipping_price }} Kč</strong> 
+               </li>
+               <li class="list-group-item d-flex justify-content-between bg-light">
+                  <!-- #TODO total  to be calculated-->
+                  <span>Total: </span> 
+                  <strong>{{ cart.get_total_price}} Kč</strong>
+               </li>
+               {% endif %}
+            </ul>
+            {% if cart.coupon %}
+            <form class="card p-2" action="{% url 'coupons:coupon_deactivate' %}" method="post">
+               <div class="input-group">
+                  <button type="submit" class="btn btn-secondary">Odebrat</button>
+               </div>
+               {% csrf_token %}
+            </form>
+            {% else %}
+            <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
+               <div class="input-group">
+                  {{ coupon_form }}
+                  <button type="submit" class="btn btn-secondary">Uplatnit</button>
+               </div>
+               {% csrf_token %}
+            </form>
+            {% endif %}
+         </div>
+         <!-- End Shopping Cart Section-->
+         <!-- Form Template -->
+         <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">Objednávka</h4>
+            <div class="form-group">
+               <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="#">
+                  {% csrf_token %}
+                  <div class="row">
+                     <div class="mb-3">
+                        <button id="packeta_button" type="button"  class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
+                        <div style="display:none" class="packeta-selector-value"></div>
+                        <!-- this value shows vendor ID -->
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6 mb-3">
+                        <label for="country">Země
+                        </label>
+                        <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
+                       
+                        <div class="form-control"> {{ cart.get_country }}</div>
+                        <input type="hidden" name="country" id="id_country" value="{{ form.initial.order_country }}">
+
+        
+                        
+                        
+                        <div class="invalid-feedback">
+                           Valid country name is required.
+                        </div>
+                     </div>
+                     <div class="col-md-6 mb-3">
+                        <label for="email">Doručovací místo</label>
+                  
+                        <div class="form-control"> {{ cart.get_address }}</div>
+                        <input type="hidden" name="address" id="id_address" value="{{ form.initial.order_address }}">
+
+                        <div class="invalid-feedback">
+                           Vložte validní příjmení.
+                        </div>
+                     </div>
+                     <div>
+                        <input type="hidden" name="vendor_id" id="id_vendor_id" value="{{ form.initial.vendor_id }}">
+                     </div>
+                  </div>
+                  <div>
+                  </div>
+                  <div class="mb-3" id="id_shipping" name="shipping">
+                     <label for="shipping">Doprava</label>
+                     {{ form.shipping }}
+                     <div class="invalid-feedback"></div>
+                  </div>
+                  <script>
+                     function showPacketaButton() {
+                       var selectElement = document.querySelector('form select[name="shipping"]');
+                       var selectedValue = selectElement.value;
+                     
+                     
+                     
+                       if (selectedValue === "Z") {
+                         var elementToShow = document.getElementById("packeta_button");
+                         elementToShow.style.display = "block";
+                       } else {
+                         var elementToHide = document.getElementById("packeta_button");
+                         elementToHide.style.display = "none";
+                       }
+                     }
+                     
+                     var selectElement = document.getElementById("id_shipping");
+                     selectElement.addEventListener("change", showPacketaButton);
+                     
+                     showPacketaButton();
+                     
+                     
+                  </script>
+                  <div class="mb-3">
+                     <!-- Packeta script-->
+                     <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
+                     <!-- Add an element to display the selected country -->
+                     <p id="selectedCountryDisplay"></p>
+                     <!-- Your JavaScript code -->
+                     <script>
+                        const packetaApiKey = 'e2ac633a88eca5e2';
+                        
+                        const packetaOptions = {
+                            valueFormat: "name, street, city"
+                        };
+                        
+                        function showSelectedPickupPoint(point) {
+                            // Add here an action on pickup point selection
+                           const saveElement = document.querySelector(".packeta-selector-value");
+                           const addressInput = document.querySelector("#cart_address"); // invokes the variable
+                           const countryInput = document.querySelector("#cart_country"); // Hidden input field for 'country'
+                            //const cartCountryInput = document.querySelector('#cart_country'); // Get the element for displaying cart_country
+                           const vendorIdInput = document.querySelector("#cart_vendor"); // invokes the variable
+                           const cartForm = document.querySelector("#country-form");
+
+                           
+                           saveElement.innerText = '';
+                           if (point) {
+                              console.log("Selected point", point);
+                              saveElement.innerText = "ID: " + point.id; // this is showing variable output, but we don't need it
+                              addressInput.value = point.formatedValue; // saves the value to the form
+                              countryInput.value = point.country; // Set the 'country' value in the hidden input field
+                              // cartCountryInput.value = point.country; // Update the display element for cart_country
+                              vendorIdInput.value = point.id;
+                     
+                              cartForm.submit();
+                           }
+                     
+                         
+                        }
+                     </script>
+                     <!-- End Packeta Script-->
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6 mb-3">
+                        <label for="firstName">Jméno    
+                        </label>
+                        {{ form.first_name }}
+                        <div class="invalid-feedback">
+                           Vyplňte své jméno.
+                        </div>
+                     </div>
+                     <div class="col-md-6 mb-3">
+                        <label for="lastName">
+                        Příjmení
+                        </label>
+                        {{ form.last_name }}
+                        <div class="invalid-feedback">
+                           Vyplňte své příjmení.
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6 mb-3">
+                        <label for="email">E-mail</label>
+                        {{ form.email }}
+                        <div class="invalid-feedback">
+                           Vyplňte svůj email
+                        </div>
+                     </div>
+                     <div class="col-md-6 mb-3">
+                        <label for="email">Telefonní číslo</label>
+                        {{ form.number }}
+                        <div class="invalid-feedback">
+                           Vyplňte své číslo.
+                        </div>
+                     </div>
+                  </div>
+                  <div class="mb-3">
+                     <label for="email">Komentáře</label>
+                     {{ form.comments }}
+                     <div class="invalid-feedback">
+                     </div>
+                  </div>
+                  <div class="mb-3">
+                     <label class="custom-checkbox">
+                           <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
+                           <span class="checkmark"></span>
+                     Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
+                     </label>
+                     <div class="invalid-feedback">
+                        Musíte souhlasit s obchodními podmínkami.
+                     </div>
+                  </div>
+                  <section class="jumbotron text-center">
+                     <div class="container">
+                        <!-- BaCK BUTTON, would have to solve it using JS
+                           <a href="javascript:history.back()"><button class="btn btn-dark my-2 mb-4">Zpět</button></a>
+                           -->
+                        <!--          <button class="btn btn-dark my-2 mb-4" type="submit">Objednat</button> -->
+                     </div>
+                     <!-- Payment Instructions -->
+               <form method="post" action="{% url 'stripepayment:process' %}">
+               <!-- Include the necessary form fields -->
+               {% csrf_token %}        
+               <!-- Add other form fields here -->
+               <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" action="https://secure.payu.com/api/v2_1/orders" type="submit">Potvrdit objednávku</button>
+               </form>
+               <!--end Payment Instructions -->
+               </section>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Form ends-->
+   </div>
+   <div id="^(,rZvUx1683491487730"></div>
+   <iframe name="" frameborder="0" id="fnlp-panel-iframe" style="display: none!important; position: fixed!important; top: 0px!important; right: -280px!important; z-index: 1000000000!important; width: 305px!important; height: 100vh!important; margin:0!important; border: 0px!important; outline: 0px!important;"></iframe>
+</body>
+{% else %}
+<div class="container px-4 py-5 mx-auto mb-5" style="max-width: 800px; min-height: 400px;">
+   <div class="row d-flex justify-content-center">
+      <section class="jumbotron text-center">
+         <div class="container">
+            <h4 class="heading">Váš košík</h4>
+            <br>
+            Prozatím zde nic není. <br>
+            Vyberte si produkty z katalogu.<br>
+         </div>
+         <br>
+         <a href="{% url 'catalog:katalog_vse' %}" class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5">Katalog</a>
+      </section>
+   </div>
+</div>
+{% endif %}
+<!-- Bootstrap core JavaScript
+   ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<div id="speechify-global-notifications"></div>
+<div id="speechify-summarization-fullscreen-mode" style="position: fixed; inset: 0px; overflow: auto; background: white; z-index: 1999; display: none;"></div>
+<div id="speechify-screenshot-mode" style="position: fixed; top: 0px; right: 0px; width: 100%; min-height: 100%; z-index: 2147483640; display: none;"></div>
+<div id="speechify-shortcuts-prompt" style="position: fixed; bottom: 32px; left: 32px; z-index: 999999999;"></div>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="../../assets/js/vendor/popper.min.js"></script>
+<script src="../../dist/js/bootstrap.min.js"></script>
+<script src="../../assets/js/vendor/holder.min.js"></script>
+<script>
+   // Example starter JavaScript for disabling form submissions if there are invalid fields
+   (function() {
+     'use strict';
+   
+     window.addEventListener('load', function() {
+       // Fetch all the forms we want to apply custom Bootstrap validation styles to
+       var forms = document.getElementsByClassName('needs-validation');
+   
+       // Loop over them and prevent submission
+       var validation = Array.prototype.filter.call(forms, function(form) {
+         form.addEventListener('submit', function(event) {
+           if (form.checkValidity() === false) {
+             event.preventDefault();
+             event.stopPropagation();
+           }
+           form.classList.add('was-validated');
+         }, false);
+       });
+     }, false);
+   })();
+</script>
+
+
+<script>
+   function decreaseCount(itemId) {
+       var select = document.getElementById('quantity-' + itemId);
+       var value = parseInt(select.value);
+       if (value > 1) {
+           select.value = value - 1;
+           submitForm(itemId); // Submit the form when the quantity changes
+       }
+   }
+
+   function increaseCount(itemId) {
+       var select = document.getElementById('quantity-' + itemId);
+       var value = parseInt(select.value);
+       select.value = value + 1;
+       submitForm(itemId); // Submit the form when the quantity changes
+   }
+
+   function submitForm(itemId) {
+       var form = document.getElementById('cart-update-quantity-form-' + itemId);
+       form.submit();
+   }
+</script>
+
+{% endblock %}
