@@ -26,6 +26,7 @@ class OrderAdmin(admin.ModelAdmin):
         "products",
         "total_cost",
         "paid",
+        "shipped",
         "discount",
         "quantity",
         "first_name",

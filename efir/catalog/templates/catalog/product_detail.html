@@ -24,8 +24,13 @@
    <div class="container my-2">
    <div class="row gx-4 gx-lg-5">
       <div class="col-md-6">
-         <div class="product-image-container">
-            <div class="slider">
+          <div class="product-image-container">
+            {% if product.new %}
+            <div class="discount-circle-product-detail" style="font-size: 90%;"> NEW </div>
+            {% elif product.bestseller %}
+            <div class="discount-circle-product-detail" style="font-size: 90%;"> BESTSELLER </div>
+            {% endif %}
+            <div class="slider">   
                {% for photo in product.photos.all %}
                <div class="slide">
                   <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" />
@@ -36,6 +41,7 @@
             <div class="discount-circle">{{ product.discount }} % </div>
             {% endif %}
          </div>
+
          <!-- Miniatures -->
          <div class="row mt-3">
             <div class="slide">

@@ -58,6 +58,8 @@ class Order(models.Model):
         max_length=250, blank=True, verbose_name="Zásilkovna ID"
     )
     paid = models.BooleanField(default=False, verbose_name="Zaplaceno")
+    shipped = models.BooleanField(default=False, verbose_name="Vyřízeno")
+
 
     class Meta:
         verbose_name = "Objednávky"
@@ -98,6 +100,7 @@ class Order(models.Model):
 
             self.total_cost = total_price_after_discount
             self.shipping_price = cart.get_shipping_price()
+            self.discount = cart.get_discount()
 
         if not self.etb_id:
             today_date = timezone.now().strftime("%y%m%d")

@@ -54,6 +54,66 @@
         right: 10px;
    }
 }
+/* Styles for desktop */
+@media (min-width: 1000px) {
+    .discount-circle-product-detail {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: black;
+        color: white;
+        font-weight: normal;
+        font-size: 12px !important; /* Add !important to override any inline styles */
+        top: 10px;
+        right: 10px;
+        z-index: 1; /* Ensure it's below the overlay */
+
+   }
+}
+/* Styles for tablet */
+@media (min-width: 768px) and (max-width: 1000px) {
+    .discount-circle-product-detail {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background-color: black;
+        color: white;
+        font-weight: normal;
+        font-size: 10px !important; /* Add !important to override any inline styles */
+        top: 10px;
+        right: 10px;
+        z-index: 1; /* Ensure it's below the overlay */
+
+   }
+}
+/* Styles for mobile */
+@media (max-width: 767px) {
+    .discount-circle-product-detail {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background-color: black;
+        color: white;
+        font-weight: normal;
+        font-size: 10px !important; /* Add !important to override any inline styles */
+        top: 10px;
+        right: 10px;
+        z-index: 1; /* Ensure it's below the overlay */
+
+   }
+}
 .product-image-container {
     position: relative;
 }

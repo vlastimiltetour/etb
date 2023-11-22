@@ -344,6 +344,12 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
               <td style="text-align: left; padding: 8px; font-weight: bold;">Doprava</td>
               <td style="text-align: right; padding: 8px;">{{ order.shipping_price }} Kč</td>
           </tr>
+         {% if order.discount > 0 %}
+          <tr>
+            <td style="text-align: left; padding: 8px; font-weight: bold;">Sleva</td>
+            <td style="text-align: right; padding: 8px;">-{{ order.discount }} Kč</td>
+         </tr>
+         {% endif %}
           <tr style="background-color: #f8f9fa;">
               <td colspan="3" style="text-align: right; padding: 8px;">
                   <strong style="text-align: right;">Celkem: {{ order.total_cost  }} Kč</strong>
