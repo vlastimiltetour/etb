@@ -63,7 +63,6 @@ class CartAddProductForm(forms.Form):
         velikost = product.get_available_sizes()  # list
         for one_size in velikost:
             available_sizes.append(one_size)
-        available_sizes.append(" ")
         available_sizes = tuple(sorted(available_sizes))
         available_sizes = [(i, i) for i in available_sizes]
 

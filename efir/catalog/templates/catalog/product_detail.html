@@ -159,7 +159,7 @@
                     }
                  </style>
                  <div id="poznamka" style="display: none;">
-                    <b>Poznámka</b>
+                    <b>Poznámka - vyplňte svou velikost</b>
                     <div class="d-flex mb-3">
                        <div class="col-6">
                           {{ form.poznamka }}
@@ -200,7 +200,7 @@
                   }
                </style>
                <div id="poznamka" style="display: none;">
-                  <b>Poznámka</b>
+                  <b>Poznámka - vyplňte svou velikost</b>
                   <div class="d-flex mb-3">
                      <div class="col-6">
                         {{ form.poznamka }}
@@ -294,12 +294,21 @@
    quantityElement.style.justifyContent = "center";
    quantityElement.style.alignItems = "center";
    
-   var quantityInput = document.getElementById('id_quantity');
-   
-     quantityInput.addEventListener('change', function(){
-   
-     });
-   
+
+// Call the function to set up the event listener
+function handleZpusobVyrobyChange() {
+  var ZpusobVyrobyInput = document.getElementById('zpusob_vyroby_selected');
+
+  // Add event listener to the input element
+  ZpusobVyrobyInput.addEventListener('change', function() {
+    // Print the selected value
+    console.log('Selected value:', ZpusobVyrobyInput.value);
+  });
+}
+
+// Call the function to set up the event listener
+handleZpusobVyrobyChange();
+
    // Increase Decrease Buttons
    function decreaseCount(){
      var input = document.getElementById('id_quantity')
