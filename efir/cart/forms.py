@@ -148,7 +148,7 @@ class CartAddProductForm(forms.Form):
         self.fields["poznamka"] = forms.CharField(
             label="Poznamka",
             widget=forms.Textarea,
-            required=False,
+            required=True,
             help_text="Vyplňte tyto hodnoty: Obvod hrudníku Obvod pod hrudníkem Obvod jednoho prsa Obvod pasu Obvod boku",
         )
 
@@ -169,3 +169,15 @@ class CartAddProductForm(forms.Form):
             choices=pas_available_sizes,
             required=False,
         )
+
+
+    def set_cart_values(self):
+        zpusob_vyroby_value = self.cleaned_data.get("zpusob_vyroby", None)
+       
+        if zpusob_vyroby_value == "Skladem":
+            self.cleaned_data['poznamka'] = "\u200B"
+        elif zpusob_vyroby_value == "Na Míru":
+            self.cleaned_data["velikost"] = "\u200B"
+            self.cleaned_data["kalhotky_velikost_set"] = "\u200B"
+            self.cleaned_data["podprsenka_velikost_set"] = "\u200B"
+            self.cleaned_data["pas_velikost_set"] = "\u200B"

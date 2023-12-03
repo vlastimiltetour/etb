@@ -10,7 +10,8 @@ from catalog.forms import ContactForm
 from orders.mail_confirmation import *
 from stripepayment.views import *
 
-from .models import Category, Product, ProductSet
+from .models import (BackgroundPhoto, Category, LeftPhoto, Product, ProductSet,
+                     RightdPhoto)
 
 
 # returns home landing page
@@ -22,7 +23,11 @@ def home(request, category_slug=None):
     categories = Category.objects.all()
     products = Product.objects.all()[:9]
     best_sellers = Product.objects.filter(bestseller=True)
+    novinky  = Product.objects.filter(new=True)
     productsets = ProductSet.objects.all()
+    backgroundphoto = BackgroundPhoto.objects.all()
+    leftphoto = LeftPhoto.objects.all()
+    rightphoto = RightdPhoto.objects.all()
 
     # print(packetLabelPdf(4382587054, format="A7 on A4", offset=0))
 
@@ -35,6 +40,10 @@ def home(request, category_slug=None):
             "products": products,
             "best_sellers": best_sellers,
             "productsets": productsets,
+            "backgroundphoto": backgroundphoto,
+            "leftphoto": leftphoto,
+            "rightphoto": rightphoto,
+            "novinky": novinky,
         },
     )
 

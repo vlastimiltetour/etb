@@ -2,8 +2,8 @@ from django.contrib import admin
 
 from inventory.models import Inventory
 
-from .models import (Category, Certificate, Photo, Product, ProductSet,
-                     ZpusobVyroby)
+from .models import (BackgroundPhoto, Category, Certificate, LeftPhoto, Photo,
+                     Product, ProductSet, RightdPhoto, ZpusobVyroby)
 
 
 # Register your models here.
@@ -14,6 +14,21 @@ class PhotoAdmin(admin.StackedInline):
 class InventoryInline(admin.TabularInline):
     model = Inventory
     extra = 1
+
+
+@admin.register(BackgroundPhoto)
+class BackgroundPhotoAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+
+
+@admin.register(LeftPhoto)
+class LeftPhotoAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+
+
+@admin.register(RightdPhoto)
+class RightPhotoAdmin(admin.ModelAdmin):
+    list_display = ["name"]
 
 
 @admin.register(Category)

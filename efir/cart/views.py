@@ -40,6 +40,7 @@ def cart_add(request, product_id):
         print("produkt jsou darkove certifikaty jo")
 
     if form.is_valid():
+        form.set_cart_values()
         cd = form.cleaned_data
 
         if inventory_capacity:

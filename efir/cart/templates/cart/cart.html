@@ -310,9 +310,7 @@
                         <input type="hidden" name="cart_vendor" id="cart_vendor">
 
                       <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
-                        <input type="hidden" name="address" value="{{ form.initial.address }}">-->
-
-                        
+                        <input type="hidden" name="address" value="{{ form.initial.address }}">-->                        
 
                         <div class="invalid-feedback">
                         </div>
@@ -458,7 +456,11 @@
                      
                               cartForm.submit();
                            }
-                     
+                           else {
+                              alert("Please select a valid pickup point.");
+                              // You can add additional handling or inform the user that a valid pickup point needs to be selected.
+                           }
+                                             
                          
                         }
                      </script>
@@ -572,28 +574,41 @@
 <script>
    // Example starter JavaScript for disabling form submissions if there are invalid fields
    (function() {
-     'use strict';
-   
-     window.addEventListener('load', function() {
-       // Fetch all the forms we want to apply custom Bootstrap validation styles to
-       var forms = document.getElementsByClassName('needs-validation');
-   
-       // Loop over them and prevent submission
-       var validation = Array.prototype.filter.call(forms, function(form) {
-         form.addEventListener('submit', function(event) {
-           if (form.checkValidity() === false) {
-             event.preventDefault();
-             event.stopPropagation();
-           }
-           form.classList.add('was-validated');
-         }, false);
-       });
-     }, false);
-   })();
+        'use strict';
+
+
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    } else {
+                        // Add the check for vendor_id before submitting the form
+                        
+                        var vendorIdInput = document.querySelector("#id_vendor_id");
+                        
+                        if (vendorIdInput.value === "" || vendorIdInput.value === null || vendorIdInput.value === "None") {
+                            alert("Prosím vyberte si adresu doručení");
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+    var vendorIdInput = document.querySelector("#id_vendor_id");
+    console.log('vendor id', vendorIdInput.value)
 </script>
 
 
 <script>
+
    function decreaseCount(itemId) {
        var select = document.getElementById('quantity-' + itemId);
        var value = parseInt(select.value);
@@ -614,6 +629,9 @@
        var form = document.getElementById('cart-update-quantity-form-' + itemId);
        form.submit();
    }
+
+
 </script>
+
 
 {% endblock %}

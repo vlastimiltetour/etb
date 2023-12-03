@@ -19,6 +19,18 @@
    text-align: center;
    border: none; /* Add black square border */
    }
+   select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0px;
+  border: 1px solid black;
+  background-color: transparent;
+  font-size: 16px;
+  width: 42px;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 <section class="py-2">
    <div class="container my-2">
@@ -76,38 +88,60 @@
                   </div>
                </div>
                <script>
-                  // Function to handle the display of elements based on the selected value
-                  function handleZpusobVyrobyDisplay() {
+                 
+                 function handleZpusobVyrobyDisplay() {
                      // Get the select element by its ID
                      var selectElement = document.getElementById("zpusob_vyroby_selected");
-               
+                     var poznamkaInput = document.getElementById("id_poznamka");
+                     var sizesInput = document.getElementById("sizes");
+                     var setSizesInput = document.getElementById("set-sizes");
+
+
                      // Trim and convert the selected value to lowercase for case-insensitive comparison
                      var selectedValue = selectElement.value.trim().toLowerCase();
-               
+
                      // Variables to store elements to show and hide
                      var elementToShow;
                      var elementToHide;
-               
-                     // Check the selected value and set elements accordingly
+
+                     // Get the elements to show and hide based on the selected value
                      if (selectedValue === "na míru") {
                         elementToShow = document.getElementById("poznamka");
                         elementToHide = document.getElementById("sizes");
-                     } else {
-                        elementToShow = document.getElementById("sizes");
-                        elementToHide = document.getElementById("poznamka");
+                        poznamkaInput.value = ""
+                        
+                        
+                     } else if (selectedValue === "skladem") {
+                        var productCategoryCeleSety = "{{ product.category.name }}";
+                        if (productCategoryCeleSety !== 'Celé sety') {
+                              elementToShow = document.getElementById("sizes");
+                              elementToHide = document.getElementById("poznamka");
+                              poznamkaInput.value = "-";
+                        } else {
+                              elementToShow = document.getElementById("set-sizes");
+                              elementToHide = document.getElementById("poznamka");
+                              poznamkaInput.value = "-";
+                              
+                        }
                      }
-               
+
                      // Set the display style of elements
-                     elementToShow.style.display = "block";
-                     elementToHide.style.display = "none";
+                     if (elementToShow) {
+                        elementToShow.style.display = "block";
+                     }
+
+                     if (elementToHide) {
+                        elementToHide.style.display = "none";
+                     }
                   }
-               
+
                   // Event listener for when the DOM is fully loaded
                   document.addEventListener("DOMContentLoaded", handleZpusobVyrobyDisplay);
-               
+
                   // Event listener for the change event on the select element
                   var selectElement = document.getElementById("zpusob_vyroby_selected");
                   selectElement.addEventListener("change", handleZpusobVyrobyDisplay);
+
                </script>
                
                <!-- start product set-->
@@ -228,7 +262,17 @@
                         
 
 
-                        <div><small>{{ form.quantity}}</small></div>
+                        <div> 
+                           <style>
+
+                              /* Style for iOS */
+                              @media only screen and (max-device-width: 480px) {
+                                select {
+                                  color: black !important; /* Set the desired color for iOS */
+                                }
+                              }
+                            </style>
+                           <small>{{ form.quantity}}</small></div>
                         
                         <div class="invalid-feedback">
                            Nedostatečná kapacita skladu.

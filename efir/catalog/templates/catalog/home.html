@@ -9,16 +9,23 @@
 
 <!-- Intro Photos-->
 <div>
+
   <div class="row align-items-md-stretch">
+    {% for photo in leftphoto %}
     <div class="col-md-4 py-2 d-none d-md-block" style="height: 86vh; padding-right: 5px; padding-left: 10px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/IMG_5092.jpg'); background-size: cover; background-position: center;"></div>
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('{{ photo.photo.url}}'); background-size: cover; background-position: center;"></div>
     </div>
+    {% endfor %}
+    {% for photo in backgroundphoto %}
     <div class="col-md-4 col-sm-12 py-2" style="height: 86vh; padding-right: 5px; padding-left: 5px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/blackintro.jpeg'); background-size: cover; background-position: center top; max-width: 100%;"></div>
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('{{ photo.photo.url }}'); background-size: cover; background-position: center top; max-width: 100%;"></div>
     </div>
+    {% endfor %}
+    {% for photo in rightphoto %}
     <div class="col-md-4 py-2 d-none d-md-block" style="height: 86vh; padding-right: 10px; padding-left: 5px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('static/assets/img/IMG_9258.jpg'); background-size: cover; background-position: center;"></div>
+      <div class="h-100 bg-body-tertiary border" style="background-image: url('{{ photo.photo.url}}'); background-size: cover; background-position: center;"></div>
     </div>
+    {% endfor %}
   </div>
 </div>
 
@@ -44,11 +51,58 @@
   </div>
 </section>
 
-<!-- Best Sellers -->
+
 <main role="main">
 
-<!-- Catalog of Products -->
-<section class="jumbotron text-center">
+  <!-- Noviky -->
+  <section class="jumbotron text-center">
+
+
+    {% if novinky %}
+    <div class="container">
+      <h1 class="jumbotron-heading mt-5 mb-5">Novinky</h1>
+    </div>
+    {% else %}
+    {% endif %}
+  <div class="album py-2 bg-white">
+    <div class="container">
+  
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
+        {% for novinka in novinky %}        
+      
+  
+  
+        <!-- Single Product -->
+  
+        <div class="col-md-4 mb-4">
+          <a href="{{ novinka.get_absolute_url }}">
+          <div class="card mb-2 box-shadow">
+            
+            <img class="card-img-top img-fluid" 
+            src="{{ novinka.photos.first.photo.url }}" 
+            alt="{{ novinka.name }}">
+            <div class="discount-circle" style="font-size: 80%;"> NEW </div>
+           
+     
+            <div class="card-body d-flex flex-column" style="padding: 1rem;">
+             <h5 class="fw-bolder">{{ novinka.name }}</h5>
+   <p class="card-text">{{ novinka.short_description }}</p>                
+             <b class="fw-semibold">  {{ novinka.price }} Kč</b>
+            </div>
+          </div>
+          </a>
+        </div>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- Bestsellers -->
+  <section class="jumbotron text-center">
+
+
   {% if best_sellers %}
   <div class="container">
     <h1 class="jumbotron-heading mt-5 mb-5">Best Sellers</h1>
@@ -72,13 +126,13 @@
           <img class="card-img-top img-fluid" 
           src="{{ bestseller.photos.first.photo.url }}" 
           alt="{{ bestseller.name }}">
-          <div class="discount-circle" style="font-size: 40%;"> BESTSELLER </div>
+          <div class="discount-circle" style="font-size: 50%;"> BESTSELLER </div>
           {% if bestseller.discount %}
           <div class="discount-circle"> - {{ bestseller.discount }} % </div>
           {% elif bestseller.new %}
           <div class="discount-circle"> NEW </div>
           {% elif bestseller.limited %}
-          <div class="discount-circle" style="font-size: 40%;"> LIMITOVANÁ EDICE </div>
+          <div class="discount-circle" style="font-size: 50%;"> LIMITOVANÁ EDICE </div>
           {% endif %}
    
           <div class="card-body d-flex flex-column" style="padding: 1rem;">
@@ -125,7 +179,7 @@
             {% elif product.new %}
             <div class="discount-circle"> NEW </div>
             {% elif product.limited %}
-            <div class="discount-circle" style="font-size: 40%;"> LIMITOVANÁ EDICE </div>
+            <div class="discount-circle" style="font-size: 50%;"> LIMITOVANÁ EDICE </div>
             {% endif %}
 
 

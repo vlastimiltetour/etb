@@ -229,3 +229,39 @@ class Certificate(models.Model):
         default=0,
         null=True,
     )
+
+
+class BackgroundPhoto(models.Model):
+    name = models.CharField(max_length=255)
+    photo = models.ImageField(
+        upload_to="catalog/background",
+        verbose_name="Hlavni fotka",
+    )
+
+    class Meta:
+        verbose_name = "Hlavni fotka"
+        verbose_name_plural = "Hlavni fotka"
+
+
+class LeftPhoto(models.Model):
+    name = models.CharField(max_length=255)
+    photo = models.ImageField(
+        upload_to="catalog/background",
+        verbose_name="Fotka vlevo",
+    )
+
+    class Meta:
+        verbose_name = "Fotka vlevo"
+        verbose_name_plural = "Fotka vlevo"
+
+
+class RightdPhoto(models.Model):
+    name = models.CharField(max_length=255)
+    photo = models.ImageField(
+        upload_to="catalog/background",
+        verbose_name="Fotka vpravo",
+    )
+
+    class Meta:
+        verbose_name = "Fotka vpravo"
+        verbose_name_plural = "Fotka vpravo"
