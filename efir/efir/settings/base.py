@@ -140,13 +140,22 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = 'cs'  # Set language code for Czech
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Europe/Prague'  # Set timezone for Czech Republic
 
-USE_I18N = True
+USE_I18N = True  # Enable internationalization
 
-USE_TZ = True
+USE_L10N = True  # Enable localization
+
+USE_TZ = True  # Enable timezone support
+
+#to generate humanize cs currency
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+USE_THOUSAND_SEPARATOR = True
+
+THOUSAND_SEPARATOR = ' '
 
 
 # Static files (CSS, JavaScript, Images)

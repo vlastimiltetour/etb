@@ -116,7 +116,7 @@
 								</td>
 
 								<td>
-									Faktura #: {{ order.etb_id }}<br />
+									Faktura #{{ order.etb_id }}<br />
 									Vytvořeno: {{ order.created }} <br />
 								</td>
 							</tr>
@@ -156,26 +156,37 @@
 					<td>Cena</td>
 				</tr>
 
+				{% for item in order.items.all %}
 				<tr class="item">
-					<td>Website design</td>
+					<td>{{ item.product.name }} </td>
 
-					<td>$300.00</td>
+					<td> {{ item.price }} </td>
 				</tr>
+				{% endfor %}
+
+				<tr></tr>
+
 
 				<tr class="item">
-					<td>Hosting (3 months)</td>
+					<td>Doprava </td>
 
-					<td>$75.00</td>
+					<td> {{ order.shipping_price }} Kč
+					</td>
 				</tr>
+				{% if order.discount > 0 %}
 
-				<tr class="item last">
-					<td>Domain name (1 year)</td>
+				<tr class="item">
+					<td>Sleva </td>
 
-					<td>$10.00</td>
+					<td>-{{ order.discount }} Kč
+					</td>
 				</tr>
+				{% endif %}
 
-				<tr class="total">
-					<td></td>
+
+						
+					<tr class="total">
+						<td></td>
 
 					<td>Total: {{ order.total_cost }} Kč</td>
 				</tr>
