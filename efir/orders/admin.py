@@ -13,10 +13,18 @@ class OrderItemInline(admin.TabularInline):
         "price",
         "quantity",
     )
-    can_delete = False
 
     class Meta:
         ordering = ("product", "velikost", "price", "quantity", "order")
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Order)
@@ -38,7 +46,10 @@ class OrderAdmin(admin.ModelAdmin):
         "address",
         "created",
     ]
+
     inlines = [OrderItemInline]
+
+#    list_editable = ["shipped"]  # Add the "shipped" field to make it editable
 
     def get_total_cost(self, obj):
         return obj.get_total_cost()  # Call the Order's get_total_cost() method
@@ -83,14 +94,16 @@ class OrderAdmin(admin.ModelAdmin):
 
     velikosti.short_description = "Položky v objednávce"
 
-    # Override the has_add_permission method to deny adding new records
-    def has_add_permission(self, request):
-        return False
+    def get_readonly_fields(self, request, obj=None):
+        # Make all fields readonly except for "shipped"
+        if obj:
+            return [
+                field.name
+                for field in self.model._meta.fields
+                if (field.name != "shipped" and field.name != "paid")
+            ]
+        else:
+            return []
 
-    # Override the has_change_permission method to deny editing records
-    def has_change_permission(self, request, obj=None):
+    def has_add_permission(self, request, obj=None):
         return False
-
-    # Override the has_delete_permission method to deny deleting records
-    def has_delete_permission(self, request, obj=None):
-        return True

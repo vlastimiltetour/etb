@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "stripepayment.apps.StripepaymentConfig",
     "newsletter.apps.NewsletterConfig",
     "inventory.apps.InventoryConfig",
+    "django_recaptcha",
 ]
 
 
@@ -214,3 +215,6 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 # zasilkovna
 ZASILKOVNA_API_KEY = os.getenv("ZASILKOVNA_API_KEY")
 ZASILKOVNA_SECRET = os.getenv("ZASILKOVNA_SECRET")
+
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")

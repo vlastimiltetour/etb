@@ -21,6 +21,7 @@ django-debug-toolbar==4.1.0
 django-dotenv==1.4.2
 django-environ==0.10.0
 django-extensions==3.2.3
+django-recaptcha==4.0.0
 django-smtp-ssl==1.0
 django-sslserver==0.22
 dnspython==2.3.0
@@ -96,7 +97,6 @@ urllib3==1.26.15
 uWSGI==2.0.21
 virtualenv==20.23.0
 virtualenv-clone==0.5.7
-weasyprint==60.1
 websocket-client==0.59.0
 Werkzeug==2.3.3
 xmltodict==0.13.0

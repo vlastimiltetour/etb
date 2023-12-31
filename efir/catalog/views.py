@@ -139,7 +139,7 @@ def kontakty(request):
             message = form.cleaned_data["message"]
             success_message = "Your message has been successfully submitted."
 
-            html_content = render_to_string("orders/customer_email_confirmation.html")
+            html_content = render_to_string("orders/contact_form.html")
             msg = EmailMultiAlternatives(
                 subject=(f"Kontaktní formulář: dotaz od {name}"),
                 from_email="objednavky@efirthebrand.cz",

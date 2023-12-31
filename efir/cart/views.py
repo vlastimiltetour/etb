@@ -1,5 +1,7 @@
 import logging
 import ssl
+import smtplib
+
 
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
@@ -200,22 +202,25 @@ def cart_detail(request, zasilkovna=True):
             cart.clear()
 
             request.session["order_id"] = order.id
-
+            order_id = order.id
             try:
-                order_id = order.id
+                
                 customer_order_email_confirmation(order_id)
-                if zasilkovna:
-                    print("Zasilkovna turned on")
-                    zasilkovna_create_package(order_id)
-                else:
-                    print("Zasilkovna turned off")
-
             except ssl.SSLCertVerificationError:
                 logging.info(
                     f"Local environment has no email backend set up.Order ID: {order_id}"
                 )
+            except smtplib.SMTPSenderRefused as e:
+                logging.error(
+                    f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
+                    )
 
-            # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
+            if zasilkovna:
+                print("Zasilkovna turned on")
+                zasilkovna_create_package(order_id)
+            else:
+                print("Zasilkovna turned off")
+
             return redirect(reverse("stripepayment:process"))
 
     # print(form.errors)
