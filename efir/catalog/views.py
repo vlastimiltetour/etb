@@ -5,8 +5,11 @@ from django.shortcuts import get_object_or_404, render
 
 logging.basicConfig(level=logging.DEBUG)
 
+from django.db.models import Q
+
 from cart.forms import CartAddProductForm
 from catalog.forms import ContactForm
+from inventory.models import Inventory
 from orders.mail_confirmation import *
 from stripepayment.views import *
 
@@ -17,13 +20,16 @@ from .models import (BackgroundPhoto, Category, LeftPhoto, Product, ProductSet,
 # returns home landing page
 def home(request, category_slug=None):
     # zasilkovna_create_package(order_id=1)
+    # customer_order_email_confirmation(order_id=143)
     # packetLabelPdf(2336806921, format="A7 on A4", offset=0)
-
+    # order = Order.objects.get(id=1)
+    # print(order.total_cost)
+    # print(coupon_create(request.GET, 500.00))
     category = None
     categories = Category.objects.all()
-    products = Product.objects.all()[:9]
-    best_sellers = Product.objects.filter(bestseller=True)
-    novinky  = Product.objects.filter(new=True)
+    products = Product.objects.filter(active=True)[:9]
+    best_sellers = Product.objects.filter(bestseller=True, active=True)
+    novinky = Product.objects.filter(new=True, active=True)
     productsets = ProductSet.objects.all()
     backgroundphoto = BackgroundPhoto.objects.all()
     leftphoto = LeftPhoto.objects.all()
@@ -48,21 +54,26 @@ def home(request, category_slug=None):
     )
 
 
-# returns product list
 def catalog_product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
-    products = Product.objects.all()  # filtering available products
+    products = Product.objects.filter(active=True)  # filtering available products
+    inventory = Inventory.objects.all()
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-    else:
-        pass
+        products = products.filter(category=category, active=True)
+
+
     return render(
         request,
         "catalog/catalog.html",
-        {"category": category, "categories": categories, "products": products},
+        {
+            "category": category,
+            "categories": categories,
+            "products": products,
+            "inventory": inventory,
+        },
     )
 
 
@@ -77,6 +88,14 @@ def product_detail(
     product = get_object_or_404(Product, id=id, slug=slug)
     form = CartAddProductForm(id_from_product=id)
 
+    recommended = recommended_products(product_id=id)
+    print(
+        f"this is the product id of the product {product.name}, {id} and recommended products  {recommended}"
+    )
+
+    if str(product.category) == "Dárkové certifikáty":
+        pass
+
     try:
         productset = ProductSet.objects.get(product=product)
     except ProductSet.DoesNotExist:
@@ -90,6 +109,7 @@ def product_detail(
             "product": product,
             "form": form,
             "productset": productset,
+            "recommended": recommended,
         },
     )
 
@@ -172,3 +192,13 @@ def kontakty(request):
         "catalog/kontakty.html",
         {"categories": categories, "form": form},
     )
+
+
+def recommended_products(product_id):
+    product_id = product_id
+
+    recommendations = Product.objects.filter(Q(bestseller=True))
+    print(f"These are the recommended products: {recommendations}")
+    # recommendations = best_sellers[:5]
+
+    return recommendations[:5]

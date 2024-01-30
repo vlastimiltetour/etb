@@ -44,6 +44,7 @@ class ProductAdmin(admin.ModelAdmin):
         "category",
         "price",
         "get_available_sizes_display",
+        "active",
         "new",
         "bestseller",
         "headliner",

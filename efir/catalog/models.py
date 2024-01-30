@@ -23,6 +23,7 @@ class Product(models.Model):
     long_description = models.TextField(blank=True)
 
     # Time Specifics
+    active = models.BooleanField(default=True, verbose_name='aktivní produkt')
     new = models.BooleanField(default=False)
     limited = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
