@@ -7,6 +7,12 @@
 <!--Intro, Header Jumbotron --> 
 <!-- link here: https://getbootstrap.com/docs/5.3/examples/jumbotron/ -->
 
+<style>
+  .dropdown-item.active {
+  background-color: #000; /* Set background color to black */
+  color: #fff; /* Set text color to white */
+}
+</style>
 
 <!-- Catalog of Products -->
   <section class="jumbotron text-center">
@@ -16,6 +22,102 @@
         <h1 class="jumbotron-heading mt-5 mb-5">Katalog
         {% endif %}</h1>
     </div>
+
+ <!-- start of other filter dropdowns as needed -->
+<div class="filters mb-5">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+     $(document).ready(function() {
+       // Event handler for changes in dropdowns
+       $('.dropdown-item').click(function() {
+         // Find the closest parent with class 'btn-group'
+         var parentBtnGroup = $(this).closest('.btn-group');
+     
+         // Find the dropdown toggle within the 'btn-group'
+         var dropdownToggle = parentBtnGroup.find('.dropdown-toggle');
+     
+         // Get the id attribute of the dropdown toggle
+         var dropdownId = dropdownToggle.attr('id');
+     
+         // Set the value of the dropdown to the selected item's text
+         $('#' + dropdownId).val($(this).text());
+     
+         // Submit the form with id 'save_filters'
+         $('#save_filters').submit();
+       });
+     });
+  </script>
+  <style>
+     #save_filters {
+     display: inline-block; /*display: inline-block;: This style makes the form and button groups inline-block elements, allowing them to appear next to each other on the same line.*/
+     white-space: nowrap; /* Prevent line breaks between elements white-space: nowrap;: This prevents line breaks between the form elements, ensuring that they stay on the same line.*/
+     }
+  </style>
+     <div class="btn-group mt-2">
+        <form action="{% url 'catalog:delete_applied_filters' %}" method="post">
+           {% csrf_token %}
+           <button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0"><i class="bi bi-dash-circle-fill"></i></button>
+        </form>
+     </div>
+     <form method="post" id="save_filters" action="{% url 'catalog:save_filters' %}">
+        <div class="visually-hidden">
+           <button  type="submit">Apply Filter</button> 
+           <!-- this is invisible-->
+           {{ sum_of }}
+        </div>
+        {% csrf_token %}
+        <div class="btn-group mt-2">
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Řadit</button>
+           <ul class="dropdown-menu">
+              {% if selected_sorting %}
+              <li class="dropdown-item active"> {{ selected_sorting }}</li>
+              {% endif %}
+              {% for sort_by_price_value in filter_form.sort_by_price %}
+              <li><a class="dropdown-item" id="sort_by_price"> {{ sort_by_price_value }}</a></li>
+              {% endfor %}
+           </ul>
+        </div>
+        <div class="btn-group mt-2">
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Kategorie</button>
+           <ul class="dropdown-menu">
+              {% if selected_category %}
+              <li class="dropdown-item active"> {{ selected_category }}</li>
+              {% endif %}
+              {% for category_value in filter_form.category_selection %}
+              <li><a class="dropdown-item" id="category_value"> {{ category_value }}</a></li>
+              {% endfor %}
+           </ul>
+        </div>
+        <div class="btn-group mt-2">
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Střih</button>
+           <ul class="dropdown-menu">
+              {% if selected_cuts %}
+              <li class="dropdown-item active"> {{ selected_cuts }}</li>
+              {% endif %}
+              {% for cut_value in filter_form.cut_selection %}
+              <li><a class="dropdown-item" id="cut_value"> {{ cut_value }}</a></li>
+              {% endfor %}
+           </ul>
+        </div>
+        <div class="btn-group mt-2">
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Velikost</button>
+           <ul class="dropdown-menu">
+              {% if selected_sizes %}
+              <li class="dropdown-item active"> {{ selected_sizes }}</li>
+              {% endif %}
+              {% for value in filter_form.size_selection %}
+              <li><a class="dropdown-item" id="size_selection">{{ value }}</a></li>
+              {% endfor %}
+           </ul>
+        </div>
+     </form>
+</div>
+  <!-- start of other filter dropdowns as needed -->
+
+    
+
+
+
   <div class="album py-2 bg-white">
     <div class="container justify-content-center align-items-center" style="min-height: 60vh;">
       {% if products %}
@@ -45,6 +147,8 @@
             <div class="discount-circle"> NEW </div>
             {% elif product.limited %}
             <div class="discount-circle" style="font-size: 40%;"> LIMITOVANÁ EDICE </div>
+            {% elif product.is_na_miru %}
+            <div class="discount-circle" style="font-size: 70%;"> POUZE NA MíRU </div>
             
             {% endif %}
           </div>

@@ -30,6 +30,9 @@
   
     <!-- Include Slick Carousel JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <!-- CDN-->
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
   
     <script>
       const csrftoken = Cookies.get('csrftoken');
@@ -51,7 +54,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-            <li class="nav-item dropdown">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'catalog:katalog_vse' %}">Katalog</a>
+            </li>
+            <!-- <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Katalog</a>
               <ul class="dropdown-menu" aria--labelledby="navbarDropdown">
 
@@ -74,7 +80,7 @@
                
                
               </ul>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link" href="{% url 'catalog:kontakty' %}">Kontakty</a>
             </li>
@@ -88,6 +94,12 @@
        
             <li class="nav-item">
               <a class="nav-link" href="{% url 'catalog:rozmery' %}">Rozměry</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'catalog:akce' %}">Akce</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'catalog:discover_your_set' %}">Objevte svůj vysněný set</a>
             </li>
           </ul>
           <!-- Social Media Icons -->

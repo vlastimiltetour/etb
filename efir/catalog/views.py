@@ -1,14 +1,14 @@
 import logging
 import ssl
 
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 logging.basicConfig(level=logging.DEBUG)
 
 from django.db.models import Q
 
 from cart.forms import CartAddProductForm
-from catalog.forms import ContactForm
+from catalog.forms import ContactForm, FilterForm
 from inventory.models import Inventory
 from orders.mail_confirmation import *
 from stripepayment.views import *
@@ -54,16 +54,121 @@ def home(request, category_slug=None):
     )
 
 
+def save_filters(request, category_slug=None):
+    if request.method == "POST":
+        filter_form = FilterForm(request.POST)
+        # print(request.POST)  # Print the entire POST data for debugging
+
+        if filter_form.is_valid():
+            cd = filter_form.cleaned_data
+
+            # these values are lists, wtf
+            zpusob_vyroby = cd["zpusob_vyroby"]
+            sort_by_price = cd["sort_by_price"]
+            size_selection = cd["size_selection"]
+            cut_selection = cd["cut_selection"]
+            category_selection = cd["category_selection"]
+
+            if category_selection != []:
+                request.session["category_session"] = category_selection
+
+            if zpusob_vyroby != []:
+                request.session["zpusob_vyroby_session"] = zpusob_vyroby
+
+            if sort_by_price != []:
+                for value in sort_by_price:
+                    request.session["sort_by_price_session"] = value
+
+            if "size_selection_session" not in request.session:
+                request.session["size_selection_session"] = []
+
+            if size_selection:
+                for val in size_selection:
+                    if val not in request.session["size_selection_session"]:
+                        request.session["size_selection_session"].append(val)
+                        request.session.save()
+
+            if "cut_selection_session" not in request.session:
+                request.session["cut_selection_session"] = []
+
+            if cut_selection:
+                for x in cut_selection:
+                    if x not in request.session["cut_selection_session"]:
+                        request.session["cut_selection_session"].append(x)
+                        request.session.save()
+
+    
+    return redirect("catalog:katalog_vse")
+
+
+def show_session_contents(request):
+    print("")
+    print("Session Contents:")
+    for key, value in request.session.items():
+        print(f"{key}: {value}")
+
+    print("")
+    return "These were the session contents"
+
+
 def catalog_product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(active=True)  # filtering available products
-    inventory = Inventory.objects.all()
+    products = Product.objects.all()
+    inventory = Inventory.objects.values("size").distinct().order_by("size")
+
+    filter_form = FilterForm()
+
+    zpusob_vyroby_session = request.session.get("zpusob_vyroby_session", "")
+    size_selection_session = request.session.get("size_selection_session", [])
+    sort_by_price_session = request.session.get("sort_by_price_session", "created")
+    cut_selection_session = request.session.get("cut_selection_session", [])
+    category_session = request.session.get("category_session", "")
+
+    # these are session contents
+    print(show_session_contents(request))
+
+    query_filters = Q()
+
+
+    
+    if category_session:
+        query_filters &= Q(category__name=category_session[0])
+
+    if cut_selection_session:
+        query_filters &= Q(short_description__in=cut_selection_session)
+
+    if zpusob_vyroby_session:
+        query_filters &= Q(
+            zpusob_vyroby__size=zpusob_vyroby_session[0]
+        )  # Assuming zpusob_vyroby is a list
+
+    if size_selection_session:
+        query_filters &= Q(inventory__size__in=size_selection_session)
+
+    if sort_by_price_session == ([] or None):
+        sort_by_price_session = "created"
+    elif type(sort_by_price_session) == str:
+        sort_by_price_session = sort_by_price_session
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category, active=True)
+        products = (
+            products.filter(category=category)
+            .filter(query_filters)
+            .order_by(sort_by_price_session)
+        )
 
+    else:
+        products = Product.objects.filter(query_filters).order_by(sort_by_price_session)
+
+    sum_of = len(products)
+
+    selected_sizes = clean_session_names(size_selection_session)
+    selected_zpubob_vyroby = clean_session_names(zpusob_vyroby_session)
+    selected_sorting = clean_session_names(sort_by_price_session)
+    selected_cuts = clean_session_names(cut_selection_session)
+    selected_category = clean_session_names(category_session)
 
     return render(
         request,
@@ -73,8 +178,60 @@ def catalog_product_list(request, category_slug=None):
             "categories": categories,
             "products": products,
             "inventory": inventory,
+            "filter_form": filter_form,
+            "selected_sizes": selected_sizes,
+            "selected_zpubob_vyroby": selected_zpubob_vyroby,
+            "selected_sorting": selected_sorting,
+            "selected_cuts": selected_cuts,
+            "selected_category": selected_category,
+            "sum_of": sum_of,
         },
     )
+
+
+def clean_session_names(session_values):
+    clean_translation_dict = {
+        "price": "Cena vzestupně",
+        "-price": "Cena sestupně",
+        "name": "Název A-Z",
+        "-name": "Název Z-A",
+        "created": "Nejnovější",
+    }
+
+    for key in clean_translation_dict:
+        if key == session_values:
+            session_values = clean_translation_dict[key]
+
+    return (
+        str(session_values)
+        .replace("'", "")
+        .replace("[", "")
+        .replace("]", "")
+        .replace("[", "")
+        .replace("]", "")
+    )
+
+
+def delete_applied_filters(request):
+    if request.method == "POST":
+        print("Before Deletion:", request.session.items())
+
+        to_delete = [
+            "zpusob_vyroby_session",
+            "size_selection_session",
+            "cut_selection_session",
+            "category_session"
+        ]
+        for key in to_delete:
+            if key in request.session:
+                del request.session[key]
+
+        if "sort_by_price_session" in request.session:
+            request.session["sort_by_price_session"] = "created"
+
+        print("After Deletion:", request.session.items())
+
+    return redirect("catalog:katalog_vse")
 
 
 def product_detail(
@@ -202,3 +359,12 @@ def recommended_products(product_id):
     # recommendations = best_sellers[:5]
 
     return recommendations[:5]
+
+
+def akce(request):
+    products = Product.objects.all()
+    return render(request, "catalog/akce.html", {"products": products})
+
+
+def discover_your_set(request):
+    return render(request, "catalog/home.html")
