@@ -14,6 +14,8 @@
 }
 </style>
 
+
+
 <!-- Catalog of Products -->
   <section class="jumbotron text-center">
     <div class="container">
@@ -24,7 +26,7 @@
     </div>
 
  <!-- start of other filter dropdowns as needed -->
-<div class="filters mb-5">
+<div class="filters">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script>
      $(document).ready(function() {
@@ -53,12 +55,15 @@
      white-space: nowrap; /* Prevent line breaks between elements white-space: nowrap;: This prevents line breaks between the form elements, ensuring that they stay on the same line.*/
      }
   </style>
-     <div class="btn-group mt-2">
-        <form action="{% url 'catalog:delete_applied_filters' %}" method="post">
+     <!--
+      <div class="btn-group mt-2">
+        <form action="{% url 'catalog:delete_all_filters' %}" method="post">
            {% csrf_token %}
-           <button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0"><i class="bi bi-dash-circle-fill"></i></button>
+           <button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0">Smazat vše <i class="bi bi-dash-circle-fill"></i> </button>
         </form>
      </div>
+	-->
+    
      <form method="post" id="save_filters" action="{% url 'catalog:save_filters' %}">
         <div class="visually-hidden">
            <button  type="submit">Apply Filter</button> 
@@ -114,8 +119,58 @@
 </div>
   <!-- start of other filter dropdowns as needed -->
 
-    
 
+  <!-- labels start labels start -->
+  <div class="filters mb-5">
+    <form action="{% url 'catalog:delete_selected_filter' %}" method="post">
+        {% csrf_token %}
+
+        <ul class="nav justify-content-center flex-sm-row">
+            <!-- Sorting Label -->
+            {% if selected_sorting and selected_sorting != "Nejnovější" %}
+                <li class="nav-item dropdown mt-2">
+                  <input type="hidden" name="selected_filter" value="{{ selected_sorting }}">
+                    <button class="btn btn-light flex-shrink-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="sortingDropdown">
+                        {{ selected_sorting }} <i class="bi bi-x"></i>
+                    </button>
+                </li>
+            {% endif %}
+            
+            <!-- Category Label -->
+            {% if selected_category %}
+                <li class="nav-item dropdown mt-2">
+                    <input type="hidden" name="selected_filter" value="{{ selected_category }}">
+                    <button class="btn btn-light flex-shrink-0 rounded-0" type="submit" id="categoryDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ selected_category }} <i class="bi bi-x"></i>
+                    </button>
+                </li>
+            {% endif %}
+            
+            <!-- Cuts Label -->
+            {% if selected_cuts %}
+                <li class="nav-item dropdown mt-2">
+                  <input type="hidden" name="selected_filter" value="{{ selected_cuts }}">
+                    <button class="btn btn-light flex-shrink-0 rounded-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cutsDropdown">
+                        {{ selected_cuts }} <i class="bi bi-x"></i>
+                    </button>
+                </li>
+            {% endif %}
+            
+            <!-- Sizes Label -->
+            {% if selected_sizes %}
+                <li class="nav-item dropdown mt-2">
+                  <input type="hidden" name="selected_filter" value="{{ selected_sizes }}">
+
+                    <button class="btn btn-light flex-shrink-0 rounded-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="sizesDropdown">
+                        {{ selected_sizes }} <i class="bi bi-x"></i>
+                    </button>
+                </li>
+            {% endif %}
+        </ul>
+    </form>
+</div>
+
+    
 
 
   <div class="album py-2 bg-white">

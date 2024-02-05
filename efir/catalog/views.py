@@ -97,7 +97,6 @@ def save_filters(request, category_slug=None):
                         request.session["cut_selection_session"].append(x)
                         request.session.save()
 
-    
     return redirect("catalog:katalog_vse")
 
 
@@ -130,8 +129,6 @@ def catalog_product_list(request, category_slug=None):
 
     query_filters = Q()
 
-
-    
     if category_session:
         query_filters &= Q(category__name=category_session[0])
 
@@ -164,11 +161,13 @@ def catalog_product_list(request, category_slug=None):
 
     sum_of = len(products)
 
+
     selected_sizes = clean_session_names(size_selection_session)
     selected_zpubob_vyroby = clean_session_names(zpusob_vyroby_session)
     selected_sorting = clean_session_names(sort_by_price_session)
     selected_cuts = clean_session_names(cut_selection_session)
     selected_category = clean_session_names(category_session)
+
 
     return render(
         request,
@@ -212,7 +211,7 @@ def clean_session_names(session_values):
     )
 
 
-def delete_applied_filters(request):
+def delete_all_filters(request):
     if request.method == "POST":
         print("Before Deletion:", request.session.items())
 
@@ -220,7 +219,7 @@ def delete_applied_filters(request):
             "zpusob_vyroby_session",
             "size_selection_session",
             "cut_selection_session",
-            "category_session"
+            "category_session",
         ]
         for key in to_delete:
             if key in request.session:
@@ -228,6 +227,46 @@ def delete_applied_filters(request):
 
         if "sort_by_price_session" in request.session:
             request.session["sort_by_price_session"] = "created"
+
+        print("After Deletion:", request.session.items())
+
+    return redirect("catalog:katalog_vse")
+
+def delete_selected_filter(request):
+    if request.method == "POST":
+        print("Before Deletion:", request.session.items())
+
+        sessions = [
+            "zpusob_vyroby_session",
+            "size_selection_session",
+            "cut_selection_session",
+            "category_session",
+        ]
+
+        clean_translation_dict = {
+            "Cena vzestupně": "price",
+            "Cena sestupně": "-price",
+            "Název A-Z": "name",
+            "Název Z-A": "-name",
+        }
+
+  
+        selected_filter = request.POST.get("selected_filter")
+        if selected_filter in clean_translation_dict:
+            selected_filter = clean_translation_dict[selected_filter]
+            if "sort_by_price_session" in request.session:
+                request.session["sort_by_price_session"] = "created"
+            
+        for session_value in sessions:
+  
+            if session_value in request.session:
+                keys = request.session[session_value]
+                for key in keys:
+                    if key == selected_filter:
+                        del request.session[session_value]
+                        break
+
+ 
 
         print("After Deletion:", request.session.items())
 
@@ -362,9 +401,18 @@ def recommended_products(product_id):
 
 
 def akce(request):
+    discounted = False
     products = Product.objects.all()
-    return render(request, "catalog/akce.html", {"products": products})
+    for product in products:
+        if product.discounted:
+            discounted = True
+            break
+
+    print("this is discounted value: ", discounted)
+    return render(
+        request, "catalog/akce.html", {"products": products, "discounted": discounted}
+    )
 
 
 def discover_your_set(request):
-    return render(request, "catalog/home.html")
+    return render(request, "catalog/set_discovery.html")
