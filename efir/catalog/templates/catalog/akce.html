@@ -17,17 +17,29 @@
 <!-- Catalog of Products -->
   <section class="jumbotron text-center">
     <div class="container">
-      <h1 class="jumbotron-heading mt-5 mb-5">{% if category %}{{category}} </h1>
-        {% else %}
+
         <h1 class="jumbotron-heading mt-5 mb-5">Akce
-        {% endif %}</h1>
+        </h1>
+
+          {% if not discounted %}
+          
+          
+          <p></p>
+          <p class="text-center">
+              Aktuálně zde nejsou žádné produkty. Prohlédněte si celou nabídku v katalogu.</p>
+
+
+
+          {% endif %}
+       
+      
     </div>
 
 
   
 
   <div class="album py-2 bg-white">
-    <div class="container justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="container justify-content-center align-items-center" style="min-height: 20vh;">
       {% if products %}
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
 
@@ -54,7 +66,8 @@
               {% if product.discount %}
               <div class="discount-circle"> - {{ product.discount }} % </div>
             
-              
+              {% else %}
+             
               {% endif %}
             </div>
               {% endwith %}
@@ -73,16 +86,15 @@
         
 
         {% else %}
+       
+          
         {% endif %}
         {% endfor %}
-        
+       
       </div>
 
-    {% else %}
-    <p></p>
-      <p class="text-center">
-          Zde nejsou žádné produkty. Prohlédněte si celou nabídku.
-      </p>
+    
+    
   </div>
   
     {% endif %}

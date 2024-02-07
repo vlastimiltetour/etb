@@ -23,14 +23,18 @@ class Product(models.Model):
     long_description = models.TextField(blank=True)
 
     # Time Specifics
-    active = models.BooleanField(default=True, verbose_name='aktivní produkt')
+    active = models.BooleanField(default=True, verbose_name="aktivní produkt")
     new = models.BooleanField(default=False)
     limited = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     bestseller = models.BooleanField(default=False)
     headliner = models.BooleanField(default=False)
     discount = models.DecimalField(
-        max_digits=2, decimal_places=0, blank=True, null=True
+        max_digits=2,
+        decimal_places=0,
+        blank=True,
+        null=True,
+        verbose_name="Sleva v procentech",
     )
 
     # velikost = models.ManyToManyField(Inventory, blank=True, verbose_name="velikost")
@@ -64,6 +68,15 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalog:product_detail", args=[self.id, self.slug])
+
+    def is_na_miru(self):
+        return (
+            self.zpusob_vyroby.filter(size="Na Míru").exists()
+            and not self.zpusob_vyroby.filter(size="Skladem").exists()
+        )
+
+    def discounted(self):
+        return self.discount
 
 
 class Category(models.Model):
@@ -105,6 +118,7 @@ class ZpusobVyroby(models.Model):
     ZPUSOB_VYROBY_CHOICES = [
         ("Skladem", "Skladem"),
         ("Na Míru", "Na Míru"),
+        ("Tištěný", "Tištěný"),
         ("-", "-"),
     ]
 
@@ -143,6 +157,10 @@ class Photo(models.Model):
         img = img.rotate(0, expand=True)
 
         img.save(self.photo.path, quality=70, optimize=True)
+
+    class Meta:
+        verbose_name = "Fotografie"
+        verbose_name_plural = "Fotografie"
 
 
 # https://mailtrap.io/blog/django-contact-form/
@@ -199,10 +217,12 @@ class ProductSet(models.Model):
 
 
 class Certificate(models.Model):
-    product = models.ForeignKey(
-        "catalog.Product",
-        related_name="certificate",
-        on_delete=models.CASCADE,
+    product = (
+        models.OneToOneField(  # this one to one field connects product and certificate
+            "catalog.Product",
+            related_name="certificate",
+            on_delete=models.CASCADE,
+        )
     )  # one
 
     DISCOUNT_TYPES = [
@@ -230,6 +250,9 @@ class Certificate(models.Model):
         default=0,
         null=True,
     )
+
+    class Meta:
+        verbose_name = "Detail certifikátu"
 
 
 class BackgroundPhoto(models.Model):

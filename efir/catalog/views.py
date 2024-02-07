@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 from django.db.models import Q
 
 from cart.forms import CartAddProductForm
-from catalog.forms import ContactForm, FilterForm
+from catalog.forms import ContactForm, CreateSetForm, FilterForm
 from inventory.models import Inventory
 from orders.mail_confirmation import *
 from stripepayment.views import *
@@ -91,11 +91,18 @@ def save_filters(request, category_slug=None):
             if "cut_selection_session" not in request.session:
                 request.session["cut_selection_session"] = []
 
+            # this is cut selection which allows more than 1
+            # if cut_selection:
+            #    for x in cut_selection:
+            #        if x not in request.session["cut_selection_session"]:
+            #            request.session["cut_selection_session"].append(x)
+            #            request.session.save()
+
+            # this is cut selection which allows only 1 value
             if cut_selection:
-                for x in cut_selection:
-                    if x not in request.session["cut_selection_session"]:
-                        request.session["cut_selection_session"].append(x)
-                        request.session.save()
+                for cut in cut_selection:
+                    request.session["cut_selection_session"] = cut
+                    request.session.save()
 
     return redirect("catalog:katalog_vse")
 
@@ -133,7 +140,23 @@ def catalog_product_list(request, category_slug=None):
         query_filters &= Q(category__name=category_session[0])
 
     if cut_selection_session:
-        query_filters &= Q(short_description__in=cut_selection_session)
+        if type(cut_selection_session) == str:
+            if cut_selection_session == "Brazilky":
+                # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
+                query_filters &= Q(short_description__icontains="Brazilky")
+                query_filters &= ~Q(short_description__icontains="Brazilky na gumičkách")
+            elif cut_selection_session == "Podprsenka s kosticemi":
+                # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
+                query_filters &= Q(short_description__icontains="Podprsenka s kosticemi")
+                query_filters &= ~Q(short_description__icontains="Podprsenka s kosticemi a otevřeným košíčkem")
+
+            else:
+                query_filters &= Q(short_description__icontains=cut_selection_session)
+        else:
+            pass
+
+
+        
 
     if zpusob_vyroby_session:
         query_filters &= Q(
@@ -150,6 +173,7 @@ def catalog_product_list(request, category_slug=None):
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
+
         products = (
             products.filter(category=category)
             .filter(query_filters)
@@ -161,13 +185,11 @@ def catalog_product_list(request, category_slug=None):
 
     sum_of = len(products)
 
-
     selected_sizes = clean_session_names(size_selection_session)
     selected_zpubob_vyroby = clean_session_names(zpusob_vyroby_session)
     selected_sorting = clean_session_names(sort_by_price_session)
     selected_cuts = clean_session_names(cut_selection_session)
     selected_category = clean_session_names(category_session)
-
 
     return render(
         request,
@@ -232,9 +254,10 @@ def delete_all_filters(request):
 
     return redirect("catalog:katalog_vse")
 
+
 def delete_selected_filter(request):
     if request.method == "POST":
-        print("Before Deletion:", request.session.items())
+        # print("Before Deletion:", request.session.items())
 
         sessions = [
             "zpusob_vyroby_session",
@@ -250,25 +273,25 @@ def delete_selected_filter(request):
             "Název Z-A": "-name",
         }
 
-  
         selected_filter = request.POST.get("selected_filter")
+
         if selected_filter in clean_translation_dict:
             selected_filter = clean_translation_dict[selected_filter]
             if "sort_by_price_session" in request.session:
                 request.session["sort_by_price_session"] = "created"
-            
+
         for session_value in sessions:
-  
             if session_value in request.session:
                 keys = request.session[session_value]
+                print("tady zaciname se session keys", keys)
+
                 for key in keys:
-                    if key == selected_filter:
-                        del request.session[session_value]
-                        break
-
- 
-
-        print("After Deletion:", request.session.items())
+                    try:
+                        if key == selected_filter or key in selected_filter:
+                            print("vytiskni mi u session value", session_value)
+                            del request.session[session_value]
+                    except KeyError:
+                        print("hele tady je chyba KeyError", KeyError)
 
     return redirect("catalog:katalog_vse")
 
@@ -401,18 +424,19 @@ def recommended_products(product_id):
 
 
 def akce(request):
-    discounted = False
     products = Product.objects.all()
-    for product in products:
-        if product.discounted:
-            discounted = True
-            break
+    discounted = Product.objects.exclude(discount__isnull=True)
 
-    print("this is discounted value: ", discounted)
+    print("these are akce discounts:", discounted)
+
     return render(
         request, "catalog/akce.html", {"products": products, "discounted": discounted}
     )
 
 
 def discover_your_set(request):
-    return render(request, "catalog/set_discovery.html")
+    create_set_form = CreateSetForm()
+
+    return render(
+        request, "catalog/set_discovery.html", {"create_set_form": create_set_form}
+    )

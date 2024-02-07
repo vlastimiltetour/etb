@@ -41,6 +41,7 @@ class OrderAdmin(admin.ModelAdmin):
         "last_name",
         "email",
         "number",
+        "birthday",
         "comments",
         "shipping",
         "address",

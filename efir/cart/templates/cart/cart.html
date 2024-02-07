@@ -495,11 +495,21 @@
                      </div>
                      <div class="col-md-6 mb-3">
                         <label for="email">Telefonní číslo</label>
-                        {{ form.number }}
+                        <input type="number" id="number" name="number" class="form-control" placeholder="Vyplňte své telefonní číslo">
                         <div class="invalid-feedback">
                            Vyplňte své číslo.
                         </div>
                      </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6 mb-3">
+                        <label for="email">Datum narození</label>
+                        <input type="date" id="birthday" name="birthday" class="form-control" required oninput="validateDate(this)">
+                        <div class="invalid-feedback">
+                           Vyplňte svůj datum narození
+                        </div>
+                     </div>
+                     
                   </div>
                   <div class="mb-3">
                      <label for="email">Komentáře</label>
@@ -512,6 +522,16 @@
                            <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
                            <span class="checkmark"></span>
                      Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
+                     </label>
+                     <div class="invalid-feedback">
+                        Musíte souhlasit s obchodními podmínkami.
+                     </div>
+                  </div>
+                  <div class="mb-3">
+                     <label class="custom-checkbox">
+                           <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_gdpr">
+                           <span class="checkmark"></span>
+                           Souhlasím se zasíláním neswletterů, akčních nabídek a marketingových sdělení.
                      </label>
                      <div class="invalid-feedback">
                         Musíte souhlasit s obchodními podmínkami.
@@ -633,5 +653,18 @@
 
 </script>
 
+<script>
+//birthday validator
+function validateDate(input) {
+    // Validate date format (YYYY-MM-DD)
+    var regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(input.value)) {
+        input.setCustomValidity('Please enter a valid date in the format YYYY-MM-DD');
+    } else {
+        input.setCustomValidity('');
+    }
+}
+
+</script>
 
 {% endblock %}

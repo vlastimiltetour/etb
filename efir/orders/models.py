@@ -11,6 +11,7 @@ class Order(models.Model):
     etb_id = models.CharField(max_length=50, verbose_name="ID")
     first_name = models.CharField(max_length=50, verbose_name="Jméno")
     last_name = models.CharField(max_length=50, verbose_name="Příjmení")
+    birthday = models.DateField(verbose_name="Datum narození", null=True, blank=True)
     email = models.CharField(max_length=50, verbose_name="Email")
     number = models.CharField(max_length=20, verbose_name="Telefonní číslo")
     comments = models.TextField(blank=True, verbose_name="Komentáře")
@@ -34,9 +35,11 @@ class Order(models.Model):
         default=Decimal("0.00"),
         verbose_name="Cena dopravy (CZK)",
     )
-    address = models.CharField(max_length=250, verbose_name="Adresa")
+    address = models.CharField(max_length=250, verbose_name="Adresa", blank=False)
     vendor_id = models.CharField(
-        max_length=250, blank=True, verbose_name="ID prodejce", default="-"
+        max_length=250,
+        verbose_name="ID prodejce",
+        blank=False,
     )
     discount = models.DecimalField(
         decimal_places=0,
@@ -59,7 +62,6 @@ class Order(models.Model):
     )
     paid = models.BooleanField(default=False, verbose_name="Zaplaceno")
     shipped = models.BooleanField(default=False, verbose_name="Vyřízeno")
-
 
     class Meta:
         verbose_name = "Objednávky"
