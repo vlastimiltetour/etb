@@ -68,9 +68,19 @@
          <div class="row mt-3">
             <div id="category" class="small mb-1"> {{ product.category }} </div>
             <h1 class="display-5 fw-bold">{{ product.name }}</h1>
+
+
             <div class="fs-5">
+               {% if product.discount %}
+               <b class="display-7 fw-bolder">
+                  <div><del>{{ product.price }} Kč</del></div>
+               <div>{{ product.corrected_price }} Kč</div></b>
+               {% else %}
                <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
+               {% endif %}
             </div>
+
+
             <!--<div style="color: #39571B; font-style: italic; border-radius: 0;">
                Ušijeme do 2 týdnů!
                </div> -->

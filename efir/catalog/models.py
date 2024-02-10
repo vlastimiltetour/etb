@@ -79,6 +79,25 @@ class Product(models.Model):
         return self.discount
 
 
+    def corrected_price(self):
+        if self.discount:
+            self.discounted_price = self.price * (1 - self.discount / 100)  # Override self.price with discounted price
+        else:
+            self.discounted_price = 0
+
+        return round(self.discounted_price)
+  
+  
+    def cart_discounted_price(self):
+        if self.discount:
+            self.discounted_price = self.price * (1 - self.discount / 100)  # Override self.price with discounted price
+            return round(self.price - self.discounted_price)
+
+        else:
+            self.discounted_price = 0
+            return 0
+
+
 class Category(models.Model):
     CATEGORY_CHOICES = [
         ("Celé sety", "Celé sety"),

@@ -25,7 +25,7 @@
           
           
           <p></p>
-          <p class="text-center">
+          <p class="lead" style="text-center;">
               Aktuálně zde nejsou žádné produkty. Prohlédněte si celou nabídku v katalogu.</p>
 
 
@@ -75,8 +75,13 @@
                 <h5 class="fw-bolder"> {{ product.name }}</h5>
               
                 <p class="card-text">{{ product.short_description }}</p>                
-                  <b class="fw-semibold"> {{ product.price }} Kč</b>
                   
+                  {% if product.discount %}
+                  <div><b class="fw-semibold"><del>{{ product.price }} Kč</del></div>
+                    <div>{{ product.corrected_price }} Kč</div></b>
+                  {% else %}
+                  <b class="fw-semibold">{{ product.price }} Kč</b>
+                  {% endif %}                  
 
               </div>
             </div>

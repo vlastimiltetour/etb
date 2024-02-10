@@ -331,7 +331,17 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
                 {{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }} {{ item.poznamka }}
                 <br><small style="font-size: 14px; color: #777;">Velikost</small>
               </td>
+               {% if item.product.corrected_price %}
+              <td style="text-align: right; padding: 8px;"> 
+                <div><del>{{ item.price }} Kč</del></div>
+                <div> {{ item.product.corrected_price }} Kč</div>
+                <small style="font-size: 14px; color: #777;">Cena</small></td>
+
+              {% else %}
               <td style="text-align: right; padding: 8px;"> {{ item.price }} Kč<br><small style="font-size: 14px; color: #777;">Cena</small></td>
+              {% endif %}
+
+
           </tr>
           <!-- Add more rows for other products -->
           {% endfor %}

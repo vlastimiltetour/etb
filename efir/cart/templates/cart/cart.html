@@ -232,7 +232,12 @@
                   </div>
                   <span>
                      <div>
-                        <div> {{ item.total_price}} Kč </div>
+                        {% if product.discount %}
+                        <div><del> {{ item.total_price}} Kč </del></div>
+                        <div>{{ item.product.corrected_price }} Kč</div>
+                        {% else %}
+                        <div> {{ item.total_price}} Kč </div> 
+                        {% endif %}
                         <br>
                         <!-- Cart Remove Function--> 
                         <div style="text-align: right;">
@@ -288,6 +293,12 @@
                      <small>"{{ cart.coupon.code }}" ({{ cart.coupon.discount_value }} Kč sleva)</small>
                   </div>
                   <strong><span class="text-success">-{{ cart.get_discount }} Kč</span></strong>
+                  {% endif %}
+                  {% if item.product.discount %}
+                  <div class="text-success">
+                     <h6 class="my-0">Sleva </h6>
+                     <small> {{ item.product.corrected_price }} Kč sleva</small>
+                  </div>
                   {% endif %}
                </li>
                <li class="list-group-item d-flex justify-content-between">
@@ -650,12 +661,8 @@
        form.submit();
    }
 
-
-</script>
-
-<script>
-//birthday validator
-function validateDate(input) {
+// birthday validatpr 
+   function validateDate(input) {
     // Validate date format (YYYY-MM-DD)
     var regex = /^\d{4}-\d{2}-\d{2}$/;
     if (!regex.test(input.value)) {
@@ -665,6 +672,10 @@ function validateDate(input) {
     }
 }
 
+
 </script>
+
+
+
 
 {% endblock %}

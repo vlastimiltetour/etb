@@ -2,8 +2,6 @@ import uuid  # Import the UUID module
 from decimal import Decimal
 
 from django.conf import settings
-from django.shortcuts import get_object_or_404, redirect, render
-
 
 from catalog.forms import *
 from catalog.models import Product
@@ -34,12 +32,10 @@ class Cart:
         for item_id in item_ids:
             product_id = self.cart[item_id]["product_id"]
 
-            
             try:
                 product = Product.objects.get(id=product_id)  # Use product_id
             except Product.DoesNotExist:
                 return self.clean_cart_session()
-
 
             cart_item = self.cart[item_id]
             cart_item["product"] = product
@@ -151,37 +147,64 @@ class Cart:
         if address is not None:
             return address
 
-        return "-"
+        return "Nevyplněno"
 
     def get_country(self):
         country = self.country
-        return country if country else "-"
+
+        if country is not None:
+            return country
+
+        return "Nevyplněno"
 
     def get_vendor(self):
         vendor = self.vendor_id
-        return vendor
+
+        if vendor is not None:
+            return vendor
+
+        return "Nevyplněno"
 
     def clean_cart_session(self):
         # Clean up the cart session
         del self.session[settings.CART_SESSION_ID]
-        
+
         try:
             del self.session["coupon_id"]
             del self.session["cart_country"]
             del self.session["cart_address"]
             del self.session["cart_vendor"]
         except KeyError:
-            print('all good')
+            print("all good")
 
-       
         self.save()
 
     def get_total_price(self):
+        #product_discount = product.corrected_price()
+        #print("this is product corrected price:", product_discount)
         product_discount = 0  # TODO subtrackt the discount from product price
+
+        # access to the Product instance within the Cart class
+        for item in self.cart.values():
+            product_id = item["product_id"]
+            quantity = item["quantity"]
+            
+            try:
+                product = Product.objects.get(id=product_id)
+                product_discount += product.cart_discounted_price() * quantity  # Assuming corrected_price() is a method of the Product model
+                print("------")
+                print("this is product discount:", product_discount)
+                print("------")
+            except Product.DoesNotExist:
+                pass
+
+
         total_price = (
             sum((item["price"]) * item["quantity"] for item in self.cart.values())
             + (self.get_shipping_price())
             - product_discount
+         
+            
         )
         return total_price
 
@@ -229,9 +252,8 @@ class Cart:
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
-      
-        if self.get_discount_threshold():
 
+        if self.get_discount_threshold():
             if total_price >= self.get_discount_threshold():
                 if self.get_discount_type() == "Procento":
                     total_price_after_discount = total_price * (1 - discount)
@@ -242,7 +264,7 @@ class Cart:
 
             else:
                 return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
-        
+
         total_price_after_discount = self.get_total_price()
-        
+
         return total_price_after_discount
