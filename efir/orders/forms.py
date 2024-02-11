@@ -17,11 +17,13 @@ class OrderForm(forms.ModelForm):
             "last_name",
             "email",
             "number",
+            "birthday",
             "comments",
             "shipping",
             "address",
             "country",
             "vendor_id",
+            "newsletter_consent",
         ]
 
         widgets = {
@@ -36,6 +38,12 @@ class OrderForm(forms.ModelForm):
             ),
             "number": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "Napište své číslo"}
+            ),
+            "birthday": forms.DateInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Napište své datum narození",
+                },
             ),
             "comments": forms.Textarea(
                 attrs={
@@ -63,7 +71,9 @@ class OrderForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Vložte adresu, kam doručit oblečení",
-                    "readonly": True,  # Add the readonly attribute here
+                    "readonly": True,
                 },
             ),
+            "newsletter_consent": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}),
         }

@@ -181,7 +181,7 @@ def catalog_product_list(request, category_slug=None):
         )
 
     else:
-        products = Product.objects.filter(query_filters).order_by(sort_by_price_session)
+        products = Product.objects.filter(query_filters).order_by(sort_by_price_session).filter(active=True)
 
     sum_of = len(products)
 

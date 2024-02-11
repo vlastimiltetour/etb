@@ -35,13 +35,14 @@ class OrderAdmin(admin.ModelAdmin):
         "total_cost",
         "paid",
         "shipped",
-        "discount",
-        "quantity",
+        # "discount",
+        # "quantity",
         "first_name",
         "last_name",
         "email",
+        # "birthday",
         "number",
-        "birthday",
+        "newsletter_consent",
         "comments",
         "shipping",
         "address",
@@ -50,7 +51,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     inlines = [OrderItemInline]
 
-#    list_editable = ["shipped"]  # Add the "shipped" field to make it editable
+    # list_editable = ["shipped"]  # Add the "shipped" field to make it editable
 
     def get_total_cost(self, obj):
         return obj.get_total_cost()  # Call the Order's get_total_cost() method

@@ -62,6 +62,9 @@ class Order(models.Model):
     )
     paid = models.BooleanField(default=False, verbose_name="Zaplaceno")
     shipped = models.BooleanField(default=False, verbose_name="Vyřízeno")
+    newsletter_consent = models.BooleanField(
+        default=False, verbose_name="Souhlas - newsletter", null=True, blank=True
+    )
 
     class Meta:
         verbose_name = "Objednávky"
