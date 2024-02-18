@@ -4,16 +4,26 @@
 {% block content %}
 <div style="text-align: center;">
     <!-- About section-->
-    <section id="kontakty">
-        <div class="container px-4 px-lg-5 my-5">
-          <h1 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Objev svůj set</h1>
-
-                    <h4 class="lead mt-2 mb-2"><a href="mailto:objednavky@efirthebrand.cz"> objednavky@efirthebrand.cz</a></h4>
-                    <h4 class="lead mt-2 mb-2"> Sídlo: Příčná 1892/4, Praha1</h4>
+    <section id="objev_svuj_set">
 
 
+      <div class="container px-4 px-lg-5 my-5">
+        <h1 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Objev svůj vysněný set</h1>
+        <div class="row gx-4 gx-lg-5 align-items-center">
 
-                    <div class="d-flex justify-content-center">
+            <!-- Initial text -->      
+            <div class="col-lg-6">
+              <div class="album bg-white">
+                <div class="horizontal-line mt-5 mb-5"></div>
+                <div class="container">
+                    <p class="lead" style="text-align: center;"> 
+                      Dobrý den, já jsem Valérie, zakladatelka EFIR. Vítejte u tohoto exkluzivního dotazníku, který zmapuje Vaší jedinečnost - je klíčovým krokem k tomu, abychom Vám představili individuální doporučení spodního prádla, které Vám nejenom skvěle padne, ale také zdůrazní Váš neodolatelný šarm. První část dotazníku se soustředí na Váš vzhled, abychom lépe pochopili Vaše estetické preference. Tak pojďme na to, začněme s tím, co je skutečně důležité - a to jste VY!
+                    </p>
+                </div>
+                  <div class="horizontal-line mt-5 mb-5"></div>
+              </div>
+
+              <div class="d-flex justify-content-center">
                       <div class="nav-item col-md-auto col-ms-auto">
                         <a class="nav-link py-2 px-2 px-md-2" href="https://www.instagram.com/efir_the_brand/" target="_blank" rel="noopener">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="navbar-nav-svg" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
@@ -50,36 +60,163 @@
                         </a>
                       </div>
                     </div>
-
-
-                    <div class="row gx-4 mt-5 gx-lg-5 align-items-center">
-                      <img src="{% static 'assets/img/objev_set.jpg' %}" class="img-fluid" style="max-width: 100%;">
-                  
-                  <label class="mb-5 mt-5"><b>Vaše dotazy rádi zodpovíme</b></label>
-
-                </div>
-                    <form action="#" method="post" style="text-align: left;">
-                        {% csrf_token %}
-                        {{ form.name }} <br>
-                        {{ form.email }} <br>
-                        {{ form.message }} <br>
-                        <center>{{ form.captcha }} <br></center>
-                        <input type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-3 mt-2" value="Odeslat">
-                        <p class="lead">Odesláním souhlasíte se zpracováním osobních údajů.</p>
-                    </form>
-                    <!-- form objev set details -->
-                    <form>
-                      <div class="form-group">
-                        <label for="formGroupExampleInput">Example label</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
-                      </div>
-                      <div class="form-group">
-                        <label for="formGroupExampleInput2">Another label</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
-                      </div>
-                    </form>
-                    <!-- form objev set details ending -->
+          </div>
+          <!-- Photo -->
+          <div class="col-lg-6">
+              <img src="{% static 'assets/img/objev_set.jpg' %}" class="img-fluid" style="max-width: 100%;">
+          </div>
         </div>
+
+
+
+     
+
+    
+
+                   
+                  
+             
+                </div>
+
+                <!-- Create Set Form -->
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                  }
+                  .form-container {
+                    max-width: 500px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #f5f5f5;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                  }
+                  .form-group {
+                      margin-bottom: 20px;
+                  }
+                  .form-group label {
+                      font-weight: normal;
+                      margin-bottom: 5px;
+                      text-align: left;
+                      display: block; /* Change to block to ensure label text alignment */
+                  }
+                  .form-control {
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                  }
+                  .btn-submit {
+                    background-color: white;
+                    color: black;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 16px;
+                  }
+
+                  .captcha-container {
+                      display: flex;
+                      justify-content: center; /* Center horizontally */
+                  }
+                </style>
+              
+              
+
+
+              <!-- Start of Create Set Form-->
+
+              <div class="form-container mt-5 mb-5">
+                <h2>Vaše jedinečné preference</h2>
+                <h5>Dotazník</h5>
+                <br>
+                <form action="{% url 'catalog:discover_your_set' %}" method="post">
+          
+                    <div class="form-group">
+                        {{ create_set_form.name.label_tag }}
+                        {{ create_set_form.name }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.surname.label_tag }}
+                        {{ create_set_form.surname }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.birthday.label_tag }}
+                        {{ create_set_form.birthday }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.hair_color.label_tag }}
+                        {{ create_set_form.hair_color }}
+
+                        <img src="{% static 'assets/img/hair_color.jpg' %}" alt="Hair Color Example" style="max-width: 50%; margin-top: 10px;">
+                        
+
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.skin_color.label_tag }}
+                        {{ create_set_form.skin_color }}
+
+                        <img src="{% static 'assets/img/skin_color.jpg' %}" alt="Skin Color Example" style="max-width: 50%; margin-top: 10px;">
+
+                    </div>
+
+                    <p>Teď přicházíme na otázky, které se soustředí na váš vkus a preference v nošení spodního prádla. Potřebujeme vědět, co vám dává sebejistotu, co preferujete v barvách a designech, a jakou roli pro vás hraje pohodlí v každodenním nošení.</p>
+
+
+                    <div class="form-group">
+                        {{ create_set_form.color_tone.label_tag }}
+                        {{ create_set_form.color_tone }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.colors_to_avoid.label_tag }}
+                        {{ create_set_form.colors_to_avoid }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.design_preferences.label_tag }}
+                        {{ create_set_form.design_preferences }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.overall_fitness.label_tag }}
+                        {{ create_set_form.overall_fitness }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.individual_cut.label_tag }}
+                        {{ create_set_form.individual_cut }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.knickers_cut.label_tag }}
+                        {{ create_set_form.knickers_cut }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.bra_cut.label_tag }}
+                        {{ create_set_form.bra_cut }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.activities.label_tag }}
+                        {{ create_set_form.activities }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.preferred_details.label_tag }}
+                        {{ create_set_form.preferred_details }}
+                    </div>
+                    <div class="form-group">
+                        {{ create_set_form.gdpr_consent }} Souhlas se zpracováním osobních údajů, tlačítko s odebráním newslatter (oba jsou povinné zaškrtnout)
+
+                    </div>
+                    <div class="form-group captcha-container">
+                      {{ create_set_form.captcha }}
+                  </div>
+                    <button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-3 mt-2">Odeslat</button>
+                    {% csrf_token %}   
+                </form>
+            </div>
+        </div>
+
+
+      </div>
     </section>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -78,19 +78,21 @@ class Product(models.Model):
     def discounted(self):
         return self.discount
 
-
     def corrected_price(self):
         if self.discount:
-            self.discounted_price = self.price * (1 - self.discount / 100)  # Override self.price with discounted price
+            self.discounted_price = self.price * (
+                1 - self.discount / 100
+            )  # Override self.price with discounted price
         else:
             self.discounted_price = 0
 
         return round(self.discounted_price)
-  
-  
+
     def cart_discounted_price(self):
         if self.discount:
-            self.discounted_price = self.price * (1 - self.discount / 100)  # Override self.price with discounted price
+            self.discounted_price = self.price * (
+                1 - self.discount / 100
+            )  # Override self.price with discounted price
             return round(self.price - self.discounted_price)
 
         else:
@@ -308,3 +310,26 @@ class RightdPhoto(models.Model):
     class Meta:
         verbose_name = "Fotka vpravo"
         verbose_name_plural = "Fotka vpravo"
+
+
+class UniqueSetCreation(models.Model):
+    id = models.AutoField(primary_key=True)  # Automatically assigns an ID
+    name = models.CharField(max_length=255)
+    surname = models.CharField(max_length=255)
+    birthday = models.CharField(max_length=255)
+    hair_color = models.CharField(max_length=255)
+    skin_color = models.CharField(max_length=255)
+    color_tone = models.CharField(max_length=255)
+    colors_to_avoid = models.CharField(max_length=255)
+    design_preferences = models.CharField(max_length=255)
+    overall = models.CharField(max_length=255)
+    individual_cut = models.CharField(max_length=255)
+    knickers_cut = models.CharField(max_length=255)
+    bra_cut = models.CharField(max_length=255)
+    activities = models.CharField(max_length=255)
+    preferred_details = models.CharField(max_length=255, blank=True)
+    gdpr_consent = models.BooleanField()
+
+    class Meta:
+        verbose_name = "Dotazník"
+        verbose_name_plural = "Dotazníky Objev svůj set"

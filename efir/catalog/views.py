@@ -14,7 +14,8 @@ from orders.mail_confirmation import *
 from stripepayment.views import *
 
 from .models import (BackgroundPhoto, Category, LeftPhoto, Product, ProductSet,
-                     RightdPhoto)
+                     RightdPhoto, UniqueSetCreation)
+
 
 
 # returns home landing page
@@ -434,9 +435,52 @@ def akce(request):
     )
 
 
+
 def discover_your_set(request):
-    create_set_form = CreateSetForm()
+    
+    create_set_form = CreateSetForm(request.POST)
+ 
+    if request.method == "POST":
+    
+            if create_set_form.is_valid():
+                cd = create_set_form.cleaned_data
+
+                uniquesetcreation = UniqueSetCreation(
+
+                name = cd["name"],
+                surname = cd["surname"],
+                birthday = cd["birthday"],
+                hair_color = cd["hair_color"],
+                skin_color = cd["skin_color"],
+                color_tone = cd["color_tone"],
+                colors_to_avoid = cd["colors_to_avoid"],
+                design_preferences = cd["design_preferences"],
+                overall = cd["overall_fitness"],
+                individual_cut= cd["individual_cut"],
+                knickers_cut =cd["knickers_cut"],
+                bra_cut = cd["bra_cut"],
+                activities = cd["activities"],
+                preferred_details = cd["preferred_details"],
+                gdpr_consent = cd["gdpr_consent"]
+
+                )
+
+                uniquesetcreation.save()
+                try:
+                    return redirect("catalog:home")
+                except ssl.SSLCertVerificationError:
+                    logging.info(
+                        f"don't have the SSL"
+                    )
+                    return redirect("catalog:home")
+
+
+            else:
+                create_set_form = CreateSetForm()
+
 
     return render(
         request, "catalog/set_discovery.html", {"create_set_form": create_set_form}
     )
+
+

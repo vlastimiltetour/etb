@@ -3,12 +3,18 @@ from django.contrib import admin
 from inventory.models import Inventory
 
 from .models import (BackgroundPhoto, Category, Certificate, LeftPhoto, Photo,
-                     Product, ProductSet, RightdPhoto, ZpusobVyroby)
+                     Product, ProductSet, RightdPhoto, UniqueSetCreation,
+                     ZpusobVyroby)
 
 
 # Register your models here.
 class PhotoAdmin(admin.StackedInline):
     model = Photo
+
+
+class CertificateInline(admin.TabularInline):
+    model = Certificate
+    extra = 0
 
 
 class InventoryInline(admin.TabularInline):
@@ -67,7 +73,27 @@ class ProductAdmin(admin.ModelAdmin):
         # "display_velikost_produktu",
     ]
 
-    inlines = [PhotoAdmin, InventoryInline]  # this is creating inline to show photos
+    inlines = [
+        PhotoAdmin,
+        InventoryInline,
+        CertificateInline,
+    ]  # this is creating inline to show photos
+
+    def get_inline_instances(self, request, obj=None):
+        # Only show CertificateInline if the product's category is "darkove certifikaty"
+
+        if obj and obj.category and obj.category.name == "Dárkové certifikáty":
+            return [CertificateInline(self.model, self.admin_site)]
+        elif obj and obj.category and obj.category.name != "Dárkové certifikáty":
+            return PhotoAdmin(self.model, self.admin_site), InventoryInline(
+                self.model, self.admin_site
+            )
+
+        return (
+            CertificateInline(self.model, self.admin_site),
+            PhotoAdmin(self.model, self.admin_site),
+            InventoryInline(self.model, self.admin_site),
+        )
 
     def get_available_sizes_display(self, obj):
         # Display a comma-separated string of available sizes for each product
@@ -89,30 +115,6 @@ class ProductAdmin(admin.ModelAdmin):
             kwargs["choices"] = unique_choices
 
         return super().formfield_for_choice_field(db_field, request, **kwargs)
-
-    def save_model(self, request, obj, form, change):
-        # Customize saving behavior based on the selected category
-
-        if obj.category and obj.category.name == "Dárkové certifikáty":
-            # If the category is "Dárkové certifikáty", create the product first
-            super().save_model(request, obj, form, change)
-
-            # Then, create or update the Inventory with size "-"
-            inventory, created = Inventory.objects.get_or_create(
-                product=obj, size="-", defaults={"quantity": 1}
-            )
-
-            if not created:
-                # If the inventory entry already exists, update the quantity
-                # Manually set ZpusobVyroby to "-"
-
-                inventory.quantity = 1
-                inventory.save()
-            else:
-                # For other categories, proceed with the default saving behavior
-                super().save_model(request, obj, form, change)
-        else:
-            super().save_model(request, obj, form, change)
 
     class Meta:
         model = Product
@@ -139,3 +141,27 @@ class ProductSetAdmin(admin.ModelAdmin):
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
     list_display = ["product"]
+
+
+class UniqueSetCreationAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "surname",
+        "birthday",
+        "hair_color",
+        "skin_color",
+        "color_tone",
+        "colors_to_avoid",
+        "design_preferences",
+        "individual_cut",
+        "knickers_cut",
+        "bra_cut",
+        "activities",
+        "preferred_details",
+        "gdpr_consent",
+        #"newsletter_consent",
+    )
+
+
+admin.site.register(UniqueSetCreation, UniqueSetCreationAdmin)

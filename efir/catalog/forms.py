@@ -141,9 +141,8 @@ class FilterForm(forms.Form):
 
 
 class CreateSetForm(forms.Form):
-    captcha = ReCaptchaField()
-
     name = forms.CharField(
+        label="1. Vaše jméno",
         max_length=50,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "Vaše jméno"}
@@ -151,6 +150,7 @@ class CreateSetForm(forms.Form):
     )
 
     surname = forms.CharField(
+        label="2. Vaše příjmení",
         max_length=50,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "Vaše příjmení"}
@@ -158,68 +158,152 @@ class CreateSetForm(forms.Form):
     )
 
     # opravit
-    birthday = forms.DateField()
+    birthday = forms.DateField(
+        label="3. Kdy jste se narodila?",
+        widget=forms.DateInput(
+            attrs={"class": "form-control", "placeholder": "DD MM RRRR"}
+        ),
+    )
 
-    hair_color = forms.NumberInput()
+    hair_color = forms.ChoiceField(
+        choices=[(i, i) for i in range(1, 9)],
+        label="4. Jakou máte barvu vlasů:",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    skin_color = forms.NumberInput()
+    skin_color = forms.ChoiceField(
+        choices=[(i, i) for i in range(1, 7)],
+        label="5. Který odstín kůže na obrázku je nejvíce podobný té vaší:",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    color_tone = forms.ChoiceField()
+    color_tone = forms.ChoiceField(
+        choices=[
+            (i, i)
+            for i in [
+                "Neutrální barvy (černá, bílá, béžová)",
+                "Pastelové tóny (růžová, světlé modrá, levandule)",
+                "Tmavší tóny (tmavě modrá, smaragdová, bordo)",
+                "Výrazné barvy (červená, lavandule, tyrkysová)",
+            ]
+        ],
+        label="1. Jaký je váš oblíbený barevný odstín, ve kterém se cítíte nejlépe?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    colors_to_avoid = forms.ChoiceField()
+    colors_to_avoid = forms.ChoiceField(
+        choices=[(i, i) for i in ["Neexistují", "Jiné"]],
+        label="2. Existují barvy, kterým se snažíte vyhýbat?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    design_preferences = forms.ChoiceField()
+    design_preferences = forms.ChoiceField(
+        choices=[
+            (i, i)
+            for i in [
+                "Jednoduchý a elegantní",
+                "S decentními vzory",
+                "S výraznými vzory a detaily",
+            ]
+        ],
+        label="3. Máte raději jednoduchý a elegantní design, nebo preferujete spodní prádlo s výraznými vzory a detaily?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    overall_fitness = forms.ChoiceField()
+    overall_fitness = forms.ChoiceField(
+        choices=[
+            (i, i)
+            for i in [
+                "Ano, je to pro mě důležité",
+                "Někdy, záleží na příležitosti",
+                "Ne, spodní prádlo je pro mě samostatným prvkem",
+            ]
+        ],
+        label="4. Když si vybíráte spodní prádlo, berete v potaz, jak ladí s vaším běžným oblečením?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    individual_cut = forms.ChoiceField()
+    individual_cut = forms.ChoiceField(
+        choices=[
+            (i, i)
+            for i in [
+                "Pohodlí má pro mě prioritu",
+                "Obojí, ideálně kombinace pohodlí a stylu",
+                "Styl je pro mě klíčový",
+            ]
+        ],
+        label="5. Je pro vás důležitý pohodlný střih, nebo upřednostňujete spodní prádlo, které zdůrazňuje váš individuální styl?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    knickers_cut = forms.ChoiceField()
+    knickers_cut = forms.ChoiceField(
+        choices=[(i, i) for i in ["Brazilky", "Tanga", "Slipy"]],
+        label="6. Který střih kalhotek dělá pro Vás největší pohodli?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    bra_cut = forms.ChoiceField()
+    bra_cut = forms.ChoiceField(
+        choices=[
+            (i, i)
+            for i in [
+                "Podprsenka s kosticemi",
+                "Podprsenka bez kostic",
+                "Podprsenka s výrazným střihem",
+            ]
+        ],
+        label="7. Který střih podprsenky poskytuje komfortní nošení?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    activities = forms.ChoiceField()
+    activities = forms.ChoiceField(
+        choices=[
+            (i, i)
+            for i in [
+                "Každodenní nošení",
+                "Při sportovních aktivitách",
+                "Speciální příležitosti",
+            ]
+        ],
+        label="8. V jakých příležitostech nosíte spodní prádlo nejčastěji?",
+        widget=forms.Select(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
 
-    preferred_details = forms.TextInput()
+    preferred_details = forms.CharField(
+        required=False,
+        label="9. Existují nějaké specifické vlastnosti nebo detaily, na které jste zvyklá a které byste chtěla u vysněného setu? (volná odpověď)",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
+        ),
+    )
+
+    gdpr_consent = forms.BooleanField(
+        label="Souhlas se zpracováním osobních údajů",
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )
+
+    captcha = ReCaptchaField()
 
     """
-4. Jakou máte barvu vlasu: 1,2,3,4,5,6,7,8. (Obrázek)
-5. Který odstín kůže nejvíce podobný vaše: 1,2,3,4,5,6 (Obrázek)
-Teď přicházíme na otázky, které se soustředí na váš vkus a preference v nošení spodního prádla. Potřebujeme vědět, co vám dává sebejistotu, co preferujete v barvách a designech, a jakou roli pro vás hraje pohodlí v každodenním nošení.
-1. Jaký je váš oblíbený barevný odstín, ve kterém se cítíte nejlépe?
-    * Neutrální barvy (černá, bílá, béžová)
-    * Pastelové tóny (růžová, světlé modrá, levandule)
-    * Tmavší tóny (tmavě modrá, smaragdová, bordo)
-    * Výrazné barvy (červená, lavandule, tyrkysová)
-2. Existují barvy, kterým se snažíte vyhýbat?
-    * Neexistují
-    * Ano……. (volná odpověď)
-3. Máte raději jednoduchý a elegantní design, nebo preferujete spodní prádlo s výraznými vzory a detaily?
-    * Jednoduchý a elegantní
-    * S decentními vzory
-    * S výraznými vzory a detaily
-4. Když si vybíráte spodní prádlo, berete v potaz, jak ladí s vaším běžným oblečením?
-    * Ano, je to pro mě důležité
-    * Někdy, záleží na příležitosti
-    * Ne, spodní prádlo je pro mě samostatným prvkem
-5. Je pro vás důležitý pohodlný střih, nebo upřednostňujete spodní prádlo, které zdůrazňuje váš individuální styl?
-    * Pohodlí má pro mě prioritu
-    * Obojí, ideálně kombinace pohodlí a stylu
-    * Styl je pro mě klíčový
-6. Který střih kalhotek dělá pro Vás největší pohodli?
-    * Brazilky
-    * Tanga
-    * Slipy
-7. Který střih podprsenky poskytuje komfortní nošení?
-    * Podprsenka s kosticemi
-    * Podprsenka bez kostic
-    * Podprsenka s výrazným střihem
-8. V jakých příležitostech nosíte spodní prádlo nejčastěji?
-* Každodenní nošení
-* Při sportovních aktivitách
-* Speciální příležitosti
-9. Existují nějaké specifické vlastnosti nebo detaily, na které jste zvyklá a které byste chtěla u vysněného setu? (volná odpověď)
-
 Pak tlačítko odeslat. + tlačítko souhlas se zpracováním osobních údajů, tlačítko s odebráním newslatter (oba jsou povinné zaškrtnout)
 (Logo a poděkování) Děkujeme za vyplnění dotazníku! Vaše odpověď bude pečlivě zpracována a dostanete ve výsledku zašleme Vám na email nabídku setu o kterých jste snili . Do 2 pracovních dnů dostanete na email svůj vysněný set. 
 """

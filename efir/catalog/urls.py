@@ -26,7 +26,7 @@ urlpatterns = [
     ),
     path("katalog", views.catalog_product_list, name="katalog_vse"),
     path("akce", views.akce, name="akce"),
-    path("objev_set", views.discover_your_set, name="discover_your_set"),
+    path("discover_your_set", views.discover_your_set, name="discover_your_set"),
     path(
         "<slug:category_slug>",
         views.catalog_product_list,
