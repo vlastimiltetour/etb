@@ -116,7 +116,7 @@ hr {
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  font-weight: 500;
+  font-weight: 300;
   line-height: 1.2;
 }
 
@@ -5676,7 +5676,12 @@ textarea.form-control-lg {
   display: block;
   padding: var(--bs-tooltip-arrow-height);
   margin: var(--bs-tooltip-margin);
-  font-family: var(--bs-font-sans-serif);
+font-family: "Montserrat", sans-serif;
+font-weight: 500; /* Thin */serif;
+font-weight: 100; /* Thin */
+
+
+
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -5786,7 +5791,12 @@ textarea.form-control-lg {
   z-index: var(--bs-popover-zindex);
   display: block;
   max-width: var(--bs-popover-max-width);
-  font-family: var(--bs-font-sans-serif);
+font-family: "Montserrat", sans-serif;
+font-weight: 500; /* Thin */serif;
+font-weight: 100; /* Thin */
+
+
+
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -8093,7 +8103,7 @@ textarea.form-control-lg {
 }
 
 .fw-semibold {
-  font-weight: 600 !important;
+  font-weight: 500 !important;
 }
 
 .fw-bolder {
@@ -11236,7 +11246,12 @@ button:focus {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: var(--bs-font-sans-serif);
+font-family: "Montserrat", sans-serif;
+font-weight: 500; /* Thin */serif;
+font-weight: 100; /* Thin */
+
+
+
 }
 
 

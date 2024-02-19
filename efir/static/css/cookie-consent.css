@@ -5,19 +5,23 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: var(--bs-font-sans-serif);
+font-family: "Montserrat", sans-serif;
+font-weight: 100;
+
+
+
 }
 
 /* Use a more specific selector */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Montserrat', Arial, sans-serif;
 }
 
 /* OR */
 
 /* Add !important */
 body {
-  font-family: sans-serif !important;
+  font-family: 'Montserrat' !important;
 }
 
 .wrapper{

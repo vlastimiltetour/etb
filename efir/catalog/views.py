@@ -28,7 +28,7 @@ def home(request, category_slug=None):
     # print(coupon_create(request.GET, 500.00))
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(active=True)[:9]
+    products = Product.objects.filter(active=True, category__name="Celé sety")[:9]
     best_sellers = Product.objects.filter(bestseller=True, active=True)
     novinky = Product.objects.filter(new=True, active=True)
     productsets = ProductSet.objects.all()

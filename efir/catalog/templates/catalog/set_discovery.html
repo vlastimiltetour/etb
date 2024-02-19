@@ -8,7 +8,7 @@
 
 
       <div class="container px-4 px-lg-5 my-5">
-        <h1 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Objev svůj vysněný set</h1>
+        <h1 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Objevte svůj vysněný set</h1>
         <div class="row gx-4 gx-lg-5 align-items-center">
 
             <!-- Initial text -->      
@@ -76,37 +76,35 @@
                    
                   
              
-                </div>
+                
 
                 <!-- Create Set Form -->
                 <style>
                   body {
-                    font-family: Arial, sans-serif;
-                  }
+                    font-family: 'Montserrat', sans-serif;
+}                  
                   .form-container {
-                    max-width: 500px;
                     margin: 0 auto;
                     padding: 20px;
-                    background-color: #f5f5f5;
                     border-radius: 10px;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    
                   }
                   .form-group {
                       margin-bottom: 20px;
                   }
                   .form-group label {
-                      font-weight: normal;
+                      font-weight: bold;
                       margin-bottom: 5px;
                       text-align: left;
                       display: block; /* Change to block to ensure label text alignment */
                   }
                   .form-control {
-                    width: 100%;
-                    padding: 10px;
-                    font-size: 16px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    box-sizing: border-box;
+                      padding: 10px;
+                      font-size: 16px;
+                      border: none; /* Remove the default border */
+                      border-bottom: 1px solid #ccc; /* Add a bottom border */
+                      border-radius: 0; /* Optional: Remove border-radius */
+                      box-sizing: border-box;
                   }
                   .btn-submit {
                     background-color: white;
@@ -144,83 +142,218 @@
                         {{ create_set_form.surname }}
                     </div>
                     <div class="form-group">
-                        {{ create_set_form.birthday.label_tag }}
-                        {{ create_set_form.birthday }}
-                    </div>
-                    <div class="form-group">
-                        {{ create_set_form.hair_color.label_tag }}
-                        {{ create_set_form.hair_color }}
+                      {{ create_set_form.birthday.label_tag }}
 
-                        <img src="{% static 'assets/img/hair_color.jpg' %}" alt="Hair Color Example" style="max-width: 50%; margin-top: 10px;">
+                      <input type="date" id="id_birthday" name="birthday" class="form-control" required oninput="validateDate(this)">
+                      <div class="invalid-feedback">
+                         Vyplňte svůj datum narození
+                        <!-- {{ create_set_form.birthday }} -->
+                      </div>
+                    </div>
+                    
+
+                    <!-- 
+                      It seems like you're encountering validation errors when rendering the form. The error message indicates that "on" is not a valid option for hair color. This could be because the value attribute of your radio buttons is set to "{{ hair_color_choice }}" which might be returning unexpected values like "on" instead of the actual hair color choices.
+                      To fix this, ensure that the value attribute of your radio buttons corresponds to the actual values of the hair color choices. Here's the corrected code:
+                    -->
+                    <div class="form-group">
+                      {{ create_set_form.hair_color.label_tag }}
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-lg-2 col-sm-12">
                         
+                                <div class="form-check">
+                                    {% for hair_color_choice_key, hair_color_choice_value in create_set_form.hair_color.field.choices %} <!--  create_set_form.hair_color.field.choices this returns tuples of choices from the form -->
+                                        <label class="form-check-label" for="id_{{ hair_color_choice_key }}">
+                                            <input class="form-check-input" type="radio" name="hair_color" id="id_{{ hair_color_choice_key }}" value="{{ hair_color_choice_key }}">
+                                            <div style="font-weight: light;">{{ hair_color_choice_value }}</div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-lg-10 col-sm-12">
+                                <img src="{% static 'assets/img/hair_color.jpg' %}" alt="Hair Color Example" class="d-block mx-auto" style="max-height: 232px; margin-top: 10px;">
+                            </div>
+                            </div>
+                        </div>
+                     </div>
 
-                    </div>
                     <div class="form-group">
-                        {{ create_set_form.skin_color.label_tag }}
-                        {{ create_set_form.skin_color }}
+                      {{ create_set_form.skin_color.label_tag }}
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-lg-2 col-sm-12">
+        
+                              
+                          
+                              <div class="form-check">
+                                {% for skin_color_key, skin_color_value in create_set_form.skin_color.field.choices %}
+                                <label class="form-check-label" for="id_{{ skin_color_key }}">
+                                  <input class="form-check-input" type="radio" name="skin_color" id="id_{{ skin_color_key }}" value="{{ skin_color_key }}">
+                                    <div style="font-weight: light;">{{ skin_color_value }}</div>
+                                </label>
+                                {% endfor %}
 
-                        <img src="{% static 'assets/img/skin_color.jpg' %}" alt="Skin Color Example" style="max-width: 50%; margin-top: 10px;">
-
+                              </div>
+                           </div>
+                            <div class="col-lg-10 col-sm-12">
+                              <img src="{% static 'assets/img/skin_color.jpg' %}" alt="Skin Color Example" class="d-block mx-auto" style="max-height: 232px; margin-top: 10px;">
+                            </div>
+                 
+                        </div>
+                      </div>
                     </div>
 
-                    <p>Teď přicházíme na otázky, které se soustředí na váš vkus a preference v nošení spodního prádla. Potřebujeme vědět, co vám dává sebejistotu, co preferujete v barvách a designech, a jakou roli pro vás hraje pohodlí v každodenním nošení.</p>
-
-
+                    
+                
+                    <div class="container mt-5 mb-5" style="padding-top: 100px; padding-bottom: 100px;">
+                       <p>Teď přicházíme na otázky, které se soustředí na váš vkus a preference v nošení spodního prádla. Potřebujeme vědět, co vám dává sebejistotu, co preferujete v barvách a designech, a jakou roli pro vás hraje pohodlí v každodenním nošení.</p>
+                    </div>
+                   
                     <div class="form-group">
                         {{ create_set_form.color_tone.label_tag }}
-                        {{ create_set_form.color_tone }}
+
+                        <div class="form-check">
+                          {% for color_tone_key, color_tone_value in create_set_form.color_tone.field.choices %}
+                          <label class="form-check-label" for="id_{{ color_tone_key }}">
+                            <input class="form-check-input" type="radio" name="color_tone" id="id_{{ color_tone_key }}" value="{{ color_tone_key }}">
+                              <div style="font-weight: light;">{{ color_tone_value }}</div>
+                          </label>
+                          {% endfor %}
+
+                        </div>
+                   
                     </div>
                     <div class="form-group">
                         {{ create_set_form.colors_to_avoid.label_tag }}
-                        {{ create_set_form.colors_to_avoid }}
+          
+                        <div class="form-check">
+                          {% for colors_to_avoid_key, colors_to_avoid_value in create_set_form.colors_to_avoid.field.choices %}
+                          <label class="form-check-label" for="id_{{ colors_to_avoid_key }}">
+                            <input class="form-check-input" type="radio" name="colors_to_avoid" id="id_{{ colors_to_avoid_key }}" value="{{ colors_to_avoid_key }}">
+                              <div style="font-weight: light;">{{ colors_to_avoid_value }}</div>
+                          </label>
+                          {% endfor %}
+                        </div>
                     </div>
                     <div class="form-group">
                         {{ create_set_form.design_preferences.label_tag }}
-                        {{ create_set_form.design_preferences }}
+                        
+                        <div class="form-check">
+                          {% for design_preferences_key, design_preferences_value in create_set_form.design_preferences.field.choices %}
+                          <label class="form-check-label" for="id_{{ design_preferences_key }}">
+                            <input class="form-check-input" type="radio" name="design_preferences" id="id_{{ design_preferences_key }}" value="{{ design_preferences_key }}">
+                              <div style="font-weight: light;">{{ design_preferences_value }}</div>
+                          </label>
+                          {% endfor %}
+                        </div>
                     </div>
                     <div class="form-group">
                         {{ create_set_form.overall_fitness.label_tag }}
-                        {{ create_set_form.overall_fitness }}
+                        
+                        <div class="form-check">
+                          {% for overall_fitness_key, overall_fitness_value in create_set_form.overall_fitness.field.choices %}
+                          <label class="form-check-label" for="id_{{ overall_fitness_key }}">
+                            <input class="form-check-input" type="radio" name="overall_fitness" id="id_{{ overall_fitness_key }}" value="{{ overall_fitness_key }}">
+                              <div style="font-weight: light;">{{ overall_fitness_value }}</div>
+                          </label>
+                          {% endfor %}
+                        </div>
                     </div>
                     <div class="form-group">
                         {{ create_set_form.individual_cut.label_tag }}
-                        {{ create_set_form.individual_cut }}
+                        
+                        <div class="form-check">
+                          {% for individual_cut_key, individual_cut_value in create_set_form.individual_cut.field.choices %}
+                          <label class="form-check-label" for="id_{{ individual_cut_key }}">
+                            <input class="form-check-input" type="radio" name="individual_cut" id="id_{{ individual_cut_key }}" value="{{ individual_cut_key }}">
+                              <div style="font-weight: light;">{{ individual_cut_value }}</div>
+                          </label>
+                          {% endfor %}
+                        </div>
                     </div>
                     <div class="form-group">
                         {{ create_set_form.knickers_cut.label_tag }}
-                        {{ create_set_form.knickers_cut }}
+                        <div class="form-check">
+                          {% for knickers_cut_key, knickers_cut_value in create_set_form.knickers_cut.field.choices %}
+                          <label class="form-check-label" for="id_{{ knickers_cut }}">
+                            <input class="form-check-input" type="radio" name="knickers_cut" id="id_{{ knickers_cut_key }}" value="{{ knickers_cut_key }}">
+                              <div style="font-weight: light;">{{ knickers_cut_value }}</div>
+                          </label>
+                          {% endfor %}
+                        </div>
                     </div>
                     <div class="form-group">
                         {{ create_set_form.bra_cut.label_tag }}
-                        {{ create_set_form.bra_cut }}
+                        
+                        <div class="form-check">
+                          {% for bra_cut_key, bra_cut_value in create_set_form.bra_cut.field.choices %}
+                          <label class="form-check-label" for="id_{{ bra_cut_key }}">
+                            <input class="form-check-input" type="radio" name="bra_cut" id="id_{{ bra_cut_key }}" value="{{ bra_cut_key }}">
+                              <div style="font-weight: light;">{{ bra_cut_value }}</div>
+                          </label>
+                          {% endfor %}
+                        </div>
                     </div>
                     <div class="form-group">
                         {{ create_set_form.activities.label_tag }}
-                        {{ create_set_form.activities }}
+                        
+                        <div class="form-check">
+                          {% for activities_key, activities_value in create_set_form.activities.field.choices %}
+                          <label class="form-check-label" for="id_{{ activities_key }}">
+                            <input class="form-check-input" type="radio" name="activities" id="id_{{ activities_key }}" value="{{ activities_key }}">
+                              <div style="font-weight: light;">{{ activities_value }}</div>
+                          </label>
+                          {% endfor %}
+                        </div>
                     </div>
                     <div class="form-group">
                         {{ create_set_form.preferred_details.label_tag }}
                         {{ create_set_form.preferred_details }}
                     </div>
+                    <br>
+                    <br>
                     <div class="form-group">
-                        {{ create_set_form.gdpr_consent }} Souhlas se zpracováním osobních údajů, tlačítko s odebráním newslatter (oba jsou povinné zaškrtnout)
+                        <!-- {{ create_set_form.gdpr_consent }} -->
+                        <input type="checkbox" name="gdpr_consent" class="form-check-input" required="" id="id_gdpr_consent" checked>
+                        Souhlasím se zpracováním osobních údajů.
 
                     </div>
+                    <div class="form-group">
+                      <!-- {{ create_set_form.gdpr_consent }} -->
+                      <input type="checkbox" name="newsletter_consent" class="form-check-input" id="id_newsletter_consent" checked>
+                      Souhlasím se zasíláním neswletterů, akčních nabídek a marketingových sdělení.
+
+                  </div>
                     <div class="form-group captcha-container">
                       {{ create_set_form.captcha }}
                   </div>
-                    <button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-3 mt-2">Odeslat</button>
-                    {% csrf_token %}   
+                  <button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-3 mt-2">Odeslat</button>
+                  {% csrf_token %}
                 </form>
             </div>
         </div>
 
 
       </div>
+    
     </section>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src='{% static "/js/scripts.js" %}'></script>
+    <script>
+      // date validation 
+      function validateThis(input) {
+          var regex = /^\d{4}-\d{2}-\d{2}$/;
+          if (!regex.test(input.value)) {
+            input.setCustomValidity('Prosím vložte validní datum ve formátu DD-MM-RRRR');
+          }
+          else {
+            input.setCustomValidity('');
+          }
+        }
+    
+    </script>
 </div>
 {% endblock %}
