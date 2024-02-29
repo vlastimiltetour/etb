@@ -9,27 +9,40 @@
 
 <!-- Intro Photos-->
 <div>
-
   <div class="row align-items-md-stretch">
     {% for photo in leftphoto %}
     <div class="col-md-4 py-2 d-none d-md-block" style="height: 86vh; padding-right: 5px; padding-left: 10px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('{{ photo.photo.url}}'); background-size: cover; background-position: center;"></div>
+      <div class="h-100 bg-body-tertiary border fade-in" style="background-image: url('{{ photo.photo.url}}'); background-size: cover; background-position: center;"></div>
     </div>
     {% endfor %}
     {% for photo in backgroundphoto %}
     <div class="col-md-4 col-sm-12 py-2" style="height: 86vh; padding-right: 5px; padding-left: 5px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('{{ photo.photo.url }}'); background-size: cover; background-position: center top; max-width: 100%;"></div>
+      <div class="h-100 bg-body-tertiary border fade-in" style="background-image: url('{{ photo.photo.url }}'); background-size: cover; background-position: center top; max-width: 100%;"></div>
     </div>
     {% endfor %}
     {% for photo in rightphoto %}
     <div class="col-md-4 py-2 d-none d-md-block" style="height: 86vh; padding-right: 10px; padding-left: 5px;">
-      <div class="h-100 bg-body-tertiary border" style="background-image: url('{{ photo.photo.url}}'); background-size: cover; background-position: center;"></div>
+      <div class="h-100 bg-body-tertiary border fade-in" style="background-image: url('{{ photo.photo.url}}'); background-size: cover; background-position: center;"></div>
     </div>
     {% endfor %}
   </div>
 </div>
 
+<style>
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+}
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+</style>
 
 
  <!-- About section-->

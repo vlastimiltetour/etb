@@ -1,6 +1,11 @@
+import xlwt
 from django.contrib import admin
+from django.http import HttpResponse
 
 from .models import Order, OrderItem
+
+from django.utils import timezone
+
 
 
 class OrderItemInline(admin.TabularInline):
@@ -109,3 +114,59 @@ class OrderAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request, obj=None):
         return False
+        
+
+    def export_to_excel(self, request, queryset):
+        response = HttpResponse(content_type="application/ms-excel")
+        response["Content-Disposition"] = 'attachment; filename="orders.xls"'
+
+        wb = xlwt.Workbook(encoding="utf-8")
+        ws = wb.add_sheet("Orders")
+
+        row_num = 0
+
+        columns = [
+            "etb_id",
+            "products",
+            "total_cost",
+            "paid",
+            "shipped",
+            "first_name",
+            "last_name",
+            "email",
+            "number",
+            "newsletter_consent",
+            "comments",
+            "shipping",
+            "address",
+        ]
+
+        for col_num, column_title in enumerate(columns):
+            ws.write(row_num, col_num, column_title)
+
+        for obj in queryset:
+            row_num += 1
+            row = [
+                obj.etb_id,
+                ", ".join([item.product.name for item in obj.items.all()]),
+                obj.get_total_cost(),
+                obj.paid,
+                obj.shipped,
+                obj.first_name,
+                obj.last_name,
+                obj.email,
+                obj.number,
+                obj.newsletter_consent,
+                obj.comments,
+                obj.shipping,
+                obj.address,
+            ]
+            for col_num, cell_value in enumerate(row):
+                ws.write(row_num, col_num, cell_value)
+
+        wb.save(response)
+        return response
+
+    export_to_excel.short_description = "Exportovat do Excelu"
+
+    actions = ["export_to_excel"]

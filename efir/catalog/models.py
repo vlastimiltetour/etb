@@ -185,7 +185,7 @@ class Photo(models.Model):
 
 
 # https://mailtrap.io/blog/django-contact-form/
-class ContactForm(models.Model):
+class ContactModel(models.Model):
     name = models.CharField(max_length=50, verbose_name="Jméno")
     email = models.CharField(
         max_length=50, validators=[EmailValidator()], verbose_name="Email"
@@ -329,7 +329,9 @@ class UniqueSetCreation(models.Model):
     activities = models.CharField(max_length=255)
     preferred_details = models.CharField(max_length=255, blank=True)
     gdpr_consent = models.BooleanField()
+    newsletter_consent = models.BooleanField(null=True)
 
     class Meta:
         verbose_name = "Dotazník"
         verbose_name_plural = "Dotazníky Objev svůj set"
+

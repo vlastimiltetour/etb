@@ -142,43 +142,33 @@ class FilterForm(forms.Form):
 
 class CreateSetForm(forms.Form):
     name = forms.CharField(
-        label="1. Vaše jméno",
+        label="Vaše jméno",
         max_length=50,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Vaše jméno"}
-        ),
+        widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
     surname = forms.CharField(
-        label="2. Vaše příjmení",
+        label="Vaše příjmení",
         max_length=50,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Vaše příjmení"}
-        ),
+        widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
     # opravit
     birthday = forms.DateField(
-        label="3. Kdy jste se narodila?",
-        widget=forms.DateInput(
-            attrs={"class": "form-control", "placeholder": "DD MM RRRR"}
-        ),
+        label="Kdy jste se narodila?",
+        widget=forms.DateInput(attrs={"class": "form-control"}),
     )
 
     hair_color = forms.ChoiceField(
         choices=[(i, i) for i in range(1, 9)],
-        label="4. Jakou máte barvu vlasů:",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Jakou máte barvu vlasů:",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     skin_color = forms.ChoiceField(
         choices=[(i, i) for i in range(1, 7)],
-        label="5. Který odstín kůže na obrázku je nejvíce podobný té vaší:",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Který odstín kůže na obrázku je nejvíce podobný té vaší:",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     color_tone = forms.ChoiceField(
@@ -191,18 +181,20 @@ class CreateSetForm(forms.Form):
                 "Výrazné barvy (červená, lavandule, tyrkysová)",
             ]
         ],
-        label="1. Jaký je váš oblíbený barevný odstín, ve kterém se cítíte nejlépe?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Jaký je váš oblíbený barevný odstín, ve kterém se cítíte nejlépe?",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     colors_to_avoid = forms.ChoiceField(
         choices=[(i, i) for i in ["Neexistují", "Jiné"]],
-        label="2. Existují barvy, kterým se snažíte vyhýbat?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Existují barvy, kterým se snažíte vyhýbat?",
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
+    other_colors = forms.CharField(
+        label="Jiné barvy, kterým se snažíte vyhýbat:",
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control", "id": "other_color"}),
     )
 
     design_preferences = forms.ChoiceField(
@@ -214,10 +206,8 @@ class CreateSetForm(forms.Form):
                 "S výraznými vzory a detaily",
             ]
         ],
-        label="3. Máte raději jednoduchý a elegantní design, nebo preferujete spodní prádlo s výraznými vzory a detaily?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Máte raději jednoduchý a elegantní design, nebo preferujete spodní prádlo s výraznými vzory a detaily?",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     overall_fitness = forms.ChoiceField(
@@ -229,10 +219,8 @@ class CreateSetForm(forms.Form):
                 "Ne, spodní prádlo je pro mě samostatným prvkem",
             ]
         ],
-        label="4. Když si vybíráte spodní prádlo, berete v potaz, jak ladí s vaším běžným oblečením?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Když si vybíráte spodní prádlo, berete v potaz, jak ladí s vaším běžným oblečením?",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     individual_cut = forms.ChoiceField(
@@ -244,18 +232,14 @@ class CreateSetForm(forms.Form):
                 "Styl je pro mě klíčový",
             ]
         ],
-        label="5. Je pro vás důležitý pohodlný střih, nebo upřednostňujete spodní prádlo, které zdůrazňuje váš individuální styl?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Je pro vás důležitý pohodlný střih, nebo upřednostňujete spodní prádlo, které zdůrazňuje váš individuální styl?",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     knickers_cut = forms.ChoiceField(
         choices=[(i, i) for i in ["Brazilky", "Tanga", "Slipy"]],
-        label="6. Který střih kalhotek dělá pro Vás největší pohodli?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Který střih kalhotek dělá pro Vás největší pohodli?",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     bra_cut = forms.ChoiceField(
@@ -267,10 +251,8 @@ class CreateSetForm(forms.Form):
                 "Podprsenka s výrazným střihem",
             ]
         ],
-        label="7. Který střih podprsenky poskytuje komfortní nošení?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Který střih podprsenky poskytuje komfortní nošení?",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     activities = forms.ChoiceField(
@@ -282,28 +264,28 @@ class CreateSetForm(forms.Form):
                 "Speciální příležitosti",
             ]
         ],
-        label="8. V jakých příležitostech nosíte spodní prádlo nejčastěji?",
-        widget=forms.Select(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="V jakých příležitostech nosíte spodní prádlo nejčastěji?",
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     preferred_details = forms.CharField(
         required=False,
-        label="9. Existují nějaké specifické vlastnosti nebo detaily, na které jste zvyklá a které byste chtěla u vysněného setu? (volná odpověď)",
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Vaše odpověď"}
-        ),
+        label="Existují nějaké specifické vlastnosti nebo detaily, na které jste zvyklá a které byste chtěla u vysněného setu? (volná odpověď)",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
     gdpr_consent = forms.BooleanField(
-        label="Souhlas se zpracováním osobních údajů",
+        label="Souhlas se zpracováním osobních údajů.",
         widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
-
-    captcha = ReCaptchaField()
+    newsletter_consent = forms.BooleanField(
+        label="Souhlas s odebíráním newsletteru.",
+        required=False,
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )
 
     """
 Pak tlačítko odeslat. + tlačítko souhlas se zpracováním osobních údajů, tlačítko s odebráním newslatter (oba jsou povinné zaškrtnout)
 (Logo a poděkování) Děkujeme za vyplnění dotazníku! Vaše odpověď bude pečlivě zpracována a dostanete ve výsledku zašleme Vám na email nabídku setu o kterých jste snili . Do 2 pracovních dnů dostanete na email svůj vysněný set. 
 """
+

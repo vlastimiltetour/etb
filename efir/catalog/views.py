@@ -13,9 +13,8 @@ from inventory.models import Inventory
 from orders.mail_confirmation import *
 from stripepayment.views import *
 
-from .models import (BackgroundPhoto, Category, LeftPhoto, Product, ProductSet,
-                     RightdPhoto, UniqueSetCreation)
-
+from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
+                     Product, ProductSet, RightdPhoto, UniqueSetCreation)
 
 
 # returns home landing page
@@ -367,6 +366,7 @@ def obchodni_podminky(request):
 from django.template.loader import render_to_string
 
 
+
 # https://mailtrap.io/blog/django-contact-form/
 def kontakty(request):
     categories = Category.objects.all()
@@ -374,10 +374,15 @@ def kontakty(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
+            print(form.errors)
             name = form.cleaned_data["name"]
             email = form.cleaned_data["email"]
             message = form.cleaned_data["message"]
             success_message = "Your message has been successfully submitted."
+
+            # Create a new instance of ContactModel and save it
+            contact_model = ContactModel(name=name, email=email, message=message)
+            contact_model.save()
 
             html_content = render_to_string("orders/contact_form.html")
             msg = EmailMultiAlternatives(
@@ -406,6 +411,7 @@ def kontakty(request):
 
     else:
         form = ContactForm()
+
 
     return render(
         request,
