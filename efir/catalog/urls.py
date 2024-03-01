@@ -13,6 +13,8 @@ urlpatterns = [
     path("ochrana-osobnich-udaju", views.ochrana, name="ochrana"),
     path("obchodni-podminky", views.obchodni_podminky, name="obchodni_podminky"),
     path("o-nas", views.about, name="about"),
+    path("discover_your_set", views.discover_your_set, name="discover_your_set"),
+    path("objednat_na_miru", views.objednat_na_miru, name="objednat_na_miru"),
     path(
         "delete_all_filters",
         views.delete_all_filters,
@@ -26,7 +28,6 @@ urlpatterns = [
     ),
     path("katalog", views.catalog_product_list, name="katalog_vse"),
     path("akce", views.akce, name="akce"),
-    path("discover_your_set", views.discover_your_set, name="discover_your_set"),
     path(
         "<slug:category_slug>",
         views.catalog_product_list,

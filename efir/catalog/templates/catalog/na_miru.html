@@ -1,0 +1,321 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+<style>
+   body {
+   font-family: 'Montserrat', sans-serif;
+   }                  
+   .form-container {
+   margin: 0 auto;
+   padding: 20px;
+   border-radius: 10px;
+   }
+   .form-group {
+   margin-bottom: 20px;
+   }
+   .form-group label {
+   font-weight: bold;
+   margin-bottom: 5px;
+   text-align: left;
+   display: block; /* Change to block to ensure label text alignment */
+   }
+   .form-control {
+   padding: 10px;
+   font-size: 16px;
+   border: none; /* Remove the default border */
+   border-bottom: 1px solid #ccc; /* Add a bottom border */
+   border-radius: 0; /* Optional: Remove border-radius */
+   box-sizing: border-box;
+   }
+   .btn-submit {
+   background-color: white;
+   color: black;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 16px;
+   }
+   .captcha-container {
+   display: flex;
+   justify-content: center; /* Center horizontally */
+   }
+ 
+   /* Styling for parts 1 and 2 */
+   .part {
+   display: none; /* Hide by default */
+   margin-bottom: 20px;
+   }
+</style>
+<div style="text-align: center;">
+
+  
+    <!-- About section-->
+    <section id="part1">
+       <div class="container px-4 px-lg-5 my-5">
+        <h1 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Šití na míru</h1>
+
+          <div class="row gx-4 gx-lg-5 align-items-center">
+             <!-- Initial text -->      
+             <div class="col-lg-8">
+                <h4 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Co je spodní prádlo na míru? </h4>
+                <div class="album bg-white">
+                  <!--   <div class="horizontal-line mt-5 mb-5"></div> -->
+                   <div class="na_miru_container">
+                    <p class="lead" style="text-align: center;">
+                     <ul style="list-style-type: disc; text-align: left; padding-left: 20px;">
+                        <li style="margin-bottom: 10px;">Premium služba, která nejenže zdůrazní vaši krásu, ale také se přizpůsobí vašim individuálním potřebám.</li>
+                        <li style="margin-bottom: 10px;">Váš set bude šit s pečlivostí a precizností, kterou si zasloužíte, a každý detail bude laděn přesně podle vašich přání.</li>
+                        <li style="margin-bottom: 10px;">Cena za prádlo na míru je vyšší o 30% než cena standardních velikostí skladem. Vaše investice se tak stává nejen výrazem luxusu, ale také zárukou perfektního padnutí a osobního přístupu od EFIR.</li>
+                        <li style="margin-bottom: 10px;">Objevte ten správný set prádla, který vám bude sedět jako druhá kůže.</li>
+                    </ul>
+                    
+                    </p>
+                    
+                   </div>
+                 <!--   <div class="horizontal-line mt-5 mb-5"></div> --> 
+                </div>
+                
+             </div>
+             <!-- Photo -->
+             <div class="col-lg-4">
+                <img src="{% static 'assets/img/co_je.jpg' %}" class="img-fluid" style="max-width: 100%; max-height: 400px;">
+             </div>
+          </div>
+       </div>
+    </section>
+    <section id="part1">
+      <div class="container px-4 px-lg-5 my-5">
+          <h4 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Proč potřebujete prádlo na míru?</h4>
+  
+          <div class="row text-center">
+              <div class="col-md-4 position-relative text-center">
+                  <div class="rounded-circle img-fluid mb-3 black-circle">
+                      <div class="image-text">
+                        <h5 style="margin-bottom: 0px;">Výběr střihů</h5>
+                      </div>
+                  </div>
+                  <div class="content-container">
+                      <p>Máte možnost vybrat si střih kalhotek, podprsenky a pasu.</p>
+                  </div>
+              </div>
+              <div class="col-md-4 position-relative text-center">
+                  <div class="rounded-circle img-fluid mb-3 black-circle">
+                      <div class="image-text">
+                          <h5 style="margin-bottom: 0px;">Individuální přístup</h5>
+                      </div>
+                  </div>
+                  <div class="content-container">
+                      <p>Pro každou zákaznici připravujeme jedinečný návrhový střih, který se odrazí ve vašem konečném produktu.</p>
+                  </div>
+              </div>
+              <div class="col-md-4 position-relative text-center">
+                  <div class="rounded-circle img-fluid mb-3 black-circle">
+                      <div class="image-text">
+                        <h5 style="margin-bottom: 0px;">Ideálně padnoucí prádlo</h5>
+                      </div>
+                  </div>
+                  <div class="content-container">
+                      <p>Díky šití prádla přesně podle vašich mír zaručujeme, že každá podprsenka, kalhotky či pas budou sedět jako vaše druhá kůže. Pokud ne, rychle vám ušijeme nový kus.</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  
+  <style>
+      .content-container {
+          max-width: 250px; /* Adjust the width as per your requirement */
+          margin: 0 auto; /* Centers the content */
+      }
+
+      .na_miru_container {
+         max-width: 850px; /* Adjust the width as per your requirement */
+         margin: 0 auto; /* Centers the content */
+      }
+
+      .li {
+         margin-bottom: 10px;
+      }
+  </style>
+  
+  
+    
+    
+    
+    <style>
+.black-circle {
+    width: 140px; /* Adjust the width and height as needed */
+    height: 140px; /* Adjust the width and height as needed */
+    background-color: white;
+    border: 2px solid black; /* Add a white border */
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* Add this line to center horizontally */
+}
+
+.image-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 0;
+
+
+
+}
+
+
+    </style>    
+    
+     <section id="part1">
+        <div class="container px-4 px-lg-5 my-5">
+           <div class="row gx-4 gx-lg-5 align-items-center">
+             <!-- Photo -->
+             <div class="col-lg-4">
+               <img src="{% static 'assets/img/kdo_potrebuje.jpg' %}" class="img-fluid" style="max-width: 100%; max-height: 400px;">
+            </div>
+              <!-- Initial text -->      
+              <div class="col-lg-8">
+                <h3 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Kdo potřebuje prádlo na míru?</h3>
+
+                 <div class="album bg-white">
+                   <!--   <div class="horizontal-line mt-5 mb-5"></div> -->
+                    <div class="na_miru_container">
+                     <ul style="list-style-type: disc; text-align: left; padding-left: 20px;">
+                        <li style="margin-bottom: 10px;">Ti, kteří hledají jedinečnost, dokonalé padnutí a maximální komfort.</li>
+                        <li style="margin-bottom: 10px;">Ti, co mají velký košíček a malý obvod pod prsy, nebo naopak, a kvůli tomu nesedí vám konfekční velikosti.</li>
+                        <li style="margin-bottom: 10px;">Ti co mají oblíbené střihy podprsenky nebo kalhotek, které nejsou běžně k dispozici.</li>
+                        <li style="margin-bottom: 10px;">Každá žena si zaslouží prádlo, které je přesně šité podle jejích proporcí a preferencí.</li>                       
+                     </ul>
+                    </div>
+                   <!--   <div class="horizontal-line mt-5 mb-5"></div> -->
+                 </div>
+               
+              </div>
+             
+           </div>
+        </div>
+     </section>
+     <section id="part1">
+        <div class="container px-4 px-lg-5 my-5">
+           <div class="row gx-4 gx-lg-5 align-items-center">
+              <!-- Initial text -->      
+              <div class="col-lg-8">
+                 <div class="album bg-white">
+                    <h3 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Kdo pro Vás prádlo na míru ušije?</h3>
+                   <!--   <div class="horizontal-line mt-5 mb-5"></div> -->
+                    <div class="na_miru_container">
+                     <p class="lead" style="text-align: center;"> 
+                        Ahoj, jsem Valérie, zakladatelka značky a designérka EFIR the brand, a já tvůj set a míru budu šít já.<br><br>
+                        Už více než čtyři roky jsem se věnovala tvorbě unikátního spodního prádla, během kterých jsem ušila více než <b>1700 unikátních setů</b> a navrhla přes <b>90 designů</b>. <br><br>
+                        S mými více než <b>1100 spokojenými zákaznicemi</b> vím, co znamená skutečně kvalitní spodní prádlo, které poskytuje pohodlí a sebevědomí každé ženě. 
+                    </div>
+                   <!--   <div class="horizontal-line mt-5 mb-5"></div> -->
+                 </div>
+                 
+              </div>
+              <!-- Photo -->
+              <div class="col-lg-4">
+               <img src="{% static 'assets/img/kdo_bude_sit.jpg' %}" class="img-fluid" style="max-width: 100%; max-height: 400px;">
+            </div>
+           </div>
+        </div>
+     </section>
+     <section id="part1">
+        <div class="container px-4 px-lg-5 my-5">
+           <div class="row gx-4 gx-lg-5 align-items-center">
+              <!-- Initial text -->      
+           
+                 <div class="album bg-white">
+                    <h3 class="jumbotron-heading mt-5 mb-5" style="text-align: center;">Jak prádlo na míru objednat?</h3>
+                   <!--   <div class="horizontal-line mt-5 mb-5"></div> -->
+                    <div class="na_miru_container">
+                     <ul style="list-style-type: disc; text-align: left;">
+<li style="margin-bottom: 10px;">Vyberte si set označený štítkem "možnost na míru".
+<li style="margin-bottom: 10px;">Vyplňte kontaktní formulář s požadavkem na set prádla na míru.
+<li style="margin-bottom: 10px;">Obratem vám pošleme instrukce a video návod, jak se správně změřit s podrobnými komentáři.
+<li style="margin-bottom: 10px;">Probereme s vámi detaily objednávky a pošleme možnosti platby (pozor na podvodníky, že požadavek o platbě přijde pouze od objednavky@efirthebrand.cz).
+<li style="margin-bottom: 10px;">Do dvou týdnů ušijeme váš set prádla a pošleme vám ho hezky zabalený v cestovním pytlíku a s božským arómaterapeutickým dotykem.
+<li style="margin-bottom: 10px;">Teď prosím vyplňte kontaktní formulář a společně se vydejme na cestu sebelásky s EFIR the brand – prádlem ušitým pro bohyně.
+</ul>
+
+
+
+                    </div>
+                 </div>
+                 
+              </div>
+              <!-- Photo -->
+              
+           </div>
+        </div>
+     </section>
+   
+     <section id="part1">
+      <div class="container px-4 px-lg-5 my-5">
+         <div class="row gx-4 gx-lg-5 align-items-center">
+            <!-- Initial text -->      
+         
+            <div class="na_miru_container">
+               <div class="album bg-white">
+                 
+                  <form action="{% url 'catalog:objednat_na_miru' %}" method="post">
+                     <div class="form-group">
+                        {{ mapping_siti_na_miru_form.name.label_tag }}
+                        {{ mapping_siti_na_miru_form.name }}
+                     </div>
+                     <div class="form-group">
+                        {{ mapping_siti_na_miru_form.surname.label_tag }}
+                        {{ mapping_siti_na_miru_form.surname }}
+                     </div>
+                     <div class="form-group">
+                        {{ mapping_siti_na_miru_form.email.label_tag }}
+                        {{ mapping_siti_na_miru_form.email }}
+                     </div>
+                     <div class="form-group">
+                        {{ mapping_siti_na_miru_form.number.label_tag }}
+                        {{ mapping_siti_na_miru_form.number }}
+                     </div>
+                     <div class="form-group">
+                        {{ mapping_siti_na_miru_form.set_selection.label_tag }}
+                        {{ mapping_siti_na_miru_form.set_selection }}
+                     </div>
+                     <div class="form-group">
+                        <!-- {{ mapping_siti_na_miru_form.gdpr_consent }} -->
+                        <input type="checkbox" name="gdpr_consent" class="form-check-input" required="" id="id_gdpr_consent" checked>
+                        Souhlasím se zpracováním osobních údajů.
+                        </div>
+                        <div class="form-group">
+                        <!-- {{ mapping_siti_na_miru_form.gdpr_consent }} -->
+                        <input type="checkbox" name="newsletter_consent" class="form-check-input" id="id_newsletter_consent" checked>
+                        Souhlasím se zasíláním neswletterů, akčních nabídek a marketingových sdělení.
+                        </div>
+                        <div class="form-group captcha-container">
+
+                           {{ mapping_siti_na_miru_form.captcha }}
+                        </div>
+
+                        <center><button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-3 mt-2">Odeslat</button></center>
+                        {% csrf_token %}
+                        </form>
+               </div>
+            </div>
+            <!-- Photo -->
+            
+         </div>
+      </div>
+   </section>
+  
+   
+
+ </div>
+{% endblock %}

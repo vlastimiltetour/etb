@@ -141,6 +141,8 @@ class FilterForm(forms.Form):
 
 
 class CreateSetForm(forms.Form):
+    # captcha = ReCaptchaField()
+
     name = forms.CharField(
         label="Vaše jméno",
         max_length=50,
@@ -152,7 +154,16 @@ class CreateSetForm(forms.Form):
         max_length=50,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
-
+    email = forms.EmailField(
+        max_length=50,
+        validators=[EmailValidator()],
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Email, který bežně používáte...",
+            }
+        ),
+    )
     # opravit
     birthday = forms.DateField(
         label="Kdy jste se narodila?",
@@ -194,8 +205,19 @@ class CreateSetForm(forms.Form):
     other_colors = forms.CharField(
         label="Jiné barvy, kterým se snažíte vyhýbat:",
         required=False,
-        widget=forms.TextInput(attrs={"class": "form-control", "id": "other_color"}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "kterou nikdy nevyberete na spodní prádlo...",
+            }
+        ),
     )
+
+    def set_other_colors(self):
+        colors_to_avoid = self.cleaned_data.get("colors_to_avoid", None)
+
+        if colors_to_avoid != "Jiné":
+            self.cleaned_data["other_colors"] = "-"
 
     design_preferences = forms.ChoiceField(
         choices=[
@@ -238,7 +260,7 @@ class CreateSetForm(forms.Form):
 
     knickers_cut = forms.ChoiceField(
         choices=[(i, i) for i in ["Brazilky", "Tanga", "Slipy"]],
-        label="Který střih kalhotek dělá pro Vás největší pohodli?",
+        label="Který střih kalhotek je pro Vás nejpohodlnější?",
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
@@ -271,7 +293,9 @@ class CreateSetForm(forms.Form):
     preferred_details = forms.CharField(
         required=False,
         label="Existují nějaké specifické vlastnosti nebo detaily, na které jste zvyklá a které byste chtěla u vysněného setu? (volná odpověď)",
-        widget=forms.TextInput(attrs={"class": "form-control"}),
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Oceníme každé slovo..."}
+        ),
     )
 
     gdpr_consent = forms.BooleanField(
@@ -289,3 +313,60 @@ Pak tlačítko odeslat. + tlačítko souhlas se zpracováním osobních údajů,
 (Logo a poděkování) Děkujeme za vyplnění dotazníku! Vaše odpověď bude pečlivě zpracována a dostanete ve výsledku zašleme Vám na email nabídku setu o kterých jste snili . Do 2 pracovních dnů dostanete na email svůj vysněný set. 
 """
 
+
+"""Pod jméno, příjmení, e-mail atd, musí být polyčko pro “Popište o který set byste měla zájem?” A pak odeslat"""
+
+
+class MappingSetNaMiruForm(forms.Form):
+    captcha = ReCaptchaField()
+
+    name = forms.CharField(
+        label="Vaše jméno",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+
+    surname = forms.CharField(
+        label="Vaše příjmení",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    email = forms.EmailField(
+        max_length=50,
+        validators=[EmailValidator()],
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Email, který bežně používáte...",
+            }
+        ),
+    )
+    number = forms.CharField(
+        label="Vaše telefonní číslo",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    set_selection = forms.CharField(
+        label="Jaký set jste si vybrala?",
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "sem vepište set, který jste vybrala, požadavky, nebo otázky...",
+            }
+        ),
+    )
+    gdpr_consent = forms.BooleanField(
+        label="Souhlas se zpracováním osobních údajů",
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )
+    newsletter_consent = forms.BooleanField(
+        label="Souhlas s odebíráním newsletteru",
+        required=False,
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )
+
+    """
+Pak tlačítko odeslat. + tlačítko souhlas se zpracováním osobních údajů, tlačítko s odebráním newslatter (oba jsou povinné zaškrtnout)
+(Logo a poděkování) Děkujeme za vyplnění dotazníku! Vaše odpověď bude pečlivě zpracována a dostanete ve výsledku zašleme Vám na email nabídku setu o kterých jste snili . Do 2 pracovních dnů dostanete na email svůj vysněný set. 
+"""

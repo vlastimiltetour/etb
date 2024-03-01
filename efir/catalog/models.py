@@ -315,12 +315,16 @@ class RightdPhoto(models.Model):
 class UniqueSetCreation(models.Model):
     id = models.AutoField(primary_key=True)  # Automatically assigns an ID
     name = models.CharField(max_length=255)
+    email = models.CharField(
+        max_length=50, validators=[EmailValidator()], verbose_name="Email", null=True
+    )
     surname = models.CharField(max_length=255)
     birthday = models.CharField(max_length=255)
     hair_color = models.CharField(max_length=255)
     skin_color = models.CharField(max_length=255)
     color_tone = models.CharField(max_length=255)
     colors_to_avoid = models.CharField(max_length=255)
+    other_colors = models.CharField(max_length=255, blank=True, null=True)
     design_preferences = models.CharField(max_length=255)
     overall = models.CharField(max_length=255)
     individual_cut = models.CharField(max_length=255)
@@ -335,3 +339,18 @@ class UniqueSetCreation(models.Model):
         verbose_name = "Dotazník"
         verbose_name_plural = "Dotazníky Objev svůj set"
 
+
+class MappingSetNaMiru(models.Model):
+    name = models.CharField(max_length=255)
+    surname = models.CharField(max_length=255)
+    email = models.CharField(
+        max_length=50, validators=[EmailValidator()], verbose_name="Email"
+    )
+    number = models.CharField(max_length=255)
+    set_selection = models.CharField(max_length=255)
+    gdpr_consent = models.BooleanField()
+    newsletter_consent = models.BooleanField(null=True)
+
+    class Meta:
+        verbose_name = "Dotazník šití na míru"
+        verbose_name_plural = "Dotazníky šití na míru"

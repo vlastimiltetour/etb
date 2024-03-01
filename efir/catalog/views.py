@@ -6,16 +6,18 @@ from django.shortcuts import get_object_or_404, redirect, render
 logging.basicConfig(level=logging.DEBUG)
 
 from django.db.models import Q
+from catalog.mail_conf import siti_na_miru_email_confirmation
 
 from cart.forms import CartAddProductForm
-from catalog.forms import ContactForm, CreateSetForm, FilterForm
+from catalog.forms import (ContactForm, CreateSetForm, FilterForm,
+                           MappingSetNaMiruForm)
 from inventory.models import Inventory
 from orders.mail_confirmation import *
 from stripepayment.views import *
 
 from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
-                     Product, ProductSet, RightdPhoto, UniqueSetCreation)
-
+                     MappingSetNaMiru, Product, ProductSet, RightdPhoto,
+                     UniqueSetCreation)
 
 # returns home landing page
 def home(request, category_slug=None):
@@ -443,50 +445,102 @@ def akce(request):
 
 
 def discover_your_set(request):
-    
     create_set_form = CreateSetForm(request.POST)
- 
+    print(create_set_form.errors)
     if request.method == "POST":
-    
-            if create_set_form.is_valid():
-                cd = create_set_form.cleaned_data
+        if create_set_form.is_valid():
+            cd = create_set_form.cleaned_data
 
-                uniquesetcreation = UniqueSetCreation(
-
-                name = cd["name"],
-                surname = cd["surname"],
-                birthday = cd["birthday"],
-                hair_color = cd["hair_color"],
-                skin_color = cd["skin_color"],
-                color_tone = cd["color_tone"],
-                colors_to_avoid = cd["colors_to_avoid"],
-                design_preferences = cd["design_preferences"],
-                overall = cd["overall_fitness"],
-                individual_cut= cd["individual_cut"],
-                knickers_cut =cd["knickers_cut"],
-                bra_cut = cd["bra_cut"],
-                activities = cd["activities"],
-                preferred_details = cd["preferred_details"],
-                gdpr_consent = cd["gdpr_consent"]
-
+            uniquesetcreation = UniqueSetCreation(
+                name=cd["name"],
+                surname=cd["surname"],
+                birthday=cd["birthday"],
+                hair_color=cd["hair_color"],
+                skin_color=cd["skin_color"],
+                color_tone=cd["color_tone"],
+                colors_to_avoid=cd["colors_to_avoid"],
+                design_preferences=cd["design_preferences"],
+                overall=cd["overall_fitness"],
+                individual_cut=cd["individual_cut"],
+                knickers_cut=cd["knickers_cut"],
+                bra_cut=cd["bra_cut"],
+                activities=cd["activities"],
+                preferred_details=cd["preferred_details"],
+                gdpr_consent=cd["gdpr_consent"],
+            )
+            print(create_set_form.errors)
+            uniquesetcreation.save()
+            try:
+                return render(
+                    request,
+                    "catalog/set_discovery_completed.html",
+                    {"create_set_form": create_set_form},
+                )
+            except ssl.SSLCertVerificationError:
+                logging.info("don't have the SSL")
+                return render(
+                    request,
+                    "catalog/set_discovery_completed.html",
+                    {"create_set_form": create_set_form},
                 )
 
-                uniquesetcreation.save()
-                try:
-                    return redirect("catalog:home")
-                except ssl.SSLCertVerificationError:
-                    logging.info(
-                        f"don't have the SSL"
-                    )
-                    return redirect("catalog:home")
+        else:
+            print(create_set_form.errors)
+            create_set_form = CreateSetForm()
 
-
-            else:
-                create_set_form = CreateSetForm()
-
-
+    print(create_set_form.errors)
     return render(
         request, "catalog/set_discovery.html", {"create_set_form": create_set_form}
     )
 
+
+def objednat_na_miru(request):
+    categories = Category.objects.all()
+    mapping_siti_na_miru_form = MappingSetNaMiruForm(request.POST)
+    print(mapping_siti_na_miru_form.errors)
+
+    if request.method == "POST":
+        if mapping_siti_na_miru_form.is_valid():
+            cd = mapping_siti_na_miru_form.cleaned_data
+
+            mappingsetnamiru = MappingSetNaMiru(
+                name=cd["name"],
+                surname=cd["surname"],
+                email=cd["email"],
+                number=cd["number"],
+                set_selection=cd["set_selection"],
+                gdpr_consent=cd["gdpr_consent"],
+                newsletter_consent=cd["newsletter_consent"],
+            )
+            mappingsetnamiru.save()
+
+            mapping_id = mappingsetnamiru.id
+            siti_na_miru_email_confirmation(mapping_id)
+
+            try:
+                return render(
+                    request,
+                    "catalog/set_discovery_completed.html",
+                    {"mappingsetnamiru": mappingsetnamiru},
+                )
+            except ssl.SSLCertVerificationError:
+                logging.info("don't have the SSL, but the email has been sent")
+                return render(
+                    request,
+                    "catalog/set_discovery_completed.html",
+                    {"mappingsetnamiru": mappingsetnamiru},
+                )
+
+        else:
+            print(mappingsetnamiru.errors)
+            mappingsetnamiru = MappingSetNaMiruForm()
+
+    return render(
+        request,
+        "catalog/na_miru.html",
+        {
+            "categories": categories,
+            "mapping_siti_na_miru_form": mapping_siti_na_miru_form,
+        },
+    )
 

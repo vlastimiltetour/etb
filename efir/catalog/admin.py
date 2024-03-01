@@ -1,11 +1,12 @@
+import xlwt  # for excel export
 from django.contrib import admin
-import xlwt #for excel export
-from django.http import HttpResponse #for excel export
+from django.http import HttpResponse  # for excel export
+
 from inventory.models import Inventory
 
-from .models import (BackgroundPhoto, Category, Certificate, LeftPhoto, Photo,
-                     Product, ProductSet, RightdPhoto, UniqueSetCreation,
-                     ZpusobVyroby)
+from .models import (BackgroundPhoto, Category, Certificate, LeftPhoto,
+                     MappingSetNaMiru, Photo, Product, ProductSet, RightdPhoto,
+                     UniqueSetCreation, ZpusobVyroby)
 
 
 # Register your models here.
@@ -250,3 +251,15 @@ class ContactModelAdmin(admin.ModelAdmin):
         "message",
     )  # Fields to display in the admin list view
     search_fields = ("name", "email", "message")  # Fields to enable search in the admin
+
+@admin.register(MappingSetNaMiru)
+class MappingSetNaMiruAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "surname",
+        "email",
+        "number",
+        "set_selection",
+        "gdpr_consent",
+        "newsletter_consent",
+    )
