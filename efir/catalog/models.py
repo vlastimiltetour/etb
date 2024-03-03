@@ -21,7 +21,9 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0)
     short_description = models.TextField(max_length=50, blank=True)
     long_description = models.TextField(blank=True)
-
+    skladem_na_miru = models.BooleanField(
+        default=False, verbose_name="Skladem i na míru"
+    )
     # Time Specifics
     active = models.BooleanField(default=True, verbose_name="aktivní produkt")
     new = models.BooleanField(default=False)

@@ -15,6 +15,7 @@ urlpatterns = [
     path("o-nas", views.about, name="about"),
     path("discover_your_set", views.discover_your_set, name="discover_your_set"),
     path("objednat_na_miru", views.objednat_na_miru, name="objednat_na_miru"),
+    path("product_feed", views.product_feed, name="product_feed"),
     path(
         "delete_all_filters",
         views.delete_all_filters,

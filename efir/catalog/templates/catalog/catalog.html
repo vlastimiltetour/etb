@@ -201,10 +201,9 @@
             {% elif product.new %}
             <div class="discount-circle"> NEW </div>
             {% elif product.limited %}
-            <div class="discount-circle" style="font-size: 40%;"> LIMITOVANÁ EDICE </div>
-            {% elif product.is_na_miru %}
-            <div class="discount-circle" style="font-size: 70%;"> POUZE NA MíRU </div>
-            
+            <div class="discount-circle"> LIMITOVANÁ EDICE </div>
+{% elif product.skladem_na_miru %}
+            <div class="discount-circle">SKLADEM<br>I&nbsp;NA MíRU </div>            
             {% endif %}
           </div>
             {% endwith %}

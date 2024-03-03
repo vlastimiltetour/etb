@@ -3,6 +3,11 @@
 {% load humanize %}
 {% load i18n %}
 
+
+
+
+
+
 {% block content %}
 <!--Intro, Header Jumbotron --> 
 <!-- link here: https://getbootstrap.com/docs/5.3/examples/jumbotron/ -->
@@ -31,7 +36,7 @@
 <style>
   .fade-in {
     opacity: 0;
-    animation: fadeIn 1s ease-in-out forwards;
+    animation: fadeIn 1.5s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
@@ -43,6 +48,8 @@
     }
 }
 </style>
+
+
 
 
  <!-- About section-->
@@ -118,7 +125,7 @@
 
   {% if best_sellers %}
   <div class="container">
-    <h1 class="jumbotron-heading mt-5 mb-5">Bestsellers</h1>
+    <h1 class="jumbotron-heading mt-5 mb-5">Best Sellers</h1>
   </div>
   {% else %}
   {% endif %}
@@ -139,13 +146,15 @@
           <img class="card-img-top img-fluid" 
           src="{{ bestseller.photos.first.photo.url }}" 
           alt="{{ bestseller.name }}">
-          <div class="discount-circle" style="font-size: 50%;"> BESTSELLER </div>
+          <div class="discount-circle"> BESTSELLER </div>
           {% if bestseller.discount %}
           <div class="discount-circle"> - {{ bestseller.discount }} % </div>
           {% elif bestseller.new %}
           <div class="discount-circle"> NEW </div>
           {% elif bestseller.limited %}
-          <div class="discount-circle" style="font-size: 50%;"> LIMITOVANÁ EDICE </div>
+          <div class="discount-circle"> LIMITOVANÁ EDICE </div>
+          {% elif product.skladem_na_miru %}
+          <div class="discount-circle"> SKLADEM<br>I&nbsp;NA MíRU </div>
           {% endif %}
    
           <div class="card-body d-flex flex-column" style="padding: 1rem;">
@@ -171,7 +180,9 @@
     <div class="container">
 
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
-        {% for product in products %}        
+       
+        {% for product in products %}  
+     
         <!-- Single Product -->
 
         <div class="col-md-4 mb-4">
@@ -187,6 +198,10 @@
             src="{{ first_photo.photo.url }}"
             data-holder-rendered="true">
             {% endif %}
+
+            <!-- start na miru -->
+          
+            <!-- end na miru -->
             {% if product.discount %}
             <div class="discount-circle"> - {{ product.discount }} % </div>
             {% elif product.new %}
@@ -194,13 +209,16 @@
             {% elif product.limited %}
             <div class="discount-circle" style="font-size: 50%;"> LIMITOVANÁ EDICE </div>
             {% endif %}
+            {% if product.skladem_na_miru %}
+            <div class="discount-circle"> SKLADEM<br>I&nbsp;NA MíRU </div>
+            {% endif %}
 
 
           </div>
             {% endwith %}
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>
-              <p class="card-text">{{ product.short_description }}</p>                
+              <p class="card-text">{{ product.short_description }}</p>     
 
               {% if product.discount %}
               <div><b class="fw-semibold"><del>{{ product.price }} Kč</del></div>
@@ -208,7 +226,6 @@
               {% else %}
               <b class="fw-semibold">{{ product.price }} Kč</b>
               {% endif %}
-
 
             </div>
           </div>
@@ -235,4 +252,5 @@
   <br>
 </main>
 <!-- End Best Sellers -->
+
 {% endblock %}

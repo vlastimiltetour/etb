@@ -41,7 +41,8 @@
             <div class="discount-circle-product-detail" style="font-size: 17px !important;"> NEW </div>
             {% elif product.bestseller %}
             <div class="discount-circle-product-detail" style="font-size: 90%;"> BESTSELLER </div>
-            {% endif %}
+{% elif product.skladem_na_miru %}
+            <div class="discount-circle-product-detail" style="font-size: 90%; text-align: center;"> SKLADEM<br>I&nbsp;NA MíRU  </div>            {% endif %}
             <div class="slider">   
                {% for photo in product.photos.all %}
                <div class="slide">

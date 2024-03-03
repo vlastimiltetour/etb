@@ -1,6 +1,10 @@
 import logging
 import ssl
 
+
+from django.core import serializers
+from django.http import HttpResponse
+
 from django.shortcuts import get_object_or_404, redirect, render
 
 logging.basicConfig(level=logging.DEBUG)
@@ -544,3 +548,7 @@ def objednat_na_miru(request):
         },
     )
 
+def product_feed(request):
+    products = Product.objects.all()
+    data = serializers.serialize("xml", products)
+    return HttpResponse(data, content_type="application/xml")
