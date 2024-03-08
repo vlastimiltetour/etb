@@ -6,7 +6,11 @@
 {% block content %}
 <!--Intro, Header Jumbotron --> 
 <!-- link here: https://getbootstrap.com/docs/5.3/examples/jumbotron/ -->
-
+<script>
+  lhi('ViewCategory', {
+  category: "{{ selected_category }}"
+});
+</script>
 <style>
   .dropdown-item.active {
   background-color: #000; /* Set background color to black */

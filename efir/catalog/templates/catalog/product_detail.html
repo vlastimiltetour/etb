@@ -3,6 +3,14 @@
 {% load i18n %}
 {% load humanize %}
 {% block content %}
+<!-- leadhub analytics -->
+<script>
+   lhi('ViewContent', {
+      products: [{
+         product_id: "{{ product.id }}",
+      }]
+   });
+</script>
 <!-- Large Product Detail -->
 <style>
    /* This will hide the entire mob-text section */

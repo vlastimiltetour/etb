@@ -1,20 +1,24 @@
 import logging
 import ssl
+from xml.etree.ElementTree import Element, SubElement, tostring
 
-
-from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
-
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+
+from newsletter.models import Newsletter
+
+from .forms import SubscribeForm
 
 logging.basicConfig(level=logging.DEBUG)
 
 from django.db.models import Q
-from catalog.mail_conf import siti_na_miru_email_confirmation
 
 from cart.forms import CartAddProductForm
 from catalog.forms import (ContactForm, CreateSetForm, FilterForm,
                            MappingSetNaMiruForm)
+from catalog.mail_conf import siti_na_miru_email_confirmation
 from inventory.models import Inventory
 from orders.mail_confirmation import *
 from stripepayment.views import *
@@ -23,25 +27,19 @@ from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
                      MappingSetNaMiru, Product, ProductSet, RightdPhoto,
                      UniqueSetCreation)
 
-# returns home landing page
+
+
 def home(request, category_slug=None):
-    # zasilkovna_create_package(order_id=1)
-    # customer_order_email_confirmation(order_id=143)
-    # packetLabelPdf(2336806921, format="A7 on A4", offset=0)
-    # order = Order.objects.get(id=1)
-    # print(order.total_cost)
-    # print(coupon_create(request.GET, 500.00))
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(active=True, category__name="Celé sety")[:9]
     best_sellers = Product.objects.filter(bestseller=True, active=True)
     novinky = Product.objects.filter(new=True, active=True)
     productsets = ProductSet.objects.all()
     backgroundphoto = BackgroundPhoto.objects.all()
     leftphoto = LeftPhoto.objects.all()
     rightphoto = RightdPhoto.objects.all()
-
-    # print(packetLabelPdf(4382587054, format="A7 on A4", offset=0))
+    products = Product.objects.filter(active=True, category__name="Celé sety")[:9]
+    subscribe_form = SubscribeForm(request.POST)
 
     return render(
         request,
@@ -56,6 +54,7 @@ def home(request, category_slug=None):
             "leftphoto": leftphoto,
             "rightphoto": rightphoto,
             "novinky": novinky,
+            "subscribe_form": subscribe_form,
         },
     )
 
@@ -548,7 +547,32 @@ def objednat_na_miru(request):
         },
     )
 
+
+
 def product_feed(request):
+    # Sample data (you would replace this with your actual data)
     products = Product.objects.all()
-    data = serializers.serialize("xml", products)
-    return HttpResponse(data, content_type="application/xml")
+
+    # Create the root element
+    shop_element = Element('SHOP')
+
+    # Iterate over each product and create corresponding XML elements
+    for product in products:
+        shopitem_element = SubElement(shop_element, 'SHOPITEM')
+
+        item_data = {
+            'item_id': product.id,
+            'productname': product.name,
+            'product': product.name,
+            'description': product.long_description,
+        }
+
+        for key, value in item_data.items():
+            sub_element = SubElement(shopitem_element, key.upper())
+            sub_element.text = str(value)
+
+    # Serialize the XML tree to string
+    xml_string = tostring(shop_element, encoding='utf-8').decode('utf-8')
+
+    # Return the XML response
+    return HttpResponse(xml_string, content_type='text/xml')

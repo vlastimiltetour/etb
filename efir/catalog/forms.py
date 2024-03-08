@@ -370,3 +370,23 @@ class MappingSetNaMiruForm(forms.Form):
 Pak tlačítko odeslat. + tlačítko souhlas se zpracováním osobních údajů, tlačítko s odebráním newslatter (oba jsou povinné zaškrtnout)
 (Logo a poděkování) Děkujeme za vyplnění dotazníku! Vaše odpověď bude pečlivě zpracována a dostanete ve výsledku zašleme Vám na email nabídku setu o kterých jste snili . Do 2 pracovních dnů dostanete na email svůj vysněný set. 
 """
+
+
+from django import forms
+from django.core.validators import EmailValidator
+from django_recaptcha.fields import ReCaptchaField
+
+
+class SubscribeForm(forms.Form):
+    captcha = ReCaptchaField()
+
+    email = forms.EmailField(
+        max_length=50,
+        validators=[EmailValidator()],
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Vložte Váš email, který bežně používáte...",
+            }
+        ),
+    )
