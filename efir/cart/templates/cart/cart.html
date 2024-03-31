@@ -3,6 +3,61 @@
 {% load i18n %}
 {% load humanize %}
 {% block content %}
+
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+       // Function to collect product details and submit to the third-party function
+       function collectAndSubmitCartDetails() {
+           const products = [];
+           const productElements = document.querySelectorAll('.product_id_class');
+   
+           if (!productElements.length) {
+               console.log('No product elements found.');
+               return;
+           }
+   
+           productElements.forEach((element, index) => {
+               const productId = element.textContent.trim();
+               const quantityElement = document.getElementById(`product_quantity${index + 1}`);
+   
+               if (!quantityElement) {
+                   console.error(`Quantity element not found for index ${index + 1}`);
+                   return;
+               }
+   
+               const quantity = parseInt(quantityElement.textContent.trim(), 10);
+               // Placeholder values for value and currency, adjust as necessary
+               const ValueElement = document.getElementById(`product_price${index + 1}`).textContent.trim().replace(/\s+/g, '');
+               const value = parseInt(ValueElement, 10);
+               const currency = 'CZK';
+   
+               products.push({
+                   product_id: productId,
+                   quantity: quantity,
+                   value: value,
+                   currency: currency
+               });
+           });
+   
+           console.log('Submitting products to lhi:', products);
+   
+           // Check if lhi function is available
+           if (typeof lhi === "function") {
+               lhi('SetCart', {
+                   products: products
+               });
+           } else {
+               console.error('lhi function is not defined.');
+           }
+       }
+   
+       // Call the function to collect and submit cart details
+       collectAndSubmitCartDetails();
+   });
+   </script>
+      
+   
+<!-- end lead hub cart integration -->
 <style>
    /* This will hide the entire mob-text section */
    .hide-form {
@@ -34,11 +89,13 @@
             {% endif %}
             {% endwith %}
          </div>
+
+             
       </div>
       <div class="my-auto py-3 col-9">
          <div class="row text-right">
             <div class="col-6">
-               <h6 class="mob-text">{{ product.name }} </h6> 
+               <h6 class="mob-text" id="product_name_{{ forloop.counter }}" >{{ product.name }} </h6> 
             </div>
             <div class="col-6">
                <!-- Cart Remove Function--> 
@@ -124,6 +181,7 @@
             </div>
          </form>
       </div>
+      
       {% endwith %}
       {% endfor %}
       <div class="row d-flex py-2 justify-content-center border-top">
@@ -193,6 +251,8 @@
                      {% endwith %}
                      <div>
 
+                        <h1 class="product_id_class" style="display: none;" id="product_id{{forloop.counter}}"> {{ product.id }} </h1>
+
                         <h6 class="my-0">{{ product.name }}       </h6>
                         <small class="text-muted">{{ item.zpusob_vyroby }}:</small>
                         <!-- if skladem-->
@@ -207,7 +267,7 @@
                            <button class="btn-quantity btn rounded-0" name="update-quantity-form" type="button" onclick="decreaseCount('{{ item.item_id }}')">
                               <i class="bi bi-dash" style="line-height: 1;"></i>
                            </button>
-                          <small> {{ item.quantity}}</small>
+                          <small id="product_quantity{{forloop.counter}}"> {{ item.quantity}}</small>
                               <input type="hidden" 
                               style="
                               -webkit-appearance: none;
@@ -236,7 +296,7 @@
                         <div><del> {{ item.total_price}} Kč </del></div>
                         <div>{{ item.product.corrected_price }} Kč</div>
                         {% else %}
-                        <div> {{ item.total_price}} Kč </div> 
+                        <div id="product_price{{forloop.counter}}"> {{ item.total_price}} Kč </div> 
                         {% endif %}
                         <br>
                         <!-- Cart Remove Function--> 
@@ -674,7 +734,6 @@
 
 
 </script>
-
 
 
 

@@ -257,115 +257,114 @@
           
       <!-- end Floating cart icon -->
 
-    <!-- Footer-->
-    <section style="background-color: black; color: white;">
+<!-- Corrected Footer -->
+ <section style="background-color: black; color: white;">
       
-      <div class="container border-top" >
-        <footer class="py-5">
-          <div class="row">
-            <div class="col-6 col-md-2 mb-3">
-              <h5>Katalog</h5>
-              <ul class="nav flex-column">
-                {% for c in categories %}
-                <li class="nav-item mb-2">
-                  <a href="{{ c.get_absolute_url }}" class="nav-link p-0 text-white">{{ c.name }}</a>
-                </li>
-                {% endfor %}
-               
-              </ul>
-            </div>
-            <div class="col-6 col-md-2 mb-3">
-              <h5>Informace</h5>
-              <ul class="nav flex-column">
-                <li class="nav-item mb-2">
-                  <a href="{% url 'catalog:kontakty' %}" class="nav-link p-0 text-white">Kontakty</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="{% url 'catalog:about' %}" class="nav-link p-0 text-white">O nás</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="{% url 'catalog:doprava' %}" class="nav-link p-0 text-white">Doprava</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="{% url 'catalog:rozmery' %}" class="nav-link p-0 text-white">Rozměry</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="{% url 'catalog:reklamace' %}" class="nav-link p-0 text-white">Reklamace</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="{% url 'catalog:ochrana' %}" class="nav-link p-0text-white">Ochrana osobních údajů</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="{% url 'catalog:obchodni_podminky' %}" class="nav-link p-0 text-white">Obchodní podmínky</a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-6 col-md-2 mb-5">
-              <h5>Kontakty</h5>
-              <ul class="nav flex-column">
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">EFIR the brand
-                    </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">Sídlo: Příčná 1892/4, 110 00, Praha 1 Nové Město</a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 text-white">IČO: 17092540</a>
-                </li>
-                
-              </ul>
-            </div>
-            <!-- subscribe form -->
-            <div class="col-md-5 offset-md-1 mb-5">              
-              <form id="subscribe-form" class="needs-validation" novalidate action="{% url 'newsletter:subscribe' %}" method="post">
-                  {% csrf_token %}
-                <h5>Odebírejte novinky</h5>
-                <p class="p-0 text-white">Nezmeškejte měsíční shrnutí novinek a vzrušujících událostí.                </p>
-                <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                <label for="email" class="visually-hidden">Email address</label>
-                 <input class="form-control" type="text" name="email" id="id_email" required oninput=validateEmail()>
-                  <button class="btn btn-light"type="submit">Odebírat</button>
-                </div>
-                <br>
-                <div>
-                {{ subscribe_form.captcha }}</div>
-              </form>
-              <!-- end subscribe form -->
-            </div>              <!-- end subscribe form -->
-            </div>
-          </div>
-          <div class="d-flex flex-column flex-sm-row justify-content-between py-4 border-top">
-            <p class="order-sm-first">&copy; 2023 Efir The Brand. All rights reserved.</p> 
-            <p>Made by Vlastimil Tetour, 2023</p>
-            <ul class="list-unstyled d-flex">
-              <li class="ms-3">
-                <a class="link-dark" href="#">
-                  <svg class="bi" width="24" height="24">
-                    <use xlink:href="#twitter" />
-                  </svg>
+  <div class="container border-top" >
+    <footer class="py-5">
+      <div class="row">
+        <div class="col-6 col-md-2 mb-3">
+          <h5>Katalog</h5>
+          <ul class="nav flex-column">
+            {% for c in categories %}
+            <li class="nav-item mb-2">
+              <a href="{{ c.get_absolute_url }}" class="nav-link p-0 text-white">{{ c.name }}</a>
+            </li>
+            {% endfor %}
+           
+          </ul>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+          <h5>Informace</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+              <a href="{% url 'catalog:kontakty' %}" class="nav-link p-0 text-white">Kontakty</a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="{% url 'catalog:about' %}" class="nav-link p-0 text-white">O nás</a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="{% url 'catalog:doprava' %}" class="nav-link p-0 text-white">Doprava</a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="{% url 'catalog:rozmery' %}" class="nav-link p-0 text-white">Rozměry</a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="{% url 'catalog:reklamace' %}" class="nav-link p-0 text-white">Reklamace</a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="{% url 'catalog:ochrana' %}" class="nav-link p-0 text-white">Ochrana osobních údajů</a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="{% url 'catalog:obchodni_podminky' %}" class="nav-link p-0 text-white">Obchodní podmínky</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2 mb-5">
+          <h5>Kontakty</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+              <a href="#" class="nav-link p-0 text-white">EFIR the brand
                 </a>
-              </li>
-              <li class="ms-3">
-                <a class="link-dark" href="#">
-                  <svg class="bi" width="24" height="24">
-                    <use xlink:href="#instagram" />
-                  </svg>
-                </a>
-              </li>
-              <li class="ms-3">
-                <a class="link-dark" href="#">
-                  <svg class="bi" width="24" height="24">
-                    <use xlink:href="#facebook" />
-                  </svg>
-                </a>
-              </li>
-            </ul>
-            <a href="/admin" style="color:white">Admin</a>
-          </div>
-        </footer>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="#" class="nav-link p-0 text-white">Sídlo: Příčná 1892/4, 110 00, Praha 1 Nové Město</a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="#" class="nav-link p-0 text-white">IČO: 17092540</a>
+            </li>
+            
+          </ul>
+        </div>
+        <!-- subscribe form -->
+        <div class="col-md-5 offset-md-1 mb-5">
+          <form id="subscribe-form" class="needs-validation" novalidate action="{% url 'newsletter:subscribe' %}" method="post">
+             {% csrf_token %}
+             <h5>Odebírejte novinky</h5>
+             <p class="p-0 text-white">Nezmeškejte měsíční shrnutí novinek a vzrušujících událostí.</p>
+             <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                <input class="form-control" type="email" name="email" id="id_email" placeholder="Email address" required oninput="validateEmail()">
+                <button class="btn btn-light" type="submit">Odebírat</button>
+             </div>
+             <div class="mt-3">{{ subscribe_form.captcha }}</div>
+          </form>
+       </div>
+       
+        <!-- end subscribe form-->
       </div>
-    </section>
+      <div class="d-flex flex-column flex-sm-row justify-content-between py-4 border-top">
+        <p class="order-sm-first">&copy; 2023 Efir The Brand. All rights reserved.</p> 
+        <p>Made by Vlastimil Tetour, 2023</p>
+        <ul class="list-unstyled d-flex">
+          <li class="ms-3">
+            <a class="link-dark" href="#">
+              <svg class="bi" width="24" height="24">
+                <use xlink:href="#twitter" />
+              </svg>
+            </a>
+          </li>
+          <li class="ms-3">
+            <a class="link-dark" href="#">
+              <svg class="bi" width="24" height="24">
+                <use xlink:href="#instagram" />
+              </svg>
+            </a>
+          </li>
+          <li class="ms-3">
+            <a class="link-dark" href="#">
+              <svg class="bi" width="24" height="24">
+                <use xlink:href="#facebook" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <a href="/admin" style="color:white">Admin</a>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<!-- End Corrected Footer-->
   
 
 
