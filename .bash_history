@@ -1,460 +1,424 @@
-git add . 
 ls
-	git config --global --add safe.directory /home/etb
+cd migrations
 ls
-git init
-git add . 
-sudo git add . 
-sudo git commit -m "trying db"
-ls
-cd data
-ls
+sudo rm -r 0043_contactmodel_mappingsetnamiru_delete_contactform_and_more.py
+cd ..
 ls
 cd ..
 ls
-docker compose up
-docker-compose restart
-ls
-docker-compose restart
-sudo docker-compose restart
-sudo docker-compose restart
+cd ..
 ls
 docker compose down
-sudo docker-compose restart
-sudo docker compose restart
-ls
-docker compose up
-sudo rm data/db/postmaster.pid
-ls
-sudo git stash
-docker compose up
-docker compose down
-sudo git stash
-sudo rm data/db/postmaster.pid
-sudo git pull https://github.com/vlastimiltetour/etb.git
 docker compose up
 ls
-cd data
+cd efir
 ls
-sudo rm -r db
+cd catalog
+ls
+cd migrations
+ls
+sudo rm -r 0043_contactmodel_mappingsetnamiru_delete_contactform_and_more.py
 ls
 cd ..
 ls
-docker compose up
-docker compose down
-CREATE DATABASE db
-ls
-cd data
-sudo CREATE DATABASE yourdbname;
-ls
-ls
-sudo pg_restore -U valeriya -d etb -v "db_backup_valzije"
-export PATH=$PATH:/path/to/postgresql/bin
-ls
-sudo apt-get install postgresql-cl
-ls
 cd ..
-ls
-sudo apt-get install postgresql-client
-apt-get update
-sudo apt-get update
-ls
-sudo pg_restore -U valeriya -d etb -v "db_backup_valzije"
-sudo apt-get update
-ls
-cd ..
-sudo apt-get update
-ls
-sudo do-release-upgrade
-docker compose down
-ls
-cd etb
-ls
-docker compose down
-sudo git stash
-sudo rm data/db/postmaster.pid
-sudo git pull https://github.com/vlastimiltetour/etb.git
-docker compose up
-ls
-cd data
-pwd
-scp root@46.101.174.92:/home/etb/data /Users/vlastimil/Coding_Projects/etb/data
-ls
-scp etb@46.101.174.92:/home/etb/data /Users/vlastimil/Coding_Projects/etb/data
-sudo scp etb@46.101.174.92:/home/etb/data /Users/vlastimil/Coding_Projects/etb/data
-sudo scp root@46.101.174.92:/home/etb/data /Users/vlastimil/Coding_Projects/etb/data
-ls
-sudo mv db_backup_valzije db
-ls
-cp -r db db_bakcup_val
-sudo cp -r db db_bakcup_val
-s
-ls
-cd ..
-ls
-docker compose up
-docker compose down
-ls
-cd data
-ls
-ls
-sudo apt-get update
-sudo apt-get install git
-cd ..
-ls
-ls
-git init
-git add . 
-ls
-ls
-cd data
-ls
-sudo cp -r db_bakcup_val db_backup
-ls
-sudo rm -r db
-ls
-sudo mv db_bakcup_val d
-ls
-sudo mv d db
-ls
-cd .
-cd ..
-ls
-docker compose up
-service postgresql status
-ls
-cd data
-service postgresql status
-ls
-cd ..
-ls
-ls
-cd data
-ls
-sudo rm -r db
-ls
-cd ..
-ls
-docker compose up
-docker compose down
-sudo rm data/db/postmaster.pid
-ls
-sudo git stash
-sudo rm data/db/postmaster.pid
-docker compose up
-ls
-docker compose dwon
-docker compose up
-ls
-docker compose down
-sudo git stash
-sudo rm data/db/postmaster.pid
-sudo git pull https://github.com/vlastimiltetour/etb.git
-ls
-git config --global user.name "vlk"
-git config --global user.email "v.tetour@gmail.com
-
-git init
-git config --global user.name "vlk"
-git config --global user.email "v.tetour@gmail.com
-
-
-ls
-cd home
-ls
-cd etb
-git config --global user.name "vlk"
-git config --global user.email "v.tetour@gmail.com"
-ls
-git init
-git add . 
-	git config --global --add safe.directory /home/etb
-git commit -m "initial"
-git remote add origin https://github.com/vlastimiltetour/etb.git
-git push -u origin master
-ls
-docker compose up
-docker compose down
-ls
-cd data
-ls
-ls
-docker compose down
-ls
-cd ..
-ls
-sudo git stash
-sudo rm data/db/postmaster.pid
-sudo git pull https://github.com/vlastimiltetour/etb.git
-git branch
-ls
-sudo git stash
-sudo rm data/db/postmaster.pid
-sudo git pull https://github.com/vlastimiltetour/etb.git
-ls
-docker compose down
-ls
-sudo git stash
-sudo rm data/db/postmaster.pid
-sudo git pull https://github.com/vlastimiltetour/etb.git
-ls
-git branch
-git checkout main
-ls
-git branch
-ls
-git branch
-git branch -a
-exit
-ls
-cd home
-ls
-cd etb
-ls
-sudo git pull https://github.com/vlastimiltetour/etb.git
-git branch
-ls
-git logt
-git logout
-git --help
-git merge
-git reset
-git switch
-git switch main
-ls
-git branch
-git credential-cache exit
-ls
-git init
-git branch
-git config user.name
-git config user.email
-git credential-cache exit
-ls
-git branch
-git credential-cache exit
-git config user.name
-git config user.email
-git symbolic-ref --short HEAD
-git symbolic-ref --short HEAD
-git branch -m master main
-git fetch origin
-git branch -u origin/main main
-git remote set-head origin -a
-git branch
-sudo git pull https://github.com/vlastimiltetour/etb.git
-git branch
-ls
-sudo git pull https://github.com/vlastimiltetour/etb.git
-ls
-ls
-cd data
-ls
-cd ..
-ls
-docker compose up
-ls
-cd data
-ls
-sudo rm -r db
 ls
 cd ..
 ls
 sudo docker compose up
-l
-ls
-ls
-cd ..
-ls
-cd home
-ls
-cd etb
-ls
-docker compose down
-docker compose up
-ls
-cd data
-ls
-cd ..
-docker compose up -d
-ls
-docker exec -it etb-app-1 bash
-docker compose down
-docker compose up
-docker compose down
-git init
-ls
-git config --global user.name "vlk"
-git config --global user.email "v.tetour@gmail.com"
-git init
-sudo git config --global user.name "vlk"
-git config --global user.email "v.tetour@gmail.com"
-git init
-git config --global user.name "vlk"
-git config --global user.email "v.tetour@gmail.com"
-git init
-git add . 
-sudo git add . 
-sudo git commit -m "initial"
-git remote add origin https://github.com/vlastimiltetour/etb.git
-ls
-sudo git push origin main
-ls
-cd data
-ls
-cd ..
-ls
-docker network ls
-ls
-docker compose up -d
-ls
-docker exec -it etb-app-1 bash
-ls
-docker compose down
-git init
-git add . 
-sudo git add . 
-git commit -m "db"
-sudo git push origin main
-ls
-docker compose down
-git init
-git pull origin main
-sudo git pull origin main
-ls
-docker compose up
-cd ..
-ls
-cd home
-ls
-cd etb
-ls
-docker compose down
-docker compose up
-ls
-cd ..
-ls
-cd home
-ls
-cd etb
-ls
-docker compose down
-ls
-sudo rm -r venvv
-ls
-ls
-docker compose up -d
-docker exec -it etb-app-1 bash
 ls
 cd efir
 ls
-sudo rm -r db_backup_2023_10_11.json
+cd catalog
 ls
+cd migrations
+ls
+sudo rm -r 0043_contactmodel_mappingsetnamiru_delete_contactform_and_more.py
+sudo touch 0043_uniquesetcreation.py
+sudo nano 0043_uniquesetcreation.py
+sudo touch 0044_uniquesetcreation_newsletter_consent.py
+sudo nano 0044_uniquesetcreation_newsletter_consent.py
+sudo touch 0045_contactmodel_delete_contactform.py
+sudo nano 0045_contactmodel_delete_contactform.py
+sudo touch 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
+sudo nano 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
+ls
+sudo touch 0047_product_skladem_na_miru.py
+sudo nano 0047_product_skladem_na_miru.py
 cd ..
 ls
-git init
-git push origin git add . 
-sudo git add . 
-git commit -m "database prod"
-git push origin main
-sudo git push origin main
-docker compose down
-ls
-git pull origin main
-sudo git pull origin main
-git stash
-sudo git pull origin main
-sudo git stash
-sudo git pull origin main
-docker compose up -d
-ls
-ls
-cd efir
-ls
-cd cart
-ls
-sudo nano cart.py
-sudo nano cart.py
-sudo nano cart.py
-ls
-cd ..
-ls
-cd ..
-ls
-docker compose down
-docker compose up -d
-ls
-cd efir
-ls
-cd ..
-ls
-docker exec -it etb-app-1 bash
-ls
-cd efir
-ls
-cd ..
-ls
-git init
-sudo git add . 
-ls
-sudo git commit -m "dalsi produkt z produkce"
-sudo git push origin main
-ls
-cd efir
-ls
-sudo rm -r db_backup_2023_10_11.jso
-sudo rm -r db_backup_2023_10_11_test.json
-sudo rm -r  db_backup_prod_efir_1111.json
-ls
-sudo rm -r  db_backup_prod_efir_1111_2.json
-sudo rm -r db_backup_test.json
-ls
-sudo rm -r db_backup_prod_efir_11_11_v1.json
-ls
-cd ..
-ls
-docker exec -it etb-app-1 bash
-;s
-ls
-cd efir
-ls
+sudo rm -r models.py
+sudo touch models.py
+sudo nano models.py
+sudo rm -r urls.py
+sudo touch urls.py
+sudo nano urls.py
+sudo rm -r views.py
+sudo touch views.py
+sudo nano views.py
 cd .
 cd ..
 ls
-git init
-sudo git add . 
-sudo git commit -m "permissions"
-sudo git push origin main
+cd ..
+ls
+docker compose up
+la
+ls
+cd efir
+ls
+cd catalog
+l
+ls
+sudo nano views..py
+sudo nano views.py
+cd ..
+cd ..
+ls
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo nano models.py
+sudo nano models.py
+cd ..
+cd ..
+ls
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo nano models.py
+cd ..
+cd ..
 ls
 docker compose down
+docker compose up
 ls
-git init
-sudo git pull origin main
-sudo git stash
-sudo git pull origin main
+cd efir
+ls
+cd catalog
+ls
+sudo nano models.py
+cd ..
+cd ..
+ls
+docker compose up
+docker compose down
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo nano models.py
+cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+cd migrations
+ls
+sudo nano 0050_alter_uniquesetcreation_email.py
+sudo nano 0043_uniquesetcreation.py
+sudo nano 0044_uniquesetcreation_newsletter_consent.py
+ls
+sudo nano 0043_uniquesetcreation.py
+sudo nano 0051_alter_mappingsetnamiru_email.py
+cd ..
+ls
+cd ..
+ls
+docker compose down
+sudo docker compose up
+ls
+cd catalog
+ls
+cd migrations
+ls
+sudo nano 0043_uniquesetcreation.py
+cd ..
+ls
+docker compose up
+ls
+cd migrations
+ls
+sudo nano 0043_uniquesetcreation.py
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd ..
+ls
+cd ..
+ls
+cd efir
+ls
+cd ..
+ls
+cd efir
+ls
+cd catalog
+ls
+cd migrations
+ls
+sudo nano 0051_alter_mappingsetnamiru_email.py
+ls
+cd ..
+ls
+cd models.
+cd models.py
+ls
+sudo nano models.py
+cd ..
+ls
+cd catalog
+ls
+sudo nano models.py
+cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo nano models.py
+cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+cd efir
+ls
+cd catalog
+ls
+cd migrations
+ls
+sudo nano 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
+cd ..
+cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up
+cd efir
+ls
+cd catalog
+ls
+cd migrations
+ls
+sudo nano 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
+cd ..
+ls
+ls
+cd ..
+ls
+cd ..
+l
+ls
+ls
+sudo touch init.sql
+sudo nano init.sql
+sudo nano docker-compose.yml
+cd ..
+ls
+cd etb
 ls
 docker compose up
 ls
 ls
+sudo mkdir init
+ls
+sudo mv init.sql init
+ls
+cd init
+ls
+cd ..
+ls
+docker compose up
+ls
+cd init
+ls
+cd ..
+ls
+sudo docker compose up
+ls
+sudo rm -r init
+ls
+docker compose up
+ls
+docker compose down
+sudo docker compose up
+ls
 cd efir
+ls
+cd catalog
+ls
+cd migrations
+ls
 cd ..
-sudo nano .env
-sudo nano .env
+ls
+cd ..
+ls
+cd ..
+ls
+cd data
+ls
+cd db
+ls
+sudo db
+ls
+sudo cd db
+ls
+cd ..
 ls
 cd efir
 ls
-cd settings
+cd catalog
+ls
+sudo nano models.py
+cd .. 
+cd ..
+ls
+docker compose down
+docker compose up
 ls
 cd efir
 ls
-cd settings
+cd catalog
 ls
-sudo nano .env
+sudo nano models.py
+cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo nano models.py
+cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo cp migrations
+sudo mv migrations
+ls
+sudo cp migrations
+pwd
+sudo cp migrations /home/etb/efir/catalog/migrations2
+ls
+sudo cp -r migrations /home/etb/efir/catalog/migrations2
+ls
+sudo rm -r migrations
+sudo mkdir migrations
+ls
+pwd
+sudo cp /home/etb/efir/catalog/migrations2/__init__.py /home/etb/efir/catalog/migrations
+ls
+cd migrations
+ls
 cd ..
 ls
 cd ..
 ls
 cd ..
+ls
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+cd migrations2
+ls
+cd ..
+ls
+sudo cp /home/etb/efir/catalog/migrations2/initial.py /home/etb/efir/catalog/migrations
+ls
+cd migrations2
+ls
+cd ..
+ls
+sudo cp /home/etb/efir/catalog/migrations2/0001_initial.py /home/etb/efir/catalog/migrations
+ls
+cd ..
+ls
+cd ..
+ls
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+cd migrations
+ls
+sudo rm -r 0001_initial.py
+ls
+cd ..
+ls
+ls
+cd migrations2
+ls
+sudo nano __init__.py
+ls
+cd ..
+ls
+cd migrations
+ls
+sudo rm -r __init__.py
+ls
+cd ..
+ls
+cd ..
+cd ..
+ls
+docker compose up
+ls
+ls
+ls
+sudo git init
+sudo git fetch
+ls
+docker compose up
+ls
+cd efir
+sudo git pull https://github.com/vlastimiltetour/etb.git
+ls
+docker compose down
+ls
+cd ..
+ls
+docker compose up
+docker compose down
+sudo git stash
+git log
+ls
+git reset --soft 272378ac9addf1d318b84c0ac7153e427b92a26d
 ls
 docker compose up
 ls
@@ -463,38 +427,74 @@ ls
 cd home
 ls
 cd etb
+ls
+cd eifr
+cd efir
+ls
+cd orders
+ls
+cd templates
+ls
+cd orders
+ls
+sudo rm -r customer_email_confirmation.html
+ls
+sudo rm -r customer_email_confirmation.htm
+sudo rm -r customer_email_confirmation.html
+ls
+sudo touch customer_email_confirmation.html
+sudo nano customer_email_confirmation.html
+ls
+cd ..
+cd ..
+ls
+sudo rm -r models.py
+sudo touch models.py
+sudo nano models.py
+cd ..
+ls
+cd catalog
+ls
+sudo rm -r migrations2
+ls
+cd migrations
+ls
+cd ..
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo rm -r product_detail.html
+sudo touch product_detail.html
+sudo nano product_detail.html
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+cd cart
+ls
+cd templates
+ls
+cd cart
+ls
+sudo rm -r cart.html
+sudo touch cart.html
+sudo nano cart.html
+cd ..
+ls
+cd ..
+ls
+sudo rm -r cart.py
+sudo touch cart.py
+sudo nano cart.py
+sudo rm -r views.py
+sudo touch views.py
+sudo nano views.py
+cd ..
+cd ..
+ls
 docker compose down
-ls
-cd efir
-ls
-cd catalog
-ls
-cd templates
-ls
-cd catalog
-ls
-sudo nano home.html
-cd ..
-ls
-cd ..
-ls
-cd ..
-ls
-cd ..
-ls
-docker compose up
-ls
-cd efir
-cd catalog
-ls
-cd templates
-ls
-cd catalog
-ls
-sudo nano home.html
-cd ..
-cd ..
-cd ..
-cd ..
-ls
 docker compose up

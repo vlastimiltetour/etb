@@ -3,7 +3,6 @@
 {% load i18n %}
 {% load humanize %}
 {% block content %}
-
 <script>
    document.addEventListener("DOMContentLoaded", function() {
        // Function to collect product details and submit to the third-party function
@@ -55,7 +54,7 @@
        collectAndSubmitCartDetails();
    });
    </script>
-      
+   
    
 <!-- end lead hub cart integration -->
 <style>
@@ -79,6 +78,7 @@
 
 <div class="hide-form">
    <div class="row d-flex py-2 justify-content-center border-top">
+  
       {% for item in cart %}
       {% with product=item.product %}
       <div class="my-auto col-3">
@@ -258,7 +258,10 @@
                         <!-- if skladem-->
                         <small class="text-muted">{{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }}</small>
                         <!-- if na miru -->
-                        <small class="text-muted">{{ item.poznamka }} </small>
+             
+             
+                        <small class="text-muted">{{ item.poznamka }} </small> <br>
+                       
                       
                         <br>
 
@@ -310,6 +313,19 @@
                      </div>
                   </span>
                </li>
+               <!-- priplatek -->
+                 <!-- surcharge -->
+                 {% if item.surcharge != '0' %}
+               <li class="list-group-item d-flex justify-content-between">
+                  <span>  + Příplatek za šití na míru: </span>
+                  {{ item.total_surcharge }} Kč
+
+                 
+                   
+                  
+               </li>
+               {% endif %}
+               <!-- end of priplatek -->
                {% endwith  %}
                {% endfor  %}
                <!-- start coupon -->

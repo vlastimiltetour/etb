@@ -78,9 +78,11 @@ class Order(models.Model):
         return f"Objednávka {self.id}"
 
     def get_total_cost(self):
-        total_cost = (
+        '''total_cost = (
             sum(item.get_cost() for item in self.items.all()) + self.shipping_price
-        )
+        )'''
+
+        total_cost 
         return total_cost
 
     def get_stripe_url(self):
@@ -102,8 +104,7 @@ class Order(models.Model):
         if "cart" in kwargs:
             cart = kwargs.pop("cart")
             total_price_after_discount = cart.get_total_price_after_discount()
-
-            self.total_cost = total_price_after_discount
+            self.total_cost = cart.get_total_price()
             self.shipping_price = cart.get_shipping_price()
             self.discount = cart.get_discount()
 
@@ -129,7 +130,13 @@ class OrderItem(models.Model):
         Product, related_name="order_items", on_delete=models.CASCADE
     )
     price = models.DecimalField(
-        decimal_places=2, max_digits=10, verbose_name="Cena za kus (CZK)"
+        decimal_places=0, max_digits=10, verbose_name="Cena za kus (CZK)"
+    )
+    total_price = models.DecimalField(
+        decimal_places=0, max_digits=10, verbose_name="Cena (CZK)", default=0,
+    )
+    surcharge = models.DecimalField(
+        decimal_places=0, max_digits=10, verbose_name="Příplatek za šití na míru (CZK)", default=0
     )
     quantity = models.PositiveIntegerField(default=1, verbose_name="Množství")
 

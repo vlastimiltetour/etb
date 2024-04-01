@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load humanize %}
 {% block content %}
-<!-- leadhub analytics -->
+<!-- Leadhub analytics -->
 <script>
    lhi('ViewContent', {
       products: [{
@@ -11,7 +11,13 @@
       }]
    });
 </script>
+<!-- End Leadhub analytics -->
 <!-- Large Product Detail -->
+  <!-- The modal container -->
+  <div id="myModal" class="modal">
+   <span class="close">&times;</span>
+   <img class="modal-content" id="img01">
+ </div>
 <style>
    /* This will hide the entire mob-text section */
    .hide-form {
@@ -47,19 +53,87 @@
           <div class="product-image-container">
             {% if product.new %}
             <div class="discount-circle-product-detail" style="font-size: 17px !important;"> NEW </div>
+            {% elif product.skladem_na_miru %}
+            <div class="discount-circle-product-detail" style="font-size: 90%; text-align: center;"> SKLADEM<br>I&nbsp;NA MíRU  </div>
             {% elif product.bestseller %}
             <div class="discount-circle-product-detail" style="font-size: 90%;"> BESTSELLER </div>
-{% elif product.skladem_na_miru %}
-            <div class="discount-circle-product-detail" style="font-size: 90%; text-align: center;"> SKLADEM<br>I&nbsp;NA MíRU  </div>            {% endif %}
+            {% endif %}
             <div class="slider">   
                {% for photo in product.photos.all %}
                <div class="slide">
-                  <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" />
+                  <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" id="zoomImage"/>
                </div>
+             
+               <style>
+           /* CSS for modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 800px;
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+               </style>
+               <script>
+           // Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the image and insert it inside the modal
+var img = document.getElementById("zoomImage");
+var modalImg = document.getElementById("img01");
+
+// When the image is clicked, open the modal
+img.onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+
+               </script>
                {% endfor %}
             </div>
             {% if product.discount %}
-            <div class="discount-circle">{{ product.discount }} % </div>
+            <div class="discount-circle">- {{ product.discount }} % </div>
             {% endif %}
          </div>
 
@@ -76,19 +150,23 @@
       <div class="col-md-6">
          <div class="row mt-3">
             <div id="category" class="small mb-1"> {{ product.category }} </div>
-            <h1 class="display-5 fw-bold">{{ product.name }}</h1>
-
-
+            <h1 class="display-5 fw-bold">{{ product.name }} </h1>
             <div class="fs-5">
                {% if product.discount %}
                <b class="display-7 fw-bolder">
                   <div><del>{{ product.price }} Kč</del></div>
                <div>{{ product.corrected_price }} Kč</div></b>
                {% else %}
-               <p class="display-7 fw-bolder">{{ product.price }} Kč</p>
+               <p class="display-7 fw-bolder">{{ product.price }} Kč
+               <span style="font-weight: bold;" id="surchargeDisplay"></span>
+            </p>
+                
+
+
+
+
                {% endif %}
             </div>
-
 
             <!--<div style="color: #39571B; font-style: italic; border-radius: 0;">
                Ušijeme do 2 týdnů!
@@ -104,6 +182,7 @@
                      {{ zv }}
                      {% endfor %} 
                      </select>
+                    
                   </div>
                </div>
                <script>
@@ -114,14 +193,19 @@
                      var poznamkaInput = document.getElementById("id_poznamka");
                      var sizesInput = document.getElementById("sizes");
                      var setSizesInput = document.getElementById("set-sizes");
+                     var productCategoryCeleSety = "{{ product.category.name }}";
 
 
                      // Trim and convert the selected value to lowercase for case-insensitive comparison
                      var selectedValue = selectElement.value.trim().toLowerCase();
 
+
                      // Variables to store elements to show and hide
                      var elementToShow;
                      var elementToHide;
+                     var elementToHide2;
+                     var elementToHide3;
+                     var elementToHide4;
 
                      // Get the elements to show and hide based on the selected value
                      if (selectedValue === "na míru") {
@@ -129,21 +213,42 @@
                         elementToHide = document.getElementById("sizes");
                         poznamkaInput.value = ""
                         
-                        
-                     } else if (selectedValue === "skladem") {
-                        var productCategoryCeleSety = "{{ product.category.name }}";
-                        if (productCategoryCeleSety !== 'Celé sety') {
+                     } else if (selectedValue === "skladem") 
+
+                     {
+                        if (productCategoryCeleSety.toLowerCase() !== 'celé sety') {
                               elementToShow = document.getElementById("sizes");
                               elementToHide = document.getElementById("poznamka");
                               poznamkaInput.value = "-";
-                        } else {
+                              console.log("productCategoryCeleSety:", productCategoryCeleSety, "-");
+
+                        }
+                        else if (productCategoryCeleSety.toLowerCase() === 'dárkové certifikáty') {
+                              elementToShow = document.getElementById("sizes");
+                              elementToHide = document.getElementById("poznamka");
+                              poznamkaInput.value = "";
+                              sizesInput.value = "-";
+                              console.log("first product category:", productCategoryCeleSety, "-");
+
+
+                        } 
+                        else {
                               elementToShow = document.getElementById("set-sizes");
                               elementToHide = document.getElementById("poznamka");
                               poznamkaInput.value = "-";
+
                               
                         }
-                     }
+                        
+                     } else {
+                        elementToHide2 = document.getElementById("sizes");
+                        elementToHide4 = document.getElementById("poznamka");
+                        console.log("Else element", productCategoryCeleSety, "-");
 
+                     }
+                        
+                     
+                    
                      // Set the display style of elements
                      if (elementToShow) {
                         elementToShow.style.display = "block";
@@ -151,6 +256,15 @@
 
                      if (elementToHide) {
                         elementToHide.style.display = "none";
+                     }
+                     if (elementToHide2) {
+                        elementToHide2.style.display = "none";
+                     }
+                     if (elementToHide3) {
+                        elementToHide3.style.display = "none";
+                     }
+                     if (elementToHide4) {
+                        elementToHide4.style.display = "none";
                      }
                   }
 
@@ -230,6 +344,12 @@
              
             
                {% else %}
+
+               <!-- if darkovy certifikat, don't show velikost -->
+               {% if product.category.name == "Dárkové certifikáty" %}
+
+               {% else %}
+               
                <!-- Start Size Variables -->
                <div id="sizes">
                   <!-- Category Definition -->
@@ -267,6 +387,8 @@
                      </div>
                   </div>
                </div>
+               {% endif %}
+               <!-- end if darkovy certifikat, don't show velikost -->
                {% endif %}
                <h2>
                   <a href="{{ katalog_vse.product.category.get_absolute_url }}"></a> <!--this is just a link, but the name is missing-->
@@ -317,10 +439,11 @@
             <div>
             <p class="lead">{{ product.long_description|linebreaks }}</p>
             </div>
+            <div id="prani">
             <p class="small muted-text">Jak určit svou velikost:<br>Pokud neznáte svou velikost, podívejte se do naší <u><a href="{% url 'catalog:rozmery' %}">velikostní tabulky</a></u></p>
             
            
-            <p class="small muted-text" style="font-size: 0.7em;">Návod na péči o spodní prádlo:<br>
+            <u><p class="small muted-text" style="font-size: 0.7em;">Návod na péči o spodní prádlo:</u><br>
 
                1. <b>Ruční praní</b>: Vždy pracujte ručně v studené nebo mírně teplé vodě s jemným pracím prostředkem.<br>
                2. <b>Namáčení</b>: Nechte spodní prádlo namočit a odpočinout si několik minut.<br>
@@ -331,10 +454,75 @@
                <br>
                Důležité je vždy sledovat pokyny na štítku, který vždy nejdete na spodním prádle.</p>
             </div>
+            </div>
          </div>
       </div>
    </div>
 </section>
+
+<!-- related items section -->
+  <section class="jumbotron text-center">
+   <div class="container">
+     <h1 class="jumbotron-heading mt-5 mb-5">Mohlo by se Vám líbit</h1>
+   </div>
+ <div class="album py-2 bg-white">
+   <div class="container">
+
+     <div class="row row-cols-2 row-cols-md-5 row-cols-lg-5">
+       {% for product in recommended %}  
+    
+       <!-- Single Product -->
+
+       <div class="col-md-4 mb-4">
+         <a href="{{ product.get_absolute_url }}">
+           <div class="product-image-container">
+
+         <div class="card mb-2 box-shadow">
+            {% with first_photo=product.photos.first %}
+              {% if first_photo %}             
+           <img class="card-img-top img-fluid" style="height: 250px" 
+           data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+           alt="Thumbnail [100%x225]"
+           src="{{ first_photo.photo.url }}"
+           data-holder-rendered="true">
+           {% endif %}
+
+           <!-- start na miru -->
+         
+           <!-- end na miru -->
+           {% if product.discount %}
+           <div class="discount-circle"> - {{ product.discount }} % </div>
+           {% elif product.new %}
+           <div class="discount-circle"> NEW </div>
+           {% elif product.limited %}
+           <div class="discount-circle"> LIMITOVANÁ EDICE </div>
+           {% endif %}
+           {% if product.is_na_miru %}
+           <div class="discount-circle"> NA MÍRU </div>
+           {% endif %}
+
+
+         </div>
+           {% endwith %}
+           <div class="card-body d-flex flex-column" style="padding: 1rem;">
+             <h5 class="fw-bolder"> {{ product.name }}</h5>
+             <p class="card-text">{{ product.short_description }}</p>                
+               <b class="fw-semibold"> {{ product.price }} Kč</b>
+
+
+           </div>
+         </div>
+         </a>
+       </div>
+       {% endfor %}
+       
+     </div>
+   </div>
+ </div>
+</section>
+<!-- end related items section -->
+
+
 <script> // JavaScript Code
    // update quantity code
    // using id_quantity
@@ -357,20 +545,34 @@
    quantityElement.style.justifyContent = "center";
    quantityElement.style.alignItems = "center";
    
+   document.addEventListener('DOMContentLoaded', function() {
+    var ZpusobVyrobyInput = document.getElementById('zpusob_vyroby_selected');
+    var productPriceStr = "{{ product.price }}".replace(/\s+/g, ''); 
+    // Convert the cleaned string to a number
+    var productPrice = parseFloat(productPriceStr); 
+    var surchargeDisplay = document.getElementById('surchargeDisplay');
 
-// Call the function to set up the event listener
-function handleZpusobVyrobyChange() {
-  var ZpusobVyrobyInput = document.getElementById('zpusob_vyroby_selected');
+    function updateSurcharge() {
+        var surcharge = 0;
+        
+        if (ZpusobVyrobyInput.value === "Na Míru") {
+            surcharge = productPrice * 0.3;
+            surchargeDisplay.innerHTML = `<strong>+ ${surcharge.toFixed(0)} Kč příplatek za šití na míru</strong>`;
+            surchargeDisplay.style.display = 'inline'; // Show surcharge
+            console.log(productPrice)
+            console.log("surcharge:", surcharge)
 
-  // Add event listener to the input element
-  ZpusobVyrobyInput.addEventListener('change', function() {
-    // Print the selected value
-    console.log('Selected value:', ZpusobVyrobyInput.value);
-  });
-}
+        } else {
+            surchargeDisplay.style.display = 'none'; // Hide surcharge
+        }
+    }
 
-// Call the function to set up the event listener
-handleZpusobVyrobyChange();
+    // Listen for changes and update surcharge accordingly
+    ZpusobVyrobyInput.addEventListener('change', updateSurcharge);
+    // Immediately update surcharge on page load
+    updateSurcharge();
+});
+
 
    // Increase Decrease Buttons
    function decreaseCount(){
@@ -397,4 +599,4 @@ handleZpusobVyrobyChange();
    });
    
 </script>
-{% endblock %}
+{% endblock %} 

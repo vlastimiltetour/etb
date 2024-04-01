@@ -1,7 +1,6 @@
 import logging
-import ssl
 import smtplib
-
+import ssl
 
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
@@ -11,6 +10,7 @@ from django.views.decorators.http import require_POST
 from cart.cart import Cart
 from catalog.models import Certificate, Product
 from coupons.forms import CouponForm
+from coupons.views import coupon_create
 from inventory.models import Inventory
 from orders.forms import OrderForm
 from orders.mail_confirmation import *
@@ -63,6 +63,8 @@ def cart_add(request, product_id):
             zpusob_vyroby=cd["zpusob_vyroby"],
             override=cd["override"],
         )
+    else:
+        print(form.errors)
 
     return redirect("cart:cart_detail")
 
@@ -155,13 +157,15 @@ def cart_detail(request, zasilkovna=True):
                     order=order,
                     product=item["product"],
                     price=item["price"],
+                    total_price = item["total_price"],
+                    surcharge=item["surcharge"],
                     quantity=item["quantity"],
                     zpusob_vyroby=item["zpusob_vyroby"],
                     velikost=item["velikost"],
                     kalhotky_velikost_set=item["kalhotky_velikost_set"],
                     podprsenka_velikost_set=item["podprsenka_velikost_set"],
                     pas_velikost_set=item["pas_velikost_set"],
-		    poznamka=item["poznamka"],
+                    poznamka=item["poznamka"],
                 )
 
             order_items = OrderItem.objects.filter(order=order)
@@ -174,6 +178,13 @@ def cart_detail(request, zasilkovna=True):
                 if str(product.category) == "Dárkové certifikáty":
                     # coupon_create(request, certificate_discount)
                     print(" coupn create should have happened")
+                    discount_value = product.certificate.discount_value
+                    discount_type = product.certificate.discount_type
+                    discount_treshold = product.certificate.discount_threshold
+
+                    coupon_create(
+                        request.GET, discount_value, discount_type, discount_treshold
+                    )
 
                 # this is inventory sotluiont
                 """size = order_item.velikost
@@ -202,9 +213,9 @@ def cart_detail(request, zasilkovna=True):
             cart.clear()
 
             request.session["order_id"] = order.id
+
             order_id = order.id
             try:
-                
                 customer_order_email_confirmation(order_id)
             except ssl.SSLCertVerificationError:
                 logging.info(
@@ -213,7 +224,7 @@ def cart_detail(request, zasilkovna=True):
             except smtplib.SMTPSenderRefused as e:
                 logging.error(
                     f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
-                    )
+                )
 
             if zasilkovna:
                 print("Zasilkovna turned on")
@@ -221,6 +232,7 @@ def cart_detail(request, zasilkovna=True):
             else:
                 print("Zasilkovna turned off")
 
+            # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
             return redirect(reverse("stripepayment:process"))
 
     # print(form.errors)

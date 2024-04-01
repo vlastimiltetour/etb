@@ -227,7 +227,7 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href='{% static "/css/styles_v2.css" %}' rel="stylesheet" />
+    <link href='{% static "/css/styles.css" %}' rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
@@ -320,31 +320,35 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
 
         <!-- cart contents -->
         {% for item in order.items.all %}
+<tr>
+    <td style="text-align: left; padding: 8px;">
+        <h6 style="margin: 0; font-size: 16px;">{{ item.product.name }}</h6>
+        <small style="font-size: 14px; color: #777;">{{ item.product.category }}: {{ item.zpusob_vyroby }}</small>
+    </td>
+    <td style="text-align: center; padding: 8px;">{{ item.quantity }}<br><small style="font-size: 14px; color: #777;">Počet kusů</small></td>
+    <td style="text-align: center; padding: 8px;">
+      {{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }} {{ item.poznamka }}
+      <br><small style="font-size: 14px; color: #777;">Velikost</small>
+    </td>
+    {% if item.product.corrected_price %}
+    <td style="text-align: right; padding: 8px;"> 
+      <div><del>{{ item.price }} Kč</del></div>
+      <div>{{ item.product.corrected_price }} Kč</div>
+      <small style="font-size: 14px; color: #777;">Cena</small>
+    </td>
+    {% else %}
+    <td style="text-align: right; padding: 8px;">{{ item.total_price }} Kč<br><small style="font-size: 14px; color: #777;">Cena</small></td>
+    {% endif %}
+</tr>
+<!-- New Row for Surcharge -->
+{% if item.surcharge %}
+<tr>
+    
+    <td style="text-align: right; padding: 8px;"colspan="4">{{ item.surcharge }} Kč<br><small style="font-size: 14px; color: #777;">Příplatek šití na míru</small></td>
+</tr>
+{% endif %}
+{% endfor %}
 
-          <tr>
-              <td style="text-align: left; padding: 8px;">
-                  <h6 style="margin: 0; font-size: 16px;">{{ item.product.name }}</h6>
-                  <small style="font-size: 14px; color: #777;">{{ item.product.category }}</small>
-              </td>
-              <td style="text-align: center; padding: 8px;">{{ item.quantity }}<br><small style="font-size: 14px; color: #777;">Počet kusů</small></td>
-              <td style="text-align: center; padding: 8px;">
-                {{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }} {{ item.poznamka }}
-                <br><small style="font-size: 14px; color: #777;">Velikost</small>
-              </td>
-               {% if item.product.corrected_price %}
-              <td style="text-align: right; padding: 8px;"> 
-                <div><del>{{ item.price }} Kč</del></div>
-                <div> {{ item.product.corrected_price }} Kč</div>
-                <small style="font-size: 14px; color: #777;">Cena</small></td>
-
-              {% else %}
-              <td style="text-align: right; padding: 8px;"> {{ item.price }} Kč<br><small style="font-size: 14px; color: #777;">Cena</small></td>
-              {% endif %}
-
-
-          </tr>
-          <!-- Add more rows for other products -->
-          {% endfor %}
       </tbody>
   </table>
 
@@ -372,7 +376,6 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
       
   </div>
 
-  
 
 
 

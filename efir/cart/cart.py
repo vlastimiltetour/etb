@@ -40,6 +40,10 @@ class Cart:
             cart_item = self.cart[item_id]
             cart_item["product"] = product
             cart_item["price"] = Decimal(cart_item["price"])
+            #print("tohle je cart item surcharge type")
+            #print(type(cart_item["quantity"]))
+            cart_item["total_surcharge"] = cart_item["quantity"] * int(cart_item["surcharge"])
+            cart_item["discounted_price_cart"] = product.corrected_price
             cart_item["total_price"] = cart_item["price"] * cart_item["quantity"]
 
             items.append(cart_item)
@@ -78,6 +82,10 @@ class Cart:
         # Generate a new cart item_id
         cart_item_id = str(uuid.uuid4())
 
+        surcharge = int(0)
+        if zpusob_vyroby == "Na Míru":
+            surcharge = int(product.price * Decimal(str(0.3)))
+
         # If the item_id is already in the cart, allow adjusting the quantity
         if cart_item_id in self.cart:
             self.cart[cart_item_id]["quantity"] += quantity
@@ -88,6 +96,7 @@ class Cart:
                 "product_id": product.id,
                 "quantity": quantity,
                 "price": str(product.price),
+                "surcharge": str(surcharge),
                 "velikost": str(velikost),
                 "kalhotky_velikost_set": str(kalhotky_velikost_set),
                 "podprsenka_velikost_set": str(podprsenka_velikost_set),
@@ -179,33 +188,43 @@ class Cart:
 
         self.save()
 
+    def get_total_surcharge(self):
+        surcharge = sum(int(item["surcharge"]) * item["quantity"] for item in self.cart.values())
+        
+        return int(surcharge)
+    
+
     def get_total_price(self):
-        #product_discount = product.corrected_price()
-        #print("this is product corrected price:", product_discount)
+        # product_discount = product.corrected_price()
+        # print("this is product corrected price:", product_discount)
         product_discount = 0  # TODO subtrackt the discount from product price
+        
 
         # access to the Product instance within the Cart class
         for item in self.cart.values():
             product_id = item["product_id"]
             quantity = item["quantity"]
-            
+            surcharge = item["surcharge"]
+
             try:
                 product = Product.objects.get(id=product_id)
-                product_discount += product.cart_discounted_price() * quantity  # Assuming corrected_price() is a method of the Product model
+                product_discount += (
+                    product.cart_discounted_price() * quantity
+                )  # Assuming corrected_price() is a method of the Product model
                 print("------")
                 print("this is product discount:", product_discount)
                 print("------")
+
             except Product.DoesNotExist:
                 pass
 
-
         total_price = (
             sum((item["price"]) * item["quantity"] for item in self.cart.values())
-            + (self.get_shipping_price())
+            + (self.get_shipping_price() + self.get_total_surcharge())
             - product_discount
-         
-            
         )
+
+    
         return total_price
 
     @property
@@ -248,6 +267,7 @@ class Cart:
             return type
 
         return None
+    
 
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
