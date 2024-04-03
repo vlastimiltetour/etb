@@ -1,42 +1,3 @@
-ls
-cd migrations
-ls
-sudo rm -r 0043_contactmodel_mappingsetnamiru_delete_contactform_and_more.py
-cd ..
-ls
-cd ..
-ls
-cd ..
-ls
-docker compose down
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo rm -r 0043_contactmodel_mappingsetnamiru_delete_contactform_and_more.py
-ls
-cd ..
-ls
-cd ..
-ls
-cd ..
-ls
-sudo docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo rm -r 0043_contactmodel_mappingsetnamiru_delete_contactform_and_more.py
-sudo touch 0043_uniquesetcreation.py
-sudo nano 0043_uniquesetcreation.py
-sudo touch 0044_uniquesetcreation_newsletter_consent.py
 sudo nano 0044_uniquesetcreation_newsletter_consent.py
 sudo touch 0045_contactmodel_delete_contactform.py
 sudo nano 0045_contactmodel_delete_contactform.py
@@ -494,6 +455,45 @@ sudo rm -r views.py
 sudo touch views.py
 sudo nano views.py
 cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+sudo git init
+sudo git add . 
+sudo git commit -m "priplatek funguje"
+sudo git push origin main
+git log
+ls
+ls
+ls
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+\cd catalog
+cd catalog
+ls
+sudo nano product_detail.html
+sudo nano product_detail.html
+cd ..
+cd ..
+ cd ..
+ls
 cd ..
 ls
 docker compose down
