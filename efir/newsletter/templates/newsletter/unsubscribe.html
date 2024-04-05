@@ -1,0 +1,41 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+
+{% block content %}
+<style>
+    .na_miru_container {
+        max-width: 850px; /* Adjust the width as per your requirement */
+        margin: 0 auto; /* Centers the content */
+    }
+
+    .centered-content {
+        text-align: center; /* Centers the content horizontally */
+    }
+</style>
+<div style="padding-bottom: 10%;">
+    <div class="container px-5 px-lg-5 mt-5 centered-content"> <!-- Added centered-content class here -->
+        <h1> 
+
+<form id="unsubscribe-form" class="needs-validation" novalidate action="{% url 'newsletter:unsubscribe' %}" method="post">
+  {% csrf_token %}
+  <h5>Jaký email chcete odhlásit?</h5>
+  <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+     <input class="form-control" type="email" name="email" id="id_email" placeholder="Email address" required oninput="validateEmail()">
+  </div>
+  <button class="btn btn-light" type="submit">Odhlásit</button>
+
+<!--  <div class="mt-3">{{ subscribe_form.captcha }}</div>-->
+</form>
+        </h1>
+        <br>
+        <div class="na_miru_container">
+            <p> 
+            </p>
+        </div>
+        <br>
+    </div>
+</div>
+
+{% endblock %}

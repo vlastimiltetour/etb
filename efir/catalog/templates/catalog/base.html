@@ -475,6 +475,42 @@
         this.querySelector('.dropdown-menu').classList.remove('show');
       });
     </script>
+
+
+
+<script>
+  // JavaScript function to validate email, existing in your code
+  function validateEmail() {
+      // Your validation logic here
+  }
   
+  // Function to handle form submission
+  document.addEventListener('DOMContentLoaded', function () {
+      const subscribeForm = document.getElementById('subscribe-form');
+  
+      subscribeForm.addEventListener('submit', function (e) {
+          e.preventDefault(); // Prevent the default form submission
+  
+          // Extract data from the form
+          const email = document.getElementById('id_email').value;
+  
+          // Here, include additional data as needed
+          const userData = {
+              email: email,
+              subscribe: ['newsletters'],
+              // Include additional user data as needed
+              // user_id: USER_ID, // You need to provide a way to get this, maybe it's already available in your session
+          };
+  
+          // Call the lhi function with the userData
+          lhi('Identify', userData);
+  
+          // Here, proceed to submit the form data to your server
+          // This could involve an AJAX request or simply allowing the form to submit if you're not handling the submission asynchronously
+          this.submit(); // If you're handling the form data asynchronously, replace this with your AJAX call
+      });
+  });
+  </script>
+    
   </body>
 </html>

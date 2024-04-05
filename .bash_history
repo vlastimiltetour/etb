@@ -1,144 +1,3 @@
-sudo nano 0044_uniquesetcreation_newsletter_consent.py
-sudo touch 0045_contactmodel_delete_contactform.py
-sudo nano 0045_contactmodel_delete_contactform.py
-sudo touch 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
-sudo nano 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
-ls
-sudo touch 0047_product_skladem_na_miru.py
-sudo nano 0047_product_skladem_na_miru.py
-cd ..
-ls
-sudo rm -r models.py
-sudo touch models.py
-sudo nano models.py
-sudo rm -r urls.py
-sudo touch urls.py
-sudo nano urls.py
-sudo rm -r views.py
-sudo touch views.py
-sudo nano views.py
-cd .
-cd ..
-ls
-cd ..
-ls
-docker compose up
-la
-ls
-cd efir
-ls
-cd catalog
-l
-ls
-sudo nano views..py
-sudo nano views.py
-cd ..
-cd ..
-ls
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo nano models.py
-sudo nano models.py
-cd ..
-cd ..
-ls
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo nano models.py
-cd ..
-cd ..
-ls
-docker compose down
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo nano models.py
-cd ..
-cd ..
-ls
-docker compose up
-docker compose down
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo nano models.py
-cd ..
-ls
-cd ..
-ls
-docker compose down
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo nano 0050_alter_uniquesetcreation_email.py
-sudo nano 0043_uniquesetcreation.py
-sudo nano 0044_uniquesetcreation_newsletter_consent.py
-ls
-sudo nano 0043_uniquesetcreation.py
-sudo nano 0051_alter_mappingsetnamiru_email.py
-cd ..
-ls
-cd ..
-ls
-docker compose down
-sudo docker compose up
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo nano 0043_uniquesetcreation.py
-cd ..
-ls
-docker compose up
-ls
-cd migrations
-ls
-sudo nano 0043_uniquesetcreation.py
-cd ..
-ls
-docker compose down
-docker compose up
-ls
-cd ..
-ls
-cd ..
-ls
-cd efir
-ls
-cd ..
-ls
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo nano 0051_alter_mappingsetnamiru_email.py
-ls
-cd ..
-ls
-cd models.
-cd models.py
-ls
 sudo nano models.py
 cd ..
 ls
@@ -493,6 +352,147 @@ sudo nano product_detail.html
 cd ..
 cd ..
  cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd home
+ls
+cd etb
+ls
+sudo git init
+sudo git add . 
+sudo git commit -m "before newsletter unsubscribe"
+sudo git push origin main
+ls
+cd efir
+ls
+cd newsletter
+ls
+cd templates
+ls
+cd ..
+ls
+cd ..
+ls
+cd orders
+ls
+cd templates
+ls
+cd orderws
+cd orders
+ls
+sudo nano customer_email_confirmation.html
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+cd newsletter
+ls
+sudo rm -r views.py
+sudo touch views.py
+sudo nano views.py
+sudo rm -r urls.py
+sudo touch urls.py
+sudo nano urls.py
+sudo rm -r forms.py
+ls
+sudo rm -r forms.py
+sudo touch forms.py
+sudo nano forms.py
+ls
+cd templates
+ls
+cd newsletter
+ls
+sudo touch unsubscribe.html
+sudo nano unsubsscribe.html
+sudo touch unsubs_completed.html
+sudo nano unsubs_completed
+sudo rm -r subs_completed.html
+sudo touch subs_completed.html
+sudo nano subs_completed.html
+ls
+sudo nano unsubs_completed.html
+sudo rm -r unsubs_completed
+sudo nano unsubsscribe.html
+Y
+sudo rm -r unsubscribe.html
+sudo rm -r unsubsscribe.html
+sudo touch unsubscribe.html
+sudo nano unsubscribe.html
+ls
+sudo nano unsubs_completed.html
+sudo nano subs_completed.html
+cd .. 
+cd ..
+cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo nano product_detail.html
+cd ..
+cd ..
+cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo nano product_detail.html
+cd .. 
+cd ..
+cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd home
+ls
+cd etb
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo nano base.html
+cd .
+cd ..
+cd ..
+cd ..
 ls
 cd ..
 ls
