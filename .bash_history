@@ -1,13 +1,3 @@
-sudo nano models.py
-cd ..
-ls
-cd catalog
-ls
-sudo nano models.py
-cd ..
-cd ..
-ls
-docker compose down
 docker compose up
 ls
 cd efir
@@ -498,3 +488,13 @@ cd ..
 ls
 docker compose down
 docker compose up
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+sudo git init
+sudo git add . 
+sudo git commit -m "siti na miru upgrade"
+sudo git push origin main
