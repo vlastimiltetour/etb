@@ -347,7 +347,7 @@ class MappingSetNaMiruForm(forms.Form):
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     set_selection = forms.CharField(
-        label="Jaký set jste si vybrala?",
+        label="Tady se můžete zeptat na cokoli",
         max_length=50,
         widget=forms.TextInput(
             attrs={

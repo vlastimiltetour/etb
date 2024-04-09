@@ -1,40 +1,3 @@
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo nano models.py
-cd ..
-cd ..
-ls
-docker compose down
-docker compose up
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo nano 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
-cd ..
-cd ..
-ls
-cd ..
-ls
-docker compose down
-docker compose up
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo nano 0046_mappingsetnamiru_uniquesetcreation_email_and_more.py
-cd ..
-ls
-ls
-cd ..
 ls
 cd ..
 l
@@ -498,3 +461,40 @@ sudo git init
 sudo git add . 
 sudo git commit -m "siti na miru upgrade"
 sudo git push origin main
+ls
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+cd ..
+ls
+cd etb
+ls
+sudo git init
+sudo git add . 
+sudo git commit -m "update siti na miru"
+sudo git push origin main
+ls
+cd efir
+ls
+cd catalog
+ls
+cd template
+cd templates
+ls
+cd catalog
+ls
+sudo rm -r na_miru.html
+sudo touch na_miru.html
+sudo nano na_miru.html
+cd ..
+cd ..
+ls
+sudo nano forms.py
+cd ..
+ cd ..
+ls
+docker compose down
+docker compose up
