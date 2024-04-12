@@ -6,11 +6,16 @@
 {% block content %}
 <!--Intro, Header Jumbotron --> 
 <!-- link here: https://getbootstrap.com/docs/5.3/examples/jumbotron/ -->
+
+{% with category_value=selected_category|default:"Vše" %}
 <script>
   lhi('ViewCategory', {
-  category: "{{ selected_category }}"
-});
+    category: "{{ category_value }}"
+  });
 </script>
+{% endwith %}
+
+
 <style>
   .dropdown-item.active {
   background-color: #000; /* Set background color to black */

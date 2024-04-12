@@ -1,88 +1,3 @@
-ls
-cd ..
-l
-ls
-ls
-sudo touch init.sql
-sudo nano init.sql
-sudo nano docker-compose.yml
-cd ..
-ls
-cd etb
-ls
-docker compose up
-ls
-ls
-sudo mkdir init
-ls
-sudo mv init.sql init
-ls
-cd init
-ls
-cd ..
-ls
-docker compose up
-ls
-cd init
-ls
-cd ..
-ls
-sudo docker compose up
-ls
-sudo rm -r init
-ls
-docker compose up
-ls
-docker compose down
-sudo docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-cd ..
-ls
-cd ..
-ls
-cd ..
-ls
-cd data
-ls
-cd db
-ls
-sudo db
-ls
-sudo cd db
-ls
-cd ..
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo nano models.py
-cd .. 
-cd ..
-ls
-docker compose down
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo nano models.py
-cd ..
-ls
-cd ..
-ls
-docker compose down
-docker compose up
-ls
-cd efir
-ls
 cd catalog
 ls
 sudo nano models.py
@@ -495,6 +410,91 @@ ls
 sudo nano forms.py
 cd ..
  cd ..
+ls
+docker compose down
+docker compose up
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+sudo git init
+sudo git add . 
+sudo git commit -m "new product feed"
+sudo git push origin main
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo nano views.py
+cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+sudo nano views.py
+cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+sudo nano views.py
+cd ..
+cd ..
+ls
+docker compose down
+docker compose up
+cd ..
+l;s
+ls
+cd home
+ls
+cd etb
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo nano catalog.html
+cd ..
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+docker compose down
+docker compose up
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo nano catalog.html
+cd ..
+cd ..
+cd ..
+ls
+cd ..
 ls
 docker compose down
 docker compose up

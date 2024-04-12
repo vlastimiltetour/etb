@@ -25,7 +25,7 @@ from stripepayment.views import *
 
 from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
                      MappingSetNaMiru, Product, ProductSet, RightdPhoto,
-                     UniqueSetCreation)
+                     UniqueSetCreation, Photo)
 
 
 
@@ -548,23 +548,30 @@ def objednat_na_miru(request):
     )
 
 
-
 def product_feed(request):
     # Sample data (you would replace this with your actual data)
     products = Product.objects.all()
+    
 
     # Create the root element
-    shop_element = Element('SHOP')
+    shop_element = Element("SHOP")
 
     # Iterate over each product and create corresponding XML elements
     for product in products:
-        shopitem_element = SubElement(shop_element, 'SHOPITEM')
+        shopitem_element = SubElement(shop_element, "SHOPITEM")
+
+        first_photo = product.photos.first().photo.url if product.photos.first() else None
+        first_photo = f"https://www.efirthebrand.cz{first_photo}"
+
 
         item_data = {
-            'item_id': product.id,
-            'productname': product.name,
-            'product': product.name,
-            'description': product.long_description,
+            "item_id": product.id,
+            "productname": product.name,
+            "product": product.name,
+            "categorytext": product.category,
+            "description": product.long_description,
+            "imgurl": first_photo,
+            "price_vat": product.price,
         }
 
         for key, value in item_data.items():
@@ -572,7 +579,9 @@ def product_feed(request):
             sub_element.text = str(value)
 
     # Serialize the XML tree to string
-    xml_string = tostring(shop_element, encoding='utf-8').decode('utf-8')
+    xml_string = tostring(shop_element, encoding="utf-8").decode("utf-8")
 
     # Return the XML response
-    return HttpResponse(xml_string, content_type='text/xml')
+    return HttpResponse(xml_string, content_type="text/xml")
+
+
