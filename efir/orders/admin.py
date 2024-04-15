@@ -1,3 +1,5 @@
+import csv
+
 import xlwt
 from django.contrib import admin
 from django.http import HttpResponse
@@ -170,3 +172,41 @@ class OrderAdmin(admin.ModelAdmin):
     export_to_excel.short_description = "Exportovat do Excelu"
 
     actions = ["export_to_excel"]
+
+
+
+    def export_to_csv(self, request, queryset):
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="orders.csv"'
+
+        writer = csv.writer(response)
+
+
+
+        writer.writerow([
+            "order_external_order_id",
+            "order_date",
+            "order_value",
+            "order_currency",
+            "identification_email_address",
+            "product_external_product_id",
+        ])
+
+    
+
+        for obj in queryset:
+            products = ", ".join([item.product.name for item in obj.items.all()])
+            writer.writerow([
+                obj.etb_id,
+                obj.created,
+                obj.total_cost,
+                'CZK',
+                obj.email,
+                products,
+            ])
+            
+        return response
+
+    export_to_csv.short_description = "Exportovat do CSV"
+
+    actions = ["export_to_csv"]

@@ -1,98 +1,3 @@
-cd catalog
-ls
-sudo nano models.py
-cd ..
-ls
-cd ..
-ls
-docker compose down
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-sudo cp migrations
-sudo mv migrations
-ls
-sudo cp migrations
-pwd
-sudo cp migrations /home/etb/efir/catalog/migrations2
-ls
-sudo cp -r migrations /home/etb/efir/catalog/migrations2
-ls
-sudo rm -r migrations
-sudo mkdir migrations
-ls
-pwd
-sudo cp /home/etb/efir/catalog/migrations2/__init__.py /home/etb/efir/catalog/migrations
-ls
-cd migrations
-ls
-cd ..
-ls
-cd ..
-ls
-cd ..
-ls
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-cd migrations2
-ls
-cd ..
-ls
-sudo cp /home/etb/efir/catalog/migrations2/initial.py /home/etb/efir/catalog/migrations
-ls
-cd migrations2
-ls
-cd ..
-ls
-sudo cp /home/etb/efir/catalog/migrations2/0001_initial.py /home/etb/efir/catalog/migrations
-ls
-cd ..
-ls
-cd ..
-ls
-docker compose up
-ls
-cd efir
-ls
-cd catalog
-ls
-cd migrations
-ls
-sudo rm -r 0001_initial.py
-ls
-cd ..
-ls
-ls
-cd migrations2
-ls
-sudo nano __init__.py
-ls
-cd ..
-ls
-cd migrations
-ls
-sudo rm -r __init__.py
-ls
-cd ..
-ls
-cd ..
-cd ..
-ls
-docker compose up
-ls
-ls
-ls
-sudo git init
-sudo git fetch
-ls
-docker compose up
 ls
 cd efir
 sudo git pull https://github.com/vlastimiltetour/etb.git
@@ -496,5 +401,100 @@ cd ..
 ls
 cd ..
 ls
+docker compose down
+docker compose up
+ls
+cd home
+ls
+cd etb
+ls
+sudo git init
+sudo git add . 
+sudo git commit -m "Export orders to CSV"
+sudo git push origin main
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo rm -r ochrana.html
+sudo touch ochrana.html
+sudo nano ochrana.html
+cd ..
+cd ..
+cd ..
+ls
+cd orders
+ls
+sudo nano admin.py
+cd ..
+cd ..
+cd ..
+ls
+cd etb
+ls
+docker compose down
+docker compose up
+ls
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+cd efir
+ls
+cd catalog
+ls
+cd ..
+ls
+cd cart
+ls
+cd templates
+ls
+cd cart
+l
+s
+ls
+sudo nano cart.html
+cd ..
+ cd ..
+cd ..
+cd ..
+ls
+cd ..
+ls
+cd etb
+docker compose down
+docker compose up
+ls
+cd .. 
+ls
+cd home
+ls
+cd etb
+ls
+cd efir
+ls
+cd catalog
+ls
+cd templates
+ls
+cd catalog
+ls
+sudo rm -r set_discovery.html
+sudo touch set_discovery.html
+sudo nano set_discovery.html
+cd ..
+cd ..
+cd ..
+ls
+cd ..
+ls
+docker comopse down
 docker compose down
 docker compose up
