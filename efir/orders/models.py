@@ -32,7 +32,7 @@ class Order(models.Model):
         decimal_places=0,
         max_digits=4,
         blank=True,
-        default=Decimal("0.00"),
+        default=Decimal("0"),
         verbose_name="Cena dopravy (CZK)",
     )
     address = models.CharField(max_length=250, verbose_name="Adresa", blank=False)
@@ -45,7 +45,7 @@ class Order(models.Model):
         decimal_places=0,
         max_digits=10,
         blank=True,
-        default=Decimal("0.00"),
+        default=Decimal("0"),
         verbose_name="Sleva (CZK)",
     )
     total_cost = models.DecimalField(
@@ -77,14 +77,6 @@ class Order(models.Model):
     def __str__(self):
         return f"Objednávka {self.id}"
 
-    def get_total_cost(self):
-        '''total_cost = (
-            sum(item.get_cost() for item in self.items.all()) + self.shipping_price
-        )'''
-
-        total_cost 
-        return total_cost
-
     def get_stripe_url(self):
         if not self.stripe_id:
             return ""
@@ -103,10 +95,11 @@ class Order(models.Model):
 
         if "cart" in kwargs:
             cart = kwargs.pop("cart")
-            total_price_after_discount = cart.get_total_price_after_discount()
-            self.total_cost = cart.get_total_price()
+            cart.get_total_price_after_discount()
+        
             self.shipping_price = cart.get_shipping_price()
-            self.discount = cart.get_discount()
+            self.discount = cart.transfer_discount_to_orders()
+            self.total_cost = cart.get_total_price_after_discount()
 
         if not self.etb_id:
             today_date = timezone.now().strftime("%y%m%d")
@@ -133,10 +126,16 @@ class OrderItem(models.Model):
         decimal_places=0, max_digits=10, verbose_name="Cena za kus (CZK)"
     )
     total_price = models.DecimalField(
-        decimal_places=0, max_digits=10, verbose_name="Cena (CZK)", default=0,
+        decimal_places=0,
+        max_digits=10,
+        verbose_name="Cena (CZK)",
+        default=0,
     )
     surcharge = models.DecimalField(
-        decimal_places=0, max_digits=10, verbose_name="Příplatek za šití na míru (CZK)", default=0
+        decimal_places=0,
+        max_digits=10,
+        verbose_name="Příplatek za šití na míru (CZK)",
+        default=0,
     )
     quantity = models.PositiveIntegerField(default=1, verbose_name="Množství")
 

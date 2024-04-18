@@ -186,7 +186,7 @@
       {% endfor %}
       <div class="row d-flex py-2 justify-content-center border-top">
          <div class="row text-right" style="text-align: right;">
-            <h6 class="mob-text">Total: {{ cart.get_total_price }} Kč</h6>
+            <h6 class="mob-text" id="cart_total">Total: {{ cart.get_total_price_after_discount }} Kč </h6>
          </div>
          {% if cart.coupon %}
 
@@ -330,10 +330,7 @@
                {% endfor  %}
                <!-- start coupon -->
                {% if cart.coupon %}
-               <li class="list-group-item d-flex justify-content-between">
-                  <span>  Celkem: </span>
-                  {{ cart.get_total_price }} Kč
-               </li>
+               
                <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <span>Doprava: </span> 
 
@@ -379,7 +376,7 @@
                </li>
                <li class="list-group-item d-flex justify-content-between">
                   <span>  Celkem po slevě: </span>
-                  <strong>{{ cart.get_total_price_after_discount }} Kč</strong>
+                  <strong>{{ cart.get_total_price_after_discount }} Kč </strong>
                </li>
                <!-- end coupon -->
                {% else %}
@@ -414,7 +411,7 @@
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <!-- #TODO total  to be calculated-->
                   <span>Total: </span> 
-                  <strong>{{ cart.get_total_price}} Kč</strong>
+                  <strong>{{ cart.get_total_price_after_discount }} Kč </strong>
                </li>
                {% endif %}
             </ul>
@@ -604,9 +601,10 @@
                      <div class="invalid-feedback">
                      </div>
                   </div>
+                  
                   <div class="mb-3">
                      <label class="custom-checkbox">
-                           <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
+                           <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms" checked>
                            <span class="checkmark"></span>
                      Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
                      </label>
@@ -616,7 +614,7 @@
                   </div>
                   <div class="mb-3">
                      <label class="custom-checkbox">
-                           <input type="checkbox" name="newsletter_consent" class="form-check-input" id="id_agree_gdpr">
+                           <input type="checkbox" name="newsletter_consent" class="form-check-input" id="id_agree_gdpr" checked>
                            <span class="checkmark"></span>
                            Souhlasím se zasíláním neswletterů, akčních nabídek a marketingových sdělení.
                      </label>
@@ -751,7 +749,6 @@
 
 </script>
 
-
 <script>
    // JavaScript function to validate email, existing in your code
    const cart_value_element = document.getElementById(`cart_total`).textContent.trim().replace(/\s+/g, '').replace(/[^\d.-]/g, '');
@@ -821,6 +818,8 @@
        });
    });
 </script>
+
+
 
 
 {% endblock %}

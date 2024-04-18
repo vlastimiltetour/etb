@@ -1,64 +1,3 @@
-ls
-cd efir
-sudo git pull https://github.com/vlastimiltetour/etb.git
-ls
-docker compose down
-ls
-cd ..
-ls
-docker compose up
-docker compose down
-sudo git stash
-git log
-ls
-git reset --soft 272378ac9addf1d318b84c0ac7153e427b92a26d
-ls
-docker compose up
-ls
-cd ..
-ls
-cd home
-ls
-cd etb
-ls
-cd eifr
-cd efir
-ls
-cd orders
-ls
-cd templates
-ls
-cd orders
-ls
-sudo rm -r customer_email_confirmation.html
-ls
-sudo rm -r customer_email_confirmation.htm
-sudo rm -r customer_email_confirmation.html
-ls
-sudo touch customer_email_confirmation.html
-sudo nano customer_email_confirmation.html
-ls
-cd ..
-cd ..
-ls
-sudo rm -r models.py
-sudo touch models.py
-sudo nano models.py
-cd ..
-ls
-cd catalog
-ls
-sudo rm -r migrations2
-ls
-cd migrations
-ls
-cd ..
-ls
-cd templates
-ls
-cd catalog
-ls
-sudo rm -r product_detail.html
 sudo touch product_detail.html
 sudo nano product_detail.html
 cd ..
@@ -496,5 +435,66 @@ ls
 cd ..
 ls
 docker comopse down
+docker compose down
+docker compose up
+ls
+cd ..
+ls
+cd home
+ls
+cd etb
+ls
+sudo git init
+sudo git add . 
+sudo git commit -m "updating discounts"
+sudo git push origin main
+ls
+cd efir
+ls
+cd orders
+l
+ls
+cd templates
+ls
+cd orders
+ls
+sudo rm -r customer_email_confirmation.html
+sudo touch customer_email_confirmation.html
+sudo nano customer_email_confirmation.html
+cd ..
+ls
+cd ..
+ls
+sudo rm -r models.py
+sudo touch models.py
+sudo nano models.py
+cd ..
+cd ..
+ls
+cd efir
+ls
+cd catalog
+ls
+cd .
+cd ..
+ls
+cd cart
+ls
+sudo rm -r cart.py
+sudo touch cart.py
+sudo nano cart.py
+cd templates
+ls
+cd cart
+ls
+sudo rm -r cart.html
+sudo touch cart.html
+sudo nano cart.html
+cd ..
+cd ..
+cd ..
+ls
+cd ..
+ls
 docker compose down
 docker compose up

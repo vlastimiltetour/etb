@@ -40,9 +40,11 @@ class Cart:
             cart_item = self.cart[item_id]
             cart_item["product"] = product
             cart_item["price"] = Decimal(cart_item["price"])
-            #print("tohle je cart item surcharge type")
-            #print(type(cart_item["quantity"]))
-            cart_item["total_surcharge"] = cart_item["quantity"] * int(cart_item["surcharge"])
+            # print("tohle je cart item surcharge type")
+            # print(type(cart_item["quantity"]))
+            cart_item["total_surcharge"] = cart_item["quantity"] * int(
+                cart_item["surcharge"]
+            )
             cart_item["discounted_price_cart"] = product.corrected_price
             cart_item["total_price"] = cart_item["price"] * cart_item["quantity"]
 
@@ -189,22 +191,21 @@ class Cart:
         self.save()
 
     def get_total_surcharge(self):
-        surcharge = sum(int(item["surcharge"]) * item["quantity"] for item in self.cart.values())
-        
+        surcharge = sum(
+            int(item["surcharge"]) * item["quantity"] for item in self.cart.values()
+        )
+
         return int(surcharge)
-    
 
     def get_total_price(self):
         # product_discount = product.corrected_price()
         # print("this is product corrected price:", product_discount)
-        product_discount = 0  # TODO subtrackt the discount from product price
-        
-
+        product_discount = 0
         # access to the Product instance within the Cart class
         for item in self.cart.values():
             product_id = item["product_id"]
             quantity = item["quantity"]
-            surcharge = item["surcharge"]
+            item["surcharge"]
 
             try:
                 product = Product.objects.get(id=product_id)
@@ -224,7 +225,6 @@ class Cart:
             - product_discount
         )
 
-    
         return total_price
 
     @property
@@ -267,7 +267,6 @@ class Cart:
             return type
 
         return None
-    
 
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
@@ -288,3 +287,6 @@ class Cart:
         total_price_after_discount = self.get_total_price()
 
         return total_price_after_discount
+    
+    def transfer_discount_to_orders(self):
+        return self.get_total_price_after_discount() - self.get_total_price()
