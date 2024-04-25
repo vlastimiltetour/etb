@@ -6,32 +6,36 @@ from django.http import HttpResponse
 
 from .models import Order, OrderItem
 
-from django.utils import timezone
-
-
+from django.contrib import admin
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
-    readonly_fields = (
-        "order",
+    fields = (
         "product",
+        "order",
         "velikost",
         "poznamka",
         "price",
         "quantity",
     )
 
+
+
+    raw_id_fields = ["product",]  # or use autocomplete_fields = ("product",) for autocomplete
+
+
     class Meta:
-        ordering = ("product", "velikost", "price", "quantity", "order")
+        ordering = ("product__name", "velikost", "price", "quantity", "order", )
 
     def has_change_permission(self, request, obj=None):
-        return False
+        return True
 
     def has_add_permission(self, request, obj=None):
-        return False
+        return True
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        return True
+
 
 
 @admin.register(Order)
@@ -67,10 +71,6 @@ class OrderAdmin(admin.ModelAdmin):
         "Total Cost"  # Set the column header in the admin site
     )
 
-    def products(self, obj):
-        product_names = [item.product.name for item in obj.items.all()]
-        return product_names
-
     def price(self, obj):
         price_value = obj.items.values_list("price").first()
         return str(price_value[0])
@@ -101,6 +101,10 @@ class OrderAdmin(admin.ModelAdmin):
         value = 0
         return str(value)
 
+    def products(self, obj):
+        product_names = [item.product.name for item in obj.items.all()]
+        return product_names
+
     velikosti.short_description = "Položky v objednávce"
 
     def get_readonly_fields(self, request, obj=None):
@@ -109,14 +113,21 @@ class OrderAdmin(admin.ModelAdmin):
             return [
                 field.name
                 for field in self.model._meta.fields
-                if (field.name != "shipped" and field.name != "paid")
+                if (field.name != "shipped" and field.name != "paid" and field.name != "author_comment")
             ]
         else:
             return []
 
     def has_add_permission(self, request, obj=None):
-        return False
-        
+        return True
+    
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            # Set instance price equal to product price
+            instance.price = instance.product.price
+            instance.save()
+        formset.save_m2m()
 
     def export_to_excel(self, request, queryset):
         response = HttpResponse(content_type="application/ms-excel")
@@ -151,7 +162,6 @@ class OrderAdmin(admin.ModelAdmin):
             row = [
                 obj.etb_id,
                 ", ".join([item.product.name for item in obj.items.all()]),
-                obj.get_total_cost(),
                 obj.paid,
                 obj.shipped,
                 obj.first_name,
@@ -173,40 +183,43 @@ class OrderAdmin(admin.ModelAdmin):
 
     actions = ["export_to_excel"]
 
-
-
     def export_to_csv(self, request, queryset):
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = 'attachment; filename="orders.csv"'
 
         writer = csv.writer(response)
 
-
-
-        writer.writerow([
-            "order_external_order_id",
-            "order_date",
-            "order_value",
-            "order_currency",
-            "identification_email_address",
-            "product_external_product_id",
-        ])
-
-    
+        writer.writerow(
+            [
+                "order_external_order_id",
+                "order_date",
+                "order_value",
+                "order_currency",
+                "identification_email_address",
+                "product_external_product_id",
+            ]
+        )
 
         for obj in queryset:
             products = ", ".join([item.product.name for item in obj.items.all()])
-            writer.writerow([
-                obj.etb_id,
-                obj.created,
-                obj.total_cost,
-                'CZK',
-                obj.email,
-                products,
-            ])
-            
+            writer.writerow(
+                [
+                    obj.etb_id,
+                    obj.created,
+                    float(obj.total_cost),
+                    "CZK",
+                    obj.email,
+                    products,
+                ]
+            )
+
         return response
 
     export_to_csv.short_description = "Exportovat do CSV"
 
     actions = ["export_to_csv"]
+
+
+"""
+"order_external_order_id","order_date","order_value","order_currency","order_external_order_state","identification_email_address","identification_first_name","identification_last_name","identification_phone","identification_external_user_id","identification_address_house_number","identification_address_street","identification_address_city","identification_address_zip_code","identification_address_country_code","product_external_product_id","product_name","product_value","product_currency","product_quantity"
+"""

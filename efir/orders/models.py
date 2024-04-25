@@ -49,7 +49,7 @@ class Order(models.Model):
         verbose_name="Sleva (CZK)",
     )
     total_cost = models.DecimalField(
-        decimal_places=0,
+        decimal_places=2,
         max_digits=10,
         blank=True,
         default=Decimal("0.00"),
@@ -65,6 +65,8 @@ class Order(models.Model):
     newsletter_consent = models.BooleanField(
         default=False, verbose_name="Souhlas - newsletter", null=True, blank=True
     )
+    author_comment = models.CharField(max_length=200,blank=True, verbose_name="ETB poznamka k objednavce")
+
 
     class Meta:
         verbose_name = "Objednávky"
@@ -147,7 +149,7 @@ class OrderItem(models.Model):
     podprsenka_velikost_set = models.CharField(max_length=50, null=True, blank=True)
     pas_velikost_set = models.CharField(max_length=50, null=True, blank=True)
 
-    poznamka = models.TextField(blank=True)
+    poznamka = models.CharField(max_length=50)
 
     def __str__(self):
         return str(self.id)
