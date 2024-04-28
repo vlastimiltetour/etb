@@ -50,6 +50,7 @@ class OrderAdmin(admin.ModelAdmin):
         # "quantity",
         "first_name",
         "last_name",
+        "author_comment",
         "email",
         # "birthday",
         "number",
