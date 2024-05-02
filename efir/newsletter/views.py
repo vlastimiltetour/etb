@@ -36,34 +36,38 @@ def unsubscribe(request):
 
 
 def subscribe(request):
-    subscribe_form = SubscribeForm(request.POST)
-    Newsletter.objects.all()
     if request.method == "POST":
         subscribe_form = SubscribeForm(request.POST)
         if subscribe_form.is_valid():
-            email = subscribe_form.cleaned_data.get("email")
+            # Validate reCAPTCHA
+            if subscribe_form.cleaned_data.get('captcha'):
+                email = subscribe_form.cleaned_data.get("email")
 
-            if not Newsletter.objects.filter(email=email).exists():
-                Newsletter.objects.create(email=email)
-                logging.info(
-                    f"Email {email} has been saved and sent subscribe confirmation"
-                )
-                try:
-                    customer_order_email_confirmation(email)
-
-                except ssl.SSLCertVerificationError:
+                if not Newsletter.objects.filter(email=email).exists():
+                    Newsletter.objects.create(email=email)
                     logging.info(
-                        "Local environment has no email backend set up. Email: {email}"
+                        f"Email {email} has been saved and sent subscribe confirmation"
                     )
+                    try:
+                        customer_order_email_confirmation(email)
 
-                return render(request, "newsletter/subs_completed.html")
+                    except ssl.SSLCertVerificationError:
+                        logging.info(
+                            "Local environment has no email backend set up. Email: {email}"
+                        )
 
+                    return render(request, "newsletter/subs_completed.html")
+
+                else:
+                    logging.info("Email already exists in the database.")
+                    return HttpResponse("Email already exists in the database.")
             else:
-                logging.info("Email already exists in the database.")
-                return HttpResponse("Email already exists in the database.")
+                return HttpResponse("reCAPTCHA validation failed")
         else:
-            return HttpResponse("email is not saved")
-
+            return HttpResponse("Form is not valid")
+    else:
+        subscribe_form = SubscribeForm()
+    return render(request, "subscribe.html", {"subscribe_form": subscribe_form})
 
 def customer_order_email_confirmation(email):
     # html_content = render_to_string("newsletter/subscribe.html")

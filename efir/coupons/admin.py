@@ -7,6 +7,7 @@ from .models import Coupon
 class CouponAdmin(admin.ModelAdmin):
     list_display = [
         "code",
+        "order_id",
         "valid_from",
         "valid_to",
         "discount_type",

@@ -18,11 +18,11 @@ class Cart:
         self.cart = cart
 
         # store applied coupon
-        self.coupon_id = self.session.get("coupon_id")
+        self.coupon_id = self.session.get("coupon_id")  # Retrieve coupon_id from session
         self.country = self.session.get("cart_country")
         self.address = self.session.get("cart_address")
         self.vendor_id = self.session.get("cart_vendor")
-
+        
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
         items = []  # temporary data structure used to organize and prep cart data
@@ -139,18 +139,35 @@ class Cart:
         del self.session[settings.CART_SESSION_ID]
         self.save()
 
+
     def get_shipping_price(self):
         # Get the country from the cart data
+        zpusob_vyroby_type_count = 0
         country = self.country
 
-        if country == "cz":
-            shipping_price = 89
-        elif country == "sk":
-            shipping_price = 99
+        for item_id, item_details in self.cart.items():
+            print('this is item zpusob vyroby')
+            zpusob_vyroby = item_details.get("zpusob_vyroby")
+            print(zpusob_vyroby)
+
+            if zpusob_vyroby != "Elektronický":
+                zpusob_vyroby_type_count += 1
+
+        if zpusob_vyroby_type_count > 0:
+            
+            if country == "cz":
+                shipping_price = 89
+            elif country == "sk":
+                shipping_price = 99
+            else:
+                shipping_price = 0
+
+            return shipping_price
+        
         else:
             shipping_price = 0
 
-        return shipping_price
+            return shipping_price
 
     def get_address(self):
         address = self.address
@@ -186,7 +203,7 @@ class Cart:
             del self.session["cart_address"]
             del self.session["cart_vendor"]
         except KeyError:
-            print("all good")
+            print("there is a key error")
 
         self.save()
 
@@ -287,6 +304,6 @@ class Cart:
         total_price_after_discount = self.get_total_price()
 
         return total_price_after_discount
-    
+
     def transfer_discount_to_orders(self):
         return self.get_total_price_after_discount() - self.get_total_price()

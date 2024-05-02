@@ -23,17 +23,23 @@ class Coupon(models.Model):
         max_digits=10,
         decimal_places=2,
         verbose_name="Zadejte hodnotu 0. anebo absolutní hodnotu částky",
-        blank=True,
+        blank=False,
         default=0,
     )
     discount_threshold = models.DecimalField(
         verbose_name="Minimální částka pro uplatnění slevy",
         max_digits=10,
         decimal_places=0,
-        blank=True,
+        blank=False,
         default=0,
         null=True,
     )
 
+    order_id = models.CharField(max_length=10, default="N/A", verbose_name="Nakoupeno v objednavce ID")
+
     def __str__(self):
         return self.code
+    
+
+    class Meta:
+        pass

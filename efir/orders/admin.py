@@ -6,26 +6,33 @@ from django.http import HttpResponse
 
 from .models import Order, OrderItem
 
-from django.contrib import admin
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     fields = (
         "product",
+        "zpusob_vyroby",
         "order",
         "velikost",
         "poznamka",
         "price",
         "quantity",
+        "slevovy_kod",
+        "hodnota_kuponu"
     )
 
-
-
-    raw_id_fields = ["product",]  # or use autocomplete_fields = ("product",) for autocomplete
-
+    raw_id_fields = [
+        "product",
+    ]  # or use autocomplete_fields = ("product",) for autocomplete
 
     class Meta:
-        ordering = ("product__name", "velikost", "price", "quantity", "order", )
+        ordering = (
+            "product__name",
+            "velikost",
+            "price",
+            "quantity",
+            "order",
+        )
 
     def has_change_permission(self, request, obj=None):
         return True
@@ -35,7 +42,6 @@ class OrderItemInline(admin.TabularInline):
 
     def has_delete_permission(self, request, obj=None):
         return True
-
 
 
 @admin.register(Order)
@@ -50,7 +56,6 @@ class OrderAdmin(admin.ModelAdmin):
         # "quantity",
         "first_name",
         "last_name",
-        "author_comment",
         "email",
         # "birthday",
         "number",
@@ -59,6 +64,8 @@ class OrderAdmin(admin.ModelAdmin):
         "shipping",
         "address",
         "created",
+        "author_comment",
+        "discount_code",
     ]
 
     inlines = [OrderItemInline]
@@ -114,14 +121,18 @@ class OrderAdmin(admin.ModelAdmin):
             return [
                 field.name
                 for field in self.model._meta.fields
-                if (field.name != "shipped" and field.name != "paid" and field.name != "author_comment")
+                if (
+                    field.name != "shipped"
+                    and field.name != "paid"
+                    and field.name != "author_comment"
+                )
             ]
         else:
             return []
 
     def has_add_permission(self, request, obj=None):
         return True
-    
+
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)
         for instance in instances:

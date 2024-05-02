@@ -7,6 +7,7 @@ app_name = "coupons"
 urlpatterns = [
     path("apply", views.coupon_apply, name="apply"),
     path("deactivate", views.coupon_deactivate, name="coupon_deactivate"),
+    path("delete", views.coupon_delete, name="delete"),
     path("create_coupon/", views.coupon_create, name="create_coupon"),
     # Add other URL patterns as needed
 ]

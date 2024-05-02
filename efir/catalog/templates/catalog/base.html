@@ -383,19 +383,43 @@
       </div>
     </div>
   </div>
-  <script>
+<script>
     function validateEmail() {
         var emailInput = document.getElementById("id_email");
-        var email = emailInput.value;
+        var email = emailInput.value.trim();  // Trim whitespace from the input
         
         // Custom validation logic
-        if (!email.includes('@') || email.indexOf('@') >= email.lastIndexOf('.')) {
+        var atIndex = email.indexOf('@');
+        var dotIndex = email.lastIndexOf('.');
+        
+        if (atIndex === -1 || dotIndex === -1 || dotIndex < atIndex) {
             emailInput.setCustomValidity("Please enter a valid email address.");
-        } else {
-            emailInput.setCustomValidity("");  // Clear any previous validation message
+            return;  // Exit the function early if the basic format is not met
         }
+        
+        var username = email.substring(0, atIndex);
+        var domain = email.substring(atIndex + 1, dotIndex);
+        var topLevelDomain = email.substring(dotIndex + 1);
+        
+        // Additional validation for username, domain, and top-level domain
+        if (username.length < 3 || username.length > 20 || !/^[a-zA-Z0-9._%+-]+$/.test(username)) {
+            emailInput.setCustomValidity("Username must be between 3 and 20 characters long and contain only letters, digits, and . _ % + -");
+            return;
+        }
+        
+        if (domain.length < 3 || domain.length > 20 || !/^[a-zA-Z0-9-]+$/.test(domain)) {
+            emailInput.setCustomValidity("Domain must be between 3 and 20 characters long and contain only letters, digits, and hyphens");
+            return;
+        }
+        
+        if (topLevelDomain.length < 2 || topLevelDomain.length > 6 || !/^[a-zA-Z]+$/.test(topLevelDomain)) {
+            emailInput.setCustomValidity("Top-level domain must be between 2 and 6 characters long and contain only letters");
+            return;
+        }
+        
+        // Clear any previous validation message if all checks pass
+        emailInput.setCustomValidity("");
     }
-    
 </script>
     
   <script>

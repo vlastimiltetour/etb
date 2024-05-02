@@ -10,6 +10,11 @@ from django.views.decorators.http import require_POST
 from .forms import CouponForm
 from .models import Coupon
 
+from orders.models import OrderItem
+
+
+
+
 
 @require_POST
 def coupon_apply(request):
@@ -31,9 +36,18 @@ def coupon_apply(request):
     return redirect("cart:cart_detail")
 
 
+def coupon_delete(request):
+    request.session["coupon_id"]
+    request.session["coupon_id"] = None
+
+    return redirect("cart:cart_detail")
+
+
 def coupon_deactivate(request):
+    coupon_id = request.session["coupon_id"]
+    print(coupon_id)
+
     try:
-        coupon_id = request.session["coupon_id"]
         coupon = get_object_or_404(Coupon, id=coupon_id)
 
         # Set the coupon's 'active' field to False
@@ -45,34 +59,57 @@ def coupon_deactivate(request):
         coupon.save()
 
         # Remove the coupon_id from the session
-        request.session["coupon_id"] = None
+    except TypeError:
+        request.session["coupon_id"] = coupon.id
+
     except KeyError:
         return redirect("cart:cart_detail")
+
+    request.session["coupon_id"] = None
 
     return redirect("cart:cart_detail")
 
 
-def coupon_create(request, discount):
+def coupon_create(request, discount_value, discount_type, discount_threshold, id, orderitem_id):
     code = generate_voucher_code(8)
     valid_from = datetime.now()
     valid_to = valid_from + timedelta(days=180)
-    discount = discount
-    print(f"this is coupon create function, and this is discount {discount}")
+    print(f"this is coupon create function, and this is discount {discount_value}")
     active = True
     redeemed = False
+
+    if discount_type == "Procento":
+        discount_value = discount_value / 100
 
     coupon = Coupon.objects.create(
         code=code,
         valid_from=valid_from,
         valid_to=valid_to,
-        discount=discount,
+        discount_value=discount_value,
+        discount_threshold=discount_threshold,
+        discount_type=discount_type,
         active=active,
         redeemed=redeemed,
+        order_id=id,
     )
 
-    print(f"this is the newly created voucher code! {coupon}")
+    product_orderitem = OrderItem.objects.get(id=orderitem_id)
+    product_orderitem.slevovy_kod = coupon.code
+    product_orderitem.hodnota_kuponu = coupon.discount_value
+    product_orderitem.save()
+
+
+
+    # Storing coupon_id in session
+    #request.session["newly_created_coupon_id"] = coupon_id
+    #request.session.save()
+
+
+    
 
     return HttpResponse(f"Coupon created successfully! {coupon}")
+
+
 
 
 def generate_voucher_code(length):

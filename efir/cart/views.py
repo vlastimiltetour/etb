@@ -7,10 +7,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from django.conf import settings
+
 from cart.cart import Cart
 from catalog.models import Certificate, Product
-from coupons.forms import CouponForm
-from coupons.views import coupon_create
+from coupons.forms import CouponForm, Coupon
+from coupons.views import coupon_create, coupon_deactivate
 from inventory.models import Inventory
 from orders.forms import OrderForm
 from orders.mail_confirmation import *
@@ -106,6 +108,13 @@ def cart_detail(request, zasilkovna=True):
     selected_country = request.session.get("cart_country")
     selected_address = request.session.get("cart_address")
     selected_vendor_id = request.session.get("cart_vendor")
+    selected_certificate_shipping = request.session.get("zpusob_vyroby")
+    print('this is selectedcertiiccate online', selected_certificate_shipping)
+    #selected_vendor_id = request.POST.get("cart_vendor")
+
+        # Update the cart's country attribute with the selected value
+    #request.session["cart_country"] = selected_country
+    
 
     # the value is taken from session and saved here, where I can request it as form.initial.cart_country, etc.
     form = OrderForm(
@@ -147,6 +156,7 @@ def cart_detail(request, zasilkovna=True):
             )  # In this line, you are using a Django ModelForm (order_form) to create an Order instance. The commit=False argument prevents the instance from being saved to the database immediately. Instead, it returns an unsaved instance of the model. This allows you to make additional modifications to the instance before saving it to the database.
 
             order.save(cart=cart)
+            print(order)
 
             """Once you have the unsaved order instance, you can call its save method to save it to the database. In this case, you are passing an additional keyword argument cart to the save method. This is where you are providing the cart instance to the save method of the Order model.
             In the save method of the Order model, you are accessing the cart instance through this passed keyword argument to calculate the total_cost for the order. This is a way to pass contextual information from the view (the cart instance) to the model (Order instance) when saving it.
@@ -157,7 +167,7 @@ def cart_detail(request, zasilkovna=True):
                     order=order,
                     product=item["product"],
                     price=item["price"],
-                    total_price = item["total_price"],
+                    total_price=item["total_price"],
                     surcharge=item["surcharge"],
                     quantity=item["quantity"],
                     zpusob_vyroby=item["zpusob_vyroby"],
@@ -170,23 +180,36 @@ def cart_detail(request, zasilkovna=True):
 
             order_items = OrderItem.objects.filter(order=order)
 
+            request.session["order_id"] = order.id
+
+            order_id = order.id
+
             for order_item in order_items:
-                product = order_item.product
+                item_product = order_item.product
 
                 # conditions to check for discount
                 # this to be repaierd
-                if str(product.category) == "Dárkové certifikáty":
+                if str(item_product.category) == "Dárkové certifikáty":
                     # coupon_create(request, certificate_discount)
                     print(" coupn create should have happened")
-                    discount_value = product.certificate.discount_value
-                    discount_type = product.certificate.discount_type
-                    discount_treshold = product.certificate.discount_threshold
-
+                    discount_value = item_product.certificate.discount_value
+                    discount_type = item_product.certificate.discount_type
+                    discount_treshold = item_product.certificate.discount_threshold
+                    print("this is order_item id", order_item.id)
+                ##rekl bych ze sem nekam ten coupon
                     coupon_create(
-                        request.GET, discount_value, discount_type, discount_treshold
+                        request.GET,
+                        discount_value,
+                        discount_type,
+                        discount_treshold,
+                        id=order.etb_id,
+                        orderitem_id=order_item.id
                     )
 
-                # this is inventory sotluiont
+
+                
+
+                #this is inventory solution
                 """size = order_item.velikost
                 quantity = order_item.quantity
 
@@ -209,14 +232,30 @@ def cart_detail(request, zasilkovna=True):
                     )
                     return redirect("cart:cart_detail")"""
 
-            # clear the cart
+            
+            #coupon apply - saving the applyed coupon code discount into the order
+            try:
+                coupon_id = request.session["coupon_id"]
+                coupon = Coupon.objects.get(id=coupon_id)
+                coupon_code = coupon.code
+                order.discount_code = coupon_code
+                order.save()
+                coupon_deactivate(request)
+            except KeyError:
+                print("Coupon not found for ID - KeyError, no coupon applied")  
+                
+            except Coupon.DoesNotExist:
+                print("Coupon not found for ID, no coupon applied")
+           
             cart.clear()
 
-            request.session["order_id"] = order.id
 
-            order_id = order.id
+            
             try:
-                customer_order_email_confirmation(order_id)
+                if cart.get_shipping_price() == 0:
+                    certificate_order_email_confirmation(order_id)    
+                else:
+                    customer_order_email_confirmation(order_id)
             except ssl.SSLCertVerificationError:
                 logging.info(
                     f"Local environment has no email backend set up.Order ID: {order_id}"
@@ -226,12 +265,22 @@ def cart_detail(request, zasilkovna=True):
                     f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
                 )
 
-            if zasilkovna:
-                print("Zasilkovna turned on")
-                zasilkovna_create_package(order_id)
-            else:
-                print("Zasilkovna turned off")
 
+
+           
+
+            if settings.DEBUG:
+                # Django is running in local settings
+                print("Local settings: Zasilkovna turned off")
+            elif order.shipping_price == 0:
+                print("Local settings: Zasilkovna turned off, shipping price: 0")
+            else:
+                # Django is running in production settings
+                print("Production settings: Zasilkovna turned on")
+                
+                zasilkovna_create_package(order_id)
+
+           
             # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
             return redirect(reverse("stripepayment:process"))
 
@@ -270,6 +319,10 @@ def update_cart_country(request):
         request.session["cart_country"] = selected_country
         request.session["cart_address"] = selected_address
         request.session["cart_vendor"] = selected_vendor_id
+        
+        
+
+
 
     return redirect("cart:cart_detail")
 

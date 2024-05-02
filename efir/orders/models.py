@@ -8,7 +8,7 @@ from catalog.models import Product
 
 
 class Order(models.Model):
-    etb_id = models.CharField(max_length=50, verbose_name="ID")
+    etb_id = models.CharField(max_length=50, verbose_name="Efir ID")
     first_name = models.CharField(max_length=50, verbose_name="Jméno")
     last_name = models.CharField(max_length=50, verbose_name="Příjmení")
     birthday = models.DateField(verbose_name="Datum narození", null=True, blank=True)
@@ -65,8 +65,15 @@ class Order(models.Model):
     newsletter_consent = models.BooleanField(
         default=False, verbose_name="Souhlas - newsletter", null=True, blank=True
     )
-    author_comment = models.CharField(max_length=200,blank=True, verbose_name="ETB poznamka k objednavce")
-
+    author_comment = models.CharField(
+        max_length=200, blank=True, verbose_name="ETB poznamka k objednavce"
+    )
+    discount_code = models.CharField(
+        max_length=15, blank=True, default="-", verbose_name="Slevovy kod"
+    )
+    coupon_id = models.CharField(
+        max_length=15, blank=True, default="-", verbose_name="ID certifikatu"
+    )
 
     class Meta:
         verbose_name = "Objednávky"
@@ -98,7 +105,7 @@ class Order(models.Model):
         if "cart" in kwargs:
             cart = kwargs.pop("cart")
             cart.get_total_price_after_discount()
-        
+
             self.shipping_price = cart.get_shipping_price()
             self.discount = cart.transfer_discount_to_orders()
             self.total_cost = cart.get_total_price_after_discount()
@@ -109,6 +116,7 @@ class Order(models.Model):
                 created__date=timezone.now().date()
             ).count()
             self.etb_id = f"{today_date}{today_order_count:02d}"
+
 
         """ vendor_id = kwargs.pop("vendor_id", None)
         if vendor_id:
@@ -150,6 +158,8 @@ class OrderItem(models.Model):
     pas_velikost_set = models.CharField(max_length=50, null=True, blank=True)
 
     poznamka = models.CharField(max_length=50)
+    slevovy_kod = models.CharField(max_length=20, default="-")
+    hodnota_kuponu = models.CharField(max_length=20, default="-")
 
     def __str__(self):
         return str(self.id)

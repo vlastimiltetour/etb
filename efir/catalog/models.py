@@ -141,8 +141,8 @@ class ZpusobVyroby(models.Model):
     ZPUSOB_VYROBY_CHOICES = [
         ("Skladem", "Skladem"),
         ("Na Míru", "Na Míru"),
-        ("Tištěný", "Tištěný"),
-        ("-", "-"),
+        ("Tištěný certifikát", "Tištěný certifikát"),
+        ("Elektronický", "Elektronický"),
     ]
 
     size = models.CharField(

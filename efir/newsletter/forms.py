@@ -1,9 +1,10 @@
 from django import forms
 from django.core.validators import EmailValidator
+from captcha.fields import ReCaptchaField
 
 
 class SubscribeForm(forms.Form):
-    # captcha = ReCaptchaField()
+    captcha = ReCaptchaField()
 
     email = forms.EmailField(
         max_length=50,
