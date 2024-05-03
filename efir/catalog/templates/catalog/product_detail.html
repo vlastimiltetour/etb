@@ -13,11 +13,7 @@
 </script>
 <!-- End Leadhub analytics -->
 <!-- Large Product Detail -->
-  <!-- The modal container -->
-  <div id="myModal" class="modal">
-   <span class="close">&times;</span>
-   <img class="modal-content" id="img01">
- </div>
+
 <style>
    /* This will hide the entire mob-text section */
    .hide-form {
@@ -58,14 +54,87 @@
             {% elif product.bestseller %}
             <div class="discount-circle-product-detail" style="font-size: 90%;"> BESTSELLER </div>
             {% endif %}
-            <div class="slider">   
-               {% for photo in product.photos.all %}
-               <div class="slide">
-                  <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" id="zoomImage"/>
-               </div>
-             
-               {% endfor %}
-            </div>
+               
+
+
+  <!-- The modal container -->
+  <div id="myModal" class="modal">
+   <span class="close">&times;</span>
+   <img class="modal-content" id="modalImg">
+</div>
+
+<div class="slider">   
+   {% for photo in product.photos.all %}
+   <div class="slide">
+       <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" onclick="openModal('{{photo.photo.url}}', '{{forloop.counter}}')" />
+   </div>
+   {% endfor %}
+</div>
+                  <style>
+              /* CSS for modal */
+   .modal {
+       display: none;
+       position: fixed;
+       z-index: 1;
+       padding-top: 100px;
+       left: 0;
+       top: 0;
+       width: 100%;
+       height: 100%;
+       overflow: auto;
+       background-color: rgb(0,0,0);
+       background-color: rgba(0,0,0,0.9);
+   }
+   
+   .modal-content {
+       margin: auto;
+       display: block;
+       width: 80%;
+       max-width: 800px;
+   }
+   
+   /* Close button */
+   .close {
+       position: absolute;
+       top: 15px;
+       right: 35px;
+       color: #f1f1f1;
+       font-size: 40px;
+       font-weight: bold;
+       transition: 0.3s;
+   }
+   
+   .close:hover,
+   .close:focus {
+       color: #bbb;
+       text-decoration: none;
+       cursor: pointer;
+   }
+   
+                  </style>
+                  <script>
+                     // Get the modal
+                     var modal = document.getElementById("myModal");
+                     
+                     // Function to open the modal
+                     function openModal(imageUrl, counter) {
+                         modal.style.display = "block";
+                         var modalImg = document.getElementById("modalImg");
+                         modalImg.src = imageUrl;
+                         modalImg.alt = "Image " + counter;
+                     }
+                     
+                     // Get the <span> element that closes the modal
+                     var span = document.getElementsByClassName("close")[0];
+                     
+                     // When the user clicks on <span> (x), close the modal
+                     span.onclick = function() {
+                         modal.style.display = "none";
+                     }
+                 </script>
+                           
+      
+    
             {% if product.discount %}
             <div class="discount-circle">- {{ product.discount }} % </div>
             {% endif %}
