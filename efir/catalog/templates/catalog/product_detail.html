@@ -72,6 +72,9 @@
 </div>
                   <style>
               /* CSS for modal */
+              #myModal {
+    z-index: 3; /* or any value higher than 2 */
+}
    .modal {
        display: none;
        position: fixed;
@@ -522,7 +525,7 @@
    </div>
 </section>
 
-<!-- related items section -->
+<!-- related items section
   <section class="jumbotron text-center">
    <div class="container">
      <h1 class="jumbotron-heading mt-5 mb-5">Mohlo by se Vám líbit</h1>
@@ -533,7 +536,7 @@
      <div class="row row-cols-2 row-cols-md-5 row-cols-lg-5">
        {% for product in recommended %}  
     
-       <!-- Single Product -->
+  Single Product 
 
        <div class="col-md-4 mb-4">
          <a href="{{ product.get_absolute_url }}">
@@ -549,9 +552,9 @@
            data-holder-rendered="true">
            {% endif %}
 
-           <!-- start na miru -->
+   start na miru 
          
-           <!-- end na miru -->
+        end na miru 
            {% if product.discount %}
            <div class="discount-circle"> - {{ product.discount }} % </div>
            {% elif product.new %}
@@ -582,7 +585,7 @@
    </div>
  </div>
 </section>
-<!-- end related items section -->
+ end related items section -->
 
 
 <script> // JavaScript Code
