@@ -7,13 +7,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from .forms import CouponForm
-from .models import Coupon
-
 from orders.models import OrderItem
 
-
-
+from .forms import CouponForm
+from .models import Coupon
 
 
 @require_POST
@@ -70,7 +67,16 @@ def coupon_deactivate(request):
     return redirect("cart:cart_detail")
 
 
-def coupon_create(request, discount_value, discount_type, discount_threshold, id, orderitem_id):
+def coupon_create(
+    request,
+    discount_value,
+    discount_type,
+    discount_threshold,
+    id,
+    orderitem_id,
+    certificate_from,
+    certificate_to,
+):
     code = generate_voucher_code(8)
     valid_from = datetime.now()
     valid_to = valid_from + timedelta(days=180)
@@ -91,6 +97,8 @@ def coupon_create(request, discount_value, discount_type, discount_threshold, id
         active=active,
         redeemed=redeemed,
         order_id=id,
+        certificate_from=certificate_from,
+        certificate_to=certificate_to,
     )
 
     product_orderitem = OrderItem.objects.get(id=orderitem_id)
@@ -98,18 +106,11 @@ def coupon_create(request, discount_value, discount_type, discount_threshold, id
     product_orderitem.hodnota_kuponu = coupon.discount_value
     product_orderitem.save()
 
-
-
     # Storing coupon_id in session
-    #request.session["newly_created_coupon_id"] = coupon_id
-    #request.session.save()
-
-
-    
+    # request.session["newly_created_coupon_id"] = coupon_id
+    # request.session.save()
 
     return HttpResponse(f"Coupon created successfully! {coupon}")
-
-
 
 
 def generate_voucher_code(length):

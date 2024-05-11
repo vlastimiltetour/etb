@@ -318,7 +318,11 @@ class UniqueSetCreation(models.Model):
     id = models.AutoField(primary_key=True)  # Automatically assigns an ID
     name = models.CharField(max_length=255)
     email = models.CharField(
-        max_length=50, validators=[EmailValidator()], verbose_name="Email", null=True
+        max_length=50,
+        validators=[EmailValidator()],
+        verbose_name="Email",
+        null=True,
+        blank=True,
     )
     surname = models.CharField(max_length=255)
     birthday = models.CharField(max_length=255)
@@ -352,6 +356,7 @@ class MappingSetNaMiru(models.Model):
     set_selection = models.CharField(max_length=255)
     gdpr_consent = models.BooleanField()
     newsletter_consent = models.BooleanField(null=True)
+    created = models.DateTimeField(verbose_name="Vytvořeno", default="2020-01-01T00:00:00Z")
 
     class Meta:
         verbose_name = "Dotazník šití na míru"

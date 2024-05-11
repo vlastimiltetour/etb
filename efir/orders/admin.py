@@ -18,7 +18,9 @@ class OrderItemInline(admin.TabularInline):
         "price",
         "quantity",
         "slevovy_kod",
-        "hodnota_kuponu"
+        "hodnota_kuponu",
+        "certificate_from",
+        "certificate_to",
     )
 
     raw_id_fields = [

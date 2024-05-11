@@ -1,17 +1,17 @@
 import logging
 import smtplib
 import ssl
+from decimal import Decimal
 
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from django.conf import settings
-
 from cart.cart import Cart
 from catalog.models import Certificate, Product
-from coupons.forms import CouponForm, Coupon
+from coupons.forms import Coupon, CouponForm
 from coupons.views import coupon_create, coupon_deactivate
 from inventory.models import Inventory
 from orders.forms import OrderForm
@@ -64,6 +64,8 @@ def cart_add(request, product_id):
             pas_velikost_set=cd["pas_velikost_set"],
             zpusob_vyroby=cd["zpusob_vyroby"],
             override=cd["override"],
+            certificate_from=cd["certificate_from"],
+            certificate_to=cd["certificate_to"],
         )
     else:
         print(form.errors)
@@ -109,12 +111,16 @@ def cart_detail(request, zasilkovna=True):
     selected_address = request.session.get("cart_address")
     selected_vendor_id = request.session.get("cart_vendor")
     selected_certificate_shipping = request.session.get("zpusob_vyroby")
-    print('this is selectedcertiiccate online', selected_certificate_shipping)
-    #selected_vendor_id = request.POST.get("cart_vendor")
+    print("this is selectedcertiiccate online", selected_certificate_shipping)
 
-        # Update the cart's country attribute with the selected value
-    #request.session["cart_country"] = selected_country
-    
+    for key, value in request.session.items():
+        if isinstance(value, Decimal):
+            value = str(value)
+        print(f"Key: {key}, Value: {value}, type{type(value)}")
+
+    if cart.get_shipping_price() == 0:
+        print("cena se rovna nule")
+        update_cart_country(request)
 
     # the value is taken from session and saved here, where I can request it as form.initial.cart_country, etc.
     form = OrderForm(
@@ -176,6 +182,8 @@ def cart_detail(request, zasilkovna=True):
                     podprsenka_velikost_set=item["podprsenka_velikost_set"],
                     pas_velikost_set=item["pas_velikost_set"],
                     poznamka=item["poznamka"],
+                    certificate_from=item["certificate_from"],
+                    certificate_to=item["certificate_to"],
                 )
 
             order_items = OrderItem.objects.filter(order=order)
@@ -196,20 +204,19 @@ def cart_detail(request, zasilkovna=True):
                     discount_type = item_product.certificate.discount_type
                     discount_treshold = item_product.certificate.discount_threshold
                     print("this is order_item id", order_item.id)
-                ##rekl bych ze sem nekam ten coupon
+                    ##rekl bych ze sem nekam ten coupon
                     coupon_create(
                         request.GET,
                         discount_value,
                         discount_type,
                         discount_treshold,
                         id=order.etb_id,
-                        orderitem_id=order_item.id
+                        orderitem_id=order_item.id,
+                        certificate_from=order_item.certificate_from,
+                        certificate_to=order_item.certificate_to,
                     )
 
-
-                
-
-                #this is inventory solution
+                # this is inventory solution
                 """size = order_item.velikost
                 quantity = order_item.quantity
 
@@ -232,8 +239,7 @@ def cart_detail(request, zasilkovna=True):
                     )
                     return redirect("cart:cart_detail")"""
 
-            
-            #coupon apply - saving the applyed coupon code discount into the order
+            # coupon apply - saving the applyed coupon code discount into the order
             try:
                 coupon_id = request.session["coupon_id"]
                 coupon = Coupon.objects.get(id=coupon_id)
@@ -242,18 +248,15 @@ def cart_detail(request, zasilkovna=True):
                 order.save()
                 coupon_deactivate(request)
             except KeyError:
-                print("Coupon not found for ID - KeyError, no coupon applied")  
-                
+                print("Coupon not found for ID -, no coupon applied")
             except Coupon.DoesNotExist:
                 print("Coupon not found for ID, no coupon applied")
-           
+
             cart.clear()
 
-
-            
             try:
                 if cart.get_shipping_price() == 0:
-                    certificate_order_email_confirmation(order_id)    
+                    certificate_order_email_confirmation(order_id)
                 else:
                     customer_order_email_confirmation(order_id)
             except ssl.SSLCertVerificationError:
@@ -265,10 +268,6 @@ def cart_detail(request, zasilkovna=True):
                     f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
                 )
 
-
-
-           
-
             if settings.DEBUG:
                 # Django is running in local settings
                 print("Local settings: Zasilkovna turned off")
@@ -277,10 +276,9 @@ def cart_detail(request, zasilkovna=True):
             else:
                 # Django is running in production settings
                 print("Production settings: Zasilkovna turned on")
-                
+
                 zasilkovna_create_package(order_id)
 
-           
             # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
             return redirect(reverse("stripepayment:process"))
 
@@ -308,6 +306,23 @@ def cart_detail(request, zasilkovna=True):
 
 
 def update_cart_country(request):
+    cart = Cart(request)
+    zpusob_vyroby_type_count = 0
+
+    print("this is cart", cart)
+
+    """for item in cart:
+        # Do something with each item
+        print('this is cart inside update cart country', item)
+      
+            
+
+        if item != "Elektronický":
+            zpusob_vyroby_type_count += 1"""
+
+    if zpusob_vyroby_type_count > 0:
+        print("ano budu mazat toto")
+
     if request.method == "POST":
         selected_country = request.POST.get(
             "cart_country"
@@ -316,13 +331,23 @@ def update_cart_country(request):
         selected_vendor_id = request.POST.get("cart_vendor")
 
         # Update the cart's country attribute with the selected value
+
         request.session["cart_country"] = selected_country
         request.session["cart_address"] = selected_address
         request.session["cart_vendor"] = selected_vendor_id
-        
-        
+
+    print("zpusob vyroby type couint", zpusob_vyroby_type_count)
+    return redirect("cart:cart_detail")
 
 
+def set_cart_online(request):
+    print("jo stoji to nuul")
+    for session_key, session_value in request.session.items():
+        if isinstance(session_value, (list, str)):
+            if "cart_vendor" in session_value:
+                print("session_key", session_key)
+                print("selected filter:", session_value)
+                request.session["cart_vendor"] = "-"
 
     return redirect("cart:cart_detail")
 

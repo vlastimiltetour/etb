@@ -35,11 +35,17 @@ class Coupon(models.Model):
         null=True,
     )
 
-    order_id = models.CharField(max_length=10, default="N/A", verbose_name="Nakoupeno v objednavce ID")
+    order_id = models.CharField(
+        max_length=10, default="N/A", verbose_name="Nakoupeno v objednavce (ID)"
+    )
+    certificate_from = models.CharField(
+        max_length=20, default="-", verbose_name="Do koho"
+    )
+    certificate_to = models.CharField(max_length=20, default="-", verbose_name="Komu")
 
     def __str__(self):
         return self.code
-    
 
     class Meta:
-        pass
+        verbose_name = "Sleva"
+        verbose_name_plural = "Slevy"

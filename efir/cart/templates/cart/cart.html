@@ -268,7 +268,12 @@
                         <small id="product_size_type" name="product_size_type" class="text-muted">{{ item.zpusob_vyroby }}</small>
                         
                         <!-- if skladem-->
-                        <small  class="text-muted">{{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }}</small>
+                        <small  class="text-muted">{{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }} 
+                           {% if item.category == "Dárkové certifikáty" %}
+                           <br>od: {{ item.certificate_from}} 
+                           <br>pro: {{item.certificate_to}} 
+                           {% endif %}
+                        </small>
                         <!-- if na miru -->
              
              
@@ -344,11 +349,11 @@
                {% if cart.coupon %}
                
                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                  <span>Doprava: </span> 
+                  <span >Doprava: </span> 
 
                   <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
                      {% csrf_token %}
-                  
+                  <!-- this one doesn't work-->>
                      <input type="hidden" name="cart_country" id="cart_country">
                      <input type="hidden" name="cart_address" id="cart_address">
                      <input type="hidden" name="cart_vendor" id="cart_vendor">
@@ -403,12 +408,10 @@
 
                      <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
                         {% csrf_token %}
-                     
+                     <!-- this one works-->
                         <input type="hidden" name="cart_country" id="cart_country">
                         <input type="hidden" name="cart_address" id="cart_address">
                         <input type="hidden" name="cart_vendor" id="cart_vendor">
-                    
-
 
                       <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
                         <input type="hidden" name="address" value="{{ form.initial.address }}">-->                        
@@ -417,13 +420,15 @@
                         </div>
                         </input>
                      </form>
+
+
                    
                  
                 
                   <!-- experiment end updating country -->
                   <!-- html country input experiment -->
                   <!-- end html country input experiement -->
-                  <strong> {{ cart.get_shipping_price }} Kč</strong> 
+                  <strong id="shipping_price"> {{ cart.get_shipping_price }} Kč</strong> 
                </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
                   <!-- #TODO total  to be calculated-->
@@ -457,12 +462,21 @@
                <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="#">
                   {% csrf_token %}
                   <div class="row">
-                     <div class="mb-3">
-                        <button id="packeta_button" type="button"  class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>    
-                        <div style="display:none" class="packeta-selector-value"></div>
-                        <!-- this value shows vendor ID -->
+                     <div class="mb-3" id="id_shipping" name="shipping">
+                        <label for="shipping">Doprava</label>
+                        {{ form.shipping }}
+                        <div class="invalid-feedback"></div>
+                    </div>
+                  <div class="row">
+                     <div class="col-md-4 mb-3"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
+                         <button id="packeta_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>
+                         <div style="display:none" class="packeta-selector-value"></div>
+                         <!-- this value shows vendor ID -->
                      </div>
-                  </div>
+                   
+                 </div>
+                 
+               </div>
                   <div class="row">
                      <div class="col-md-6 mb-3">
                         <label for="country">Země
@@ -470,7 +484,7 @@
                         <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
                        
                         <div class="form-control"> {{ cart.get_country }}</div>
-                        <input type="hidden" name="country" id="id_country" value="{{ form.initial.order_country }}">
+                        <input type="hidden" name="country" id="id_country"  value="{{ form.initial.order_country }}">
 
         
                         
@@ -483,23 +497,19 @@
                         <label for="email">Doručovací místo</label>
                   
                         <div class="form-control"> {{ cart.get_address }}</div>
-                        <input type="hidden" name="address" id="id_address" value="{{ form.initial.order_address }}">
+                        <input type="hidden" name="address" id="id_address"  value="{{ form.initial.order_address }}">
 
                         <div class="invalid-feedback">
                            Vložte validní příjmení.
                         </div>
                      </div>
                      <div>
-                        <input type="hidden" name="vendor_id" id="id_vendor_id" value="{{ form.initial.vendor_id }}">
+                        <input type="hidden" name="vendor_id" id="id_vendor_id"  value="{{ form.initial.vendor_id }}">
                      </div>
                   </div>
                   <div>
                   </div>
-                  <div class="mb-3" id="id_shipping" name="shipping">
-                     <label for="shipping">Doprava</label>
-                     {{ form.shipping }}
-                     <div class="invalid-feedback"></div>
-                  </div>
+                
                   <script>
                      function showPacketaButton() {
                        var selectElement = document.querySelector('form select[name="shipping"]');
@@ -693,50 +703,45 @@
 <script src="../../assets/js/vendor/popper.min.js"></script>
 <script src="../../dist/js/bootstrap.min.js"></script>
 <script src="../../assets/js/vendor/holder.min.js"></script>
+
 <script>
    // Example starter JavaScript for disabling form submissions if there are invalid fields
    (function() {
-        'use strict';
+       'use strict';
 
+       window.addEventListener('load', function() {
+           var forms = document.getElementsByClassName('needs-validation');
 
-        window.addEventListener('load', function() {
-            var forms = document.getElementsByClassName('needs-validation');
+           var validation = Array.prototype.filter.call(forms, function(form) {
+               form.addEventListener('submit', function(event) {
+                   if (form.checkValidity() === false) {
+                       event.preventDefault();
+                       event.stopPropagation();
+                   } else {
+                       // Add the check for vendor_id before submitting the form
+                       var vendorIdInput = document.querySelector("#id_vendor_id");
+                       if (vendorIdInput.value === "" || vendorIdInput.value === null || vendorIdInput.value === "None") {
+                           alert("Prosím vyberte si adresu doručení");
+                           event.preventDefault();
+                           event.stopPropagation();
+                       } else {
+                           // If vendor_id is valid, proceed to handle subscription and submit the form
+                           handleSubscriptionAndSubmitForm();
+                       }
+                   }
 
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    } else {
-                        // Add the check for vendor_id before submitting the form
-                        
-                        var vendorIdInput = document.querySelector("#id_vendor_id");
-                        
-                        if (vendorIdInput.value === "" || vendorIdInput.value === null || vendorIdInput.value === "None") {
-                            alert("Prosím vyberte si adresu doručení");
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    }
-
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
-    var vendorIdInput = document.querySelector("#id_vendor_id");
-    console.log('vendor id', vendorIdInput.value)
-</script>
-
-
-<script>
+                   form.classList.add('was-validated');
+               }, false);
+           });
+       }, false);
+   })();
 
    function decreaseCount(itemId) {
        var select = document.getElementById('quantity-' + itemId);
        var value = parseInt(select.value);
        if (value > 1) {
            select.value = value - 1;
-           submitForm(itemId); // Submit the form when the quantity changes
+           handleSubscriptionAndSubmitForm(itemId); // Submit the form when the quantity changes
        }
    }
 
@@ -744,97 +749,157 @@
        var select = document.getElementById('quantity-' + itemId);
        var value = parseInt(select.value);
        select.value = value + 1;
-       submitForm(itemId); // Submit the form when the quantity changes
+       handleSubscriptionAndSubmitForm(itemId); // Submit the form when the quantity changes
    }
 
-   function submitForm(itemId) {
+   function handleSubscriptionAndSubmitForm(itemId) {
+       // Extract data from the form
+       const email = document.getElementById('id_email').value;
+
+       const products = [];
+       const productElements = document.querySelectorAll('.product_id_class');
+
+       if (!productElements.length) {
+           console.log('No product elements found.');
+           return;
+       }
+
+       productElements.forEach((element, index) => {
+           const productId = element.textContent.trim();
+
+           products.push({
+               product_id: productId,
+           });
+       });
+
+       const cartValueElement = document.getElementById('cart_total').textContent.trim().replace(/\s+/g, '').replace(/[^\d.-]/g, '');
+       const cartValue = parseInt(cartValueElement, 10);
+       const currency = 'CZK';
+
+       const userData = {
+           email: email,
+           subscribe: ['Zákazník'],
+       };
+
+       const purchaseData = {
+           email: email,
+           value: cartValue,
+           currency: currency,
+           products: products,
+       };
+
+       // Call the lhi function with the userData
+       lhi('Identify', userData);
+       lhi('Purchase', purchaseData);
+
+       // Now submit the form
        var form = document.getElementById('cart-update-quantity-form-' + itemId);
        form.submit();
    }
 
-// birthday validatpr 
+   // birthday validator 
    function validateDate(input) {
-    // Validate date format (YYYY-MM-DD)
-    var regex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!regex.test(input.value)) {
-        input.setCustomValidity('Please enter a valid date in the format YYYY-MM-DD');
-    } else {
-        input.setCustomValidity('');
-    }
-}
-
-
+       // Validate date format (YYYY-MM-DD)
+       var regex = /^\d{4}-\d{2}-\d{2}$/;
+       if (!regex.test(input.value)) {
+           input.setCustomValidity('Please enter a valid date in the format YYYY-MM-DD');
+       } else {
+           input.setCustomValidity('');
+       }
+   }
 </script>
+
+
+
+
+
+
+
 
 <script>
-   // JavaScript function to validate email, existing in your code
-   const cart_value_element = document.getElementById(`cart_total`).textContent.trim().replace(/\s+/g, '').replace(/[^\d.-]/g, '');
 
-   const cart_value = parseInt(cart_value_element, 10);
-   console.log("how much is cart total", cart_value)
+   function checkIfCertificate() {
+       //const shippingPriceElement = document.getElementById('shipping_price');
+       //const addressInput = document.querySelector("#cart_address");
+       //const countryInput = document.querySelector("#cart_country");
+       //const vendorIdInput = document.querySelector("#cart_vendor");
+       //const cartForm = document.querySelector("#country-form");
+       const ShippingType = document.getElementById('id_shipping').textContent;
 
-   const currency = 'CZK';
-   
-   function validateEmail() {
-       // Your validation logic here
+       console.log("Step 2: References to relevant elements obtained.", shippingType);
    }
-   
-   // Function to handle form submission
-   document.addEventListener('DOMContentLoaded', function () {
-       const subscribeForm = document.getElementById('update-order-form');
-   
-       subscribeForm.addEventListener('submit', function (e) {
-           e.preventDefault(); // Prevent the default form submission
-   
-           // Extract data from the form
-           const email = document.getElementById('id_email').value;
-          
-           //start
-           const products = [];
-           const productElements = document.querySelectorAll('.product_id_class');
-        
+
+       console.log("Step 3: Content of the product size type element retrieved.");
+
+       if (ShippingType.trim() === 'online') {
+           console.log("Step 4: Product size type is 'Elektronický'. Proceeding with additional actions or validations.");
+
+           // Additional actions or validations can be added here
            
-           if (!productElements.length) {
-               console.log('No product elements found.');
-               return;
-            }
+           console.log("Step 5: Additional actions or validations completed.");
 
-               productElements.forEach((element, index) => {
-                  const productId = element.textContent.trim();
+           // Submit the form
+           cartForm.submit();
+           console.log("Step 6: Form submitted.");
+           return;
+       }
+   ;
 
-                  products.push({
-                     product_id: productId,
-                  });
-               });
-           //end
 
-           // const product_id = 
-   
-           // Here, include additional data as needed
-           const userData = {
-               email: email,
-               subscribe: ['Zákazník'],
-               // Include additional user data as needed
-               // user_id: USER_ID, // You need to provide a way to get this, maybe it's already available in your session
-           };
+   document.addEventListener("DOMContentLoaded", checkIfCertificate);
 
-           const purchaseData = {
-               email: email,
-               value: cart_value,
-               currency: 'CZK',
-               products: products,
-           }
-   
-           // Call the lhi function with the userData
-           lhi('Identify', userData);
-           lhi('Purchase', purchaseData);
-   
-           // Here, proceed to submit the form data to your server
-           // This could involve an AJAX request or simply allowing the form to submit if you're not handling the submission asynchronously
-           this.submit(); // If you're handling the form data asynchronously, replace this with your AJAX call
-       });
-   });
+// Event listener for the change event on the select element
+var selectElement = document.getElementById("id_shipping").textContent;
+selectElement.addEventListener("change", checkIfCertificate);
+
+function checkIfCertificate() {
+    console.log("Event occurred: DOMContentLoaded or change on select element");
+    // Add your logic here
+}
+
 </script>
+
+
+ 
+
+<script>
+   function listenToShippingSelection() {
+  const shippingSelect = document.getElementById('id_shipping');
+  const shippingPriceElement = document.getElementById('shipping_price');
+  const addressInput = document.querySelector("#cart_address");
+  const countryInput = document.querySelector("#cart_country");
+  const vendorIdInput = document.querySelector("#cart_vendor");
+  const cartForm = document.querySelector("#country-form");
+
+  shippingSelect.addEventListener('change', (event) => {
+    const selectedValue = event.target.value;
+    console.log('Selected shipping option:', selectedValue);
+
+    if (selectedValue === "O") {
+      console.log("Online delivery selected");
+      // Update UI to display "Online" or similar message (optional)
+      // ...
+
+      // Ask user for confirmation before submitting (recommended)
+      addressInput.value = "-";  // Set the actual value of the input element
+      countryInput.value = "-";
+      vendorIdInput.value = "-";
+      cartForm.submit();
+      console.log("Step 6: Form submitted with online delivery.");
+      selectedValue = "Online"
+      
+    }
+  });
+}
+
+// Call the function to start listening
+listenToShippingSelection();
+
+</script>
+
+
+
+
 
 
 

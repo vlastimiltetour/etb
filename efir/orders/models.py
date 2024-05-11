@@ -21,7 +21,11 @@ class Order(models.Model):
     COUNTRY_CHOICES = [("CZ", "cz"), ("SK", "sk")]
 
     country = models.CharField(max_length=20, verbose_name="Země")
-    shipping_type = (("Z", "Zásilkovna"),)
+    shipping_type = (
+        ("", "Vyberte si způsob dopravy"),
+        ("Z", "Zásilkovna"),
+        ("O", "Online"),
+    )
     shipping = models.CharField(
         max_length=100,
         choices=shipping_type,
@@ -117,7 +121,6 @@ class Order(models.Model):
             ).count()
             self.etb_id = f"{today_date}{today_order_count:02d}"
 
-
         """ vendor_id = kwargs.pop("vendor_id", None)
         if vendor_id:
             self.vendor_id = vendor_id
@@ -158,8 +161,16 @@ class OrderItem(models.Model):
     pas_velikost_set = models.CharField(max_length=50, null=True, blank=True)
 
     poznamka = models.CharField(max_length=50)
-    slevovy_kod = models.CharField(max_length=20, default="-")
-    hodnota_kuponu = models.CharField(max_length=20, default="-")
+    slevovy_kod = models.CharField(
+        max_length=20, default="-", verbose_name="Slevový kód"
+    )
+    hodnota_kuponu = models.CharField(
+        max_length=20, default="-", verbose_name="Hodnota kuponu"
+    )
+    certificate_from = models.CharField(
+        max_length=20, default="-", verbose_name="Od koho"
+    )
+    certificate_to = models.CharField(max_length=20, default="-", verbose_name="Komu")
 
     def __str__(self):
         return str(self.id)

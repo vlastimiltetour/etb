@@ -181,7 +181,7 @@
             <!-- select size buttons -->
             <form id="add-to-cart-form" action="{% url 'cart:cart_add' product.id %}" method="post">
                <div id="zpusob_vyroby" class="row mb-3">
-                  <label for="zpusob_vyroby" class="mb-2"><b>Na míru nebo skladem?</b></label>
+                  <label for="zpusob_vyroby" id="tag_zpusob_vyroby" class="mb-2"><b>Typ produktu</b></label>
                   <div class="col">
                      <select id="zpusob_vyroby_selected" name="zpusob_vyroby" class="form-select flex-grow-1 me-3 rounded-0 mb-1" style="border-color: black;" aria-label="Default select example">
                      {% for zv in form.zpusob_vyroby %}
@@ -202,6 +202,10 @@
                      var sizesInput = document.getElementById("sizes");
                      var setSizesInput = document.getElementById("set-sizes");
                      var productCategoryCeleSety = "{{ product.category.name }}";
+                     var certificateFrom = document.getElementById("id_certificate_from")
+                     var certificateTo = document.getElementById("id_certificate_to")
+                     var certificate_section = document.getElementById("certificate")
+
                      
                               
                
@@ -216,12 +220,17 @@
                      var elementToHide2;
                      var elementToHide3;
                      var elementToHide4;
+                     var elementToHide5;
+                     var elementToHide6;
 
                      // Get the elements to show and hide based on the selected value
                      if (selectedValue === "na míru") {
                         elementToShow = document.getElementById("poznamka");
                         elementToHide = document.getElementById("sizes");
+                        elementToHide2 = document.getElementById("certificate")
                         poznamkaInput.value = ""
+                        certificateFrom.value = "-"
+                        certificateTo.value = "-"
                         console.log("option 1:");
 
                         
@@ -231,14 +240,23 @@
                         if (productCategoryCeleSety.toLowerCase() !== 'celé sety') {
                               elementToShow = document.getElementById("sizes");
                               elementToHide = document.getElementById("poznamka");
+                              elementToHide2 = document.getElementById("certificate")
+
                               poznamkaInput.value = "-";
+                              certificateFrom.value = "-"
+                              certificateTo.value = "-"
+                              console.log(certificateFrom.value, "tohle je certificate from")
                               console.log("option 2 productCategoryCeleSety:", productCategoryCeleSety, "-");
 
                         }
                         else if (productCategoryCeleSety.toLowerCase() === 'dárkové certifikáty') {
                               elementToShow = document.getElementById("sizes");
                               elementToHide = document.getElementById("poznamka");
+                              elementToHide2 = document.getElementById("certificate")
+
                               poznamkaInput.value = "-";
+                              certificateFrom.value = "-"
+                              certificateTo.value = "-"
                               sizesInput.value = "-";
                               console.log("option 3 first product category:", productCategoryCeleSety, "-");
 
@@ -247,7 +265,11 @@
                         else {
                               elementToShow = document.getElementById("set-sizes");
                               elementToHide = document.getElementById("poznamka");
+                              elementToHide2 = document.getElementById("certificate")
+
                               poznamkaInput.value = "-";
+                              certificateFrom.value = "-"
+                              certificateTo.value = "-"
                               console.log("option 4:", productCategoryCeleSety, "-");
 
 
@@ -256,9 +278,12 @@
                         
                      } else 
                      { //this one
-                        elementToHide = document.getElementById("zpusob_vyroby");
-                        elementToHide = document.getElementById("sizes");
-                        elementToHide3 = document.getElementById("poznamka");
+                        elementToShow = document.getElementById("zpusob_vyroby");
+                        elementToHide2 = document.getElementById("sizes");
+                        elementToHide3 = document.getElementById("prani");
+                        elementToHide4 = document.getElementById("long_description");
+                        elementToHide5 = document.getElementById("poznamka");
+                        elementToHide6 = document.getElementById("tag_zpusob_vyroby");
                         elementToShow = document.getElementById("zpusob_vyroby_selected");
                         
                         
@@ -288,6 +313,12 @@
                      if (elementToHide4) {
                         elementToHide4.style.display = "none";
                      }
+                     if (elementToHide5) {
+                        elementToHide4.style.display = "none";
+                     }
+                     if (elementToHide6) {
+                        elementToHide4.style.display = "none";
+                     }
                   }
 
                   // Event listener for when the DOM is fully loaded
@@ -300,6 +331,16 @@
                </script>
                
                <!-- start product set-->
+
+               <div id="certificate">
+                  <div id="certificate_from">
+                  {{ form.certificate_from }}
+                  </div>
+                  <div id="certificate_to">
+                  {{ form.certificate_to }}<br>
+                  </div>
+               </div>
+
                {% if product.category.name == 'Celé sety' %}
              
                <h1>{{ productset.name }}</h1>
@@ -370,8 +411,7 @@
                <!-- if darkovy certifikat, don't show velikost -->
                {% if product.category.name == "Dárkové certifikáty" %}
 
-
-
+               
                <!-- Start Size Variables -->
                <div id="sizes">
                   <!-- Category Definition -->
@@ -399,6 +439,7 @@
                   <div class="d-flex mb-3">
                      <div class="col-6">
                         {{ form.poznamka }}
+                   
                         <br>
                         <small class="form-text text-muted">Vyplňte tyto hodnoty podle <u><a href="https://www.youtube.com/shorts/gYKg0y_DBQI">video návodu</a></u>:<br>
                         Obvod hrudníku<br>
@@ -441,6 +482,7 @@
                   <div class="d-flex mb-3">
                      <div class="col-6">
                         {{ form.poznamka }}
+                       
                         <br>
                         <small class="form-text text-muted">Vyplňte tyto hodnoty podle <u><a href="https://www.youtube.com/shorts/gYKg0y_DBQI">video návodu</a></u>:<br>
                         Obvod hrudníku<br>
@@ -502,7 +544,7 @@
             </form>
             </div>
             <div>
-            <p class="lead">{{ product.long_description|linebreaks }}</p>
+            <p class="lead" id="long_description">{{ product.long_description|linebreaks }}</p>
             </div>
             <div id="prani">
             <p class="small muted-text">Jak určit svou velikost:<br>Pokud neznáte svou velikost, podívejte se do naší <u><a href="{% url 'catalog:rozmery' %}">velikostní tabulky</a></u></p>

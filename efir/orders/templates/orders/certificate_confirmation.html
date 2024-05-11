@@ -321,6 +321,8 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
 
         <!-- cart contents -->
         {% for item in order.items.all %}
+        {% if item.hodnota_kuponu != "-" %}
+        
 <tr>
     <td style="text-align: left; padding: 8px;">
         <h6 style="margin: 0; font-size: 16px;">{{ item.product.name }}</h6>
@@ -329,6 +331,12 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
     <td style="text-align: center; padding: 8px;">{{ item.hodnota_kuponu }}<br><small style="font-size: 14px; color: #777;">Hodnota</small></td>
     <td style="text-align: center; padding: 8px;">
       {{ item.slevovy_kod }}<br><small style="font-size: 14px; color: #777;">Slevový kód</small>
+    </td>
+    <td style="text-align: center; padding: 8px;">
+      {{ item.certificate_from }}<br><small style="font-size: 14px; color: #777;">Od koho</small>
+    </td>
+    <td style="text-align: center; padding: 8px;">
+      {{ item.certificate_to }}<br><small style="font-size: 14px; color: #777;">Pro koho</small>
     </td>
     {% if item.product.corrected_price %}
     <td style="text-align: right; padding: 8px;"> 
@@ -346,6 +354,7 @@ table.table td:nth-child(2), table.table th:nth-child(2) {
     
     <td style="text-align: right; padding: 8px;"colspan="4">{{ item.surcharge }} Kč<br><small style="font-size: 14px; color: #777;">Příplatek šití na míru</small></td>
 </tr>
+{% endif %}
 {% endif %}
 {% endfor %}
 

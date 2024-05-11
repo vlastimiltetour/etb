@@ -18,11 +18,14 @@ class Cart:
         self.cart = cart
 
         # store applied coupon
-        self.coupon_id = self.session.get("coupon_id")  # Retrieve coupon_id from session
+        self.coupon_id = self.session.get(
+            "coupon_id"
+        )  # Retrieve coupon_id from session
         self.country = self.session.get("cart_country")
         self.address = self.session.get("cart_address")
-        self.vendor_id = self.session.get("cart_vendor")
-        
+        self.vendor = self.session.get("cart_vendor")
+        self.shipping_type = self.session.get("shipping_type")
+
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
         items = []  # temporary data structure used to organize and prep cart data
@@ -42,7 +45,7 @@ class Cart:
             cart_item["price"] = Decimal(cart_item["price"])
             # print("tohle je cart item surcharge type")
             # print(type(cart_item["quantity"]))
-            cart_item["total_surcharge"] = cart_item["quantity"] * int(
+            cart_item["total_surcharge"] = cart_item["quantity"] * Decimal(
                 cart_item["surcharge"]
             )
             cart_item["discounted_price_cart"] = product.corrected_price
@@ -66,6 +69,8 @@ class Cart:
         zpusob_vyroby=None,  # might be renamed to konfekcni
         poznamka=None,
         override=None,
+        certificate_from=None,
+        certificate_to=None,
     ):
         # Check if the product is already in the cart
 
@@ -84,9 +89,9 @@ class Cart:
         # Generate a new cart item_id
         cart_item_id = str(uuid.uuid4())
 
-        surcharge = int(0)
+        surcharge = Decimal(0)
         if zpusob_vyroby == "Na Míru":
-            surcharge = int(product.price * Decimal(str(0.3)))
+            surcharge = Decimal(product.price * Decimal(str(0.3)))
 
         # If the item_id is already in the cart, allow adjusting the quantity
         if cart_item_id in self.cart:
@@ -106,6 +111,8 @@ class Cart:
                 "poznamka": str(poznamka),
                 "zpusob_vyroby": str(zpusob_vyroby),
                 "override": override,
+                "certificate_from": str(certificate_from),
+                "certificate_to": str(certificate_to),
             }
 
         self.save()
@@ -139,14 +146,13 @@ class Cart:
         del self.session[settings.CART_SESSION_ID]
         self.save()
 
-
     def get_shipping_price(self):
         # Get the country from the cart data
         zpusob_vyroby_type_count = 0
         country = self.country
 
         for item_id, item_details in self.cart.items():
-            print('this is item zpusob vyroby')
+            print("this is item zpusob vyroby")
             zpusob_vyroby = item_details.get("zpusob_vyroby")
             print(zpusob_vyroby)
 
@@ -154,7 +160,6 @@ class Cart:
                 zpusob_vyroby_type_count += 1
 
         if zpusob_vyroby_type_count > 0:
-            
             if country == "cz":
                 shipping_price = 89
             elif country == "sk":
@@ -163,11 +168,11 @@ class Cart:
                 shipping_price = 0
 
             return shipping_price
-        
+
         else:
             shipping_price = 0
 
-            return shipping_price
+        return shipping_price
 
     def get_address(self):
         address = self.address
@@ -193,26 +198,52 @@ class Cart:
 
         return "Nevyplněno"
 
-    def clean_cart_session(self):
+    def clean_cart_address(self):
         # Clean up the cart session
-        del self.session[settings.CART_SESSION_ID]
 
-        try:
-            del self.session["coupon_id"]
-            del self.session["cart_country"]
-            del self.session["cart_address"]
-            del self.session["cart_vendor"]
-        except KeyError:
-            print("there is a key error")
+        keys_to_delete = ["coupon_id", "cart_country", "cart_address", "cart_vendor"]
+
+        for key in keys_to_delete:
+            if key in self.session:
+                del self.session[key]
+            else:
+                print(f"Key '{key}' not found in session")
 
         self.save()
 
+    def clean_cart_session(self):
+        # Clean up the cart session
+        print("Cleaning up the cart session...")
+        # del self.session[settings.CART_SESSION_ID]
+        print("Cart session cleaned.")
+        print("Current session contents:")
+        for key, value in self.session.items():
+            print(f"Key: {key}, Value: {value}, type: {type(value)}")
+
+        keys_to_delete = ["coupon_id", "cart_country", "cart_address", "cart_vendor"]
+
+        for key in keys_to_delete:
+            print(f"Checking for '{key}' in session...")
+            # Check if the key exists in the session
+            if key in self.session:
+                # If found, delete the key
+                print(f"Deleting '{key}' from session...")
+                del self.session[key]
+                print(f"'{key}' deleted.")
+            else:
+                # If not found, print a message
+                print(f"Key '{key}' not found in session")
+
+        print("Saving session...")
+        self.save()
+        print("Session saved.")
+
     def get_total_surcharge(self):
         surcharge = sum(
-            int(item["surcharge"]) * item["quantity"] for item in self.cart.values()
+            Decimal(item["surcharge"]) * item["quantity"] for item in self.cart.values()
         )
 
-        return int(surcharge)
+        return Decimal(surcharge)
 
     def get_total_price(self):
         # product_discount = product.corrected_price()

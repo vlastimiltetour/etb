@@ -117,10 +117,6 @@ class CartAddProductForm(forms.Form):
 
         zpusob_vyroby = tuple(product.zpusob_vyroby.values_list())
         zpusob_vyroby_list = [(i[1], str(i[1])) for i in zpusob_vyroby]
-        # zpusob_vyroby = tuple(product.zpusob_vyroby.values_list())
-        # zpusob_vyroby_list = [(i, str(i)) for i in zpusob_vyroby]
-        # for item in zpusob_vyroby:
-        #    zpusob_vyroby_list.append(item)
 
         self.fields["quantity"] = forms.TypedChoiceField(
             label="Quantity",
@@ -147,7 +143,12 @@ class CartAddProductForm(forms.Form):
         )
         self.fields["poznamka"] = forms.CharField(
             label="Poznamka",
-            widget=forms.Textarea,
+            widget=forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Obvod hrudníku:\nObvod pod hrudníkem:\nObvod jednoho prsa:\nObvod pasu:\nObvod boků:",
+                }
+            ),
             required=True,
             help_text="Vyplňte tyto hodnoty: Obvod hrudníku Obvod pod hrudníkem Obvod jednoho prsa Obvod pasu Obvod boku",
         )
@@ -170,14 +171,57 @@ class CartAddProductForm(forms.Form):
             required=False,
         )
 
+        self.fields["certificate_from"] = forms.CharField(
+            label="certificate_from",
+            widget=forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Od koho je tento certifikát?",
+                }
+            ),
+            required=True,
+            help_text="Od koho je tento certifikát?",
+        )
+
+        self.fields["certificate_to"] = forms.CharField(
+            label="certificate_to",
+            widget=forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Pro koho je tento certifikát?",
+                }
+            ),
+            required=True,
+            help_text="Pro koho je tento certifikát?",
+        )
 
     def set_cart_values(self):
         zpusob_vyroby_value = self.cleaned_data.get("zpusob_vyroby", None)
-       
+
         if zpusob_vyroby_value == "Skladem":
-            self.cleaned_data['poznamka'] = "\u200B"
+            self.cleaned_data["poznamka"] = "\u200B"
+            self.cleaned_data["certificate_from"] = "\u200B"
+            self.cleaned_data["certificate_to"] = "\u200B"
+
         elif zpusob_vyroby_value == "Na Míru":
             self.cleaned_data["velikost"] = "\u200B"
             self.cleaned_data["kalhotky_velikost_set"] = "\u200B"
             self.cleaned_data["podprsenka_velikost_set"] = "\u200B"
             self.cleaned_data["pas_velikost_set"] = "\u200B"
+            self.cleaned_data["certificate_from"] = "\u200B"
+            self.cleaned_data["certificate_to"] = "\u200B"
+        elif zpusob_vyroby_value == "Tištěný":
+            self.cleaned_data["velikost"] = "\u200B"
+            self.cleaned_data["poznamka"] = "\u200B"
+            self.cleaned_data["kalhotky_velikost_set"] = "\u200B"
+            self.cleaned_data["podprsenka_velikost_set"] = "\u200B"
+            self.cleaned_data["pas_velikost_set"] = "\u200B"
+        else:
+            self.cleaned_data["velikost"] = "\u200B"
+            self.cleaned_data["poznamka"] = "\u200B"
+            self.cleaned_data["kalhotky_velikost_set"] = "\u200B"
+            self.cleaned_data["podprsenka_velikost_set"] = "\u200B"
+            self.cleaned_data["pas_velikost_set"] = "\u200B"
+
+        # this happens when saved to cart
+        return zpusob_vyroby_value
