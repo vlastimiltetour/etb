@@ -22,7 +22,6 @@ class Order(models.Model):
 
     country = models.CharField(max_length=20, verbose_name="Země")
     shipping_type = (
-        ("", "Vyberte si způsob dopravy"),
         ("Z", "Zásilkovna"),
         ("O", "Online"),
     )
