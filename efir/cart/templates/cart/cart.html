@@ -357,6 +357,8 @@
                      <input type="hidden" name="cart_country" id="cart_country">
                      <input type="hidden" name="cart_address" id="cart_address">
                      <input type="hidden" name="cart_vendor" id="cart_vendor">
+                     <input type="hidden" name="cart_shipping" id="cart_shipping">
+
 
 
                      
@@ -412,6 +414,8 @@
                         <input type="hidden" name="cart_country" id="cart_country">
                         <input type="hidden" name="cart_address" id="cart_address">
                         <input type="hidden" name="cart_vendor" id="cart_vendor">
+                        <input type="hidden" name="cart_shipping" id="cart_shipping">
+
 
                       <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
                         <input type="hidden" name="address" value="{{ form.initial.address }}">-->                        
@@ -461,22 +465,38 @@
             <div class="form-group">
                <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="#">
                   {% csrf_token %}
-                  <div class="row">
-                     <div class="mb-3" id="id_shipping" name="shipping">
-                        <label for="shipping">Doprava</label>
-                        {{ form.shipping }}
-                        <div class="invalid-feedback"></div>
-                    </div>
+                 
                   <div class="row">
                      <div class="col-md-4 mb-3"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
                          <button id="packeta_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>
                          <div style="display:none" class="packeta-selector-value"></div>
                          <!-- this value shows vendor ID -->
                      </div>
+                     <div class="col-md-4 mb-3"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
+                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectOnlineShipping()">Online</button>
+                        <div style="display:none" class="packeta-selector-value"></div>
+                        <!-- this value shows vendor ID -->
+                    </div>
                    
                  </div>
                  
                </div>
+               <div class="row">
+                  <div class="mb-3" >
+                     <label for="shipping">Doprava</label>
+                     <!-- {{ form.shipping }}-->
+                     <div class="form-control">
+                        {% if cart.get_shipping == "Z" %}
+                            Zásilkovna
+                        {% else %}
+                            Online
+                        {% endif %}
+                    </div>
+
+                     <input type="hidden" id="id_shipping" name="shipping" value="{{ form.initial.order_shipping }}">
+
+                     <div class="invalid-feedback"></div>
+                 </div>
                   <div class="row">
                      <div class="col-md-6 mb-3">
                         <label for="country">Země
@@ -503,6 +523,7 @@
                            Vložte validní příjmení.
                         </div>
                      </div>
+                     
                      <div>
                         <input type="hidden" name="vendor_id" id="id_vendor_id"  value="{{ form.initial.vendor_id }}">
                      </div>
@@ -553,7 +574,7 @@
                            const countryInput = document.querySelector("#cart_country"); // Hidden input field for 'country'
                             //const cartCountryInput = document.querySelector('#cart_country'); // Get the element for displaying cart_country
                            const vendorIdInput = document.querySelector("#cart_vendor"); // invokes the variable
-
+                           const shippingType = document.querySelector("#cart_shipping")
                            const cartForm = document.querySelector("#country-form");
 
                            
@@ -565,6 +586,7 @@
                               countryInput.value = point.country; // Set the 'country' value in the hidden input field
                               // cartCountryInput.value = point.country; // Update the display element for cart_country
                               vendorIdInput.value = point.id;
+                              shippingType.value = "Z";
                               cartForm.submit();
                            }
                            else {
@@ -863,38 +885,32 @@ function checkIfCertificate() {
  
 
 <script>
-   function listenToShippingSelection() {
-  const shippingSelect = document.getElementById('id_shipping');
-  const shippingPriceElement = document.getElementById('shipping_price');
-  const addressInput = document.querySelector("#cart_address");
-  const countryInput = document.querySelector("#cart_country");
-  const vendorIdInput = document.querySelector("#cart_vendor");
-  const cartForm = document.querySelector("#country-form");
+   function selectOnlineShipping() {
+      const addressInput = document.querySelector("#cart_address");
+      const countryInput = document.querySelector("#cart_country");
+      const vendorIdInput = document.querySelector("#cart_vendor");
+      const cartForm = document.querySelector("#country-form");
+      const shippingSelect = document.getElementById('cart_shipping');
 
-  shippingSelect.addEventListener('change', (event) => {
-    const selectedValue = event.target.value;
-    console.log('Selected shipping option:', selectedValue);
+      // Check if the shippingSelect element exists
+      if (!shippingSelect) {
+         alert("Error: id_shipping element not found.");
+         return;
+      }
 
-    if (selectedValue === "O") {
-      console.log("Online delivery selected");
-      // Update UI to display "Online" or similar message (optional)
-      // ...
-
-      // Ask user for confirmation before submitting (recommended)
-      addressInput.value = "-";  // Set the actual value of the input element
+      // Set values for other inputs if needed
+      addressInput.value = "-";
       countryInput.value = "-";
       vendorIdInput.value = "-";
+
+      // Set the value of id_shipping to "Online"
+      shippingSelect.value = "O";
+
+      // Alert to verify the value has been set correctly
+
+      // Uncomment this line if you want to submit the form automatically
       cartForm.submit();
-      console.log("Step 6: Form submitted with online delivery.");
-      selectedValue = "Online"
-      
-    }
-  });
-}
-
-// Call the function to start listening
-listenToShippingSelection();
-
+   }
 </script>
 
 
@@ -904,4 +920,6 @@ listenToShippingSelection();
 
 
 
+
 {% endblock %}
+

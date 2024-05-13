@@ -24,7 +24,7 @@ class Cart:
         self.country = self.session.get("cart_country")
         self.address = self.session.get("cart_address")
         self.vendor = self.session.get("cart_vendor")
-        self.shipping_type = self.session.get("shipping_type")
+        self.shipping = self.session.get("cart_shipping")
 
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
@@ -179,6 +179,18 @@ class Cart:
 
         if address is not None:
             return address
+
+        return "Nevyplněno"
+
+    def get_shipping(self):
+        shipping = self.shipping
+
+        if shipping is not None:
+            return shipping
+        elif shipping == "Z":
+            return "Zásilkovna"
+        elif shipping == "O":
+            return "Online"
 
         return "Nevyplněno"
 

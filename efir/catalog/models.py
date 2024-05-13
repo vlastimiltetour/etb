@@ -273,6 +273,7 @@ class Certificate(models.Model):
         default=0,
         null=True,
     )
+    photo = models.ImageField(upload_to="catalog/%Y/%m/%d", blank=True)
 
     class Meta:
         verbose_name = "Detail certifikátu"

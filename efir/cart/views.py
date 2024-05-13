@@ -110,6 +110,8 @@ def cart_detail(request, zasilkovna=True):
     selected_country = request.session.get("cart_country")
     selected_address = request.session.get("cart_address")
     selected_vendor_id = request.session.get("cart_vendor")
+    selected_cart_shipping = request.session.get("cart_shipping")
+
     selected_certificate_shipping = request.session.get("zpusob_vyroby")
     print("this is selectedcertiiccate online", selected_certificate_shipping)
 
@@ -129,6 +131,7 @@ def cart_detail(request, zasilkovna=True):
             "order_country": selected_country,
             "order_address": selected_address,
             "vendor_id": selected_vendor_id,
+            "order_shipping": selected_cart_shipping,
         },
     )
     # print("Form data:", form.data)
@@ -153,6 +156,7 @@ def cart_detail(request, zasilkovna=True):
                 "order_country": selected_country,
                 "order_address": selected_address,
                 "vendor_id": selected_vendor_id,
+                "order_shipping": selected_cart_shipping,
             },
         )
 
@@ -257,6 +261,7 @@ def cart_detail(request, zasilkovna=True):
             try:
                 if cart.get_shipping_price() == 0:
                     certificate_order_email_confirmation(order_id)
+                    customer_order_email_confirmation(order_id)
                 else:
                     customer_order_email_confirmation(order_id)
             except ssl.SSLCertVerificationError:
@@ -291,6 +296,7 @@ def cart_detail(request, zasilkovna=True):
                 "order_country": selected_country,
                 "order_address": selected_address,
                 "vendor_id": selected_vendor_id,
+                "order_shipping": selected_cart_shipping,
             },
         )
 
@@ -306,22 +312,7 @@ def cart_detail(request, zasilkovna=True):
 
 
 def update_cart_country(request):
-    cart = Cart(request)
-    zpusob_vyroby_type_count = 0
 
-    print("this is cart", cart)
-
-    """for item in cart:
-        # Do something with each item
-        print('this is cart inside update cart country', item)
-      
-            
-
-        if item != "Elektronický":
-            zpusob_vyroby_type_count += 1"""
-
-    if zpusob_vyroby_type_count > 0:
-        print("ano budu mazat toto")
 
     if request.method == "POST":
         selected_country = request.POST.get(
@@ -329,14 +320,16 @@ def update_cart_country(request):
         )  # Get the selected country from the form, it has unique cart_address id and name
         selected_address = request.POST.get("cart_address")
         selected_vendor_id = request.POST.get("cart_vendor")
+        selected_cart_shipping = request.POST.get("cart_shipping")
 
         # Update the cart's country attribute with the selected value
 
         request.session["cart_country"] = selected_country
         request.session["cart_address"] = selected_address
         request.session["cart_vendor"] = selected_vendor_id
+        request.session["cart_shipping"] = selected_cart_shipping
 
-    print("zpusob vyroby type couint", zpusob_vyroby_type_count)
+    
     return redirect("cart:cart_detail")
 
 

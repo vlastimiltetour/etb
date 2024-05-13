@@ -271,7 +271,11 @@
               <a href="{{ c.get_absolute_url }}" class="nav-link p-0 text-white">{{ c.name }}</a>
             </li>
             {% endfor %}
-           
+             <li class="nav-item mb-2">
+              <a href="{% url 'catalog:akce' %}" class="nav-link p-0 text-white">Akce</a>
+
+            </li>
+                      
           </ul>
         </div>
         <div class="col-6 col-md-2 mb-3">
