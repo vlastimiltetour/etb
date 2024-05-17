@@ -143,6 +143,7 @@ class CartAddProductForm(forms.Form):
         )
         self.fields["poznamka"] = forms.CharField(
             label="Poznamka",
+            max_length=1600,
             widget=forms.Textarea(
                 attrs={
                     "class": "form-control",

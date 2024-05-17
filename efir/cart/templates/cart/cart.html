@@ -98,7 +98,10 @@
             {% if first_photo %}
             <img src="{{ first_photo.photo.url }}" class="book-img" style="max-height: 100px; max-width: 50px;">
             {% endif %}
+        
             {% endwith %}
+         
+            
          </div>
 
              
@@ -257,6 +260,12 @@
                      {% if first_photo %}   
                      <div style="position: relative">
                         <img src="{{ first_photo.photo.url }}" style="max-height: 90px; margin-right: 10px; ">
+                     </div>
+                     {% endif %}
+                     {% if product.certificate.photo %}
+                     
+                     <div style="position: relative">
+                        <img src="{{ product.certificate.photo.url }}" style="max-height: 90px; margin-right: 10px; ">
                      </div>
                      {% endif %}
                      {% endwith %}
@@ -922,4 +931,3 @@ function checkIfCertificate() {
 
 
 {% endblock %}
-

@@ -21,6 +21,12 @@
   background-color: #000; /* Set background color to black */
   color: #fff; /* Set text color to white */
 }
+
+
+    .thin-border {
+        border: 1px solid black; /* Grey color */
+    }
+
 </style>
 
 
@@ -64,122 +70,107 @@
      white-space: nowrap; /* Prevent line breaks between elements white-space: nowrap;: This prevents line breaks between the form elements, ensuring that they stay on the same line.*/
      }
   </style>
-     <!--
-      <div class="btn-group mt-2">
+     <div class="btn-group mt-2">
         <form action="{% url 'catalog:delete_all_filters' %}" method="post">
            {% csrf_token %}
            <button type="submit" class="btn btn-outline-dark flex-shrink-0 rounded-0">Smazat vše <i class="bi bi-dash-circle-fill"></i> </button>
         </form>
      </div>
-	-->
     
      <form method="post" id="save_filters" action="{% url 'catalog:save_filters' %}">
-        <div class="visually-hidden">
-           <button  type="submit">Apply Filter</button> 
+           <button style="display:none" type="submit">Apply Filter</button>
            <!-- this is invisible-->
-           {{ sum_of }}
-        </div>
+          
+        
         {% csrf_token %}
         <div class="btn-group mt-2">
-           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Řadit</button>
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle thin-border" data-bs-toggle="dropdown" aria-expanded="false">Řadit</button>
            <ul class="dropdown-menu">
-              {% if selected_sorting %}
-              <li class="dropdown-item active"> {{ selected_sorting }}</li>
-              {% endif %}
+             
               {% for sort_by_price_value in filter_form.sort_by_price %}
               <li><a class="dropdown-item" id="sort_by_price"> {{ sort_by_price_value }}</a></li>
               {% endfor %}
            </ul>
         </div>
         <div class="btn-group mt-2">
-           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Kategorie</button>
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle thin-border" data-bs-toggle="dropdown" aria-expanded="false">Kategorie</button>
            <ul class="dropdown-menu">
-              {% if selected_category %}
-              <li class="dropdown-item active"> {{ selected_category }}</li>
-              {% endif %}
+             
               {% for category_value in filter_form.category_selection %}
               <li><a class="dropdown-item" id="category_value"> {{ category_value }}</a></li>
               {% endfor %}
            </ul>
         </div>
         <div class="btn-group mt-2">
-           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Střih</button>
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle thin-border" data-bs-toggle="dropdown" aria-expanded="false">Střih</button>
            <ul class="dropdown-menu">
-              {% if selected_cuts %}
-              <li class="dropdown-item active"> {{ selected_cuts }}</li>
-              {% endif %}
+              
               {% for cut_value in filter_form.cut_selection %}
               <li><a class="dropdown-item" id="cut_value"> {{ cut_value }}</a></li>
               {% endfor %}
            </ul>
         </div>
         <div class="btn-group mt-2">
-           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Velikost</button>
+           <button type="button" class="btn btn-outline-dark flex-shrink-0 rounded-0 dropdown-toggle thin-border" data-bs-toggle="dropdown" aria-expanded="false">Velikost</button>
            <ul class="dropdown-menu">
-              {% if selected_sizes %}
-              <li class="dropdown-item active"> {{ selected_sizes }}</li>
-              {% endif %}
-              {% for value in filter_form.size_selection %}
-              <li><a class="dropdown-item" id="size_selection">{{ value }}</a></li>
+            
+              {% for size_value in filter_form.size_selection %}
+              <li><a class="dropdown-item" id="size_selection">{{ size_value }}</a></li>
               {% endfor %}
            </ul>
         </div>
      </form>
 </div>
   <!-- start of other filter dropdowns as needed -->
+<!-- labels start labels start -->
+<div class="filters mb-5">
+  <form action="{% url 'catalog:delete_selected_filter' %}" method="post">
+      {% csrf_token %}
 
-
-  <!-- labels start labels start -->
-  <div class="filters mb-5">
-    <form action="{% url 'catalog:delete_selected_filter' %}" method="post">
-        {% csrf_token %}
-
-        <ul class="nav justify-content-center flex-sm-row">
-            <!-- Sorting Label -->
-            {% if selected_sorting and selected_sorting != "Nejnovější" %}
-                <li class="nav-item dropdown mt-2">
+      <ul class="nav justify-content-center flex-sm-row">
+          <!-- Sorting Label -->
+          {% if selected_sorting and selected_sorting != "Nejnovější" %}
+              <li class="nav-item dropdown mt-2">
                   <input type="hidden" name="selected_filter" value="{{ selected_sorting }}">
-                    <button class="btn btn-light flex-shrink-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="sortingDropdown">
-                        {{ selected_sorting }} <i class="bi bi-x"></i>
-                    </button>
-                </li>
-            {% endif %}
-            
-            <!-- Category Label -->
-            {% if selected_category %}
-                <li class="nav-item dropdown mt-2">
-                    <input type="hidden" name="selected_filter" value="{{ selected_category }}">
-                    <button class="btn btn-light flex-shrink-0 rounded-0" type="submit" id="categoryDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ selected_category }} <i class="bi bi-x"></i>
-                    </button>
-                </li>
-            {% endif %}
-            
-            <!-- Cuts Label -->
-            {% if selected_cuts %}
-                <li class="nav-item dropdown mt-2">
+                  <button class="btn btn-light flex-shrink-0" id="selected_filter">
+                      {{ selected_sorting }} <i class="bi bi-x"></i>
+                  </button>
+              </li>
+          {% endif %}
+          
+          <!-- Category Label -->
+          {% if selected_category %}
+              <li class="nav-item dropdown mt-2">
+                  <input type="hidden" name="selected_filter" value="{{ selected_category }}">
+                  <button class="btn btn-light flex-shrink-0 rounded-0"  id="selected_filter">
+                      {{ selected_category }} <i class="bi bi-x"></i>
+                  </button>
+              </li>
+          {% endif %}
+          
+          <!-- Cuts Label -->
+          {% if selected_cuts %}
+              <li class="nav-item dropdown mt-2">
                   <input type="hidden" name="selected_filter" value="{{ selected_cuts }}">
-                    <button class="btn btn-light flex-shrink-0 rounded-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cutsDropdown">
-                        {{ selected_cuts }} <i class="bi bi-x"></i>
-                    </button>
-                </li>
-            {% endif %}
-            
-            <!-- Sizes Label -->
-            {% if selected_sizes %}
-                <li class="nav-item dropdown mt-2">
+                  <button class="btn btn-light flex-shrink-0 rounded-0"  id="selected_filter">
+                      {{ selected_cuts }} <i class="bi bi-x"></i>
+                  </button>
+              </li>
+          {% endif %}
+          
+          <!-- Sizes Label -->
+          {% if selected_sizes %}
+              <li class="nav-item dropdown mt-2">
                   <input type="hidden" name="selected_filter" value="{{ selected_sizes }}">
-
-                    <button class="btn btn-light flex-shrink-0 rounded-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="sizesDropdown">
-                        {{ selected_sizes }} <i class="bi bi-x"></i>
-                    </button>
-                </li>
-            {% endif %}
-        </ul>
-    </form>
+                  <button class="btn btn-light flex-shrink-0 rounded-0" id="selected_filter">
+                      {{ selected_sizes }} <i class="bi bi-x"></i>
+                  </button>
+              </li>
+          {% endif %}
+      </ul>
+  </form>
 </div>
 
-    
 
 
   <div class="album py-2 bg-white">
@@ -205,27 +196,44 @@
             src="{{ first_photo.photo.url }}"
             data-holder-rendered="true">
             {% endif %}
+
+
+            {% if product.certificate.photo %}
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="{{ product.name }} certificate"
+            src="{{ product.certificate.photo.url }}"
+            data-holder-rendered="true">
+            {% endif %}
+
+
+
             {% if product.discount %}
             <div class="discount-circle"> - {{ product.discount }} % </div>
             {% elif product.new %}
             <div class="discount-circle"> NEW </div>
             {% elif product.limited %}
             <div class="discount-circle"> LIMITOVANÁ EDICE </div>
-{% elif product.skladem_na_miru %}
-            <div class="discount-circle">SKLADEM<br>I&nbsp;NA MíRU </div>            
+            {% elif product.skladem_na_miru %}
+            <div class="discount-circle">SKLADEM<br>I&nbsp;NA MíRU </div>
             {% endif %}
           </div>
             {% endwith %}
             <div class="card-body d-flex flex-column" style="padding: 1rem;">
               <h5 class="fw-bolder"> {{ product.name }}</h5>
             
-              <p class="card-text">{{ product.short_description }}</p>                
+              <p class="card-text">{{ product.short_description }}</p>    
+                          
+            
+             
                   {% if product.discount %}
                   <div><b class="fw-semibold"><del>{{ product.price }} Kč</del></div>
                     <div>{{ product.corrected_price }} Kč</div></b>
                   {% else %}
                   <b class="fw-semibold">{{ product.price }} Kč</b>
                   {% endif %}
+
+                
 
             </div>
           </div>

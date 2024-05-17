@@ -34,5 +34,6 @@ urlpatterns = [
         views.catalog_product_list,
         name="product_list_by_category",
     ),
+    path("media/assets/Reklamace.docx", views.download_reklamacni_formular, name="download_reklamacni_formular"),
     path("<int:id>/<slug:slug>", views.product_detail, name="product_detail"),
 ]

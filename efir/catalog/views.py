@@ -25,7 +25,9 @@ from stripepayment.views import *
 
 from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
                      MappingSetNaMiru, Product, ProductSet, RightdPhoto,
-                     UniqueSetCreation, Photo)
+                     UniqueSetCreation)
+
+import mimetypes
 
 
 
@@ -106,7 +108,7 @@ def save_filters(request, category_slug=None):
             # this is cut selection which allows only 1 value
             if cut_selection:
                 for cut in cut_selection:
-                    request.session["cut_selection_session"] = cut
+                    request.session["cut_selection_session"].append(cut)
                     request.session.save()
 
     return redirect("catalog:katalog_vse")
@@ -130,14 +132,14 @@ def catalog_product_list(request, category_slug=None):
 
     filter_form = FilterForm()
 
-    zpusob_vyroby_session = request.session.get("zpusob_vyroby_session", "")
+    zpusob_vyroby_session = request.session.get("zpusob_vyroby_session", [])
     size_selection_session = request.session.get("size_selection_session", [])
     sort_by_price_session = request.session.get("sort_by_price_session", "created")
     cut_selection_session = request.session.get("cut_selection_session", [])
-    category_session = request.session.get("category_session", "")
+    category_session = request.session.get("category_session", [])
 
     # these are session contents
-    print(show_session_contents(request))
+    # print(show_session_contents(request))
 
     query_filters = Q()
 
@@ -149,19 +151,22 @@ def catalog_product_list(request, category_slug=None):
             if cut_selection_session == "Brazilky":
                 # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
                 query_filters &= Q(short_description__icontains="Brazilky")
-                query_filters &= ~Q(short_description__icontains="Brazilky na gumičkách")
+                query_filters &= ~Q(
+                    short_description__icontains="Brazilky na gumičkách"
+                )
             elif cut_selection_session == "Podprsenka s kosticemi":
                 # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
-                query_filters &= Q(short_description__icontains="Podprsenka s kosticemi")
-                query_filters &= ~Q(short_description__icontains="Podprsenka s kosticemi a otevřeným košíčkem")
+                query_filters &= Q(
+                    short_description__icontains="Podprsenka s kosticemi"
+                )
+                query_filters &= ~Q(
+                    short_description__icontains="Podprsenka s kosticemi a otevřeným košíčkem"
+                )
 
             else:
                 query_filters &= Q(short_description__icontains=cut_selection_session)
         else:
             pass
-
-
-        
 
     if zpusob_vyroby_session:
         query_filters &= Q(
@@ -186,7 +191,11 @@ def catalog_product_list(request, category_slug=None):
         )
 
     else:
-        products = Product.objects.filter(query_filters).order_by(sort_by_price_session).filter(active=True)
+        products = (
+            Product.objects.filter(query_filters)
+            .order_by(sort_by_price_session)
+            .filter(active=True)
+        )
 
     sum_of = len(products)
 
@@ -243,7 +252,6 @@ def delete_all_filters(request):
         print("Before Deletion:", request.session.items())
 
         to_delete = [
-            "zpusob_vyroby_session",
             "size_selection_session",
             "cut_selection_session",
             "category_session",
@@ -262,15 +270,6 @@ def delete_all_filters(request):
 
 def delete_selected_filter(request):
     if request.method == "POST":
-        # print("Before Deletion:", request.session.items())
-
-        sessions = [
-            "zpusob_vyroby_session",
-            "size_selection_session",
-            "cut_selection_session",
-            "category_session",
-        ]
-
         clean_translation_dict = {
             "Cena vzestupně": "price",
             "Cena sestupně": "-price",
@@ -285,18 +284,13 @@ def delete_selected_filter(request):
             if "sort_by_price_session" in request.session:
                 request.session["sort_by_price_session"] = "created"
 
-        for session_value in sessions:
-            if session_value in request.session:
-                keys = request.session[session_value]
-                print("tady zaciname se session keys", keys)
+        for session_key, session_value in request.session.items():
+            if isinstance(session_value, (list, str)):
+                if selected_filter in session_value:
+                    print("session_key", session_key)
+                    print("selected filter:", selected_filter)
 
-                for key in keys:
-                    try:
-                        if key == selected_filter or key in selected_filter:
-                            print("vytiskni mi u session value", session_value)
-                            del request.session[session_value]
-                    except KeyError:
-                        print("hele tady je chyba KeyError", KeyError)
+        del request.session[session_key]
 
     return redirect("catalog:katalog_vse")
 
@@ -306,11 +300,14 @@ def product_detail(
     id,
     slug,
 ):
+    embed_video = """<iframe width="560" height="315" src="https://youtube.com/shorts/gYKg0y_DBQI?si=85sIletxJ4TIIUmQ" frameborder="0" allowfullscreen></iframe>"""
+
     categories = (
         Category.objects.all()
     )  # this is only for the purpose of showing the variable in the menu and footer
     product = get_object_or_404(Product, id=id, slug=slug)
     form = CartAddProductForm(id_from_product=id)
+    
 
     recommended = recommended_products(product_id=id)
     print(
@@ -334,6 +331,7 @@ def product_detail(
             "form": form,
             "productset": productset,
             "recommended": recommended,
+            "embed_video": embed_video,
         },
     )
 
@@ -369,7 +367,6 @@ def obchodni_podminky(request):
 
 
 from django.template.loader import render_to_string
-
 
 
 # https://mailtrap.io/blog/django-contact-form/
@@ -417,7 +414,6 @@ def kontakty(request):
     else:
         form = ContactForm()
 
-
     return render(
         request,
         "catalog/kontakty.html",
@@ -436,15 +432,14 @@ def recommended_products(product_id):
 
 
 def akce(request):
-    products = Product.objects.all()
-    discounted = Product.objects.exclude(discount__isnull=True)
+    products = Product.objects.all().filter(active=True)
+    discounted = Product.objects.exclude(discount__isnull=True).filter(active=True)
 
     print("these are akce discounts:", discounted)
 
     return render(
         request, "catalog/akce.html", {"products": products, "discounted": discounted}
     )
-
 
 
 def discover_your_set(request):
@@ -526,8 +521,9 @@ def objednat_na_miru(request):
                     "catalog/set_discovery_completed.html",
                     {"mappingsetnamiru": mappingsetnamiru},
                 )
-            except ssl.SSLCertVerificationError:
-                logging.info("don't have the SSL, but the email has been sent")
+
+            except Exception as e:
+                logging.info(f"don't have the SSL, but the email has been sent, {e}")
                 return render(
                     request,
                     "catalog/set_discovery_completed.html",
@@ -551,7 +547,6 @@ def objednat_na_miru(request):
 def product_feed(request):
     # Sample data (you would replace this with your actual data)
     products = Product.objects.all()
-    
 
     # Create the root element
     shop_element = Element("SHOP")
@@ -560,9 +555,10 @@ def product_feed(request):
     for product in products:
         shopitem_element = SubElement(shop_element, "SHOPITEM")
 
-        first_photo = product.photos.first().photo.url if product.photos.first() else None
+        first_photo = (
+            product.photos.first().photo.url if product.photos.first() else None
+        )
         first_photo = f"https://www.efirthebrand.cz{first_photo}"
-
 
         item_data = {
             "item_id": product.id,
@@ -584,4 +580,57 @@ def product_feed(request):
     # Return the XML response
     return HttpResponse(xml_string, content_type="text/xml")
 
+
+# Create your views here.
+
+
+def subscribe_test(request):
+    return render(request, "newsletter/subs_conf.html")
+
+
+def subscribe(request):
+    subscribe_form = SubscribeForm(request.POST)
+    Newsletter.objects.all()
+    if request.method == "POST":
+        if subscribe_form.is_valid():
+            cd = subscribe_form.cleaned_data
+
+            subscribe_form = SubscribeForm(
+                email=cd["email"],
+            )
+
+        email = request.POST.get("email")
+
+        if not Newsletter.objects.filter(email=email).exists():
+            Newsletter.objects.create(email=email)
+            logging.info(
+                f"Email {email} has been saved and sent subscribe confirmation"
+            )
+            try:
+                customer_order_email_confirmation(email)
+            except ssl.SSLCertVerificationError:
+                logging.info(
+                    f"Local environment has no email backend set up.Email: {email}"
+                )
+
+        else:
+            logging.info(
+                "there is an error with object creation, email either exist or is an empty value."
+            )
+
+    return redirect("catalog:home")
+
+
+
+def download_reklamacni_formular(request):
+    file_url = "media/assets/Reklamace.docx"  # URL to your file
+    file_name = "Reklamační_formulář.docx"
+    
+    fl = open(file_url,"rb")
+    mime_type, _ = mimetypes.guess_type(file_url)
+    response = HttpResponse(fl, content_type=mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % file_name
+    return response
+
+    #return render(request, 'catalog/reklamace.html', {'file_url': file_url})
 

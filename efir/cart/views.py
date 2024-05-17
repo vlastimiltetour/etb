@@ -2,6 +2,8 @@ import logging
 import smtplib
 import ssl
 from decimal import Decimal
+from django.http import JsonResponse
+
 
 from django.conf import settings
 from django.contrib import messages
@@ -18,6 +20,8 @@ from orders.forms import OrderForm
 from orders.mail_confirmation import *
 from orders.models import OrderItem
 from stripepayment.views import zasilkovna_create_package
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +74,13 @@ def cart_add(request, product_id):
     else:
         print(form.errors)
 
-    return redirect("cart:cart_detail")
+    #return JsonResponse({'success': True})
+
+    #return redirect("cart:cart_detail")
+    return redirect("catalog:product_detail", id=product_id, slug=product.slug)
+
+    #return reverse("product_detail", request, id=2, slug='hello')
+
 
 
 def cart_remove(request, product_id):
@@ -312,8 +322,6 @@ def cart_detail(request, zasilkovna=True):
 
 
 def update_cart_country(request):
-
-
     if request.method == "POST":
         selected_country = request.POST.get(
             "cart_country"
@@ -329,7 +337,6 @@ def update_cart_country(request):
         request.session["cart_vendor"] = selected_vendor_id
         request.session["cart_shipping"] = selected_cart_shipping
 
-    
     return redirect("cart:cart_detail")
 
 

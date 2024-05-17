@@ -65,10 +65,22 @@
 
 <div class="slider">   
    {% for photo in product.photos.all %}
+  
    <div class="slide">
        <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" onclick="openModal('{{photo.photo.url}}', '{{forloop.counter}}')" />
    </div>
    {% endfor %}
+
+   {% if product.certificate.photo %}
+   <img src="{{ product.certificate.photo.url }}" alt="{{ product.name }} certificate">
+   {% endif %}
+
+   {% if product.photos.all %}
+    <img src="{{ product.photos.first.photo.url }}" alt="{{ product.name }} photo">
+
+{% endif %}
+
+
 </div>
                   <style>
               /* CSS for modal */
@@ -332,7 +344,11 @@
                
                <!-- start product set-->
 
-               <div id="certificate">
+
+               <div id="certificate">    
+                  <label for="certificate" class="mb-2"><b>Vyplňte údaje, které budou uvedené na certifikátu:</b></label>
+                  
+
                   <div id="certificate_from">
                   {{ form.certificate_from }}
                   </div>

@@ -159,7 +159,7 @@ class OrderItem(models.Model):
     podprsenka_velikost_set = models.CharField(max_length=50, null=True, blank=True)
     pas_velikost_set = models.CharField(max_length=50, null=True, blank=True)
 
-    poznamka = models.CharField(max_length=50)
+    poznamka = models.TextField(blank=True)
     slevovy_kod = models.CharField(
         max_length=20, default="-", verbose_name="Slevový kód"
     )
