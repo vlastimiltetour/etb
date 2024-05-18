@@ -4,6 +4,6 @@
 [safe]
 	directory = /home/etb
 [pack]
-	windowMemory = 200m
-	packSizeLimit = 200m
-	deltaCacheSize = 200m
+	windowMemory = 1g
+	packSizeLimit = 1g
+	deltaCacheSize = 1g
