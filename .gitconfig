@@ -3,3 +3,5 @@
 	email = v.tetour@gmail.com
 [safe]
 	directory = /home/etb
+[pack]
+	windowMemory = 256m
