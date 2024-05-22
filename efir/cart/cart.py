@@ -332,7 +332,7 @@ class Cart:
         total_price = self.get_total_price()
         discount = self.get_discount()
 
-        if self.get_discount_threshold():
+        if self.get_discount_threshold() or self.get_discount_threshold() == int(0):
             if total_price >= self.get_discount_threshold():
                 if self.get_discount_type() == "Procento":
                     total_price_after_discount = total_price * (1 - discount)

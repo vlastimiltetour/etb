@@ -13,6 +13,8 @@ from .forms import SubscribeForm
 
 logging.basicConfig(level=logging.DEBUG)
 
+import mimetypes
+
 from django.db.models import Q
 
 from cart.forms import CartAddProductForm
@@ -26,9 +28,6 @@ from stripepayment.views import *
 from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
                      MappingSetNaMiru, Product, ProductSet, RightdPhoto,
                      UniqueSetCreation)
-
-import mimetypes
-
 
 
 def home(request, category_slug=None):
@@ -307,7 +306,6 @@ def product_detail(
     )  # this is only for the purpose of showing the variable in the menu and footer
     product = get_object_or_404(Product, id=id, slug=slug)
     form = CartAddProductForm(id_from_product=id)
-    
 
     recommended = recommended_products(product_id=id)
     print(
@@ -621,16 +619,14 @@ def subscribe(request):
     return redirect("catalog:home")
 
 
-
 def download_reklamacni_formular(request):
-    file_url = "media/assets/Reklamace.docx"  # URL to your file
-    file_name = "Reklamační_formulář.docx"
-    
-    fl = open(file_url,"rb")
+    file_url = "media/assets/Reklamace.pdf"  # URL to your file
+    file_name = "Reklamační_formulář.pdf"
+
+    fl = open(file_url, "rb")
     mime_type, _ = mimetypes.guess_type(file_url)
     response = HttpResponse(fl, content_type=mime_type)
-    response['Content-Disposition'] = "attachment; filename=%s" % file_name
+    response["Content-Disposition"] = "attachment; filename=%s" % file_name
     return response
 
-    #return render(request, 'catalog/reklamace.html', {'file_url': file_url})
-
+    # return render(request, 'catalog/reklamace.html', {'file_url': file_url})
