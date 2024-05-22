@@ -271,7 +271,6 @@ def cart_detail(request, zasilkovna=True):
             try:
                 if cart.get_shipping_price() == 0:
                     certificate_order_email_confirmation(order_id)
-                    customer_order_email_confirmation(order_id)
                 else:
                     customer_order_email_confirmation(order_id)
             except ssl.SSLCertVerificationError:

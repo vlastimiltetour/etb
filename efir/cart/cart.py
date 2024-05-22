@@ -160,9 +160,9 @@ class Cart:
                 zpusob_vyroby_type_count += 1
 
         if zpusob_vyroby_type_count > 0:
-            if country == "cz":
+            if country == "cz" or "CZ":
                 shipping_price = 89
-            elif country == "sk":
+            elif country == "sk" or "SK":
                 shipping_price = 99
             else:
                 shipping_price = 0
@@ -331,8 +331,9 @@ class Cart:
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
-
+        
         if self.get_discount_threshold() or self.get_discount_threshold() == int(0):
+            print("jo cena je vyssi", {self.get_discount_threshold})
             if total_price >= self.get_discount_threshold():
                 if self.get_discount_type() == "Procento":
                     total_price_after_discount = total_price * (1 - discount)
@@ -345,6 +346,7 @@ class Cart:
                 return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
 
         total_price_after_discount = self.get_total_price()
+        print("jo cena je nizsi", {total_price_after_discount})
 
         return total_price_after_discount
 
