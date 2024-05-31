@@ -209,7 +209,8 @@
 
 
             {% if product.discount %}
-            <div class="discount-circle"> - {{ product.discount }} % </div>
+            <div class="discount-circle" style="background-color: #990000; font-size: 15px;"> -{{ product.discount }} % </div>
+
             {% elif product.new %}
             <div class="discount-circle"> NEW </div>
             {% elif product.limited %}

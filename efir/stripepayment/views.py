@@ -1,10 +1,10 @@
 import json
 import logging
 from decimal import Decimal
-import unidecode
 
 import requests
 import stripe
+import unidecode
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
@@ -20,12 +20,46 @@ stripe.api_version = settings.STRIPE_API_VERSION
 
 import xml.etree.ElementTree as ET
 
+import logging
+import smtplib
+import ssl
+from decimal import Decimal
+
+from django.conf import settings
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.views.decorators.http import require_POST
+
+from cart.cart import Cart
+from catalog.models import Certificate, Product
+from coupons.forms import Coupon, CouponForm
+from coupons.views import coupon_create, coupon_deactivate
+from inventory.models import Inventory
+from orders.forms import OrderForm
+from orders.mail_confirmation import *
+from orders.models import OrderItem
+
+
+logger = logging.getLogger(__name__)
+
+from cart.cart import Cart
+from cart.forms import CartAddProductForm
+
+# Set up the logging configuration
+logging.basicConfig(level=logging.DEBUG)
+
+
+from django.http import HttpResponseBadRequest
+
 
 def payment_process(request):
     order_id = request.session.get("order_id")
     # order_id = 4
 
     order = get_object_or_404(Order, id=order_id)
+
+    payment_attempts = request.session.get("payment_attempts", 0)
 
     if request.method == "POST":
         success_url = request.build_absolute_uri(reverse("stripepayment:completed"))
@@ -63,8 +97,17 @@ def payment_process(request):
             checkout_session = stripe.checkout.Session.create(**session_data)
             return redirect(checkout_session.url)
         except stripe.error.InvalidRequestError:
-            return render(request, "stripe/canceled.html")
+            payment_attempts += 1
 
+            request.session["payment_attempts"] = payment_attempts
+
+            # If there have been three unsuccessful attempts, cancel the transaction
+            if payment_attempts >= 3:
+                return redirect(reverse("stripepayment:canceled"))
+            else:
+                # If there's an error in creating the checkout session,
+                # redirect back to the payment process page to retry
+                return redirect(reverse("stripepayment:payment_process"))
     # else:
     return render(request, "stripe/process.html", locals())
 
@@ -83,7 +126,6 @@ def zasilkovna_create_package(order_id):
     order_price = str(order.total_cost)
     weight = "0.5"  # set up
     currency = "CZK"
-
 
     order_name = unidecode.unidecode(order_name)
     order_surname = unidecode.unidecode(order_surname)
@@ -146,7 +188,7 @@ def zasilkovna_create_package(order_id):
             print(f"Packet ID: {packet_id}")
             print(f"Barcode Text: {barcode_text}")
 
-            #packetLabelPdf(packetId=packet_id, format="A7 on A4", offset=0)
+            # packetLabelPdf(packetId=packet_id, format="A7 on A4", offset=0)
         except AttributeError as e:
             print("An error occurred while parsing the XML response:", e)
 
@@ -212,14 +254,63 @@ def payment_notification(request):
 
 def payment_completed(request):
     order_id = request.session.get("order_id")
-
-    # coupon_deactivate(request)
+    cart = Cart(request)
 
     order = get_object_or_404(Order, id=order_id)
+    try:
+        if cart.get_shipping_price() == 0:
+            certificate_order_email_confirmation(order_id)
+        else:
+            customer_order_email_confirmation(order_id)
+    except ssl.SSLCertVerificationError:
+        logging.info(
+            f"Local environment, no email sending service. Order ID: {order_id}"
+        )
+    except smtplib.SMTPSenderRefused as e:
+        logging.error(
+            f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
+        )
+
+    if settings.DEBUG:
+        # Django is running in local settings
+        print("Local settings: Zasilkovna turned off")
+    elif order.shipping_price == 0:
+        print("Local settings: Zasilkovna turned off, shipping price: 0")
+    else:
+        # Django is running in production settings
+        print("Production settings: Zasilkovna turned on")
+
+        zasilkovna_create_package(order_id)
+
     return render(request, "stripe/completed.html", {"order": order})
 
 
+from django.contrib import messages
+
 def payment_canceled(request):
+    coupon_id = request.session.get("coupon_id")
+
+    try:
+        Coupon.objects.get(id=coupon_id).delete()
+    except Coupon.DoesNotExist:
+        pass 
+    
+    '''
+    
+    order_id = request.session.get("order_id")
+
+    if order_id is None:
+        messages.error(request, "Order ID not found in session.")
+        return redirect("some-fallback-view")  # Replace with an appropriate fallback
+
+    
+
+    Order.objects.filter(id=order_id).delete()
+    OrderItem.objects.filter(order_id=order_id).delete()
+
+    # Optionally remove order_id from session
+    request.session.pop("order_id", None)'''
+
     return render(request, "stripe/canceled.html")
 
 

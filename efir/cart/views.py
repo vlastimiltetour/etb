@@ -2,8 +2,6 @@ import logging
 import smtplib
 import ssl
 from decimal import Decimal
-from django.http import JsonResponse
-
 
 from django.conf import settings
 from django.contrib import messages
@@ -20,8 +18,6 @@ from orders.forms import OrderForm
 from orders.mail_confirmation import *
 from orders.models import OrderItem
 from stripepayment.views import zasilkovna_create_package
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -74,13 +70,12 @@ def cart_add(request, product_id):
     else:
         print(form.errors)
 
-    #return JsonResponse({'success': True})
+    # return JsonResponse({'success': True})
 
-    #return redirect("cart:cart_detail")
+    # return redirect("cart:cart_detail")
     return redirect("catalog:product_detail", id=product_id, slug=product.slug)
 
-    #return reverse("product_detail", request, id=2, slug='hello')
-
+    # return reverse("product_detail", request, id=2, slug='hello')
 
 
 def cart_remove(request, product_id):
@@ -205,6 +200,7 @@ def cart_detail(request, zasilkovna=True):
             request.session["order_id"] = order.id
 
             order_id = order.id
+            print("order has been created under", {order_id},"and order_items", {order_items})
 
             for order_item in order_items:
                 item_product = order_item.product
@@ -267,32 +263,6 @@ def cart_detail(request, zasilkovna=True):
                 print("Coupon not found for ID, no coupon applied")
 
             cart.clear()
-
-            try:
-                if cart.get_shipping_price() == 0:
-                    certificate_order_email_confirmation(order_id)
-                else:
-                    customer_order_email_confirmation(order_id)
-            except ssl.SSLCertVerificationError:
-                logging.info(
-                    f"Local environment has no email backend set up.Order ID: {order_id}"
-                )
-            except smtplib.SMTPSenderRefused as e:
-                logging.error(
-                    f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
-                )
-
-            if settings.DEBUG:
-                # Django is running in local settings
-                print("Local settings: Zasilkovna turned off")
-            elif order.shipping_price == 0:
-                print("Local settings: Zasilkovna turned off, shipping price: 0")
-            else:
-                # Django is running in production settings
-                print("Production settings: Zasilkovna turned on")
-
-                zasilkovna_create_package(order_id)
-
             # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
             return redirect(reverse("stripepayment:process"))
 
