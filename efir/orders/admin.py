@@ -3,6 +3,8 @@ import csv
 import xlwt
 from django.contrib import admin
 from django.http import HttpResponse
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from .models import Order, OrderItem
 
@@ -56,6 +58,7 @@ class OrderAdmin(admin.ModelAdmin):
         "shipped",
         # "discount",
         # "quantity",
+        "author_comment",
         "first_name",
         "last_name",
         "email",
@@ -66,11 +69,21 @@ class OrderAdmin(admin.ModelAdmin):
         "shipping",
         "address",
         "created",
-        "author_comment",
         "discount_code",
+        "download_label",
     ]
 
     inlines = [OrderItemInline]
+
+    def download_label(self, obj):
+        if obj.label:
+            file_name = obj.label.split("/")[-1].replace(".pdf", "")
+            url = reverse("orders:download_ppl_label", args=[file_name])
+            return mark_safe(f'<a href="{url}" download>PPL Etiketa</a>')
+        else:
+            return "-"
+
+    download_label.short_description = "PDF Label"
 
     # list_editable = ["shipped"]  # Add the "shipped" field to make it editable
 

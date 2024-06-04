@@ -11,6 +11,7 @@ urlpatterns = [
     path("notify/", views.payment_notification, name="payment_notification"),
     path("packetapdf/", views.packetLabelPdf, name="packetLabelPdf"),
     path("webhook/", webhooks.stripe_webhook, name="stripe_webhook"),
+    path("create_label/", views.ppl_create_label_view, name="create_label"),
     path(
         "zasilkovna-create-package/",
         views.zasilkovna_create_package,

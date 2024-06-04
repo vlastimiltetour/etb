@@ -4,7 +4,9 @@
 {% load humanize %}
 {% block content %}
 
-
+<script type="text/javascript" src="https://www.ppl.cz/sources/map/main.js"
+async></script>
+<link rel="stylesheet" href="https://www.ppl.cz/sources/map/main.css">
 <script>
    document.addEventListener("DOMContentLoaded", function() {
     // Function to collect product details and submit to the third-party function
@@ -66,7 +68,7 @@
 
    </script>
    
-   
+
 <!-- end lead hub cart integration -->
 <style>
    /* This will hide the entire mob-text section */
@@ -92,6 +94,7 @@
   
       {% for item in cart %}
       {% with product=item.product %}
+      
       <div class="my-auto col-3">
          <div class="book">
             {% with first_photo=product.photos.first %}
@@ -109,7 +112,7 @@
       <div class="my-auto py-3 col-9">
          <div class="row text-right">
             <div class="col-6">
-               <h6 class="mob-text" id="product_name_{{ forloop.counter }}" >{{ product.name }} </h6> 
+               <h6 class="mob-text" id="product_name_{{ forloop.counter }}" >{{ product.name }}</h6> 
             </div>
             <div class="col-6">
                <!-- Cart Remove Function--> 
@@ -225,9 +228,10 @@
    <div>
       {% if cart.coupon %}
       {% else %}
+      
       <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
          <div class="input-group">
-            {{ coupon_form }}
+            {{ coupon_form }} 
             <button type="submit" class="btn btn-secondary">Uplatnit</button>
          </div>
          {% csrf_token %}
@@ -244,6 +248,7 @@
 <!-- This is where hidden section ends -->
 <body data-new-gr-c-s-check-loaded="14.1107.0" data-gr-ext-installed="">
    <div class="container py-5">
+      
       <!-- Shopping Cart Section -->
       <div class="row">
          <div class="col-md-4 order-md-2 mb-4">
@@ -273,16 +278,15 @@
 
                         <h1 class="product_id_class" style="display: none;" id="product_id{{forloop.counter}}"> {{ product.id }} </h1>
 
-                        <h6 class="my-0">{{ product.name }}       </h6>
+                        <h6 class="my-0">{{ product.name }}</h6>
                         <small id="product_size_type" name="product_size_type" class="text-muted">{{ item.zpusob_vyroby }}</small>
                         
                         <!-- if skladem-->
                         <small  class="text-muted">{{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }} 
-                           {% if item.category == "Dárkové certifikáty" %}
-                           <br>od: {{ item.certificate_from}} 
-                           <br>pro: {{item.certificate_to}} 
-                           {% endif %}
+                    
+                        
                         </small>
+                        
                         <!-- if na miru -->
              
              
@@ -324,8 +328,11 @@
                         {% if product.discount %}
                         <div><del> {{ item.total_price}} Kč </del></div>
                         <div>{{ item.product.corrected_price }} Kč</div>
+
+                        
                         {% else %}
                         <div id="product_price{{forloop.counter}}"> {{ item.total_price}} Kč </div> 
+                        
                         {% endif %}
                         <br>
                         <!-- Cart Remove Function--> 
@@ -367,8 +374,10 @@
                      <input type="hidden" name="cart_address" id="cart_address">
                      <input type="hidden" name="cart_vendor" id="cart_vendor">
                      <input type="hidden" name="cart_shipping" id="cart_shipping">
+                 
+                     
 
-
+                     
 
                      
 
@@ -424,7 +433,8 @@
                         <input type="hidden" name="cart_address" id="cart_address">
                         <input type="hidden" name="cart_vendor" id="cart_vendor">
                         <input type="hidden" name="cart_shipping" id="cart_shipping">
-
+                        <input type="hidden" name="cart_zipcode" id="cart_zipcode">
+                        <input type="hidden" name="cart_city" id="cart_city">
 
                       <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
                         <input type="hidden" name="address" value="{{ form.initial.address }}">-->                        
@@ -451,6 +461,7 @@
                {% endif %}
             </ul>
             {% if cart.coupon %}
+            
             <form class="card p-2" action="{% url 'coupons:delete' %}" method="post">
                <div class="input-group">
                   <button type="submit" class="btn btn-secondary">Odebrat</button>
@@ -458,45 +469,69 @@
                {% csrf_token %}
             </form>
             {% else %}
+            
             <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
                <div class="input-group">
-                  {{ coupon_form }}
+                  {{ coupon_form }} 
                   <button type="submit" class="btn btn-secondary">Uplatnit</button>
                </div>
                {% csrf_token %}
             </form>
             {% endif %}
+            
          </div>
          <!-- End Shopping Cart Section-->
          <!-- Form Template -->
          <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Objednávka</h4>
+            
             <div class="form-group">
                <form id="update-order-form" class="needs-validation" novalidate="" method="post" action="#">
                   {% csrf_token %}
                  
+
                   <div class="row">
+                     <div class="container mb-5" id="ppl-parcelshop-map" style="display: none;"></div>
+
+                     <label for="shipping">Doprava</label>
+
+
                      <div class="col-md-4 mb-3"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
-                         <button id="packeta_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Vyberte si místo vyzvednutí</button>
+                         <button id="packeta_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Zásilkovna</button>
                          <div style="display:none" class="packeta-selector-value"></div>
                          <!-- this value shows vendor ID -->
-                     </div>
-                     <div class="col-md-4 mb-3"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
+                     
+                         {% for item in cart %}
+
+                         {% if item.product.category.name == "Dárkové certifikáty" %}
+                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectPPLShipping()">PPL</button>
+                        <div style="display:none" class="packeta-selector-value"></div>
+                        <!-- this value shows vendor ID -->
+                  
+                  
                         <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectOnlineShipping()">Online</button>
                         <div style="display:none" class="packeta-selector-value"></div>
                         <!-- this value shows vendor ID -->
+                        
+                        
+                     {% endif %}
+                     {% endfor %}
                     </div>
+                    
+                     
                    
                  </div>
                  
                </div>
                <div class="row">
-                  <div class="mb-3" >
-                     <label for="shipping">Doprava</label>
+                  <div class="mb-3">
+                     <label for="shipping">Zvolený způsob dopravy</label>
                      <!-- {{ form.shipping }}-->
                      <div class="form-control">
                         {% if cart.get_shipping == "Z" %}
                             Zásilkovna
+                        {% elif cart.get_shipping == "P" %}
+                            PPL
                         {% else %}
                             Online
                         {% endif %}
@@ -506,7 +541,7 @@
 
                      <div class="invalid-feedback"></div>
                  </div>
-                  <div class="row">
+                  <div class="row" id="onlineAddress">
                      <div class="col-md-6 mb-3">
                         <label for="country">Země
                         </label>
@@ -735,8 +770,9 @@
 <script src="../../dist/js/bootstrap.min.js"></script>
 <script src="../../assets/js/vendor/holder.min.js"></script>
 
+
 <script>
-   // Example starter JavaScript for disabling form submissions if there are invalid fields
+   // JavaScript for form validation
    (function() {
        'use strict';
 
@@ -748,16 +784,15 @@
                    if (form.checkValidity() === false) {
                        event.preventDefault();
                        event.stopPropagation();
+                       showAlertOnMissingFields();
                    } else {
-                       // Add the check for vendor_id before submitting the form
-                       var vendorIdInput = document.querySelector("#id_vendor_id");
-                       if (vendorIdInput.value === "" || vendorIdInput.value === null || vendorIdInput.value === "None") {
-                           alert("Prosím vyberte si adresu doručení");
+                       // Assuming there is a vendorIdInput for validation
+                       var vendorIdInput = document.querySelector("id_vendor_id");
+                       console.log("this is vendor id delivery address", vendorIdInput.value)
+                       if (vendorIdInput && (!vendorIdInput.value || vendorIdInput.value === "None")) {
+                           alert("Please select a delivery address.");
                            event.preventDefault();
                            event.stopPropagation();
-                       } else {
-                           // If vendor_id is valid, proceed to handle subscription and submit the form
-                           handleSubscriptionAndSubmitForm();
                        }
                    }
 
@@ -766,6 +801,54 @@
            });
        }, false);
    })();
+
+   function showAlertOnMissingFields() {
+            const firstName = document.querySelector('input[name="first_name"]');
+            const lastName = document.querySelector('input[name="last_name"]');
+            const email = document.querySelector('input[name="email"]');
+            const phoneNumber = document.querySelector('input[name="number"]');
+            const birthday = document.querySelector('input[name="birthday"]');
+            //const address = document.querySelector('input[name="address"]');
+            const vendorIdInput = document.querySelector('input[name="id_vendor_id"]');
+            const agreeToTerms = document.querySelector('input[name="id_agree_to_terms"]');
+            console.log("this is agree to remts", agreeToTerms.value)
+      
+            if (!firstName.value) {
+                alert("Please fill out your first name.");
+                firstName.focus();
+                return;
+            }
+            if (!lastName.value) {
+                alert("Please fill out your last name.");
+                lastName.focus();
+                return;
+            }
+            if (!email.value) {
+                alert("Please fill out your email.");
+                email.focus();
+                return;
+            }
+            if (!phoneNumber.value) {
+                alert("Please fill out your phone number.");
+                phoneNumber.focus();
+                return;
+            }
+            if (!birthday.value) {
+                alert("Please fill out your birthday.");
+                birthday.focus();
+                return;
+            }
+            
+        
+            if (!agreeToTerms.checked) {
+                alert("You must agree to the terms and conditions.");
+                agreeToTerms.focus();
+                return;
+            }
+            
+        }
+
+
 
    function decreaseCount(itemId) {
        var select = document.getElementById('quantity-' + itemId);
@@ -900,6 +983,7 @@ function checkIfCertificate() {
       const vendorIdInput = document.querySelector("#cart_vendor");
       const cartForm = document.querySelector("#country-form");
       const shippingSelect = document.getElementById('cart_shipping');
+      const onlineAddress = document.getElementById('onlineAddress');
 
       // Check if the shippingSelect element exists
       if (!shippingSelect) {
@@ -908,18 +992,75 @@ function checkIfCertificate() {
       }
 
       // Set values for other inputs if needed
-      addressInput.value = "-";
-      countryInput.value = "-";
+      addressInput.value = "online";
+      countryInput.value = "online";
       vendorIdInput.value = "-";
 
       // Set the value of id_shipping to "Online"
       shippingSelect.value = "O";
+
+      onlineAddress.style.display = "none";
 
       // Alert to verify the value has been set correctly
 
       // Uncomment this line if you want to submit the form automatically
       cartForm.submit();
    }
+
+
+
+   function selectPPLShipping() {
+         const pplMap = document.getElementById("ppl-parcelshop-map");
+
+         if (pplMap) {
+            pplMap.style.display = "block";
+         } else {
+            console.error("Element with ID 'ppl-parcelshop-map' not found.");
+         }
+         }
+
+   document.addEventListener("ppl-parcelshop-map", (event) => {
+      console.log("Vybraný parcel shop:", event.detail);
+
+      const addressInput = document.querySelector("#cart_address");
+      const countryInput = document.querySelector("#cart_country");
+      const vendorIdInput = document.querySelector("#cart_vendor");
+      const cartForm = document.querySelector("#country-form");
+      const shippingSelect = document.getElementById("cart_shipping");
+      const pplMap = document.getElementById("ppl-parcelshop-map");
+      const zipcode = document.querySelector("#cart_zipcode");
+      const city = document.querySelector("#cart_city");
+      
+
+      if (!shippingSelect) {
+         alert("Error: id_shipping element not found.");
+         return;
+      }
+
+      // Check if other elements exist
+      if (addressInput && countryInput && vendorIdInput && cartForm) {
+         // Set values for inputs if needed
+         addressInput.value = event.detail.name;
+         countryInput.value = event.detail.country;
+         vendorIdInput.value = event.detail.id;
+         zipcode.value = event.detail.zipCode;
+         city.value = event.detail.city;
+
+
+         // Set the value of id_shipping to "Online"
+         shippingSelect.value = "P";
+
+         if (pplMap) { 
+            pplMap.style.display = "none";
+         }
+
+         cartForm.submit();
+      } else {
+         console.error("One or more elements (address, country, vendor, form) not found.");
+      }
+      });
+
+
 </script>
 
 

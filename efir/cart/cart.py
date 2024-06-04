@@ -25,6 +25,8 @@ class Cart:
         self.address = self.session.get("cart_address")
         self.vendor = self.session.get("cart_vendor")
         self.shipping = self.session.get("cart_shipping")
+        self.city = self.session.get("cart_city")
+        self.zipcode = self.session.get("cart_zipcode")
 
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
@@ -213,7 +215,14 @@ class Cart:
     def clean_cart_address(self):
         # Clean up the cart session
 
-        keys_to_delete = ["coupon_id", "cart_country", "cart_address", "cart_vendor"]
+        keys_to_delete = [
+            "coupon_id",
+            "cart_country",
+            "cart_address",
+            "cart_vendor",
+            "cart_city",
+            "cart_zipcode",
+        ]
 
         for key in keys_to_delete:
             if key in self.session:
@@ -232,7 +241,14 @@ class Cart:
         for key, value in self.session.items():
             print(f"Key: {key}, Value: {value}, type: {type(value)}")
 
-        keys_to_delete = ["coupon_id", "cart_country", "cart_address", "cart_vendor"]
+        keys_to_delete = [
+            "coupon_id",
+            "cart_country",
+            "cart_address",
+            "cart_vendor",
+            "cart_city",
+            "cart_zipcode",
+        ]
 
         for key in keys_to_delete:
             print(f"Checking for '{key}' in session...")
@@ -331,7 +347,7 @@ class Cart:
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
-        
+
         if self.get_discount_threshold() or self.get_discount_threshold() == int(0):
             print("jo cena je vyssi", {self.get_discount_threshold})
             if total_price >= self.get_discount_threshold():

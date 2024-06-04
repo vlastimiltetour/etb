@@ -1,9 +1,6 @@
 import logging
-import smtplib
-import ssl
 from decimal import Decimal
 
-from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -17,7 +14,6 @@ from inventory.models import Inventory
 from orders.forms import OrderForm
 from orders.mail_confirmation import *
 from orders.models import OrderItem
-from stripepayment.views import zasilkovna_create_package
 
 logger = logging.getLogger(__name__)
 
@@ -116,6 +112,8 @@ def cart_detail(request, zasilkovna=True):
     selected_address = request.session.get("cart_address")
     selected_vendor_id = request.session.get("cart_vendor")
     selected_cart_shipping = request.session.get("cart_shipping")
+    selected_cart_city = request.session.get("cart_city")
+    selected_cart_zipcode = request.session.get("cart_zipcode")
 
     selected_certificate_shipping = request.session.get("zpusob_vyroby")
     print("this is selectedcertiiccate online", selected_certificate_shipping)
@@ -137,6 +135,8 @@ def cart_detail(request, zasilkovna=True):
             "order_address": selected_address,
             "vendor_id": selected_vendor_id,
             "order_shipping": selected_cart_shipping,
+            "order_city": selected_cart_city,
+            "order_zipcode": selected_cart_zipcode,
         },
     )
     # print("Form data:", form.data)
@@ -162,6 +162,8 @@ def cart_detail(request, zasilkovna=True):
                 "order_address": selected_address,
                 "vendor_id": selected_vendor_id,
                 "order_shipping": selected_cart_shipping,
+                "order_city": selected_cart_city,
+                "order_zipcode": selected_cart_zipcode,
             },
         )
 
@@ -171,6 +173,9 @@ def cart_detail(request, zasilkovna=True):
             )  # In this line, you are using a Django ModelForm (order_form) to create an Order instance. The commit=False argument prevents the instance from being saved to the database immediately. Instead, it returns an unsaved instance of the model. This allows you to make additional modifications to the instance before saving it to the database.
 
             order.save(cart=cart)
+            order.city = selected_cart_city
+            order.zipcode = selected_cart_zipcode
+            order.save()
             print(order)
 
             """Once you have the unsaved order instance, you can call its save method to save it to the database. In this case, you are passing an additional keyword argument cart to the save method. This is where you are providing the cart instance to the save method of the Order model.
@@ -200,7 +205,12 @@ def cart_detail(request, zasilkovna=True):
             request.session["order_id"] = order.id
 
             order_id = order.id
-            print("order has been created under", {order_id},"and order_items", {order_items})
+            print(
+                "order has been created under",
+                {order_id},
+                "and order_items",
+                {order_items},
+            )
 
             for order_item in order_items:
                 item_product = order_item.product
@@ -298,6 +308,8 @@ def update_cart_country(request):
         selected_address = request.POST.get("cart_address")
         selected_vendor_id = request.POST.get("cart_vendor")
         selected_cart_shipping = request.POST.get("cart_shipping")
+        selected_cart_city = request.POST.get("cart_city")
+        selected_cart_zipcode = request.POST.get("cart_zipcode")
 
         # Update the cart's country attribute with the selected value
 
@@ -305,6 +317,8 @@ def update_cart_country(request):
         request.session["cart_address"] = selected_address
         request.session["cart_vendor"] = selected_vendor_id
         request.session["cart_shipping"] = selected_cart_shipping
+        request.session["cart_city"] = selected_cart_city
+        request.session["cart_zipcode"] = selected_cart_zipcode
 
     return redirect("cart:cart_detail")
 

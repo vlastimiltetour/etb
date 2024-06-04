@@ -41,6 +41,9 @@ class Order(models.Model):
         verbose_name="Cena dopravy (CZK)",
     )
     address = models.CharField(max_length=250, verbose_name="Adresa", blank=False)
+    city = models.CharField(max_length=250, verbose_name="City", blank=True, null=True)
+    zipcode = models.CharField(max_length=250, verbose_name="Zipcode", blank=True, null=True)
+
     vendor_id = models.CharField(
         max_length=250,
         verbose_name="ID prodejce",
@@ -79,6 +82,9 @@ class Order(models.Model):
     coupon_id = models.CharField(
         max_length=15, blank=True, default="-", verbose_name="ID certifikatu"
     )
+    label = models.CharField(
+        max_length=200, blank=True, null=True, verbose_name="Etiketa k doprave"
+    )  # Or use FilePathField if you want to restrict to a certain directory
 
     class Meta:
         verbose_name = "Objednávky"

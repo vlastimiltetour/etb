@@ -1,5 +1,9 @@
 import logging
+import mimetypes
+import os
 
+from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from .mail_confirmation import *
@@ -83,11 +87,40 @@ def calculate_shipping_price(country_code):
     # Add other country prices here
 
 
-""
+def invoice(request):
+    id = 150
+    order = get_object_or_404(Order, id=id)
+    print(order)
+    return render(request, "orders/invoice_pdf.html", {"order": order})
+
+
+def objednavka_vytvorena_order(request):
+    id = 231
+    order = get_object_or_404(Order, id=id)
+    print(order)
+    return render(request, "orders/customer_email_confirmation.html", {"order": order})
 
 
 def objednavka_vytvorena(request):
-    id = 1
+    id = 302
     order = get_object_or_404(Order, id=id)
 
-    return render(request, "orders/customer_email_confirmation.html", {"order": order})
+    print(order)
+    return render(request, "orders/certificate_confirmation.html", {"order": order})
+
+
+def contact_form(request):
+    return render(request, "orders/contact_form.html")
+
+
+def download_ppl_label(request, file_name):
+    # file_path = "media/assets/Reklamace.pdf"  # URL to your file
+
+    file_path = os.path.join(
+        settings.MEDIA_ROOT, "catalog/ppl_labels", file_name + ".pdf"
+    )
+    fl = open(file_path, "rb")
+    mime_type, _ = mimetypes.guess_type(file_path)
+    response = HttpResponse(fl, content_type=mime_type)
+    response["Content-Disposition"] = "attachment; filename=%s" % file_name
+    return response

@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 
 from efir.settings.base import ZASILKOVNA_SECRET
-from orders.models import Order
+from orders.models import Order, OrderItem
 
 # Set up the logging configuration
 logging.basicConfig(level=logging.DEBUG)
@@ -18,39 +18,26 @@ logging.basicConfig(level=logging.DEBUG)
 stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
 
-import xml.etree.ElementTree as ET
-
 import logging
 import smtplib
 import ssl
+import xml.etree.ElementTree as ET
 from decimal import Decimal
 
 from django.conf import settings
-from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.decorators.http import require_POST
 
 from cart.cart import Cart
-from catalog.models import Certificate, Product
-from coupons.forms import Coupon, CouponForm
-from coupons.views import coupon_create, coupon_deactivate
-from inventory.models import Inventory
-from orders.forms import OrderForm
+from coupons.forms import Coupon
 from orders.mail_confirmation import *
-from orders.models import OrderItem
-
 
 logger = logging.getLogger(__name__)
 
 from cart.cart import Cart
-from cart.forms import CartAddProductForm
 
 # Set up the logging configuration
 logging.basicConfig(level=logging.DEBUG)
-
-
-from django.http import HttpResponseBadRequest
 
 
 def payment_process(request):
@@ -254,14 +241,29 @@ def payment_notification(request):
 
 def payment_completed(request):
     order_id = request.session.get("order_id")
+    #order_id = 364
     cart = Cart(request)
-
+    certificate = False
     order = get_object_or_404(Order, id=order_id)
+    order_items = OrderItem.objects.filter(order=order)
+
+    
+    '''for order_item in order_items:
+        print(order_item.product.name)
+        if (str(order_item.product.category)) == "Dárkové certifikáty":   
+            certificate = True     '''
+    certificate = any(str(order_item.product.category) == "Dárkové certifikáty" for order_item in order_items)
+    print("tady se snazim vytisknout certificate", certificate)
+
     try:
-        if cart.get_shipping_price() == 0:
+        if certificate == True:
+            print("ANO ANO ANO YES posli potvzrni certifikatu")
             certificate_order_email_confirmation(order_id)
+
         else:
+            print("NE NE NE NE NE neposli potvrzeni certifikatu")
             customer_order_email_confirmation(order_id)
+
     except ssl.SSLCertVerificationError:
         logging.info(
             f"Local environment, no email sending service. Order ID: {order_id}"
@@ -280,67 +282,151 @@ def payment_completed(request):
         # Django is running in production settings
         print("Production settings: Zasilkovna turned on")
 
+    if cart.shipping == "Z":
         zasilkovna_create_package(order_id)
+        print("Zasilkovna package has been created")
+    elif cart.shipping == "P":
+        ppl_create_label_view(request, order_id)
+        print("PPL package has been created")
+    elif cart.shipping == "O":
+        print("Online delivery has been requested")
 
     return render(request, "stripe/completed.html", {"order": order})
 
 
-from django.contrib import messages
-
 def payment_canceled(request):
     coupon_id = request.session.get("coupon_id")
+
+    order_id = request.session.get("order_id")
+    print("oh year this is order_id", order_id)
+    cart = Cart(request)
+
+    try:
+        customer_order_email_confirmation(order_id)
+        print("customer email byl odeslan ale neni zaplaceno")
+    except ssl.SSLCertVerificationError:
+        logging.info(
+            f"Local environment, no email sending service. Order ID: {order_id}"
+        )
+    except smtplib.SMTPSenderRefused as e:
+        logging.error(
+            f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
+        )
 
     try:
         Coupon.objects.get(id=coupon_id).delete()
     except Coupon.DoesNotExist:
-        pass 
-    
-    '''
-    
-    order_id = request.session.get("order_id")
+        pass
 
-    if order_id is None:
-        messages.error(request, "Order ID not found in session.")
-        return redirect("some-fallback-view")  # Replace with an appropriate fallback
-
-    
-
-    Order.objects.filter(id=order_id).delete()
-    OrderItem.objects.filter(order_id=order_id).delete()
-
-    # Optionally remove order_id from session
-    request.session.pop("order_id", None)'''
+    if cart.shipping == "Z":
+        # zasilkovna_create_package(order_id)
+        print("Zasilkovna package has been created")
+    elif cart.shipping == "P":
+        ppl_create_label_view(request, order_id)
+        print("PPL package has been created")
+    elif cart.shipping == "O":
+        print("Online delivery has been requested")
 
     return render(request, "stripe/canceled.html")
 
 
-def notify(request):
-    pass
+import json
+import logging
+
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+from .api import create_package_label
+
+logger = logging.getLogger(__name__)
 
 
-## this should be placed in a separate app
+@csrf_exempt
+def ppl_create_label_view(request, order_id):
+    try:
+        payload = ppl_create_shipment_payload(
+            request, order_id
+        )  # Use the helper function to create the payload
+
+        print("this is printing of payload", payload)
+        response = create_package_label(payload, request, order_id)
+
+        if not isinstance(response, dict):
+            logger.error(f"Unexpected response format: {response}")
+            return JsonResponse(
+                {"error": "Unexpected response format from the API"}, status=500
+            )
+
+        status_code = 201 if response.get("message") else 200
+
+        # Create a response with headers
+        response_data = json.dumps(response)
+        http_response = HttpResponse(
+            response_data, content_type="application/json", status=status_code
+        )
+        http_response["Custom-Header"] = "CustomHeaderValue"  # Example header
+
+        # Printing the header to the console for debugging purposes
+        print(f"Response Headers: {http_response.headers.get}")
+
+        return http_response
+    except requests.HTTPError as e:
+        logger.error(f"HTTPError: {e.response.text}")
+        return JsonResponse({"error": e.response.text}, status=e.response.status_code)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON payload"}, status=400)
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        return JsonResponse({"error": "An unexpected error occurred"}, status=500)
 
 
-"""
-def create_package():
-    pass
+def ppl_create_shipment_payload(request, order_id):
+    # order_id = 289
+    order = get_object_or_404(Order, id=order_id)
 
-
-
-def export_to_zasilkovna():
-    api_key = ZASILKOVNA_SECRET
-    endpoint = "https://api.zasilkovna.cz/v4/orders"
-
-    headers = {
-        "Authorization": f"ApiKey {api_key}",
-        "Content-Type": "application/json"
-    }
-
-    order_details = 
-    response = requests.post(endpoint, json=order_details, headers=headers)
-
-    if response.status_code == 201:
-        return True
+    print("this is order country", order.country, type(order.country))
+    if order.country == "CZ":
+        product_type = "BUSS"
     else:
-        return False
-"""
+        product_type = "IMPO"
+
+    payload = {
+        "returnChannel": {"type": "Email", "address": "objednavky@efirthebrand.cz"},
+        "labelSettings": {
+            "format": "Pdf",
+            "dpi": 300,
+            "completeLabelSettings": {
+                "isCompleteLabelRequested": True,
+                "pageSize": "A4",
+                "position": 1,
+            },
+        },
+        "shipments": [
+            {
+                "referenceId": order.etb_id,
+                "productType": product_type,
+                "shipmentSet": {"numberOfShipments": 1},
+                "sender": {
+                    "name": "Ing. Valeriya Ageeva",
+                    "street": "Příčná 1892/4",
+                    "city": " Praha 1 - Nové Město",
+                    "zipCode": "11000",
+                    "country": "CZ",
+                    "contact": "Contact sender",
+                    "phone": "+420 774 363 883",
+                    "email": "objednavky@efirthebrand.cz",
+                },
+                "recipient": {
+                    "name": f"{order.first_name} {order.last_name}",
+                    "street": order.address,
+                    "city": order.city,
+                    "zipCode": order.zipcode,
+                    "country": "CZ",
+                    "contact": "Kontakt prijemce",
+                    "phone": order.number,
+                    "email": order.email,
+                },
+            }
+        ],
+    }
+    return payload
