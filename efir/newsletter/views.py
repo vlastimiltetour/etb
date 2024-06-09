@@ -27,7 +27,9 @@ def unsubscribe(request):
 
             if Newsletter.objects.filter(email=email).exists():
                 Newsletter.objects.filter(email=email).delete()
-                return render(request, "newsletter/unsubs_completed.html", {"unsubscribe_form": unsubscribe_form})
+                return redirect(reverse('unsubscribe'))
+
+
             else:
                 return HttpResponse("Email doesn't exist")
         

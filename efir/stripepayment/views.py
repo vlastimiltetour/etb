@@ -91,10 +91,11 @@ def payment_process(request):
             # If there have been three unsuccessful attempts, cancel the transaction
             if payment_attempts >= 3:
                 return redirect(reverse("stripepayment:canceled"))
-            else:
+            else: 
+                pass
                 # If there's an error in creating the checkout session,
                 # redirect back to the payment process page to retry
-                return redirect(reverse("stripepayment:payment_process"))
+#                return redirect(reverse("stripepayment:payment_process"))
     # else:
     return render(request, "stripe/process.html", locals())
 
@@ -295,7 +296,10 @@ def payment_completed(request):
 
 
 def payment_canceled(request):
-    coupon_id = request.session.get("coupon_id")
+    try:
+        coupon_id = request.session.get("coupon_id")
+    except Exception:
+        print("there is an exception", Exception)
 
     order_id = request.session.get("order_id")
     print("oh year this is order_id", order_id)

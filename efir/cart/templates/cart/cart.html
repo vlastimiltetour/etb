@@ -283,7 +283,7 @@ async></script>
                         
                         <!-- if skladem-->
                         <small  class="text-muted">{{ item.velikost }} {{ item.kalhotky_velikost_set }} {{ item.podprsenka_velikost_set }} {{ item.pas_velikost_set }} 
-                    
+                        
                         
                         </small>
                         
@@ -431,7 +431,7 @@ async></script>
                      <!-- this one works-->
                         <input type="hidden" name="cart_country" id="cart_country">
                         <input type="hidden" name="cart_address" id="cart_address">
-                        <input type="hidden" name="cart_vendor" id="cart_vendor">
+                        <input type="hidden" name="cart_vendor" id="cart_vendor" value="{{ form.initial.vendor_id }}"> <!-- it works when it has text inside-->
                         <input type="hidden" name="cart_shipping" id="cart_shipping">
                         <input type="hidden" name="cart_zipcode" id="cart_zipcode">
                         <input type="hidden" name="cart_city" id="cart_city">
@@ -493,27 +493,24 @@ async></script>
                   <div class="row">
                      <div class="container mb-5" id="ppl-parcelshop-map" style="display: none;"></div>
 
-                     <label for="shipping">Doprava</label>
-
+                     <label for="shipping"><b>Doprava </b>(vyberte způsob dopravy)</label>
 
                      <div class="col-md-4 mb-3"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
                          <button id="packeta_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Zásilkovna</button>
                          <div style="display:none" class="packeta-selector-value"></div>
                          <!-- this value shows vendor ID -->
-                     
                          {% for item in cart %}
-
-                         {% if item.product.category.name == "Dárkové certifikáty" %}
+            
+                     {% if item.product.category.name == "Dárkové certifikáty" %} 
                         <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectPPLShipping()">PPL</button>
                         <div style="display:none" class="packeta-selector-value"></div>
                         <!-- this value shows vendor ID -->
+                        
+                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectOnlineShipping()">Online (pouze dárkový certifikát)</button>
                   
-                  
-                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectOnlineShipping()">Online</button>
                         <div style="display:none" class="packeta-selector-value"></div>
                         <!-- this value shows vendor ID -->
-                        
-                        
+          
                      {% endif %}
                      {% endfor %}
                     </div>
@@ -772,81 +769,76 @@ async></script>
 
 
 <script>
-   // JavaScript for form validation
-   (function() {
-       'use strict';
+   
+    // JavaScript for form validation
+    (function() {
+        'use strict';
 
-       window.addEventListener('load', function() {
-           var forms = document.getElementsByClassName('needs-validation');
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
 
-           var validation = Array.prototype.filter.call(forms, function(form) {
-               form.addEventListener('submit', function(event) {
-                   if (form.checkValidity() === false) {
-                       event.preventDefault();
-                       event.stopPropagation();
-                       showAlertOnMissingFields();
-                   } else {
-                       // Assuming there is a vendorIdInput for validation
-                       var vendorIdInput = document.querySelector("id_vendor_id");
-                       console.log("this is vendor id delivery address", vendorIdInput.value)
-                       if (vendorIdInput && (!vendorIdInput.value || vendorIdInput.value === "None")) {
-                           alert("Please select a delivery address.");
-                           event.preventDefault();
-                           event.stopPropagation();
-                       }
-                   }
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        showAlertOnMissingFields();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 
-                   form.classList.add('was-validated');
-               }, false);
-           });
-       }, false);
-   })();
-
-   function showAlertOnMissingFields() {
-            const firstName = document.querySelector('input[name="first_name"]');
-            const lastName = document.querySelector('input[name="last_name"]');
-            const email = document.querySelector('input[name="email"]');
-            const phoneNumber = document.querySelector('input[name="number"]');
-            const birthday = document.querySelector('input[name="birthday"]');
-            //const address = document.querySelector('input[name="address"]');
-            const vendorIdInput = document.querySelector('input[name="id_vendor_id"]');
-            const agreeToTerms = document.querySelector('input[name="id_agree_to_terms"]');
-            console.log("this is agree to remts", agreeToTerms.value)
-      
-            if (!firstName.value) {
-                alert("Please fill out your first name.");
-                firstName.focus();
-                return;
-            }
-            if (!lastName.value) {
-                alert("Please fill out your last name.");
-                lastName.focus();
-                return;
-            }
-            if (!email.value) {
-                alert("Please fill out your email.");
-                email.focus();
-                return;
-            }
-            if (!phoneNumber.value) {
-                alert("Please fill out your phone number.");
-                phoneNumber.focus();
-                return;
-            }
-            if (!birthday.value) {
-                alert("Please fill out your birthday.");
-                birthday.focus();
-                return;
-            }
-            
-        
-            if (!agreeToTerms.checked) {
-                alert("You must agree to the terms and conditions.");
-                agreeToTerms.focus();
-                return;
-            }
-            
+    function showAlertOnMissingFields() {
+        const firstName = document.querySelector('input[name="first_name"]');
+        const lastName = document.querySelector('input[name="last_name"]');
+        const email = document.querySelector('input[name="email"]');
+        const phoneNumber = document.querySelector('input[name="number"]');
+        const birthday = document.querySelector('input[name="birthday"]');
+        const agreeToTerms = document.querySelector('input[name="agree_to_terms"]');
+        //const vendorId = document.querySelector("#cart_vendor");
+        const vendorId = document.querySelector('input[name="cart_vendor"]');
+   
+      console.log("vendor ID:", vendorId, "#")
+         if (vendorId.value === "" || vendorId.value === null || vendorId.value === 'None') {
+            alert("Vyplňte adresu doručení.");
+            vendorId.focus();
+            return;
         }
+        if (!firstName.value) {
+            alert("Prosím vyplňte své jméno.");
+            firstName.focus();
+            return;
+        }
+        if (!lastName.value) {
+            alert("Prosím vyplňte své příjmení.");
+            lastName.focus();
+            return;
+        }
+        if (!email.value) {
+            alert("Prosím vyplňte svůj email.");
+            email.focus();
+            return;
+        }
+        if (!phoneNumber.value) {
+            alert("Prosím vyplňte své telefonní číslo.");
+            phoneNumber.focus();
+            return;
+        }
+        if (!birthday.value) {
+            alert("Prosím vyplňte své datum narození.");
+            birthday.focus();
+            return;
+        }
+        if (!agreeToTerms.checked) {
+            alert("Musíte souhlasit s obchodními podmínkami.");
+            return;
+        }
+       
+    }
+
+
 
 
 
@@ -869,6 +861,7 @@ async></script>
    function handleSubscriptionAndSubmitForm(itemId) {
        // Extract data from the form
        const email = document.getElementById('id_email').value;
+       
 
        const products = [];
        const productElements = document.querySelectorAll('.product_id_class');
