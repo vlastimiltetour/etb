@@ -495,24 +495,32 @@ async></script>
 
                      <label for="shipping"><b>Doprava </b>(vyberte způsob dopravy)</label>
 
-                     <div class="col-md-4 mb-3"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
+
+                     <div class="col sm-4"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
                          <button id="packeta_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Zásilkovna</button>
                          <div style="display:none" class="packeta-selector-value"></div>
                          <!-- this value shows vendor ID -->
+                     
+                      
                          {% for item in cart %}
-            
+
                      {% if item.product.category.name == "Dárkové certifikáty" %} 
-                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectPPLShipping()">PPL</button>
+                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectPPLShipping()">PPL - výdejní místo</button>
                         <div style="display:none" class="packeta-selector-value"></div>
-                        <!-- this value shows vendor ID -->
+
+
+                        <button id="select-home-delivery-btn" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectHomePPLDelivery()">PPL - doručení domů</button>
+                        <div style="display:none" class="packeta-selector-value"></div>
                         
-                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectOnlineShipping()">Online (pouze dárkový certifikát)</button>
                   
+                        <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectOnlineShipping()">Online (pouze certifikát)</button>
                         <div style="display:none" class="packeta-selector-value"></div>
                         <!-- this value shows vendor ID -->
           
                      {% endif %}
                      {% endfor %}
+               
+
                     </div>
                     
                      
@@ -661,8 +669,9 @@ async></script>
                   </div>
                   <div class="row">
                      <div class="col-md-6 mb-3">
-                        <label for="email">E-mail</label>
-                        {{ form.email }}
+                        <label for="email" >E-mail</label>
+                         {{ form.email }}
+                        <!--<input type="email" id="id_email" name="id_email" class="form-control" placeholder="Vyplňte svůj email"> -->
                         <div class="invalid-feedback">
                            Vyplňte svůj email
                         </div>
@@ -799,6 +808,9 @@ async></script>
         const agreeToTerms = document.querySelector('input[name="agree_to_terms"]');
         //const vendorId = document.querySelector("#cart_vendor");
         const vendorId = document.querySelector('input[name="cart_vendor"]');
+
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
    
       console.log("vendor ID:", vendorId, "#")
          if (vendorId.value === "" || vendorId.value === null || vendorId.value === 'None') {
@@ -816,8 +828,9 @@ async></script>
             lastName.focus();
             return;
         }
-        if (!email.value) {
-            alert("Prosím vyplňte svůj email.");
+       
+        if (!emailRegex.test(email.value)) {
+            alert("Prosím opravte formát emailové adresy.");
             email.focus();
             return;
         }
@@ -1000,7 +1013,26 @@ function checkIfCertificate() {
       cartForm.submit();
    }
 
+   function selectHomePPLDelivery() {
+      const addressInput = document.querySelector("#cart_address");
+      const countryInput = document.querySelector("#cart_country");
+      const vendorIdInput = document.querySelector("#cart_vendor");
+      const cartForm = document.querySelector("#country-form");
+      const shippingSelect = document.getElementById("cart_shipping");
+      const zipcode = document.querySelector("#cart_zipcode");
+      const city = document.querySelector("#cart_city");
+      
 
+      city.style.display = "block";
+      zipcode.style.display = "block";
+      shippingSelect.value = "P";
+
+
+      // Uncomment this line if you want to submit the form automatically
+      cartForm.submit();
+   }
+
+   document.getElementById("select-home-delivery-btn").addEventListener("click", selectHomePPLDelivery);
 
    function selectPPLShipping() {
          const pplMap = document.getElementById("ppl-parcelshop-map");
