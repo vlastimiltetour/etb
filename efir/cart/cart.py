@@ -235,32 +235,15 @@ class Cart:
     def clean_cart_session(self):
         # Clean up the cart session
         print("Cleaning up the cart session...")
-        # del self.session[settings.CART_SESSION_ID]
+
+        # Clear the entire session
+        self.session.clear()
         print("Cart session cleaned.")
+
+        # Display the current session contents (should be empty)
         print("Current session contents:")
         for key, value in self.session.items():
             print(f"Key: {key}, Value: {value}, type: {type(value)}")
-
-        keys_to_delete = [
-            "coupon_id",
-            "cart_country",
-            "cart_address",
-            "cart_vendor",
-            "cart_city",
-            "cart_zipcode",
-        ]
-
-        for key in keys_to_delete:
-            print(f"Checking for '{key}' in session...")
-            # Check if the key exists in the session
-            if key in self.session:
-                # If found, delete the key
-                print(f"Deleting '{key}' from session...")
-                del self.session[key]
-                print(f"'{key}' deleted.")
-            else:
-                # If not found, print a message
-                print(f"Key '{key}' not found in session")
 
         print("Saving session...")
         self.save()
