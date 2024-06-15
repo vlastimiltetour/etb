@@ -149,9 +149,43 @@ class Cart:
         self.save()
 
     def get_shipping_price(self):
-        # Get the country from the cart data
         zpusob_vyroby_type_count = 0
-        country = self.country
+        country = self.country.upper()
+        shipping_type = self.shipping
+        # price
+        ppl_prices = {
+            "CZ": 11,
+            "PL": 22,
+            "SK": 22,
+            "DE": 22,
+            "BE": 33,
+            "BG": 33,
+            "DK": 33,
+            "EE": 33,
+            "FI": 33,
+            "FR": 33,
+            "HR": 33,
+            "IE": 33,
+            "IT": 33,
+            "LT": 33,
+            "LV": 33,
+            "LU": 33,
+            "HU": 33,
+            "NL": 33,
+            "PT": 33,
+            "RO": 33,
+            "GR": 33,
+            "SI": 33,
+            "ES": 33,
+            "SE": 33,
+            "AT": 33,
+        }
+
+        zasilkovna_prices = {"CZ": 89, "SK": 99}
+
+        parcelbox = {"CZ": 1, "SK": 2, "PL": 2, "DE": 2}
+
+        # Get the country from the cart data
 
         for item_id, item_details in self.cart.items():
             print("this is item zpusob vyroby")
@@ -162,17 +196,27 @@ class Cart:
                 zpusob_vyroby_type_count += 1
 
         if zpusob_vyroby_type_count > 0:
-            if country == "cz" or "CZ":
-                shipping_price = 89
-            elif country == "sk" or "SK":
-                shipping_price = 99
-            else:
-                shipping_price = 0
+            if shipping_type == "P":
+                if parcelbox.get(country):
+                    shipping_price = parcelbox.get(country)
+                else:
+                    shipping_price = 0
+            elif shipping_type == "D":
+                if ppl_prices.get(country):
+                    shipping_price = ppl_prices.get(country)
+                else:
+                    shipping_price = 0
+            elif shipping_type == "Z":
+                if zasilkovna_prices.get(country):
+                    shipping_price = zasilkovna_prices.get(country)
+                else:
+                    shipping_price = 0
 
             return shipping_price
 
         else:
             shipping_price = 0
+            # I can create a fucntion to set up values to online
 
         return shipping_price
 

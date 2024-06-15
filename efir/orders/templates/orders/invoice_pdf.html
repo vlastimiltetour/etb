@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Efir Faktura</title>
+		<title>Prodejní doklad / faktura č. {{order.etb_id}}</title>
 
 		<style>
 			.invoice-box {
@@ -116,8 +116,10 @@
 								</td>
 
 								<td>
-									Faktura #{{ order.etb_id }}<br />
-									Vytvořeno: {{ order.created }} <br />
+									Faktura #{{ order.etb_id }}<br>
+									Datum vystavení: {{ order.created }} <br>
+									Datum uskutečnění plnění:  {{ order.created }} <br>
+
 								</td>
 							</tr>
 						</table>
@@ -129,17 +131,33 @@
 						<table>
 							<tr>
 								<td>
-									EFIR the brand <br/>
-									Sídlo: Příčná 1892/4 <br/>
-									110 00, Praha 1 Nové Město <br/>
-									IČO: 17092540
+									<u>Prodávající:</u><br>
+									Ing. Valeriya Ageeva<br>
+									Sídlo: Příčná 1892/4, 110 00, Praha 1 - Nové Město<br>
+									IČ:17092540<br>
+									číslo účtu: 2270534028/3030<br>
+									IBAN: CZ79 3030 0000 0022 7053 4028<br>
+									SWIFT: AIRACZPP<br>
+									e-mail: objednavky@efirthebrand.cz<br>
+									Tel. č.: +420774363883<br>
+									<br>
+									Není plátcem DPH
+
+
 								
 								</td>
 
 								<td>
-									{{ order.first_name }} {{ order.last_name }}<br />
-									{{ order.email }} <br/>
-									{{ order.number }}
+									<u>Kupující:</u> <br>
+									
+									Jméno a příjmení / Název firmy: {{ order.first_name }} {{ order.last_name }}<br>
+									Dodací adresa: {{ order.address }}, {{ order.city }}, {{order.postcode}}, {{ order.country}} <br>
+									Email: {{ order.email }} <br/>
+									Tel. č {{ order.number }} 
+
+									
+									
+									
 								</td>
 							</tr>
 						</table>
@@ -160,7 +178,7 @@
 				<tr class="item">
 					<td>{{ item.product.name }} </td>
 
-					<td> {{ item.price }} </td>
+					<td> {{ item.price }} Kč</td>
 				</tr>
 				{% endfor %}
 
@@ -191,6 +209,7 @@
 					<td>Total: {{ order.total_cost }} Kč</td>
 				</tr>
 			</table>
+			Forma platby: Platba provedena skrz platební bránu Stripe.
 		</div>
 	</body>
 </html>
