@@ -31,6 +31,9 @@ from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
 
 
 def home(request, category_slug=None):
+    # token = get_oauth_token()
+    # print("this is token", token)
+
     category = None
     categories = Category.objects.all()
     best_sellers = Product.objects.filter(bestseller=True, active=True)
@@ -39,7 +42,9 @@ def home(request, category_slug=None):
     backgroundphoto = BackgroundPhoto.objects.all()
     leftphoto = LeftPhoto.objects.all()
     rightphoto = RightdPhoto.objects.all()
-    products = Product.objects.filter(active=True, category__name="Celé sety")[:9]
+    products = Product.objects.filter(active=True, category__name="Celé sety").exclude(
+        category__name="Dárkové certifikáty"
+    )[:9]
     subscribe_form = SubscribeForm(request.POST)
 
     return render(
@@ -125,8 +130,8 @@ def show_session_contents(request):
 
 def catalog_product_list(request, category_slug=None):
     category = None
-    categories = Category.objects.all()
-    products = Product.objects.all()
+    categories = Category.objects.all().exclude(name="Dárkové certifikáty")
+    products = Product.objects.all().exclude(category__name="Dárkové certifikáty")
     inventory = Inventory.objects.values("size").distinct().order_by("size")
 
     filter_form = FilterForm()
@@ -176,7 +181,7 @@ def catalog_product_list(request, category_slug=None):
         query_filters &= Q(inventory__size__in=size_selection_session)
 
     if sort_by_price_session == ([] or None):
-        sort_by_price_session = "created"
+        sort_by_price_session = "-created"
     elif type(sort_by_price_session) == str:
         sort_by_price_session = sort_by_price_session
 
@@ -184,14 +189,14 @@ def catalog_product_list(request, category_slug=None):
         category = get_object_or_404(Category, slug=category_slug)
 
         products = (
-            products.filter(category=category)
+            products.filter(category=category).exclude(category__name="Dárkové certifikáty")
             .filter(query_filters)
             .order_by(sort_by_price_session)
         )
 
     else:
         products = (
-            Product.objects.filter(query_filters)
+            Product.objects.filter(query_filters).exclude(category__name="Dárkové certifikáty")
             .order_by(sort_by_price_session)
             .filter(active=True)
         )
@@ -630,3 +635,9 @@ def download_reklamacni_formular(request):
     return response
 
     # return render(request, 'catalog/reklamace.html', {'file_url': file_url})
+
+
+def certificates(request):
+    products = Product.objects.filter(category__name="Dárkové certifikáty", active=True)
+
+    return render(request, "catalog/certificates.html", {"products": products})

@@ -1,0 +1,129 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block content %}
+<!--Intro, Header Jumbotron --> 
+<!-- link here: https://getbootstrap.com/docs/5.3/examples/jumbotron/ -->
+
+<style>
+  .dropdown-item.active {
+  background-color: #000; /* Set background color to black */
+  color: #fff; /* Set text color to white */
+}
+</style>
+
+<!-- Catalog of Products -->
+  <section class="jumbotron text-center">
+    <div class="container">
+
+        <h1 class="jumbotron-heading mt-5 mb-5">Dárkové certifikáty
+        </h1>
+
+          {% if not products %}
+          
+          
+          <p></p>
+          <p class="lead" style="text-center;">
+              Aktuálně zde nejsou žádné produkty. Prohlédněte si celou nabídku v katalogu.</p>
+
+
+
+          {% endif %}
+       
+      
+    </div>
+
+
+  
+
+  <div class="album py-2 bg-white">
+    <div class="container justify-content-center align-items-center" style="min-height: 20vh;">
+      {% if products %}
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3">
+
+        
+        {% for product in products %} 
+
+
+      
+          <!-- Single Product -->
+          <div class="col-md-4 mb-4">
+            <a href="{{ product.get_absolute_url }}">
+              <div class="product-image-container">
+
+
+            <div class="card mb-2 box-shadow">
+            
+              {% if product.certificate.photo %}
+            <img class="card-img-top img-fluid" 
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
+            alt="{{ product.name }} certificate"
+            src="{{ product.certificate.photo.url }}"
+            data-holder-rendered="true">
+           
+            {% endif %}
+              {% if product.discount %}
+              <div class="discount-circle" style="background-color: #990000; font-size: 15px;"> -{{ product.discount }} % </div>
+            
+              {% else %}
+             
+              {% endif %}
+            </div>
+          
+              <div class="card-body d-flex flex-column" style="padding: 1rem;">
+                <h5 class="fw-bolder"> {{ product.name }}</h5>
+              
+                <p class="card-text">{{ product.short_description }}</p>                
+                  
+                {% if product.discount %}
+                <div><b class="fw-semibold"><del>{{ product.price }} Kč</del></div>
+                  <div>{{ product.corrected_price }} Kč</div></b>
+                {% else %}
+                <b class="fw-semibold">{{ product.price }} Kč</b>
+                {% endif %}
+
+              </div>
+            </div>
+          </a>
+          </div>
+        
+        
+
+    
+        {% endfor %}
+       
+      </div>
+
+    
+    
+  </div>
+  
+    {% endif %}
+  </div>
+  </div>
+  </section>
+
+<!-- End Best Sellers -->
+
+
+  <!--
+  <header class="masthead">
+    <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+        <div class="d-flex justify-content-center">
+            <div class="text-center">
+            
+                <h1 class="display-5 fw-bolder">{% trans "🪡 Spodní prádlo na míru" %}</h1>
+                <h2 class="text-white mx-auto mt-2 mb-5">{% trans "Exkluzivní design 🤍" %}</h2>
+                            
+            </div> 
+        </div> 
+    </div>
+</header>
+-->
+
+
+
+
+{% endblock %}

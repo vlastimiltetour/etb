@@ -29,6 +29,7 @@ urlpatterns = [
     ),
     path("katalog", views.catalog_product_list, name="katalog_vse"),
     path("akce", views.akce, name="akce"),
+    path("certifikaty", views.certificates, name="certificates"),
     path(
         "<slug:category_slug>",
         views.catalog_product_list,

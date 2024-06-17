@@ -92,6 +92,7 @@ def update_cart_quantity(request, item_id):
 
 
 def cart_detail(request, zasilkovna=True):
+    certificate = 0
     try:
         cart = Cart(request)
         for item in cart:
@@ -168,6 +169,7 @@ def cart_detail(request, zasilkovna=True):
         )
 
         if form.is_valid():
+            # print("form contents", form)
             order = form.save(
                 commit=False
             )  # In this line, you are using a Django ModelForm (order_form) to create an Order instance. The commit=False argument prevents the instance from being saved to the database immediately. Instead, it returns an unsaved instance of the model. This allows you to make additional modifications to the instance before saving it to the database.
@@ -175,8 +177,10 @@ def cart_detail(request, zasilkovna=True):
             order.save(cart=cart)
             order.city = selected_cart_city
             order.zipcode = selected_cart_zipcode
+            order.shipping_price = cart.get_shipping_price()
+            print("this is shiping price:", cart.get_shipping_price())
             order.save()
-            print(order)
+            print("thse are order contents", order)
 
             """Once you have the unsaved order instance, you can call its save method to save it to the database. In this case, you are passing an additional keyword argument cart to the save method. This is where you are providing the cart instance to the save method of the Order model.
             In the save method of the Order model, you are accessing the cart instance through this passed keyword argument to calculate the total_cost for the order. This is a way to pass contextual information from the view (the cart instance) to the model (Order instance) when saving it.
@@ -276,7 +280,7 @@ def cart_detail(request, zasilkovna=True):
             # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
             return redirect(reverse("stripepayment:process"))
 
-    # print(form.errors)
+        print(form.errors)
 
     else:  # data has to be saved to the form, and if the form is reastarted, it's brought back again here
         form = OrderForm(
@@ -286,9 +290,12 @@ def cart_detail(request, zasilkovna=True):
                 "order_address": selected_address,
                 "vendor_id": selected_vendor_id,
                 "order_shipping": selected_cart_shipping,
+                "order_city": selected_cart_city,
+                "order_zipcode": selected_cart_zipcode,
             },
         )
 
+    print("overuji hodnotu cetifitkatu", certificate)
     return render(
         request,
         "cart/cart.html",
@@ -296,6 +303,7 @@ def cart_detail(request, zasilkovna=True):
             "cart": cart,
             "coupon_form": coupon_form,
             "form": form,
+            "certificate": certificate,
         },
     )
 
