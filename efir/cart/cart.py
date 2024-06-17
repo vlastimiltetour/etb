@@ -149,8 +149,14 @@ class Cart:
         self.save()
 
     def get_shipping_price(self):
+        shipping_price = 0
         zpusob_vyroby_type_count = 0
-        country = self.country.upper()
+        try:
+            country = self.country.upper()
+        except AttributeError as e:
+            country = self.country
+
+            
         shipping_type = self.shipping
         # price
         ppl_prices = {

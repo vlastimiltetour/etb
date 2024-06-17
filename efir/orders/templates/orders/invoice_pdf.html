@@ -11,7 +11,7 @@
 				padding: 30px;
 				border: 1px solid #eee;
 				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-				font-size: 16px;
+				font-size: 12px;
 				line-height: 24px;
 				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
 				color: #555;
@@ -114,13 +114,14 @@
 										style="width: 100%; max-width: 150px"
 									/>
 								</td>
-
+							<tr>
 								<td>
 									Faktura #{{ order.etb_id }}<br>
 									Datum vystavení: {{ order.created }} <br>
 									Datum uskutečnění plnění:  {{ order.created }} <br>
 
 								</td>
+							</tr>
 							</tr>
 						</table>
 					</td>
@@ -151,7 +152,7 @@
 									<u>Kupující:</u> <br>
 									
 									Jméno a příjmení / Název firmy: {{ order.first_name }} {{ order.last_name }}<br>
-									Dodací adresa: {{ order.address }}, {{ order.city }}, {{order.postcode}}, {{ order.country}} <br>
+									Dodací adresa: {{ order.address }}, {{ order.city }}, {{order.zipcode}}, {{ order.country}} <br>
 									Email: {{ order.email }} <br/>
 									Tel. č {{ order.number }} 
 
@@ -209,6 +210,7 @@
 					<td>Total: {{ order.total_cost }} Kč</td>
 				</tr>
 			</table>
+			<br>
 			Forma platby: Platba provedena skrz platební bránu Stripe.
 		</div>
 	</body>

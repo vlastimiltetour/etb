@@ -52,7 +52,7 @@ class OrderForm(forms.ModelForm):
                     "initial": "-",
                 }
             ),
-            "shipping": forms.Select(
+            "shipping": forms.TextInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Vyberte si způsob dopravy",
@@ -62,7 +62,21 @@ class OrderForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Vložte adresu, kam doručit oblečení",
-                    "readonly": True,  # Add the readonly attribute here
+                    # "readonly": True,  # Add the readonly attribute here
+                }
+            ),
+            "city": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Vložte mesto, kam doručit oblečení",
+                    # "readonly": True,  # Add the readonly attribute here
+                }
+            ),
+            "zipcode": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Vložte zipcode, kam doručit oblečení",
+                    # "readonly": True,  # Add the readonly attribute here
                 }
             ),
             "vendor_id": forms.HiddenInput(),
@@ -71,9 +85,10 @@ class OrderForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Vložte adresu, kam doručit oblečení",
-                    "readonly": True,
+                    # "readonly": True,
                 },
             ),
             "newsletter_consent": forms.CheckboxInput(
-                attrs={"class": "form-check-input"}),
+                attrs={"class": "form-check-input"}
+            ),
         }

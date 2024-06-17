@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from decimal import Decimal
 
 import requests
@@ -91,11 +92,11 @@ def payment_process(request):
             # If there have been three unsuccessful attempts, cancel the transaction
             if payment_attempts >= 3:
                 return redirect(reverse("stripepayment:canceled"))
-            else: 
-                pass
+            else:
                 # If there's an error in creating the checkout session,
                 # redirect back to the payment process page to retry
-#                return redirect(reverse("stripepayment:payment_process"))
+                # return redirect(reverse("stripepayment:payment_process"))
+                pass
     # else:
     return render(request, "stripe/process.html", locals())
 
@@ -242,28 +243,32 @@ def payment_notification(request):
 
 def payment_completed(request):
     order_id = request.session.get("order_id")
-    #order_id = 364
+    # order_id = 364
     cart = Cart(request)
     certificate = False
     order = get_object_or_404(Order, id=order_id)
     order_items = OrderItem.objects.filter(order=order)
 
-    
-    '''for order_item in order_items:
+    """for order_item in order_items:
         print(order_item.product.name)
         if (str(order_item.product.category)) == "Dárkové certifikáty":   
-            certificate = True     '''
-    certificate = any(str(order_item.product.category) == "Dárkové certifikáty" for order_item in order_items)
+            certificate = True     """
+    certificate = any(
+        str(order_item.product.category) == "Dárkové certifikáty"
+        for order_item in order_items
+    )
     print("tady se snazim vytisknout certificate", certificate)
 
     try:
-        if certificate == True:
+        if certificate is True:
             print("ANO ANO ANO YES posli potvzrni certifikatu")
             certificate_order_email_confirmation(order_id)
+            time.sleep(5)
 
         else:
             print("NE NE NE NE NE neposli potvrzeni certifikatu")
             customer_order_email_confirmation(order_id)
+            time.sleep(5)
 
     except ssl.SSLCertVerificationError:
         logging.info(
@@ -308,6 +313,7 @@ def payment_canceled(request):
     try:
         customer_order_email_confirmation(order_id)
         print("customer email byl odeslan ale neni zaplaceno")
+        time.sleep(5)
     except ssl.SSLCertVerificationError:
         logging.info(
             f"Local environment, no email sending service. Order ID: {order_id}"
@@ -325,7 +331,7 @@ def payment_canceled(request):
     if cart.shipping == "Z":
         # zasilkovna_create_package(order_id)
         print("Zasilkovna package has been created")
-    elif cart.shipping == "P":
+    elif cart.shipping == "P" or "D":
         ppl_create_label_view(request, order_id)
         print("PPL package has been created")
     elif cart.shipping == "O":
@@ -393,6 +399,10 @@ def ppl_create_shipment_payload(request, order_id):
         product_type = "BUSS"
     else:
         product_type = "IMPO"
+        
+        
+
+    print("this is product type", product_type)
 
     payload = {
         "returnChannel": {"type": "Email", "address": "objednavky@efirthebrand.cz"},
@@ -425,7 +435,7 @@ def ppl_create_shipment_payload(request, order_id):
                     "street": order.address,
                     "city": order.city,
                     "zipCode": order.zipcode,
-                    "country": "CZ",
+                    "country": order.country,
                     "contact": "Kontakt prijemce",
                     "phone": order.number,
                     "email": order.email,
@@ -434,3 +444,7 @@ def ppl_create_shipment_payload(request, order_id):
         ],
     }
     return payload
+
+
+def ppl_track_order():
+    pass

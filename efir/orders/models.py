@@ -24,6 +24,7 @@ class Order(models.Model):
     shipping_type = (
         ("", "Vyberte si způsob dopravy"),
         ("P", "PPL"),
+        ("D", "PPL - Doručení domů"),
         ("Z", "Zásilkovna"),
         ("O", "Online"),
     )
@@ -42,7 +43,9 @@ class Order(models.Model):
     )
     address = models.CharField(max_length=250, verbose_name="Adresa", blank=False)
     city = models.CharField(max_length=250, verbose_name="City", blank=True, null=True)
-    zipcode = models.CharField(max_length=250, verbose_name="Zipcode", blank=True, null=True)
+    zipcode = models.CharField(
+        max_length=250, verbose_name="Zipcode", blank=True, null=True
+    )
 
     vendor_id = models.CharField(
         max_length=250,

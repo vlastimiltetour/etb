@@ -498,9 +498,13 @@ async></script>
 
                      <div class="col sm-4"> <!-- Use col-md-6 to make each button occupy half of the row on medium-sized screens and above -->
                          <button id="packeta_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions)">Zásilkovna</button>
-                       <!--  <button id="ppl_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectPPLShipping()">PPL - výdejní místo</button>
-                        <button id="home-delivery-btn" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectHomePPLDelivery()">PPL - doručení domů</button> -->
-                        <div style="display:none" class="packeta-selector-value"></div> 
+                         <!-- this one cannot be deleted -->
+                         <div style="display:none" class="packeta-selector-value"></div>
+
+                        <button id="ppl_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectPPLShipping()">PPL - výdejní místo</button>
+
+                        <button id="home-delivery-btn" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectHomePPLDelivery()">PPL - doručení domů</button>
+                     
                         <button id="online_button" type="button" class="btn btn-outline-dark my-2 mb-4" onclick="selectOnlineShipping()">Online (pouze certifikát)</button>
                     </div>
                     
@@ -535,112 +539,123 @@ async></script>
                  </div>
                  
                </div>
-               <div class="row">
-                  <div class="mb-3">
-                     <label for="shipping">Zvolený způsob dopravy</label>
-                     <!-- {{ form.shipping }}-->
-                     <div class="form-control">
-                        {% if cart.get_shipping == "Z" %}
-                            Zásilkovna
-                        {% elif cart.get_shipping == "P" %}
-                            PPL
-                        {% else %}
-                            Online
-                        {% endif %}
-                    </div>
+                           <div class="row">
+                                       <div class="mb-3" >
+                                          <label for="shipping">Zvolený způsob dopravy</label>
+                                          <!-- {{ form.shipping }}-->
+                                                   <div class="form-control" id="selected_type_delivery">
+                                                      {% if cart.get_shipping == "Z" %}
+                                                         Zásilkovna
+                                                      {% elif cart.get_shipping == "P" %}
+                                                         PPL
+                                                      {% elif cart.get_shipping == "D" %}
+                                                         PPL - Doručení domů
+                                                      {% else %}
+                                                         Online
+                                                      {% endif %}
+                                                </div>
+                                                   <div style="display: none;" class="form-control" id="selected_type_delivery_ppl_forced">PPL - Doručení domů</div>
 
-                     <input type="hidden" id="id_shipping" name="shipping" value="{{ form.initial.order_shipping }}">
+                                                      <input type="hidden" id="id_shipping" name="shipping" value="{{ form.initial.order_shipping }}">
 
-                     <div class="invalid-feedback"></div>
-                 </div>
-                        <!-- Delivery points -->
-                        <div class="row" id="onlineAddress">
-                           <div class="col-md-6 mb-3">
-                              <label for="country">Země
-                              </label>
-                              <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
-                           
-                              <div id="cart_get_country" name="cart_get_country" class="form-control"> {{ cart.get_country }}</div>
-                              
-                              <input type="hidden" name="country" id="id_country"  value="{{ form.initial.order_country }}">
+                                                      <div class="invalid-feedback"></div>
+                                    </div>
+                                    <!-- Delivery points -->
+                                    <div id="onlineAddress" display="none">
+                                                <div class="row">
+                                                   <div class="col-md-6 mb-3">
+                                                      <label for="country">Země
+                                                      </label>
+                                                      <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
+                                                   
+                                                      <div id="cart_get_country" name="cart_get_country" class="form-control"> {{ cart.get_country }}</div>
+                                                      
+                                                      <input type="hidden" name="country" id="id_country"  value="{{ form.initial.order_country }}">
 
-            
-                              
-                              
-                              <div class="invalid-feedback">
-                                 Valid country name is required.
-                              </div>
+                                    
+                                                      
+                                                      
+                                                      <div class="invalid-feedback">
+                                                         Valid country name is required.
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-md-6 mb-3">
+                                                      <label for="email">Doručovací místo</label>
+                                                
+                                                      <div class="form-control"> {{ cart.get_address }}</div>
+                                                      <input type="hidden" name="address" id="id_address"  value="{{ form.initial.order_address }}">
+
+                                                      <div class="invalid-feedback">
+                                                         Vložte validní příjmení.
+                                                      </div>
+                                                   </div>
+                                                   
+                                                   <div>
+                                                      <input type="hidden" name="vendor_id" id="id_vendor_id"  value="{{ form.initial.vendor_id }}">
+                                                   </div>
+                                                </div>   
+                                    </div>
                            </div>
-                           <div class="col-md-6 mb-3">
-                              <label for="email">Doručovací místo</label>
+                                    <!-- Delivery points Ending -->
+
+
+
+
+
+                                          <!-- Home Delivery points start -->
+                                                         <div type="hidden" style="display: none" id="HomeDelivery">
+                                                            <div class="row">
+                                                               <div class="col-md-6 mb-3">
+                                                                  <label for="address">Adresa doručení</label>
+                                                                  <input type="text" class="form-control" name="home_ppl_cart_address" id="home_ppl_cart_address">
+                                                                  <ul id="suggestions"></ul>
+                                                                     <div class="invalid-feedback">
+                                                                     Vložte validní příjmení.
+                                                                     </div>
+                                                               </div>
+                                                               <div class="col-md-6 mb-3">
+                                                                  <label for="country">Země</label>
+                                                                  <input type="text" name="home_ppl_cart_country" id="home_ppl_cart_country" class="form-control">
+                                                                     <div class="invalid-feedback">
+                                                                        Valid country name is required.
+                                                                     </div>
+                                                               </div>
+                                                            </div>
+
+
+                                                            <div class="row">
+                                                               <div class="col-md-6 mb-3">
+                                                                  <label for="country">Město</label>
+                                                                  <input type="text" class="form-control" name="home_ppl_cart_city" id="home_ppl_cart_city">
+                                                                  <div class="invalid-feedback">
+                                                                     Valid country name is required.
+                                                                  </div>
+                                                               </div>
+                                                               <div class="col-md-6 mb-3">
+                                                                  <label for="email">PSČ</label>
+                                                                  <input type="text" class="form-control" name="home_ppl_cart_zipcode" id="home_ppl_cart_zipcode">
+                                                                     <div class="invalid-feedback">
+                                                                        Vložte validní příjmení.
+                                                                     </div>
+                                                               </div>
+                                                            </div>
+                                                         
+                                                               <div>
+                                                                  <input type="hidden" name="home_ppl_cart_vendor" id="home_ppl_cart_vendor" value="-">
+                                                               </div>
+
+                                                               <section class="jumbotron text-center">
+
+                                                                  <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" type="button" id="submit-button">Adresa je správně</button>
+                                                               </section>
+                                                         </div>                                          
+                                                   <!-- Home Delivery points ends -->
+
+                  
+                     <!-- Add other form fields here -->     
                         
-                              <div class="form-control"> {{ cart.get_address }}</div>
-                              <input type="hidden" name="address" id="id_address"  value="{{ form.initial.order_address }}">
-
-                              <div class="invalid-feedback">
-                                 Vložte validní příjmení.
-                              </div>
-                           </div>
-                           
-                           <div>
-                              <input type="hidden" name="vendor_id" id="id_vendor_id"  value="{{ form.initial.vendor_id }}">
-                           </div>
-                        </div>
                         <!-- Delivery points Ending -->
-
-
-
-
-
-                        <!-- Delivery points -->
-                        <div type="hidden" style="display: none" class="row" id="HomeDelivery" >
-                           <div class="col-md-6 mb-3">
-                              <label for="country">Země
-                              </label>
-                              <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
-                           
-                              <input type="text" name="country" id="cart_country" class="form-control" value="{{ form.initial.order_country }}">
-                              <div class="invalid-feedback">
-                                 Valid country name is required.
-                              </div>
-                           </div>
-                           <div class="col-md-6 mb-3">
-                              <label for="email">Adresa doručení</label>
-                        
-                              <input type="text" class="form-control"  name="cart_address" id="id_address"  value="{{ form.initial.order_address }}">
-                              
-
-                              <div class="invalid-feedback">
-                                 Vložte validní příjmení.
-                              </div>
-                           </div>
-                           <div class="col-md-6 mb-3">
-                              <label for="country">Město
-                              </label>
-                              <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
-                           
-                              <input type="text" class="form-control" name="city" id="cart_city"  value="{{ form.initial.order_city }}">                              
-                              <div class="invalid-feedback">
-                                 Valid country name is required.
-                              </div>
-                           </div>
-                           <div class="col-md-6 mb-3">
-                              <label for="email">PSČ</label>
-                        
-                              <input type="text" class="form-control" name="zipcode" id="cart_zipcode"  value="{{ form.initial.order_zipcode }}">    
-
-                              <div class="invalid-feedback">
-                                 Vložte validní příjmení.
-                              </div>
-                           </div>
-                           <div>
-                              <input type="hidden" name="vendor_id" id="id_vendor_id" value="-">
-                           </div>
-                        </div>
                
-                        <!-- Delivery points Ending -->
-                  <div>
-                  </div>
                 
                   <script>
                      function showPacketaButton() {
@@ -795,7 +810,7 @@ async></script>
                <!-- Include the necessary form fields -->
                {% csrf_token %}        
                <!-- Add other form fields here -->
-               <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" action="https://secure.payu.com/api/v2_1/orders" type="submit">Potvrdit objednávku</button>
+               <button class="btn btn-outline-dark flex-shrink-0 rounded-0 mb-5" action="https://secure.payu.com/api/v2_1/orders" id="order_submit" type="submit">Potvrdit objednávku</button>
                </form>
                <!--end Payment Instructions -->
                </section>
@@ -1052,7 +1067,7 @@ function checkIfCertificate() {
       const shippingSelect = document.getElementById('cart_shipping');
       const onlineAddress = document.getElementById('onlineAddress');
 
-      // Check if the shippingSelect element exists
+      // Check if the shippingSelect element xists
       if (!shippingSelect) {
          alert("Error: id_shipping element not found.");
          return;
@@ -1074,49 +1089,11 @@ function checkIfCertificate() {
       cartForm.submit();
    }
 
-   function selectHomePPLDelivery() {
-    console.log("Function called"); // Debugging statement
-    const shippingSelect = document.getElementById("cart_shipping");
-    console.log(shippingSelect); // Debugging statement
-    shippingSelect.value = "P";
-}
-
-   
-   function HomePPLDeliveryDetails() {
-   const addressInput = document.querySelector("#cart_address");
-   const countryInput = document.querySelector("#cart_country");
-   const vendorIdInput = document.querySelector("#cart_vendor");
-   const cartForm = document.querySelector("#country-form");
-   const shippingSelect = document.getElementById("cart_shipping");
-   const zipcode = document.querySelector("#cart_zipcode");
-   const city = document.querySelector("#cart_city");
-   const country_ppl_input = document.querySelector("#id_country");
-   const cart_get_country = document.querySelector("#cart_get_country");
-   const HomeDelivery = document.querySelector("#HomeDelivery");
-   const DeliveryPoint = document.querySelector("#onlineAddress");
-   const pplMap = document.getElementById("ppl-parcelshop-map");
-   
-   
-   pplMap.style.display = "none";
-   DeliveryPoint.style.display = "none";
-   HomeDelivery.style.display = "block";
-   country_ppl_input.style.display = "block";
-   cart_get_country.style.display = "none";
-   zipcode.style.display = "block";
-   shippingSelect.value = "P";
-
-   // Uncomment this line if you want to submit the form automatically
-   
-
-}
-
-document.getElementById("select-home-delivery-btn").addEventListener("click", selectHomePPLDelivery);
-
-
 
 
 
    function selectPPLShipping() {
+         alert("PPL je prozatím v zaváděcím režimu. Nepoužívejte tento způsob doručení.")
          const pplMap = document.getElementById("ppl-parcelshop-map");
 
          if (pplMap) {
@@ -1168,14 +1145,150 @@ document.getElementById("select-home-delivery-btn").addEventListener("click", se
       });
 
 
+
+
+
+      
+      function selectHomePPLDelivery() {
+      alert("PPL je prozatím v zaváděcím režimu. Nepoužívejte tento způsob doručení.")       
+    const selectedDeliveryType = document.getElementById("selected_type_delivery");
+    const selectedDeliveryTypePplForced = document.getElementById("selected_type_delivery_ppl_forced");
+    const HomeDelivery = document.querySelector("#HomeDelivery");
+    const onlineAddress = document.querySelector("#onlineAddress");
+
+    selectedDeliveryType.style.display = "none";
+    selectedDeliveryTypePplForced.style.display = "block";
+    HomeDelivery.style.display = "block";
+    onlineAddress.style.display = "none";
+
+    const pplMap = document.getElementById("ppl-parcelshop-map");
+
+         if (pplMap) {
+            pplMap.style.display = "none";
+         } else {
+            console.error("Element with ID 'ppl-parcelshop-map' not found.");
+         }
+         
+}
+
+document.getElementById("submit-button").addEventListener("click", () => {
+    const addressInput = document.querySelector("#cart_address");
+    const countryInput = document.querySelector("#cart_country");
+    const vendorIdInput = document.querySelector("#cart_vendor");
+    const zipcode = document.querySelector("#cart_zipcode");
+    const city = document.querySelector("#cart_city");
+    const shippingSelect = document.getElementById("cart_shipping");
+    const cartForm = document.querySelector("#country-form");
+
+    const home_ppl_addressInput = document.querySelector("#home_ppl_cart_address");
+    const home_ppl_countryInput = document.querySelector("#home_ppl_cart_country");
+    const home_ppl_vendorIdInput = document.querySelector("#home_ppl_cart_vendor");
+    const home_ppl_zipcode = document.querySelector("#home_ppl_cart_zipcode");
+    const home_ppl_city = document.querySelector("#home_ppl_cart_city");
+    
+    // Part 2: Assign values to the inputs
+      addressInput.value = home_ppl_addressInput.value;
+      countryInput.value = home_ppl_countryInput.value.toUpperCase();
+      vendorIdInput.value = home_ppl_vendorIdInput.value;
+      zipcode.value = home_ppl_zipcode.value;
+      city.value = home_ppl_city.value;
+      shippingSelect.value = "D"
+
+
+
+    
+
+    // Collecting empty fields
+    let emptyFields = [];
+
+    if (!addressInput.value) emptyFields.push("Address");
+    if (!countryInput.value) emptyFields.push("Country");
+    if (!vendorIdInput.value) emptyFields.push("Vendor ID");
+    if (!zipcode.value) emptyFields.push("Zipcode");
+    if (!city.value) emptyFields.push("City");
+    if (!shippingSelect.value) emptyFields.push("Shipping");
+
+    if (emptyFields.length === 0) {
+        if (cartForm) {
+            cartForm.submit();
+        } else {
+            console.error("Form element not found.");
+        }
+    } else {
+        console.error("The following form fields are empty: " + emptyFields.join(", "));
+    }
+});
+
+    
+
+
+</script>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+       document.getElementById('home_ppl_cart_address').addEventListener('input', function() {
+           const query = this.value;
+
+           if (query.length > 2) {
+               fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1`)
+                   .then(response => response.json())
+                   .then(data => {
+                       const suggestions = document.getElementById('suggestions');
+                       suggestions.innerHTML = '';
+
+                       data.forEach(item => {
+                           const li = document.createElement('li');
+                           li.textContent = item.display_name;
+
+                           li.addEventListener('click', function() {
+                               const address = item.address;
+                               document.getElementById('home_ppl_cart_address').value = item.display_name;
+
+                               suggestions.innerHTML = '';
+
+                               function setValue(id, value) {
+                                   const element = document.getElementById(id);
+                                   if (element) {
+                                       element.value = value;
+                                       console.log(`${id}: ${value}`);
+                                   } else {
+                                       console.warn(`Element with ID ${id} not found.`);
+                                   }
+                               }
+
+                               setValue('home_ppl_cart_address', `${address.road || ''} ${address.house_number || ''}`.trim());
+                               setValue('home_ppl_cart_city', address.city || address.town || address.village || address.borough || address.city_district || '');
+                               setValue('home_ppl_cart_zipcode', address.postcode || '');
+                               setValue('home_ppl_cart_country', address.country_code || '').toUpperCase();;
+
+
+                               
+                           });
+
+                           suggestions.appendChild(li);
+                       });
+                   })
+                   .catch(error => {
+                       console.error('Error fetching address data:', error);
+                   });
+           } else {
+               document.getElementById('suggestions').innerHTML = '';
+           }
+       });
+
+       document.addEventListener('click', function(event) {
+           const suggestions = document.getElementById('suggestions');
+           if (!document.getElementById('home_ppl_cart_address').contains(event.target) && !suggestions.contains(event.target)) {
+               suggestions.innerHTML = '';
+           }
+       });
+   });
 </script>
 
 
 
 
 
-
-
-
+</body>
+</html>
 
 {% endblock %}
