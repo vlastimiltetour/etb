@@ -13,13 +13,32 @@ from orders.models import Order
 from .auth import get_oauth_token
 
 logger = logging.getLogger(__name__)
-
-
 from datetime import datetime
+
+import requests
+from django.http import HttpResponse, JsonResponse
+
+
+def track_shipment(request, shipment_number):
+    url = "https://api-dev.dhl.com/ecs/ppl/myapi2/shipment"
+    token = get_oauth_token()
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+    payload = {"Limit": 1, "Offset": 0, "ShipmentNumbers": [shipment_number]}
+
+    try:
+        response = requests.get(url, headers=headers, json=payload)
+        response.raise_for_status()  # Raise an HTTPError on bad responses
+        return JsonResponse(response.json())
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 def get_today_date():
     return datetime.now().isoformat()
+
 
 def order_trigger(request, batch_id, token, order_id):
     logging.info("function to create order is triggered")
@@ -74,7 +93,6 @@ def order_trigger(request, batch_id, token, order_id):
     order_batch_url = response.headers.get("Location")
     order_batch_id = order_batch_url.split("/")[-1]
 
-
     print("Payload:", payload)
     print("Response status code:", response.status_code)
     print("Response headers:", response.headers)
@@ -95,6 +113,7 @@ def order_trigger(request, batch_id, token, order_id):
 
     return response
 
+
 def create_package_label(payload, request, order_id):
     logging.info("function to create package is running")
 
@@ -108,7 +127,7 @@ def create_package_label(payload, request, order_id):
     print("this is headers", headers)
     url = f"{settings.API_BASE_URL}/shipment/batch"
     response = requests.post(url, headers=headers, json=payload)
-   
+
     print("this is response", response)
     print("Response status code:", response.status_code)
     print("Response content:", response.content)  # Log response content for debugging
@@ -125,17 +144,18 @@ def create_package_label(payload, request, order_id):
         logging.error(f"Request failed: {response.status_code} {response.text}")
         raise e
 
-    if response.status_code == 201:
+    if response.status_code == 201 or 200:
         data = response.json()
         print("this is data", data)
         try:
-            shipment_number = data.get('shipmentNumber', [])
-            print('this is shimpent number V1:', shipment_number)
+            shipment_number = data.get("shipmentNumber", [])
+            print("this is shimpent number V1:", shipment_number)
         except Exception as e:
             print("exception", e)
         #order_trigger(request, batch_id, token, order_id)
+        print("starting download pdf")
         download_pdf(batch_id, token, order_id)
-        
+        print("ending download pdf")
         return {"message": "Shipment batch created successfully", "batch_id": batch_id}
 
     try:
@@ -167,7 +187,7 @@ def package_trigger(request):
         "shipments": [
             {
                 "referenceId": "Reference03",
-                "productType": "BUSS",
+                "productType": "CONN",
                 "note": "Poznamka",
                 "depot": "07",
                 "shipmentSet": {"numberOfShipments": 1},
@@ -186,7 +206,7 @@ def package_trigger(request):
                     "street": "Novoveská 1262/95",
                     "city": "Ostrava",
                     "zipCode": "70900",
-                    "country": "CZ",
+                    "country": "DE",
                     "contact": "Kontakt prijemce",
                     "phone": "+420777888999",
                     "email": "test@test.cz",
@@ -195,45 +215,8 @@ def package_trigger(request):
         ],
     }
 
-    return create_package_label(payload, request, order_id=330)
+    return create_package_label(payload, request, order_id=382)
 
-
-#print(package_trigger(request=requests))
-#print(order_trigger(request=requests, batch_id='22d2ecf2-b2b7-45ef-90ea-fb8ee0082929', token='''eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxb2FKeG9vbGtDeENrQlZva1VWVE5SZXBrbEdFMEZRNUZfMHBnWXBYU1pZIn0.eyJleHAiOjE3MTcyNDQzMzEsImlhdCI6MTcxNzI0MjUzMSwianRpIjoiOTJhNDc4ZTgtYmY4Yy00ZTNiLTg3MmYtNWI5NGRhOTIxZTMyIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLXRlc3QtY3VzdC5wcGwuY3ovYXV0aC9yZWFsbXMvaGZfY3pfbXlhcGkiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzBlM2ZkNDUtYzczNi00NTI0LTllMmMtZDA2MzYxMTRjYTM1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiVkE0NTM3MjkzIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm15YXBpLXNlcnZpY2UiLCJkZWZhdWx0LXJvbGVzLWhmX2N6X215YXBpIiwibXlhcGkuY2xpZW50Iiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoibXlhcGkyIiwiY2xpZW50SG9zdCI6IjEwLjI4LjI0MC4yMCIsImNsaWVudElkIjoiVkE0NTM3MjkzIiwiZXBzIjp7ImN1c3RvbWVyIjp7ImlkIjoyMDUwOTM3fX0sImNsaWVudEFkZHJlc3MiOiIxMC4yOC4yNDAuMjAifQ.KsiLHuyppfIV_33KtfWnAZ7QhhYF0EbhvfKnEyNvaUJCdYMVg-mBP_V9DHLmkQ0P1KZbOYrIMvs9HIQfq1N0lI-rsBSnRH2ZyhyO0LjqFXDv-3Erg7cEO7M7o6wS4cO2CWHe5FhO9oDgs4uqyzdGW_xlFNXwkhiovt8H0xm_Y5BZ9Y9q4gJJN4SA-hbbq2YSyAqPqFpYfIQMO2FzIMSNDLBA8CN0hjc_udByWHWemuAzo-_GD6l9WfaH8EOa3pP7rQr5CLuZwSGNhKAzBGvs4NB1AHd-7mruXZOJS6-nak3p2AU5Ifi-wKs2EeV8HG2p9wcMBWbl6sF_0pzSsTfAmA''', order_id=349))
-
-
-
-
-
-import requests
-from django.http import HttpResponse
-
-
-def download_pdf_old(batch_id, token, request):
-    # url = f"{settings.API_BASE_URL}/shipment/batch/{batch_id}/label"
-    # url = f"{settings.API_BASE_URL}/shipment/batch/{batch_id}/label?pageSize=A4&position=1&limit=200&offset=0"
-    url = f"{settings.API_BASE_URL}/shipment/batch/{batch_id}/label?pageSize=A4&position=1&limit=200&offset=0"
-    # token = get_oauth_token()
-    params = {"Limit": 200, "Offset": 0, "position": 1, "pageSize": "A4"}
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json",
-    }
-
-    print("token", token, "url", url, "headers", headers)
-    response = requests.get(url, headers=headers, params=params)
-    print("Response Status Code:", response.status_code)
-    print("Response Headers:", response.headers)
-    print("Response Body:", response.text)
-
-    if response.status_code == 201:
-        # If the request was successful, return the label content
-        label_content = response.content
-        return HttpResponse(label_content, content_type="application/pdf")
-    else:
-        # If the request failed, return an error message
-        error_message = f"Error: {response.status_code} - {response.reason}"
-        return HttpResponse(error_message, status=response.status_code)
 
 
 
@@ -260,12 +243,11 @@ def download_pdf(batch_id, token, order_id):
     if response.status_code == 200 or 201:
         # Save the PDF into the STATIC_ROOT directory
         try:
-        
             data = response.json()
             print(data)
 
             ##shipment_number = data.get('shipmentNumber', [])
-            #print('this is shimpent number V2:', shipment_number)
+            # print('this is shimpent number V2:', shipment_number)
         except Exception as e:
             print("exception", e)
 
@@ -294,19 +276,16 @@ def download_pdf(batch_id, token, order_id):
     except Order.DoesNotExist:
         print(f"Error: Order with id {order_id} does not exist.")
 
-    """if response.status_code == 200:
-        # Print the response content (PDF content) to the console
-        # print(response.content)
-        with open("downloaded_pdf.pdf", "wb") as f:
-            f.write(response.content)
-        print("PDF saved successfully.")
-    else:
-        # Print detailed error information
-        print(f"Error: Failed to download PDF, status code: {response.status_code}")
-        print(response.text)"""
+    return
 
 
-"""download_pdf('b1853afd-1515-41ec-b073-a73439ce6711', 
-             'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxb2FKeG9vbGtDeENrQlZva1VWVE5SZXBrbEdFMEZRNUZfMHBnWXBYU1pZIn0.eyJleHAiOjE3MTcxODg2MTQsImlhdCI6MTcxNzE4NjgxNCwianRpIjoiOTAwZGZlZTUtZTZmOC00NTg5LWEwODMtNjZjYmU1NjY4ZGYwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLXRlc3QtY3VzdC5wcGwuY3ovYXV0aC9yZWFsbXMvaGZfY3pfbXlhcGkiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzBlM2ZkNDUtYzczNi00NTI0LTllMmMtZDA2MzYxMTRjYTM1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiVkE0NTM3MjkzIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm15YXBpLXNlcnZpY2UiLCJkZWZhdWx0LXJvbGVzLWhmX2N6X215YXBpIiwibXlhcGkuY2xpZW50Iiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoibXlhcGkyIiwiY2xpZW50SG9zdCI6IjEwLjI4LjI0MC4xOSIsImNsaWVudElkIjoiVkE0NTM3MjkzIiwiZXBzIjp7ImN1c3RvbWVyIjp7ImlkIjoyMDUwOTM3fX0sImNsaWVudEFkZHJlc3MiOiIxMC4yOC4yNDAuMTkifQ.ayCW5GXfMfoQPhn5v99sVSkRY2gmncq0_PREXL9XASFPotcTNy7pkv_YgbLk-GboyNVSSkE8_bCJJ9vsvr05COeMQoYiQ1AXLTJpWpWUIe_IfIFhXZKVEk1m77iUBqbUFXZxXyZEnmzxlvD9XbiamBf7pvUr3TwV_Y0FUgMGSJMbDxaYJBB0060cM4hpFTvEgY9P1QYKROB4FEN3ax3IqpXmYDyotOL-11-p57QEORrk351cW7m0b5jnIgrf2Btm7NEpLmEbc9iZBuhg3pULCOb-O8z1IC5_m_foahB5gFshK657q60SCcW0dvXj4dH72532I73CeiVzlB6fFkx67Q',
-             order_id=331)
-"""
+
+'''download_pdf('9cd03061-9047-4ee6-a41d-d0d08039ff92', 
+             'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxb2FKeG9vbGtDeENrQlZva1VWVE5SZXBrbEdFMEZRNUZfMHBnWXBYU1pZIn0.eyJleHAiOjE3MTg3NDQ5NTUsImlhdCI6MTcxODc0MzE1NSwianRpIjoiMTBiZTVmZmMtMjk1OC00NzBmLTg2ZjItMDRiMzU0MDQ3Nzg1IiwiaXNzIjoiaHR0cHM6Ly9hdXRoLXRlc3QtY3VzdC5wcGwuY3ovYXV0aC9yZWFsbXMvaGZfY3pfbXlhcGkiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzBlM2ZkNDUtYzczNi00NTI0LTllMmMtZDA2MzYxMTRjYTM1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiVkE0NTM3MjkzIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm15YXBpLXNlcnZpY2UiLCJkZWZhdWx0LXJvbGVzLWhmX2N6X215YXBpIiwibXlhcGkuY2xpZW50Iiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoibXlhcGkyIiwiY2xpZW50SG9zdCI6IjM1LjIzNC43OC4zMyIsImNsaWVudElkIjoiVkE0NTM3MjkzIiwiZXBzIjp7ImN1c3RvbWVyIjp7ImlkIjoyMDUwOTM3fX0sImNsaWVudEFkZHJlc3MiOiIzNS4yMzQuNzguMzMifQ.SC4gVrVtj1d_KPX_w6w9DPQC2iI58DRjvQUjieLlNsLd9ir15RGYH4abn6avfTOXPNHlh9kEKxvRKAQAZa9NDEFMVGy_V70jXsd0ICZkS1EL_aIawsLnpTHpNZsWqbq3wr-YTsvRsFDP3Wdk4uMS-42jRGRafvQlOa3bBTrPwnvJ4yhRKcF7QBjIUzydFheCJxxkfVwO8EXFbflEsO4-_vwC7ZwATx18md3uO6izQJltA-yQTYFF-sPWe6DVEV2cM8heVv18vGgGoGsjc05chi3AVr1X7rJrDinQmUyEgQmtsldah9jFLhqyBlGfSnboMNJkDZS_3cyAnrSPwNayOA',
+             order_id=456)
+'''
+
+
+#print(package_trigger(request=requests))
+# print(order_trigger(request=requests, batch_id='22d2ecf2-b2b7-45ef-90ea-fb8ee0082929', token='''eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxb2FKeG9vbGtDeENrQlZva1VWVE5SZXBrbEdFMEZRNUZfMHBnWXBYU1pZIn0.eyJleHAiOjE3MTcyNDQzMzEsImlhdCI6MTcxNzI0MjUzMSwianRpIjoiOTJhNDc4ZTgtYmY4Yy00ZTNiLTg3MmYtNWI5NGRhOTIxZTMyIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLXRlc3QtY3VzdC5wcGwuY3ovYXV0aC9yZWFsbXMvaGZfY3pfbXlhcGkiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzBlM2ZkNDUtYzczNi00NTI0LTllMmMtZDA2MzYxMTRjYTM1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiVkE0NTM3MjkzIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm15YXBpLXNlcnZpY2UiLCJkZWZhdWx0LXJvbGVzLWhmX2N6X215YXBpIiwibXlhcGkuY2xpZW50Iiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoibXlhcGkyIiwiY2xpZW50SG9zdCI6IjEwLjI4LjI0MC4yMCIsImNsaWVudElkIjoiVkE0NTM3MjkzIiwiZXBzIjp7ImN1c3RvbWVyIjp7ImlkIjoyMDUwOTM3fX0sImNsaWVudEFkZHJlc3MiOiIxMC4yOC4yNDAuMjAifQ.KsiLHuyppfIV_33KtfWnAZ7QhhYF0EbhvfKnEyNvaUJCdYMVg-mBP_V9DHLmkQ0P1KZbOYrIMvs9HIQfq1N0lI-rsBSnRH2ZyhyO0LjqFXDv-3Erg7cEO7M7o6wS4cO2CWHe5FhO9oDgs4uqyzdGW_xlFNXwkhiovt8H0xm_Y5BZ9Y9q4gJJN4SA-hbbq2YSyAqPqFpYfIQMO2FzIMSNDLBA8CN0hjc_udByWHWemuAzo-_GD6l9WfaH8EOa3pP7rQr5CLuZwSGNhKAzBGvs4NB1AHd-7mruXZOJS6-nak3p2AU5Ifi-wKs2EeV8HG2p9wcMBWbl6sF_0pzSsTfAmA''', order_id=349))
+# print(track_shipment(requests, ["81253538687"]))

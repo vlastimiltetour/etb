@@ -27,6 +27,7 @@ class Cart:
         self.shipping = self.session.get("cart_shipping")
         self.city = self.session.get("cart_city")
         self.zipcode = self.session.get("cart_zipcode")
+        self.unsuccessful_payment_rate = self.session.get("unsuccessful_payment_rate")
 
     def __iter__(self):  # this is a view
         item_ids = self.cart.keys()
@@ -153,43 +154,42 @@ class Cart:
         zpusob_vyroby_type_count = 0
         try:
             country = self.country.upper()
-        except AttributeError as e:
+        except AttributeError:
             country = self.country
 
-            
         shipping_type = self.shipping
         # price
         ppl_prices = {
-            "CZ": 11,
-            "PL": 22,
-            "SK": 22,
-            "DE": 22,
-            "BE": 33,
-            "BG": 33,
-            "DK": 33,
-            "EE": 33,
-            "FI": 33,
-            "FR": 33,
-            "HR": 33,
-            "IE": 33,
-            "IT": 33,
-            "LT": 33,
-            "LV": 33,
-            "LU": 33,
-            "HU": 33,
-            "NL": 33,
-            "PT": 33,
-            "RO": 33,
-            "GR": 33,
-            "SI": 33,
-            "ES": 33,
-            "SE": 33,
-            "AT": 33,
+            "CZ": 119,
+            "PL": 150,
+            "SK": 150,
+            "DE": 150,
+            "BE": 150,
+            "BG": 150,
+            "DK": 150,
+            "EE": 150,
+            "FI": 150,
+            "FR": 150,
+            "HR": 150,
+            "IE": 150,
+            "IT": 150,
+            "LT": 150,
+            "LV": 150,
+            "LU": 150,
+            "HU": 150,
+            "NL": 150,
+            "PT": 150,
+            "RO": 150,
+            "GR": 150,
+            "SI": 150,
+            "ES": 150,
+            "SE": 150,
+            "AT": 150,
         }
 
         zasilkovna_prices = {"CZ": 89, "SK": 99}
 
-        parcelbox = {"CZ": 1, "SK": 2, "PL": 2, "DE": 2}
+        parcelbox = {"CZ": 89, "SK": 130, "PL": 130, "DE": 130}
 
         # Get the country from the cart data
 

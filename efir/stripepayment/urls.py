@@ -13,6 +13,9 @@ urlpatterns = [
     path("webhook/", webhooks.stripe_webhook, name="stripe_webhook"),
     path("create_label/", views.ppl_create_label_view, name="create_label"),
     path(
+        "unsuccessful_payment/", views.unsuccessful_payment, name="unsuccessful_payment"
+    ),
+    path(
         "zasilkovna-create-package/",
         views.zasilkovna_create_package,
         name="zasilkovna_create_package",

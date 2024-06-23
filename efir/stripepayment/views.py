@@ -262,13 +262,25 @@ def payment_completed(request):
     try:
         if certificate is True:
             print("ANO ANO ANO YES posli potvzrni certifikatu")
-            certificate_order_email_confirmation(order_id)
-            time.sleep(5)
+            try:
+                certificate_order_email_confirmation(order_id)
+                time.sleep(5)
+            except UnicodeEncodeError as e:
+                 logging.info(f"There is an error with {order_id}, {e}")
+            except ValueError as e:
+                 logging.info(f"There is an error with {order_id}, {e}")
 
         else:
-            print("NE NE NE NE NE neposli potvrzeni certifikatu")
-            customer_order_email_confirmation(order_id)
-            time.sleep(5)
+            
+            try:
+                print("NE NE NE NE NE neposli potvrzeni certifikatu")
+                customer_order_email_confirmation(order_id)
+                time.sleep(5)
+            except UnicodeEncodeError as e:
+                 logging.info(f"There is an error with {order_id}, {e}")
+            except ValueError as e:
+                 logging.info(f"There is an error with {order_id}, {e}")
+
 
     except ssl.SSLCertVerificationError:
         logging.info(
@@ -291,7 +303,7 @@ def payment_completed(request):
     if cart.shipping == "Z":
         zasilkovna_create_package(order_id)
         print("Zasilkovna package has been created")
-    elif cart.shipping == "P":
+    elif cart.shipping == "P" or "D":
         ppl_create_label_view(request, order_id)
         print("PPL package has been created")
     elif cart.shipping == "O":
@@ -301,6 +313,10 @@ def payment_completed(request):
 
 
 def payment_canceled(request):
+    for key, value in request.session.items():
+        if isinstance(value, Decimal):
+            value = str(value)
+        print(f"Key: {key}, Value: {value}, type{type(value)}")
     try:
         coupon_id = request.session.get("coupon_id")
     except Exception:
@@ -308,19 +324,22 @@ def payment_canceled(request):
 
     order_id = request.session.get("order_id")
     print("oh year this is order_id", order_id)
+
     cart = Cart(request)
 
     try:
-        customer_order_email_confirmation(order_id)
-        print("customer email byl odeslan ale neni zaplaceno")
         time.sleep(5)
+        unpaid_customer_order_email_confirmation(order_id)
+
+        print("customer email byl odeslan ale neni zaplaceno")
+
     except ssl.SSLCertVerificationError:
         logging.info(
-            f"Local environment, no email sending service. Order ID: {order_id}"
+            f"customer email byl odeslan ale neni zaplaceno. Local environment, no email sending service. Order ID: {order_id}"
         )
     except smtplib.SMTPSenderRefused as e:
         logging.error(
-            f"SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
+            f"customer email byl odeslan ale neni zaplaceno. SMTP Sender Refused Error: {e}. Check SMTP policies. Order ID: {order_id}"
         )
 
     try:
@@ -330,14 +349,35 @@ def payment_canceled(request):
 
     if cart.shipping == "Z":
         # zasilkovna_create_package(order_id)
-        print("Zasilkovna package has been created")
+        print("payment canceled Zasilkovna package has not been created")
     elif cart.shipping == "P" or "D":
-        ppl_create_label_view(request, order_id)
-        print("PPL package has been created")
+        #ppl_create_label_view(request, order_id)
+        print("Payment canceled PPL package has not been created")
     elif cart.shipping == "O":
         print("Online delivery has been requested")
 
+    try:
+        if "unsuccessful_payment_rate" not in request.session:
+            request.session["unsuccessful_payment_rate"] = 0
+            request.session.save()
+
+    except KeyError:
+        request.session["unsuccessful_payment_rate"] = 0
+        request.session.save()
+
+    # Increment the unsuccessful_payment_rate
+    request.session["unsuccessful_payment_rate"] += 1
+
+    # Check if unsuccessful_payment_rate exceeds the threshold
+    if request.session["unsuccessful_payment_rate"] > 1:
+        request.session["unsuccessful_payment_rate"] = 0
+        return redirect("stripepayment:unsuccessful_payment")
+
     return render(request, "stripe/canceled.html")
+
+
+def unsuccessful_payment(request):
+    return render(request, "stripe/unsuccessful_payment.html")
 
 
 import json
@@ -398,9 +438,7 @@ def ppl_create_shipment_payload(request, order_id):
     if order.country == "CZ":
         product_type = "BUSS"
     else:
-        product_type = "IMPO"
-        
-        
+        product_type = "CONN"
 
     print("this is product type", product_type)
 

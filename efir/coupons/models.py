@@ -39,9 +39,9 @@ class Coupon(models.Model):
         max_length=10, default="N/A", verbose_name="Nakoupeno v objednavce (ID)"
     )
     certificate_from = models.CharField(
-        max_length=20, default="-", verbose_name="Do koho"
+        max_length=100, default="-", verbose_name="Do koho"
     )
-    certificate_to = models.CharField(max_length=20, default="-", verbose_name="Komu")
+    certificate_to = models.CharField(max_length=100, default="-", verbose_name="Komu")
 
     def __str__(self):
         return self.code

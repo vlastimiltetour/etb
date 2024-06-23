@@ -237,6 +237,8 @@ async></script>
          {% csrf_token %}
       </form>
       {% endif %}
+
+   
    </div>
    <section class="jumbotron text-center">
       <div class="container">
@@ -478,6 +480,10 @@ async></script>
                {% csrf_token %}
             </form>
             {% endif %}
+            {% if alert_message %}
+            {{ alert_message }}
+            {% endif %}
+            
             
          </div>
          <!-- End Shopping Cart Section-->
@@ -1067,7 +1073,7 @@ function checkIfCertificate() {
       const shippingSelect = document.getElementById('cart_shipping');
       const onlineAddress = document.getElementById('onlineAddress');
 
-      // Check if the shippingSelect element xists
+      // Check if the shippingSelect element exists
       if (!shippingSelect) {
          alert("Error: id_shipping element not found.");
          return;
@@ -1093,7 +1099,7 @@ function checkIfCertificate() {
 
 
    function selectPPLShipping() {
-         alert("PPL je prozatím v zaváděcím režimu. Nepoužívejte tento způsob doručení.")
+         alert("PPL je prozatím v zaváděcím režimu - v tuto chvíli doručujeme pouze v Česku. PPL is currently in a rollout mode - we only deliver in the Czech Republic at the moment.")
          const pplMap = document.getElementById("ppl-parcelshop-map");
 
          if (pplMap) {
@@ -1150,7 +1156,7 @@ function checkIfCertificate() {
 
       
       function selectHomePPLDelivery() {
-      alert("PPL je prozatím v zaváděcím režimu. Nepoužívejte tento způsob doručení.")       
+      alert("PPL je prozatím v zaváděcím režimu - v tuto chvíli doručujeme pouze v Česku. PPL is currently in a rollout mode - we only deliver in the Czech Republic at the moment.")       
     const selectedDeliveryType = document.getElementById("selected_type_delivery");
     const selectedDeliveryTypePplForced = document.getElementById("selected_type_delivery_ppl_forced");
     const HomeDelivery = document.querySelector("#HomeDelivery");
