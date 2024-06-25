@@ -39,9 +39,29 @@ class Coupon(models.Model):
         max_length=10, default="N/A", verbose_name="Nakoupeno v objednavce (ID)"
     )
     certificate_from = models.CharField(
-        max_length=100, default="-", verbose_name="Do koho"
+        max_length=110, default="-", verbose_name="Do koho"
     )
-    certificate_to = models.CharField(max_length=100, default="-", verbose_name="Komu")
+    certificate_to = models.CharField(max_length=110, default="-", verbose_name="Komu")
+
+    category_types = [
+        ("Dárkový certifikát", "Dárkový certifikát"),
+        ("Sleva na první nákup", "Sleva na první nákup"),
+        ("Odměna 30 dní po 1. nákupu", "Odměna 30 dní po 1. nákupu"),
+        (
+            "Sleva po 3 měsících", "Sleva po 3 měsících"
+        ),
+        ("Přání k svátku", "Přání k svátku"),
+        ("Osobní slevový kód", "Osobní slevový kód"),
+("-", "-"),
+    ]
+
+    category = models.CharField(
+        max_length=100,
+        choices=category_types,
+        verbose_name="Kategorie",
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.code

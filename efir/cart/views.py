@@ -227,6 +227,7 @@ def cart_detail(request, zasilkovna=True):
                     discount_value = item_product.certificate.discount_value
                     discount_type = item_product.certificate.discount_type
                     discount_treshold = item_product.certificate.discount_threshold
+                    certificate_category = "Dárkový certifikát"
                     print("this is order_item id", order_item.id)
                     ##rekl bych ze sem nekam ten coupon
                     coupon_create(
@@ -234,6 +235,7 @@ def cart_detail(request, zasilkovna=True):
                         discount_value,
                         discount_type,
                         discount_treshold,
+                        category=certificate_category,
                         id=order.etb_id,
                         orderitem_id=order_item.id,
                         certificate_from=order_item.certificate_from,

@@ -72,6 +72,7 @@ def coupon_create(
     discount_value,
     discount_type,
     discount_threshold,
+    category,
     id,
     orderitem_id,
     certificate_from,
@@ -94,6 +95,7 @@ def coupon_create(
         discount_value=discount_value,
         discount_threshold=discount_threshold,
         discount_type=discount_type,
+        category=category,
         active=active,
         redeemed=redeemed,
         order_id=id,
@@ -101,10 +103,14 @@ def coupon_create(
         certificate_to=certificate_to,
     )
 
-    product_orderitem = OrderItem.objects.get(id=orderitem_id)
-    product_orderitem.slevovy_kod = coupon.code
-    product_orderitem.hodnota_kuponu = coupon.discount_value
-    product_orderitem.save()
+    try:
+        product_orderitem = OrderItem.objects.get(id=orderitem_id)
+        product_orderitem.slevovy_kod = coupon.code
+        product_orderitem.hodnota_kuponu = coupon.discount_value
+        product_orderitem.save()
+    except OrderItem.DoesNotExist:
+        # Handle the case where the OrderItem does not exist
+        product_orderitem = None  # Or any default value or action you want to take
 
     # Storing coupon_id in session
     # request.session["newly_created_coupon_id"] = coupon_id
@@ -119,3 +125,59 @@ def generate_voucher_code(length):
     )  # Use uppercase letters and numbers
     voucher_code = "".join(random.choice(characters) for _ in range(length))
     return voucher_code
+
+
+def generate_vouchers(request):
+    for i in range(200):
+        coupon_create(
+            request,
+            id=0,
+            orderitem_id=0,
+            category="Sleva na první nákup",
+            discount_value=300,
+            discount_type="Částka",
+            discount_threshold=1,
+            certificate_from="-",
+            certificate_to="-",
+        )
+
+    for i in range(200):
+        coupon_create(
+            request,
+            id=0,
+            orderitem_id=0,
+            category="Odměna 30 dní po 1. nákupu",
+            discount_value=10,
+            discount_type="Procento",
+            discount_threshold=1,
+            certificate_from="-",
+            certificate_to="-",
+        )
+
+    for i in range(200):
+        coupon_create(
+            request,
+            id=0,
+            orderitem_id=0,
+            category="Sleva po 3 měsících",
+            discount_value=10,
+            discount_type="Procento",
+            discount_threshold=1,
+            certificate_from="-",
+            certificate_to="-",
+        )
+
+    for i in range(300):
+        coupon_create(
+            request,
+            id=0,
+            orderitem_id=0,
+            category="Přání k svátku",
+            discount_value=15,
+            discount_type="Procento",
+            discount_threshold=1,
+            certificate_from="-",
+            certificate_to="-",
+        )
+
+    return HttpResponse("Vouchers have been created")
