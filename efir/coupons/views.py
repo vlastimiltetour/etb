@@ -127,7 +127,7 @@ def generate_voucher_code(length):
     return voucher_code
 
 
-def generate_vouchers(request):
+def generate_vouchers_X(request):
     for i in range(200):
         coupon_create(
             request,
@@ -179,5 +179,139 @@ def generate_vouchers(request):
             certificate_from="-",
             certificate_to="-",
         )
+
+    return HttpResponse("Vouchers have been created")
+
+
+from datetime import datetime
+
+from django.db import transaction
+
+from .models import Coupon
+
+
+def generate_vouchers(request):
+    coupons_data = [
+        {
+            "code": "252FZ6TO",
+            "order_id": "24062012",
+            "valid_from": "2024-06-20",
+            "valid_to": "2024-12-17",
+            "discount_type": "Částka",
+        },
+        {
+            "code": "2YZH2N5D",
+            "order_id": "24062000",
+            "valid_from": "2024-06-20",
+            "valid_to": "2024-12-17",
+            "discount_type": "Částka",
+        },
+        {
+            "code": "LUCIE20",
+            "order_id": "N/A",
+            "valid_from": "2024-06-11",
+            "valid_to": "2024-12-11",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "9SS6XAKA",
+            "order_id": "24061003",
+            "valid_from": "2024-06-10",
+            "valid_to": "2024-12-07",
+            "discount_type": "Částka",
+        },
+        {
+            "code": "KLARA",
+            "order_id": "N/A",
+            "valid_from": "2024-06-10",
+            "valid_to": "2024-12-31",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "TEREZA",
+            "order_id": "N/A",
+            "valid_from": "2024-05-31",
+            "valid_to": "2024-12-31",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "ROZA",
+            "order_id": "N/A",
+            "valid_from": "2024-05-26",
+            "valid_to": "2024-12-31",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "NADYA",
+            "order_id": "N/A",
+            "valid_from": "2024-05-26",
+            "valid_to": "2024-12-31",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "ANASTASIA",
+            "order_id": "N/A",
+            "valid_from": "2024-05-26",
+            "valid_to": "2024-12-31",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "KSENIA",
+            "order_id": "N/A",
+            "valid_from": "2024-05-26",
+            "valid_to": "2024-12-31",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "DARIA",
+            "order_id": "N/A",
+            "valid_from": "2024-05-26",
+            "valid_to": "2024-12-31",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "KATUS15",
+            "order_id": "N/A",
+            "valid_from": "2024-06-01",
+            "valid_to": "2024-06-01",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "ADRI15",
+            "order_id": "N/A",
+            "valid_from": "2024-05-24",
+            "valid_to": "2024-06-03",
+            "discount_type": "Procento",
+        },
+        {
+            "code": "5VERZAK342",
+            "order_id": "N/A",
+            "valid_from": "2024-05-19",
+            "valid_to": "2024-05-23",
+            "discount_type": "Částka",
+        },
+    ]
+
+    with transaction.atomic():
+        for data in coupons_data:
+            coupon, created = Coupon.objects.get_or_create(
+                code=data["code"],
+                defaults={
+                    "valid_from": datetime.strptime(
+                        data["valid_from"], "%Y-%m-%d"
+                    ).date(),
+                    "valid_to": datetime.strptime(data["valid_to"], "%Y-%m-%d").date(),
+                    "discount_type": data["discount_type"],
+                    "discount_threshold": 1,
+                    "certificate_from": "-",
+                    "certificate_to": "-",
+                    "category": "-",
+                    "order_id": data["order_id"],
+                    "active": True,
+                },
+            )
+            if not created:
+                # Handle cases where the coupon already exists
+                pass
 
     return HttpResponse("Vouchers have been created")

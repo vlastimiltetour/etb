@@ -78,7 +78,7 @@ class FilterForm(forms.Form):
         ("Brazilky na gumičkách", "Brazilky na gumičkách"),
         ("V-string", "V-string"),
         ("Vysoká tanga", "Vysoká tanga"),
-        ("Podvazkový pás s gumičkami", "Podvazkový pás s gumičkami"),
+        ("Podvazkový pas s gumičkami", "Podvazkový pas s gumičkami"),
         ("Bezkosticová podprsenka", "Bezkosticová podprsenka"),
         ("Podprsenka s kosticemi", "Podprsenka s kosticemi"),
         (

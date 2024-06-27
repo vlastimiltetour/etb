@@ -21,6 +21,7 @@ from cart.forms import CartAddProductForm
 from catalog.forms import (ContactForm, CreateSetForm, FilterForm,
                            MappingSetNaMiruForm)
 from catalog.mail_conf import siti_na_miru_email_confirmation
+from coupons.views import *
 from inventory.models import Inventory
 from orders.mail_confirmation import *
 from stripepayment.views import *
@@ -151,25 +152,31 @@ def catalog_product_list(request, category_slug=None):
         query_filters &= Q(category__name=category_session[0])
 
     if cut_selection_session:
+        cut_selection_session = cut_selection_session[0]
         if type(cut_selection_session) == str:
+            print("type 1")
             if cut_selection_session == "Brazilky":
                 # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
-                query_filters &= Q(short_description__icontains="Brazilky")
+                query_filters &= Q(short_description__iexact="Brazilky")
                 query_filters &= ~Q(
-                    short_description__icontains="Brazilky na gumičkách"
+                    short_description__iexact="Brazilky na gumičkách"
                 )
+                print("type 2")
             elif cut_selection_session == "Podprsenka s kosticemi":
                 # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
                 query_filters &= Q(
-                    short_description__icontains="Podprsenka s kosticemi"
+                    short_description__iexact="Podprsenka s kosticemi"
                 )
                 query_filters &= ~Q(
-                    short_description__icontains="Podprsenka s kosticemi a otevřeným košíčkem"
+                    short_description__iexact="Podprsenka s kosticemi a otevřeným košíčkem"
                 )
+                print("type 3")
 
             else:
-                query_filters &= Q(short_description__icontains=cut_selection_session)
+                query_filters &= Q(short_description__iexact=cut_selection_session)
+                print("type 4")
         else:
+            print("type 5")
             pass
 
     if zpusob_vyroby_session:
@@ -189,14 +196,16 @@ def catalog_product_list(request, category_slug=None):
         category = get_object_or_404(Category, slug=category_slug)
 
         products = (
-            products.filter(category=category).exclude(category__name="Dárkové certifikáty")
+            products.filter(category=category)
+            .exclude(category__name="Dárkové certifikáty")
             .filter(query_filters)
             .order_by(sort_by_price_session)
         )
 
     else:
         products = (
-            Product.objects.filter(query_filters).exclude(category__name="Dárkové certifikáty")
+            Product.objects.filter(query_filters)
+            .exclude(category__name="Dárkové certifikáty")
             .order_by(sort_by_price_session)
             .filter(active=True)
         )
@@ -317,6 +326,7 @@ def product_detail(
         f"this is the product id of the product {product.name}, {id} and recommended products  {recommended}"
     )
 
+    # print("these are recomennded products", recommend_products(product.name))
     if str(product.category) == "Dárkové certifikáty":
         pass
 
