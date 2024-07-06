@@ -4,6 +4,10 @@
 {% load humanize %}
 {% block content %}
 
+
+
+
+
 <script type="text/javascript" src="https://www.ppl.cz/sources/map/main.js"
 async></script>
 <link rel="stylesheet" href="https://www.ppl.cz/sources/map/main.css">
@@ -226,19 +230,23 @@ async></script>
    </div>
    <br>
    <div>
+     
+      
       {% if cart.coupon %}
       {% else %}
       
       <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
          <div class="input-group">
-            {{ coupon_form }} 
+            {{ coupon_form }}
             <button type="submit" class="btn btn-secondary">Uplatnit</button>
          </div>
          {% csrf_token %}
+
+     
       </form>
       {% endif %}
+     
 
-   
    </div>
    <section class="jumbotron text-center">
       <div class="container">
@@ -466,25 +474,31 @@ async></script>
             
             <form class="card p-2" action="{% url 'coupons:delete' %}" method="post">
                <div class="input-group">
-                  <button type="submit" class="btn btn-secondary">Odebrat</button>
+                  <button type="submit" class="btn btn-secondary">Odebrat kupón</button>
                </div>
                {% csrf_token %}
             </form>
             {% else %}
             
-            <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
-               <div class="input-group">
-                  {{ coupon_form }} 
-                  <button type="submit" class="btn btn-secondary">Uplatnit</button>
-               </div>
-               {% csrf_token %}
-            </form>
-            {% endif %}
-            {% if alert_message %}
-            {{ alert_message }}
-            {% endif %}
             
+                     <form class="card p-2" action="{% url 'coupons:apply' %}" method="post">
+                        <div class="input-group">
+                           {{ coupon_form }} 
+                           <button type="submit" class="btn btn-secondary">Uplatnit</button>
+                        </div>
+                        {% csrf_token %}
+                     </form>
+            {% endif %}
+            {% if messages %}
             
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show mt-3" role="alert">
+                        {{ message }}
+                     
+                    </div>
+                {% endfor %}
+                {% endif %}
+
          </div>
          <!-- End Shopping Cart Section-->
          <!-- Form Template -->

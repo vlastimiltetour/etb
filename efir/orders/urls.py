@@ -7,9 +7,6 @@ app_name = "orders"
 
 
 urlpatterns = [
-    path(
-        "objednavka_vytvorena", views.objednavka_vytvorena, name="objednavka_vytvorena"
-    ),
     path("invoice", views.invoice, name="invoice"),
     path("contact_form", views.contact_form, name="contact_form"),
     path(
@@ -18,6 +15,10 @@ urlpatterns = [
         name="download_ppl_label",
     ),
     path("new", views.new_order, name="new_order"),
-    path("send_offer_confirmation/<int:order_id>/", views.send_offer_confirmation, name="send_offer_confirmation"),
-
+    path(
+        "send_offer_confirmation/<int:order_id>/",
+        views.send_offer_confirmation,
+        name="send_offer_confirmation",
+    ),
+    path("update_orders", views.update_orders, name="update_orders"),
 ]

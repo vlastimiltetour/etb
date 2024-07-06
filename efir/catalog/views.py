@@ -30,11 +30,17 @@ from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
                      MappingSetNaMiru, Product, ProductSet, RightdPhoto,
                      UniqueSetCreation)
 
+from .models import ContactModel
+
+def create_contact(request):
+    contact_instance = ContactModel(name="John Doe", email="john.doe@example.com", message="Hello, this is a test message.")
+    contact_instance.save()
+    return HttpResponse(f"Contact created with id: {contact_instance.id}")
 
 def home(request, category_slug=None):
     # token = get_oauth_token()
     # print("this is token", token)
-
+    # this is to create fake contact email create_contact(request=requests)
     category = None
     categories = Category.objects.all()
     best_sellers = Product.objects.filter(bestseller=True, active=True)
@@ -153,6 +159,7 @@ def catalog_product_list(request, category_slug=None):
 
     if cut_selection_session:
         cut_selection_session = cut_selection_session[0]
+        print(cut_selection_session)
         if type(cut_selection_session) == str:
             print("type 1")
             if cut_selection_session == "Brazilky":
@@ -171,6 +178,14 @@ def catalog_product_list(request, category_slug=None):
                     short_description__iexact="Podprsenka s kosticemi a otevřeným košíčkem"
                 )
                 print("type 3")
+
+            elif cut_selection_session == "Podvazkový pas s gumičkami":
+                # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
+                query_filters &= Q(
+                    short_description__icontains=cut_selection_session
+                )
+              
+                print("type 6")
 
             else:
                 query_filters &= Q(short_description__iexact=cut_selection_session)
@@ -382,6 +397,8 @@ def obchodni_podminky(request):
 from django.template.loader import render_to_string
 
 
+
+
 # https://mailtrap.io/blog/django-contact-form/
 def kontakty(request):
     categories = Category.objects.all()
@@ -399,7 +416,9 @@ def kontakty(request):
             contact_model = ContactModel(name=name, email=email, message=message)
             contact_model.save()
 
-            html_content = render_to_string("orders/contact_form.html")
+            contact_msg = get_object_or_404(ContactModel, id=contact_model.id)
+
+            html_content = render_to_string("orders/contact_form.html", {"contact_msg": contact_msg})
             msg = EmailMultiAlternatives(
                 subject=(f"Kontaktní formulář: dotaz od {name}"),
                 from_email="objednavky@efirthebrand.cz",

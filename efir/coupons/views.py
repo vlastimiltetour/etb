@@ -2,6 +2,7 @@ import random
 import string
 from datetime import datetime, timedelta
 
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
@@ -22,13 +23,21 @@ def coupon_apply(request):
         print(code)
         try:
             coupon = Coupon.objects.get(
-                code__iexact=code, valid_from__lte=now, valid_to__gte=now, active=True
+                code__iexact=code, valid_from__lte=now, valid_to__gte=now
             )
-            if coupon.capacity > 0:
+            if coupon.capacity > 0 and coupon.active:
                 request.session["coupon_id"] = coupon.id
+                messages.success(request, "Kupón byl úspěšně použit.")
+
+            elif not coupon.active:
+                # return HttpResponse("Coupon has been applied")
+                messages.warning(
+                    request, "Tento kupón byl již použit, nebo je neaktivní."
+                )
 
         except Coupon.DoesNotExist:
             request.session["coupon_id"] = None
+            messages.error(request, "Tento kupón není v databázi.")
 
     return redirect("cart:cart_detail")
 
@@ -80,7 +89,7 @@ def coupon_create(
 ):
     code = generate_voucher_code(8)
     valid_from = datetime.now()
-    valid_to = valid_from + timedelta(days=180)
+    valid_to = valid_from + timedelta(days=365)
     print(f"this is coupon create function, and this is discount {discount_value}")
     active = True
     redeemed = False
@@ -119,6 +128,7 @@ def coupon_create(
     return HttpResponse(f"Coupon created successfully! {coupon}")
 
 
+
 def generate_voucher_code(length):
     characters = (
         string.ascii_uppercase + string.digits
@@ -127,7 +137,13 @@ def generate_voucher_code(length):
     return voucher_code
 
 
-def generate_vouchers_X(request):
+def repair_vouchers(request):
+    coupons_all = Coupon.objects.filter(category="Sleva po 3 měsících")
+    coupons_all.update(discount_value=0.1)
+    return HttpResponse("Vouchers have been corrected")
+
+
+def generate_vouchers(request):
     for i in range(200):
         coupon_create(
             request,
@@ -147,7 +163,7 @@ def generate_vouchers_X(request):
             id=0,
             orderitem_id=0,
             category="Odměna 30 dní po 1. nákupu",
-            discount_value=10,
+            discount_value=20,
             discount_type="Procento",
             discount_threshold=1,
             certificate_from="-",
@@ -190,7 +206,7 @@ from django.db import transaction
 from .models import Coupon
 
 
-def generate_vouchers(request):
+def generate_vouchers_2(request):
     coupons_data = [
         {
             "code": "252FZ6TO",

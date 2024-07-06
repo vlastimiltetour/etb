@@ -88,26 +88,22 @@ def calculate_shipping_price(country_code):
 
 
 def invoice(request):
-    id = 150
+    id = 413
     order = get_object_or_404(Order, id=id)
     print(order)
     return render(request, "orders/invoice_pdf.html", {"order": order})
 
 
-def objednavka_vytvorena_order(request):
-    id = 231
-    order = get_object_or_404(Order, id=id)
-    print(order)
-    return render(request, "orders/customer_email_confirmation.html", {"order": order})
 
-
-def objednavka_vytvorena(request):
-    id = 302
     order = get_object_or_404(Order, id=id)
 
     print(order)
     return render(request, "orders/certificate_confirmation.html", {"order": order})
 
+def update_orders(request):
+    selected_order = Order.objects.filter(id=939)
+    selected_order.update(discount=-300, total_cost=2029)
+    return HttpResponse("Order has been corrected")
 
 def contact_form(request):
     return render(request, "orders/contact_form.html")

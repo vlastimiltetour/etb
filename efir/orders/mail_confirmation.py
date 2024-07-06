@@ -25,7 +25,7 @@ def customer_order_email_confirmation(order_id):
         subject=(f"Vaše objednávka #{order.etb_id} je potvrzena [ZAPLACENO]."),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email],
-        bcc=["objednavky@efirthebrand.cz"],
+        bcc=["v.tetour@gmail.com", "objednavky@efirthebrand.cz"],
     )
     msg.attach_alternative(html_content, "text/html")
     msg.attach(f"Objednavka {order.etb_id}.pdf", out.getvalue(), "application/pdf")
@@ -45,10 +45,10 @@ def unpaid_customer_order_email_confirmation(order_id):
         "orders/unpaid_customer_email_confirmation.html", {"order": order}
     )
     msg = EmailMultiAlternatives(
-        subject=(f"Vaše objednávka #{order.etb_id} je potvrzena [NEUHRAZENO]"),
+        subject=(f"Vaše objednávka #{order.etb_id} je potvrzen [NEUHRAZENO]"),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email],
-        bcc=["objednavky@efirthebrand.cz"],
+        bcc=["objednavky@efirthebrand.cz", "v.tetour@gmail.com"],
     )
     msg.attach_alternative(html_content, "text/html")
     return msg.send()
@@ -76,16 +76,20 @@ def certificate_order_email_confirmation(order_id):
 
 
 def send_offer_confirmation(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
+    order = Order.objects.get(id=order_id)
     html_content = render_to_string(
-        "orders/customer_email_confirmation.html", {"order": order}
+        "orders/unpaid_customer_email_confirmation.html", {"order": order}
     )
     msg = EmailMultiAlternatives(
-        subject=f"Vaše objednávka #{order.etb_id} je potvrzena.",
+        subject=(f"Vaše objednávka #{order.etb_id} je potvrzen [NEUHRAZENO]"),
         from_email="objednavky@efirthebrand.cz",
-        to=[order.email, "objednavky@efirthebrand.cz"],
+        to=[order.email],
+        bcc=["objednavky@efirthebrand.cz", "v.tetour@gmail.com"],
     )
     msg.attach_alternative(html_content, "text/html")
+    return msg.send()
+
+
     try:
         msg.send()
         return HttpResponse("Confirmation email sent successfully.")
