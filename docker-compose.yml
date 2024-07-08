@@ -7,7 +7,7 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - DJANGO_SETTINGS_MODULE=efir.settings.prod
+      - DJANGO_SETTINGS_MODULE=efir.settings.prod_spaces
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -15,6 +15,7 @@ services:
     build: .
     command: >
       sh -c "python ./efir/manage.py collectstatic --no-input &&
+
             python ./efir/manage.py makemigrations --no-input &&
             python ./efir/manage.py migrate --no-input &&
             ./wait-for-it.sh db:5432 -- uwsgi --ini /code/config/uwsgi/uwsgi.ini"

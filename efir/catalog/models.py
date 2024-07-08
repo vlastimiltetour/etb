@@ -1,7 +1,8 @@
 from django.core.validators import EmailValidator
 from django.db import models
 from django.urls import reverse  # this is when calling an address by name
-from PIL import Image, ImageOps
+
+from efir.settings.storage_backends import MediaStorage
 
 
 # Create your models here.
@@ -160,17 +161,28 @@ class ZpusobVyroby(models.Model):
         super().save(*args, **kwargs)
 
 
-# import PIL for image resizing
-
-
 class Photo(models.Model):
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="photos"
     )
-    photo = models.ImageField(upload_to="catalog/%Y/%m/%d")
+    photo = models.ImageField(upload_to="catalog/%Y/%m/%d", storage=MediaStorage())
+
+    class Meta:
+        verbose_name = "Fotografie"
+        verbose_name_plural = "Fotografie"
+
+
+# import PIL for image resizing
+'''
+class Photo(models.Model):
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="photos"
+    )
+    photo = models.ImageField(upload_to="catalog/%Y/%m/%d", storage=MediaStorage())
 
     # resizing the image, you can change parameters like size and quality.
     def save(self, *args, **kwargs):
+        quality = kwargs.pop("quality", None)
         super(Photo, self).save(*args, **kwargs)
         img = Image.open(self.photo.path)
         if img.height > 1125 or img.width > 1125:
@@ -179,11 +191,41 @@ class Photo(models.Model):
         img = ImageOps.exif_transpose(img)
         img = img.rotate(0, expand=True)
 
-        img.save(self.photo.path, quality=70, optimize=True)
+        if quality is not None:
+            img.save(self.photo.path, quality=quality, optimize=True)
+        else:
+            img.save(self.photo.path, optimize=True)
 
     class Meta:
         verbose_name = "Fotografie"
-        verbose_name_plural = "Fotografie"
+        verbose_name_plural = "Fotografie"'''
+
+
+'''class Photo(models.Model):
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="photos"
+    )
+    photo = models.ImageField(upload_to="catalog/%Y/%m/%d")
+
+    # resizing the image, you can change parameters like size and quality.
+    def save(self, *args, **kwargs):
+        quality = kwargs.pop("quality", None)
+        super(Photo, self).save(*args, **kwargs)
+        img = Image.open(self.photo.path)
+        if img.height > 1125 or img.width > 1125:
+            img.thumbnail((1125, 1125))
+        # Force the image to be in an upright position (vertical)
+        img = ImageOps.exif_transpose(img)
+        img = img.rotate(0, expand=True)
+
+        if quality is not None:
+            img.save(self.photo.path, quality=quality, optimize=True)
+        else:
+            img.save(self.photo.path, optimize=True)
+
+    class Meta:
+        verbose_name = "Fotografie"
+        verbose_name_plural = "Fotografie"'''
 
 
 # https://mailtrap.io/blog/django-contact-form/
@@ -357,7 +399,9 @@ class MappingSetNaMiru(models.Model):
     set_selection = models.CharField(max_length=255)
     gdpr_consent = models.BooleanField()
     newsletter_consent = models.BooleanField(null=True)
-    created = models.DateTimeField(verbose_name="Vytvořeno", default="2020-01-01T00:00:00Z")
+    created = models.DateTimeField(
+        verbose_name="Vytvořeno", default="2020-01-01T00:00:00Z"
+    )
 
     class Meta:
         verbose_name = "Dotazník šití na míru"

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from .base import *
+
 DJANGO_SETTINGS_MODULE = "efir.settings.local"
 
 import logging
@@ -53,6 +55,11 @@ DEBUG = os.getenv("DEBUG")
 
 
 # Application definition
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",  # this is default
+    "guardian.backends.ObjectPermissionBackend",
+)
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -72,6 +79,7 @@ INSTALLED_APPS = [
     "newsletter.apps.NewsletterConfig",
     "inventory.apps.InventoryConfig",
     "django_recaptcha",
+    "storages",
 ]
 
 
@@ -80,6 +88,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -140,10 +149,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
+# settings.py
 
-LANGUAGE_CODE = 'cs'  # Set language code for Czech
+LANGUAGE_CODE = "cs"  # Set language code for Czech
 
-TIME_ZONE = 'Europe/Prague'  # Set timezone for Czech Republic
+TIME_ZONE = "Europe/Prague"  # Set timezone for Czech Republic
 
 USE_I18N = True  # Enable internationalization
 
@@ -151,12 +161,10 @@ USE_L10N = True  # Enable localization
 
 USE_TZ = True  # Enable timezone support
 
-#to generate humanize cs currency
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 USE_THOUSAND_SEPARATOR = True
-
-THOUSAND_SEPARATOR = ' '
+THOUSAND_SEPARATOR = " "
 
 
 # Static files (CSS, JavaScript, Images)
@@ -170,14 +178,10 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 # to allow handling larger files
 FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 
+AWS_S3_ENDPOINT_URL = (
+    "https://etb.fra1.digitaloceanspaces.com"  # Change to your region's endpoint
+)
 
-STATIC_URL = "static/"
-
-# generating pdf
-STATIC_ROOT = BASE_DIR / "static"
-
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -216,5 +220,56 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 ZASILKOVNA_API_KEY = os.getenv("ZASILKOVNA_API_KEY")
 ZASILKOVNA_SECRET = os.getenv("ZASILKOVNA_SECRET")
 
+
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
 RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
+
+
+STATICFILES_DIRS = (BASE_DIR / "static",)
+
+# Local media files
+MEDIA_ROOT = BASE_DIR / "mediafiles"
+
+
+# oddeleny pro prod spaces
+
+# Spaces settings
+# https://stackoverflow.com/questions/76940089/signaturedoesnotmatch-digitalocean-spaces-boto3-django-storages-django
+AWS_ACCESS_KEY_ID = str(os.getenv("AWS_ACCESS_KEY_ID"))
+AWS_SECRET_ACCESS_KEY = str(os.getenv("AWS_SECRET_ACCESS_KEY"))
+AWS_STORAGE_BUCKET_NAME = "etb"
+AWS_DEFAULT_ACL = "public-read"
+AWS_S3_ENDPOINT_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.fra1.digitaloceanspaces.com"
+
+AWS_S3_REGION_NAME = "fra1"
+
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+    "ACL": "public-read",  # THIS LINE IS OPTIONAL
+}
+
+# static settings
+# AWS_LOCATION = 'static'
+
+
+# Static files settings: this works
+STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/static/"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+
+# Optional: Set S3 object parameters
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+    "ACL": "public-read",
+}
+
+# Public media files
+AWS_PUBLIC_MEDIA_LOCATION = "media"
+DEFAULT_FILE_STORAGE = "efir.settings.storage_backends.MediaStorage"
+MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_PUBLIC_MEDIA_LOCATION}/"
+
+# Optional: Set S3 object parameters (again, if needed)
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+    "ACL": "public-read",
+}
