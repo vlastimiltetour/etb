@@ -6,7 +6,6 @@ import weasyprint
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 
 from .models import Order
@@ -25,7 +24,7 @@ def customer_order_email_confirmation(order_id):
         subject=(f"Vaše objednávka #{order.etb_id} je potvrzena [ZAPLACENO]."),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email],
-        bcc=["v.tetour@gmail.com", "objednavky@efirthebrand.cz"],
+        bcc=["objednavky@efirthebrand.cz"],
     )
     msg.attach_alternative(html_content, "text/html")
     msg.attach(f"Objednavka {order.etb_id}.pdf", out.getvalue(), "application/pdf")
@@ -45,10 +44,10 @@ def unpaid_customer_order_email_confirmation(order_id):
         "orders/unpaid_customer_email_confirmation.html", {"order": order}
     )
     msg = EmailMultiAlternatives(
-        subject=(f"Vaše objednávka #{order.etb_id} je potvrzen [NEUHRAZENO]"),
+        subject=(f"Vaše objednávka #{order.etb_id} je potvrzena [NEUHRAZENO]"),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email],
-        bcc=["objednavky@efirthebrand.cz", "v.tetour@gmail.com"],
+        bcc=["objednavky@efirthebrand.cz"],
     )
     msg.attach_alternative(html_content, "text/html")
     return msg.send()
@@ -67,7 +66,7 @@ def certificate_order_email_confirmation(order_id):
         subject=("Váš zakoupený certifikát od EFIR"),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email],
-        bcc=["v.tetour@gmail.com", "objednavky@efirthebrand.cz"],
+        bcc=["objednavky@efirthebrand.cz"],
     )
     msg.attach_alternative(html_content, "text/html")
     msg.attach(f"Objednavka {order.etb_id}.pdf", out.getvalue(), "application/pdf")
@@ -81,14 +80,13 @@ def send_offer_confirmation(request, order_id):
         "orders/unpaid_customer_email_confirmation.html", {"order": order}
     )
     msg = EmailMultiAlternatives(
-        subject=(f"Vaše objednávka #{order.etb_id} je potvrzen [NEUHRAZENO]"),
+        subject=(f"Vaše objednávka #{order.etb_id} je potvrzena [NEUHRAZENO]"),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email],
-        bcc=["objednavky@efirthebrand.cz", "v.tetour@gmail.com"],
+        bcc=["objednavky@efirthebrand.cz"],
     )
     msg.attach_alternative(html_content, "text/html")
     return msg.send()
-
 
     try:
         msg.send()
@@ -105,3 +103,19 @@ def send_offer_confirmation(request, order_id):
         # Handle the exception (e.g., log the error, retry sending, etc.)
 
     return HttpResponse("Email wasn't sent")
+
+
+
+def send_paid_offer_confirmation(request, order_id):
+    order = Order.objects.get(id=order_id)
+    html_content = render_to_string(
+        "orders/customer_email_confirmation.html", {"order": order}
+    )
+    msg = EmailMultiAlternatives(
+        subject=(f"Vaše objednávka #{order.etb_id} je potvrzena [ZAPLACENO]."),
+        from_email="objednavky@efirthebrand.cz",
+        to=[order.email],
+        bcc=["objednavky@efirthebrand.cz"],
+    )
+    msg.attach_alternative(html_content, "text/html")
+    return msg.send()

@@ -1,3 +1,5 @@
+import logging
+
 from django.apps import AppConfig
 
 
@@ -6,4 +8,6 @@ class CatalogConfig(AppConfig):
     name = "catalog"
 
     def ready(self):
-        pass  # Adjust this import based on your app's structure
+        from . import signals  # noqa: F401
+
+        logging.getLogger("django").info("Catalog signals imported")
