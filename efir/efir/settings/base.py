@@ -22,6 +22,9 @@ import logging
 # Set up the logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
+logging.getLogger('botocore').setLevel(logging.CRITICAL)
+logging.getLogger('boto3').setLevel(logging.CRITICAL)
+
 try:
     logging.info("Loading local Env Module")
     import dotenv
@@ -273,3 +276,5 @@ AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
     "ACL": "public-read",
 }
+
+APPEND_SLASH = True

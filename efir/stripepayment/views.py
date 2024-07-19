@@ -266,21 +266,19 @@ def payment_completed(request):
                 certificate_order_email_confirmation(order_id)
                 time.sleep(5)
             except UnicodeEncodeError as e:
-                 logging.info(f"There is an error with {order_id}, {e}")
+                logging.info(f"There is an error with {order_id}, {e}")
             except ValueError as e:
-                 logging.info(f"There is an error with {order_id}, {e}")
+                logging.info(f"There is an error with {order_id}, {e}")
 
         else:
-            
             try:
                 print("NE NE NE NE NE neposli potvrzeni certifikatu")
                 customer_order_email_confirmation(order_id)
                 time.sleep(5)
             except UnicodeEncodeError as e:
-                 logging.info(f"There is an error with {order_id}, {e}")
+                logging.info(f"There is an error with {order_id}, {e}")
             except ValueError as e:
-                 logging.info(f"There is an error with {order_id}, {e}")
-
+                logging.info(f"There is an error with {order_id}, {e}")
 
     except ssl.SSLCertVerificationError:
         logging.info(
@@ -351,7 +349,7 @@ def payment_canceled(request):
         # zasilkovna_create_package(order_id)
         print("payment canceled Zasilkovna package has not been created")
     elif cart.shipping == "P" or "D":
-        #ppl_create_label_view(request, order_id)
+        # ppl_create_label_view(request, order_id)
         print("Payment canceled PPL package has not been created")
     elif cart.shipping == "O":
         print("Online delivery has been requested")
@@ -486,3 +484,45 @@ def ppl_create_shipment_payload(request, order_id):
 
 def ppl_track_order():
     pass
+
+
+
+
+def manual_payment_completed(request, order_id,vendor_type):
+    order_id = order_id
+    # order_id = 364
+    
+    certificate = False
+    order = get_object_or_404(Order, id=order_id)
+    order_items = OrderItem.objects.filter(order=order)
+
+    """for order_item in order_items:
+        print(order_item.product.name)
+        if (str(order_item.product.category)) == "Dárkové certifikáty":   
+            certificate = True     """
+    certificate = any(
+        str(order_item.product.category) == "Dárkové certifikáty"
+        for order_item in order_items
+    )
+    print("tady se snazim vytisknout certificate", certificate)
+
+
+    if settings.DEBUG:
+        # Django is running in local settings
+        print("Local settings: Zasilkovna turned off")
+    elif order.shipping_price == 0:
+        print("Local settings: Zasilkovna turned off, shipping price: 0")
+    else:
+        # Django is running in production settings
+        print("Production settings: Zasilkovna turned on")
+
+    if vendor_type == "Z":
+        zasilkovna_create_package(order_id)
+        print("Zasilkovna package has been created")
+    elif vendor_type == "P" or "D":
+        ppl_create_label_view(request, order_id)
+        print("PPL package has been created")
+    elif vendor_type == "O":
+        print("Online delivery has been requested")
+
+    return render(request, "stripe/completed.html", {"order": order})

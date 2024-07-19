@@ -1,13 +1,14 @@
 import logging
+
 from django.conf import settings
+from django.contrib.sessions.models import Session
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.contrib.sessions.models import Session
+
 from catalog.models import Product
 
-from cart.cart import Cart
-
 logger = logging.getLogger(__name__)
+
 
 @receiver(post_delete, sender=Product)
 def clear_cart_on_product_delete(sender, instance, **kwargs):
@@ -16,7 +17,7 @@ def clear_cart_on_product_delete(sender, instance, **kwargs):
     """
     logger.info(f"======= Product {instance.name} deleted")
 
-    ''' #his would be to delete the product from the cart
+    """ #his would be to delete the product from the cart
     sessions = Session.objects.all()
     for session in sessions:
         session_data = session.get_decoded()
@@ -27,10 +28,9 @@ def clear_cart_on_product_delete(sender, instance, **kwargs):
             session.session_data = Session.objects.encode(session_data)
             session.save()
             logger.info(f"Product {instance.name} removed from Cart in session {session.session_key}")
-'''
+"""
 
-    
-    #this is to delete the whole session
+    # this is to delete the whole session
     sessions = Session.objects.all()
     for session in sessions:
         session_data = session.get_decoded()

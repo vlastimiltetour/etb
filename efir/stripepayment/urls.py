@@ -15,6 +15,7 @@ urlpatterns = [
     path(
         "unsuccessful_payment/", views.unsuccessful_payment, name="unsuccessful_payment"
     ),
+    path('manual_payment_completed/<int:order_id>/<str:vendor_type>/', views.manual_payment_completed, name='manual_payment_completed'),
     path(
         "zasilkovna-create-package/",
         views.zasilkovna_create_package,
