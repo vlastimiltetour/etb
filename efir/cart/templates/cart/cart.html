@@ -800,7 +800,7 @@ async></script>
                   
                   <div class="mb-3">
                      <label class="custom-checkbox">
-                           <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms" checked>
+                           <input type="checkbox" name="agree_to_terms" class="form-check-input" required id="id_agree_to_terms">
                            <span class="checkmark"></span>
                      Souhlasím s <a href="{% url 'catalog:obchodni_podminky' %}"><u>obchodními podmínkami</u></a>
                      </label>
@@ -906,7 +906,11 @@ async></script>
         //const vendorId = document.querySelector("#cart_vendor");
         const vendorId = document.querySelector('input[name="cart_vendor"]');
 
+        // resource to regex: https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
         var emailRegex = /^[^\s@]+@[^\s@.]+\.[^\s@.]{1,}$/;
+
+        
+        
         // /^ start of the regex
         // [^\s@] don't allow whitespace or @
         // +@ require @
@@ -915,34 +919,35 @@ async></script>
         //[^\s@.]{1,} at least  once, . @ or whitespace not allowed
         // $/ end of the regex
 
+       
       //console.log("vendor ID:", vendorId, "#")
          if (vendorId.value === "" || vendorId.value === null || vendorId.value === 'None') {
-            alert("Vyplňte adresu doručení.");
+            alert("Vyberte způsob doručení - Zásilkovna, nebo PPL.");
             vendorId.focus();
             return;
         }
-        if (!firstName.value) {
+        if (!firstName.value.trim()) {
             alert("Prosím vyplňte své jméno.");
             firstName.focus();
             return;
         }
-        if (!lastName.value) {
+        if (!lastName.value.trim()) {
             alert("Prosím vyplňte své příjmení.");
             lastName.focus();
             return;
         }
-       
         if (!emailRegex.test(email.value)) {
             alert("Prosím opravte formát emailové adresy.");
             email.focus();
             return;
         }
-        if (!phoneNumber.value) {
+        
+        if (!phoneNumber.value.trim()) {
             alert("Prosím vyplňte své telefonní číslo.");
             phoneNumber.focus();
             return;
         }
-        if (!birthday.value) {
+        if (!birthday.value.trim()) {
             alert("Prosím vyplňte své datum narození.");
             birthday.focus();
             return;
@@ -1008,7 +1013,7 @@ async></script>
            email: email,
            value: cartValue,
            currency: currency,
-           products: products,
+           prducts: products,
        };
 
        // Call the lhi function with the userData
@@ -1039,7 +1044,7 @@ async></script>
        //const addressInput = document.querySelector("#cart_address");
        //const countryInput = document.querySelector("#cart_country");
        //const vendorIdInput = document.querySelector("#cart_vendor");
-       //const cartForm = document.querySelector("#country-form");
+       //const cartForm = document.uerySelector("#country-form");
        const ShippingType = document.getElementById('id_shipping').textContent;
 
        console.log("Step 2: References to relevant elements obtained.", shippingType);

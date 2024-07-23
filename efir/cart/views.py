@@ -36,8 +36,7 @@ def cart_add(request, product_id):
     inventory = Inventory.objects.filter(product=product).first()
     Certificate.objects.filter(product=product).first()
 
-    if str(product.category) == "Dárkové certifikáty":
-        print("produkt jsou darkove certifikaty jo")
+  
 
     if form.is_valid():
         form.set_cart_values()
@@ -63,6 +62,19 @@ def cart_add(request, product_id):
             certificate_from=cd["certificate_from"],
             certificate_to=cd["certificate_to"],
         )
+        zpusob_vyroby = cd["zpusob_vyroby"]
+        print("this is the form add to cart", {form})
+
+        if str(product.category) == "Dárkové certifikáty":
+            print("produkt jsou darkove certifikaty jo")
+            if zpusob_vyroby == "Elektronický":
+                print("ano zpusob vyroby je elektronicky")
+                update_cart_country(request, online=True)
+            else:
+                print("ne zpusob vyroby nefunguje")
+        else:
+            update_cart_country(request, online=False)
+
     else:
         print(form.errors)
 
@@ -126,7 +138,7 @@ def cart_detail(request, zasilkovna=True):
 
     if cart.get_shipping_price() == 0:
         print("cena se rovna nule")
-        update_cart_country(request)
+        update_cart_country(request, online=True)
 
     # the value is taken from session and saved here, where I can request it as form.initial.cart_country, etc.
     form = OrderForm(
@@ -176,6 +188,7 @@ def cart_detail(request, zasilkovna=True):
 
             order.save(cart=cart)
             order.city = selected_cart_city
+            
             order.zipcode = selected_cart_zipcode
             order.shipping_price = cart.get_shipping_price()
             print("this is shiping price:", cart.get_shipping_price())
@@ -310,25 +323,51 @@ def cart_detail(request, zasilkovna=True):
     )
 
 
-def update_cart_country(request):
-    if request.method == "POST":
-        selected_country = request.POST.get(
-            "cart_country"
-        )  # Get the selected country from the form, it has unique cart_address id and name
-        selected_address = request.POST.get("cart_address")
-        selected_vendor_id = request.POST.get("cart_vendor")
-        selected_cart_shipping = request.POST.get("cart_shipping")
-        selected_cart_city = request.POST.get("cart_city")
-        selected_cart_zipcode = request.POST.get("cart_zipcode")
+def update_cart_country(request, online=None):
+    print('update cart country has been triggered')
+    if online:
+        if request.method == "POST":
+            selected_country = request.POST.get(
+                "cart_country"
+            )  # Get the selected country from the form, it has unique cart_address id and name
+            selected_address = request.POST.get("cart_address")
+            selected_vendor_id = request.POST.get("cart_vendor")
+            selected_cart_shipping = request.POST.get("cart_shipping")
+            selected_cart_city = request.POST.get("cart_city")
+            selected_cart_zipcode = request.POST.get("cart_zipcode")
 
-        # Update the cart's country attribute with the selected value
+            # Update the cart's country attribute with the selected value
 
-        request.session["cart_country"] = selected_country
-        request.session["cart_address"] = selected_address
-        request.session["cart_vendor"] = selected_vendor_id
-        request.session["cart_shipping"] = selected_cart_shipping
-        request.session["cart_city"] = selected_cart_city
-        request.session["cart_zipcode"] = selected_cart_zipcode
+            request.session["cart_country"] = 'online'
+            request.session["cart_address"] = 'online'
+            request.session["cart_vendor"] = '-'
+            request.session["cart_shipping"] = 'O'
+            request.session["cart_city"] = ''
+            request.session["cart_zipcode"] = ''
+            #request.save()
+
+ 
+
+    else:
+        if request.method == "POST":
+            selected_country = request.POST.get(
+                "cart_country"
+            )  # Get the selected country from the form, it has unique cart_address id and name
+            selected_address = request.POST.get("cart_address")
+            selected_vendor_id = request.POST.get("cart_vendor")
+            selected_cart_shipping = request.POST.get("cart_shipping")
+            selected_cart_city = request.POST.get("cart_city")
+            selected_cart_zipcode = request.POST.get("cart_zipcode")
+
+            # Update the cart's country attribute with the selected value
+
+            request.session["cart_country"] = selected_country
+            request.session["cart_address"] = selected_address
+            request.session["cart_vendor"] = selected_vendor_id
+            request.session["cart_shipping"] = selected_cart_shipping
+            request.session["cart_city"] = selected_cart_city
+            request.session["cart_zipcode"] = selected_cart_zipcode
+            #request.save()
 
     return redirect("cart:cart_detail")
 

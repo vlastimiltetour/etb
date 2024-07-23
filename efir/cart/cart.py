@@ -11,6 +11,7 @@ from coupons.models import Coupon
 class Cart:
     def __init__(self, request):  # initialize the cart
         self.session = request.session
+
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
@@ -382,7 +383,7 @@ class Cart:
         discount = self.get_discount()
 
         if self.get_discount_threshold() or self.get_discount_threshold() == int(0):
-            print("jo cena je vyssi", {self.get_discount_threshold})
+            print("jo cena je vyssi", {self.get_discount_threshold()})
             if total_price >= self.get_discount_threshold():
                 if self.get_discount_type() == "Procento":
                     total_price_after_discount = total_price * (1 - discount)
