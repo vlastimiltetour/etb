@@ -379,22 +379,16 @@ async></script>
 
                   <form method="post" id="country-form" action="{% url 'cart:update_cart_country' %}">
                      {% csrf_token %}
-                  <!-- this one doesn't work-->
+                  <!-- this one works-->
                      <input type="hidden" name="cart_country" id="cart_country">
                      <input type="hidden" name="cart_address" id="cart_address">
-                     <input type="hidden" name="cart_vendor" id="cart_vendor">
+                     <input type="hidden" name="cart_vendor" id="cart_vendor" value="{{ form.initial.vendor_id }}"> <!-- it works when it has text inside-->
                      <input type="hidden" name="cart_shipping" id="cart_shipping">
-                 
-                     
-
-                     
-
-                     
+                     <input type="hidden" name="cart_zipcode" id="cart_zipcode">
+                     <input type="hidden" name="cart_city" id="cart_city">
 
                    <!--  <input type="hidden" name="country" value="{{ form.initial.country }}">
-                     <input type="hidden" name="address" value="{{ form.initial.address }}">-->
-                 
-                     
+                     <input type="hidden" name="address" value="{{ form.initial.address }}">-->                        
 
                      <div class="invalid-feedback">
                      </div>
@@ -1013,7 +1007,7 @@ async></script>
            email: email,
            value: cartValue,
            currency: currency,
-           prducts: products,
+           products: products,
        };
 
        // Call the lhi function with the userData
@@ -1044,7 +1038,7 @@ async></script>
        //const addressInput = document.querySelector("#cart_address");
        //const countryInput = document.querySelector("#cart_country");
        //const vendorIdInput = document.querySelector("#cart_vendor");
-       //const cartForm = document.uerySelector("#country-form");
+       //const cartForm = document.querySelector("#country-form");
        const ShippingType = document.getElementById('id_shipping').textContent;
 
        console.log("Step 2: References to relevant elements obtained.", shippingType);
@@ -1140,14 +1134,17 @@ function checkIfCertificate() {
       const zipcode = document.querySelector("#cart_zipcode");
       const city = document.querySelector("#cart_city");
       
-
+      //specific check for shipping select
       if (!shippingSelect) {
          alert("Error: id_shipping element not found.");
+         if (pplMap) {
+            pplMap.style.display = "block";
+         }
          return;
       }
 
       // Check if other elements exist
-      if (addressInput && countryInput && vendorIdInput && cartForm) {
+      if (addressInput && countryInput && vendorIdInput && cartForm && zipcode && city) {
          // Set values for inputs if needed
          addressInput.value = event.detail.name;
          countryInput.value = event.detail.country;
@@ -1166,6 +1163,10 @@ function checkIfCertificate() {
          cartForm.submit();
       } else {
          console.error("One or more elements (address, country, vendor, form) not found.");
+         if (pplMap) {
+            pplMap.style.display = "block";
+         }
+         
       }
       });
 
