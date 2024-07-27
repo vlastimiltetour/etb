@@ -590,7 +590,6 @@ def product_feed(request):
         first_photo = (
             product.photos.first().photo.url if product.photos.first() else None
         )
-        first_photo = f"https://www.efirthebrand.cz{first_photo}"
 
         item_data = {
             "item_id": product.id,
