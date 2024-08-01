@@ -59,15 +59,18 @@
 
   <!-- The modal container -->
   <div id="myModal" class="modal">
-   <span class="close">&times;</span>
+   <div class="close">&times;</div>
    <img class="modal-content" id="modalImg">
 </div>
 
 <div class="slider">   
    {% for photo in product.photos.all %}
   
+
+
    <div class="slide">
-       <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" onclick="openModal('{{photo.photo.url}}', '{{forloop.counter}}')" />
+       <img class="card-img-top mb-md-0" src="{{photo.photo.url}}" alt="{{ product.name }}" onclick="openModal('{{photo.photo.url}}', '{{forloop.counter}}')"/>
+    
    </div>
    {% endfor %}
 
@@ -75,10 +78,6 @@
    <img src="{{ product.certificate.photo.url }}" alt="{{ product.name }} certificate">
    {% endif %}
 
-   {% if product.photos.all %}
-    <img src="{{ product.photos.first.photo.url }}" alt="{{ product.name }} photo">
-
-{% endif %}
 
 
 </div>
@@ -104,8 +103,8 @@
    .modal-content {
        margin: auto;
        display: block;
-       width: 80%;
-       max-width: 800px;
+       width: 120%;
+       max-width: 120%;
    }
    
    /* Close button */
@@ -145,6 +144,18 @@
                      // When the user clicks on <span> (x), close the modal
                      span.onclick = function() {
                          modal.style.display = "none";
+                     }
+
+                     // When the user presses a key
+                     document.onkeydown = function(e) {
+                           if (e.key === 'Escape') {
+                              modal.style.display = 'none';
+                           }
+                     }
+
+                     // When the user presses a key
+                     modalImg.onclick = function() {
+                              modal.style.display = 'none';
                      }
                  </script>
                            
@@ -594,7 +605,8 @@
    </div>
 </section>
 
-<!-- related items section
+<!-- recommended items section -->
+ {% if recommended %}
   <section class="jumbotron text-center">
    <div class="container">
      <h1 class="jumbotron-heading mt-5 mb-5">Mohlo by se Vám líbit</h1>
@@ -603,16 +615,16 @@
    <div class="container">
 
      <div class="row row-cols-2 row-cols-md-5 row-cols-lg-5">
-       {% for product in recommended %}  
+       {% for r_product in recommended %}  
+       
     
-  Single Product 
 
        <div class="col-md-4 mb-4">
-         <a href="{{ product.get_absolute_url }}">
+         <a href="{{ r_product.get_absolute_url }}">
            <div class="product-image-container">
 
          <div class="card mb-2 box-shadow">
-            {% with first_photo=product.photos.first %}
+            {% with first_photo=r_product.photos.first %}
               {% if first_photo %}             
            <img class="card-img-top img-fluid" style="height: 250px" 
            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" 
@@ -621,17 +633,15 @@
            data-holder-rendered="true">
            {% endif %}
 
-   start na miru 
-         
-        end na miru 
-           {% if product.discount %}
-           <div class="discount-circle"> - {{ product.discount }} % </div>
-           {% elif product.new %}
+
+           {% if r_product.discount %}
+           <div class="discount-circle"> - {{ r_product.discount }} % </div>
+           {% elif r_product.new %}
            <div class="discount-circle"> NEW </div>
-           {% elif product.limited %}
+           {% elif r_product.limited %}
            <div class="discount-circle"> LIMITOVANÁ EDICE </div>
            {% endif %}
-           {% if product.is_na_miru %}
+           {% if r_product.is_na_miru %}
            <div class="discount-circle"> NA MÍRU </div>
            {% endif %}
 
@@ -639,9 +649,9 @@
          </div>
            {% endwith %}
            <div class="card-body d-flex flex-column" style="padding: 1rem;">
-             <h5 class="fw-bolder"> {{ product.name }}</h5>
-             <p class="card-text">{{ product.short_description }}</p>                
-               <b class="fw-semibold"> {{ product.price }} Kč</b>
+             <h5 class="fw-bolder"> {{ r_product.name }}</h5>
+             <p class="card-text">{{ r_product.short_description }}</p>                
+               <b class="fw-semibold"> {{ r_product.price }} Kč</b>
 
 
            </div>
@@ -654,7 +664,8 @@
    </div>
  </div>
 </section>
- end related items section -->
+{% endif %}
+  <!-- end recommended items section -->
 
 
 <script> // JavaScript Code

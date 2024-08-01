@@ -35,6 +35,12 @@ urlpatterns = [
         views.catalog_product_list,
         name="product_list_by_category",
     ),
+    path("train_the_model/", views.train_the_model, name="train_the_model"),
+    path(
+        "recommendation_engine/",
+        views.recommendation_engine_settings,
+        name="recommendation_engine_settings",
+    ),
     path(
         "media/assets/Reklamace.pdf",
         views.download_reklamacni_formular,

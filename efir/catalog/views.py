@@ -24,23 +24,31 @@ from catalog.mail_conf import siti_na_miru_email_confirmation
 from coupons.views import *
 from inventory.models import Inventory
 from orders.mail_confirmation import *
+from orders.mail_confirmation import customer_order_email_confirmation
 from stripepayment.views import *
 
 from .models import (BackgroundPhoto, Category, ContactModel, LeftPhoto,
                      MappingSetNaMiru, Product, ProductSet, RightdPhoto,
                      UniqueSetCreation)
+from .recommendation import *
 
-from .models import ContactModel
 
 def create_contact(request):
-    contact_instance = ContactModel(name="John Doe", email="john.doe@example.com", message="Hello, this is a test message.")
+    contact_instance = ContactModel(
+        name="John Doe",
+        email="john.doe@example.com",
+        message="Hello, this is a test message.",
+    )
     contact_instance.save()
     return HttpResponse(f"Contact created with id: {contact_instance.id}")
 
+
 def home(request, category_slug=None):
+    # print(customer_order_email_confirmation(1009))
     # token = get_oauth_token()
     # print("this is token", token)
     # this is to create fake contact email create_contact(request=requests)
+
     category = None
     categories = Category.objects.all()
     best_sellers = Product.objects.filter(bestseller=True, active=True)
@@ -138,14 +146,14 @@ def show_session_contents(request):
 def catalog_product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all().exclude(name="Dárkové certifikáty")
-    products = Product.objects.all().exclude(category__name="Dárkové certifikáty")
+    products = Product.objects.all().exclude(category__name="Dárkové certifikáty").order_by("created")
     inventory = Inventory.objects.values("size").distinct().order_by("size")
 
     filter_form = FilterForm()
 
     zpusob_vyroby_session = request.session.get("zpusob_vyroby_session", [])
     size_selection_session = request.session.get("size_selection_session", [])
-    sort_by_price_session = request.session.get("sort_by_price_session", "created")
+    sort_by_price_session = request.session.get("sort_by_price_session", "-created")  # Set default here
     cut_selection_session = request.session.get("cut_selection_session", [])
     category_session = request.session.get("category_session", [])
 
@@ -153,6 +161,13 @@ def catalog_product_list(request, category_slug=None):
     # print(show_session_contents(request))
 
     query_filters = Q()
+    # Replace "created" with "-created" if necessary
+    if sort_by_price_session == "created":
+        sort_by_price_session = "-created"
+    print(request.session.items())  # Add this line to inspect session data
+
+
+    
 
     if category_session:
         query_filters &= Q(category__name=category_session[0])
@@ -165,15 +180,11 @@ def catalog_product_list(request, category_slug=None):
             if cut_selection_session == "Brazilky":
                 # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
                 query_filters &= Q(short_description__iexact="Brazilky")
-                query_filters &= ~Q(
-                    short_description__iexact="Brazilky na gumičkách"
-                )
+                query_filters &= ~Q(short_description__iexact="Brazilky na gumičkách")
                 print("type 2")
             elif cut_selection_session == "Podprsenka s kosticemi":
                 # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
-                query_filters &= Q(
-                    short_description__iexact="Podprsenka s kosticemi"
-                )
+                query_filters &= Q(short_description__iexact="Podprsenka s kosticemi")
                 query_filters &= ~Q(
                     short_description__iexact="Podprsenka s kosticemi a otevřeným košíčkem"
                 )
@@ -181,10 +192,8 @@ def catalog_product_list(request, category_slug=None):
 
             elif cut_selection_session == "Podvazkový pas s gumičkami":
                 # Filter for products containing "Brazilky" but exclude those containing "Brazilky na gumičkách"
-                query_filters &= Q(
-                    short_description__icontains=cut_selection_session
-                )
-              
+                query_filters &= Q(short_description__icontains=cut_selection_session)
+
                 print("type 6")
 
             else:
@@ -310,7 +319,7 @@ def delete_selected_filter(request):
         if selected_filter in clean_translation_dict:
             selected_filter = clean_translation_dict[selected_filter]
             if "sort_by_price_session" in request.session:
-                request.session["sort_by_price_session"] = "created"
+                request.session["sort_by_price_session"] = "-created"
 
         for session_key, session_value in request.session.items():
             if isinstance(session_value, (list, str)):
@@ -336,14 +345,19 @@ def product_detail(
     product = get_object_or_404(Product, id=id, slug=slug)
     form = CartAddProductForm(id_from_product=id)
 
-    recommended = recommended_products(product_id=id)
-    print(
-        f"this is the product id of the product {product.name}, {id} and recommended products  {recommended}"
-    )
+    rc = RecommenderSystem(cz_stop_words)
+    # rc.retrieve_product_feed()
+    # rc.train_model()
+    recommended = []
 
-    # print("these are recomennded products", recommend_products(product.name))
-    if str(product.category) == "Dárkové certifikáty":
-        pass
+    try:
+        list_of_recommended = rc.recommend_products(str(id))
+        print("list of rec", list_of_recommended)
+        if list_of_recommended:
+            recommended = Product.objects.filter(id__in=list_of_recommended)
+            recommended = recommended[:5]
+    except ValueError:
+        recommended = []
 
     try:
         productset = ProductSet.objects.get(product=product)
@@ -397,8 +411,6 @@ def obchodni_podminky(request):
 from django.template.loader import render_to_string
 
 
-
-
 # https://mailtrap.io/blog/django-contact-form/
 def kontakty(request):
     categories = Category.objects.all()
@@ -418,7 +430,9 @@ def kontakty(request):
 
             contact_msg = get_object_or_404(ContactModel, id=contact_model.id)
 
-            html_content = render_to_string("orders/contact_form.html", {"contact_msg": contact_msg})
+            html_content = render_to_string(
+                "orders/contact_form.html", {"contact_msg": contact_msg}
+            )
             msg = EmailMultiAlternatives(
                 subject=(f"Kontaktní formulář: dotaz od {name}"),
                 from_email="objednavky@efirthebrand.cz",
@@ -669,3 +683,21 @@ def certificates(request):
     products = Product.objects.filter(category__name="Dárkové certifikáty", active=True)
 
     return render(request, "catalog/certificates.html", {"products": products})
+
+
+def recommendation_engine_settings(request):
+    recommended = Product.objects.all()[:5]
+    return render(
+        request, "catalog/recommendation_engine.html", {"recommended": recommended}
+    )
+
+
+def train_the_model(request):
+    Category.objects.all()
+
+    rc = RecommenderSystem(cz_stop_words)
+    rc.retrieve_product_feed()
+    rc.train_model()
+    rc.last_retrieved_time
+
+    return HttpResponse("The model has been trained")
