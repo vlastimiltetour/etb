@@ -1,7 +1,6 @@
 import logging
 from decimal import Decimal
 
-from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -35,8 +34,6 @@ def cart_add(request, product_id):
     form = CartAddProductForm(id_from_product=product_id, data=request.POST)
     inventory = Inventory.objects.filter(product=product).first()
     Certificate.objects.filter(product=product).first()
-
-  
 
     if form.is_valid():
         form.set_cart_values()
@@ -91,7 +88,7 @@ def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
 
-    messages.info(request, f"{product.name} has been removed from your cart.")
+    # messages.info(request, f"{product.name} has been removed from your cart.")
 
     return redirect("cart:cart_detail")
 
@@ -108,7 +105,6 @@ def cart_detail(request, zasilkovna=True):
     try:
         cart = Cart(request)
         for item in cart:
-            # Your existing code for processing cart items
             print(f"this is the cart contents, item: {item}")
 
         # Rest of your view logic
@@ -188,7 +184,7 @@ def cart_detail(request, zasilkovna=True):
 
             order.save(cart=cart)
             order.city = selected_cart_city
-            
+
             order.zipcode = selected_cart_zipcode
             order.shipping_price = cart.get_shipping_price()
             print("this is shiping price:", cart.get_shipping_price())
@@ -200,22 +196,45 @@ def cart_detail(request, zasilkovna=True):
             The combination of these lines ensures that the Order instance is created from the form data but not immediately saved, allowing you to calculate and set additional fields like total_cost before the final save."""
 
             for item in cart:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item["product"],
-                    price=item["price"],
-                    total_price=item["total_price"],
-                    surcharge=item["surcharge"],
-                    quantity=item["quantity"],
-                    zpusob_vyroby=item["zpusob_vyroby"],
-                    velikost=item["velikost"],
-                    kalhotky_velikost_set=item["kalhotky_velikost_set"],
-                    podprsenka_velikost_set=item["podprsenka_velikost_set"],
-                    pas_velikost_set=item["pas_velikost_set"],
-                    poznamka=item["poznamka"],
-                    certificate_from=item["certificate_from"],
-                    certificate_to=item["certificate_to"],
-                )
+                # I'd create if item.product.cateogory == "Darkove certifikaty"
+                # Your existing code for processing cart items
+                if item["product"].category.name == "Dárkové certifikáty":
+                    for i in range(item["quantity"]):
+                        print("this is round", {i})
+                        OrderItem.objects.create(
+                            order=order,
+                            product=item["product"],
+                            price=item["price"],
+                            total_price=item["total_price"],
+                            surcharge=item["surcharge"],
+                            quantity=1,
+                            zpusob_vyroby=item["zpusob_vyroby"],
+                            velikost=item["velikost"],
+                            kalhotky_velikost_set=item["kalhotky_velikost_set"],
+                            podprsenka_velikost_set=item["podprsenka_velikost_set"],
+                            pas_velikost_set=item["pas_velikost_set"],
+                            poznamka=item["poznamka"],
+                            certificate_from=item["certificate_from"],
+                            certificate_to=item["certificate_to"],
+                        )
+
+                else:
+                    OrderItem.objects.create(
+                        order=order,
+                        product=item["product"],
+                        price=item["price"],
+                        total_price=item["total_price"],
+                        surcharge=item["surcharge"],
+                        quantity=item["quantity"],
+                        zpusob_vyroby=item["zpusob_vyroby"],
+                        velikost=item["velikost"],
+                        kalhotky_velikost_set=item["kalhotky_velikost_set"],
+                        podprsenka_velikost_set=item["podprsenka_velikost_set"],
+                        pas_velikost_set=item["pas_velikost_set"],
+                        poznamka=item["poznamka"],
+                        certificate_from=item["certificate_from"],
+                        certificate_to=item["certificate_to"],
+                    )
 
             order_items = OrderItem.objects.filter(order=order)
 
@@ -243,17 +262,25 @@ def cart_detail(request, zasilkovna=True):
                     certificate_category = "Dárkový certifikát"
                     print("this is order_item id", order_item.id)
                     ##rekl bych ze sem nekam ten coupon
-                    coupon_create(
-                        request.GET,
-                        discount_value,
-                        discount_type,
-                        discount_treshold,
-                        category=certificate_category,
-                        id=order.etb_id,
-                        orderitem_id=order_item.id,
-                        certificate_from=order_item.certificate_from,
-                        certificate_to=order_item.certificate_to,
-                    )
+                    print("this is order_item check 1", order_item, order_item.quantity)
+
+                    for i in range(order_item.quantity):
+                        print(
+                            "this is order_item check 2",
+                            order_item,
+                            order_item.quantity,
+                        )
+                        coupon_create(
+                            request.GET,
+                            discount_value,
+                            discount_type,
+                            discount_treshold,
+                            category=certificate_category,
+                            id=order.etb_id,
+                            orderitem_id=order_item.id,
+                            certificate_from=order_item.certificate_from,
+                            certificate_to=order_item.certificate_to,
+                        )
 
                 # this is inventory solution
                 """size = order_item.velikost
@@ -293,6 +320,7 @@ def cart_detail(request, zasilkovna=True):
 
             cart.clear()
             # return render(request, "orders/objednavka_vytvorena.html", {"order": order})
+
             return redirect(reverse("stripepayment:process"))
 
         print(form.errors)
@@ -324,7 +352,7 @@ def cart_detail(request, zasilkovna=True):
 
 
 def update_cart_country(request, online=None):
-    print('update cart country has been triggered')
+    print("update cart country has been triggered")
     if online:
         if request.method == "POST":
             selected_country = request.POST.get(
@@ -338,15 +366,13 @@ def update_cart_country(request, online=None):
 
             # Update the cart's country attribute with the selected value
 
-            request.session["cart_country"] = 'online'
-            request.session["cart_address"] = 'online'
-            request.session["cart_vendor"] = '-'
-            request.session["cart_shipping"] = 'O'
-            request.session["cart_city"] = ''
-            request.session["cart_zipcode"] = ''
-            #request.save()
-
- 
+            request.session["cart_country"] = "online"
+            request.session["cart_address"] = "online"
+            request.session["cart_vendor"] = "-"
+            request.session["cart_shipping"] = "O"
+            request.session["cart_city"] = ""
+            request.session["cart_zipcode"] = ""
+            # request.save()
 
     else:
         if request.method == "POST":
@@ -367,7 +393,7 @@ def update_cart_country(request, online=None):
             request.session["cart_shipping"] = selected_cart_shipping
             request.session["cart_city"] = selected_cart_city
             request.session["cart_zipcode"] = selected_cart_zipcode
-            #request.save()
+            # request.save()
 
     return redirect("cart:cart_detail")
 
