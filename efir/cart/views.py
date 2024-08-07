@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from cart.cart import Cart
+
+from coupons.views import coupon_delete
 from catalog.models import Certificate, Product
 from coupons.forms import Coupon, CouponForm
 from coupons.views import coupon_create, coupon_deactivate
@@ -106,8 +108,19 @@ def cart_detail(request, zasilkovna=True):
         cart = Cart(request)
         for item in cart:
             print(f"this is the cart contents, item: {item}")
+            if item["product"].category.name == "Dárkové certifikáty":
+                coupon_id = request.session.get("coupon_id")
+        
+                if coupon_id is not None:
+                    print("Current coupon_id:", coupon_id)
+                    # Redirect to the desired view
+                    return redirect("coupons:delete")
+                else:
+                    print("No coupon is applied")
+                    # Optional: You might want to redirect to a different view or render a response indicating no coupon
+                    # return redirect("some_other_view")
 
-        # Rest of your view logic
+                # Rest of your view logic
 
     except TypeError as e:
         logger.error(f"An error occurred in the cart_detail view: {e}")

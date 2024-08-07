@@ -16,15 +16,48 @@ from .models import Coupon
 
 @require_POST
 def coupon_apply(request):
+    certificate_in_cart = False
+
+    # Get the cart dictionary from the session
+    cart = request.session.get("cart", {})
+
+    # Iterate over each item in the cart
+    for item_id, item_data in cart.items():
+        # Print the entire item_data dictionary to debug
+        print(f"Item ID: {item_id}")
+        print(f"Item Data: {item_data}")
+
+        # Extract and print the 'velikost' value from each item
+        zpusob_vyroby = item_data.get("zpusob_vyroby", "Not provided")
+        print(f"Velikost: {zpusob_vyroby}")
+
+        if (
+            zpusob_vyroby == "Tištěný certifikát"
+            or zpusob_vyroby == "Elektronický"
+            or zpusob_vyroby == "Tištěný"
+        ):
+            print(
+                "oh yeah zpusob vyroby i elektronicky or tisetny certif", zpusob_vyroby
+            )
+            certificate_in_cart = True
+
+    print("This is cart session values end:")
+    # TODO #I need to pop the coupon if cart now has coupon inside
+
     now = timezone.now()
     form = CouponForm(request.POST)
+
     if form.is_valid():
         code = form.cleaned_data["code"]
-        print(code)
+
         try:
             coupon = Coupon.objects.get(
                 code__iexact=code, valid_from__lte=now, valid_to__gte=now
             )
+            if certificate_in_cart:
+                messages.warning(request, "Nelze uplatnit slevu na nákup certifikátu.")
+                return redirect("cart:cart_detail")
+
             if coupon.capacity > 0 and coupon.active:
                 request.session["coupon_id"] = coupon.id
                 messages.success(request, "Kupón byl úspěšně použit.")
@@ -112,6 +145,8 @@ def coupon_create(
         certificate_to=certificate_to,
     )
 
+    print("coupon has been created", coupon)
+
     try:
         product_orderitem = OrderItem.objects.get(id=orderitem_id)
         product_orderitem.slevovy_kod = coupon.code
@@ -126,7 +161,6 @@ def coupon_create(
     # request.session.save()
 
     return HttpResponse(f"Coupon created successfully! {coupon}")
-
 
 
 def generate_voucher_code(length):
@@ -163,7 +197,7 @@ def generate_vouchers(request):
             id=0,
             orderitem_id=0,
             category="Odměna 30 dní po 1. nákupu",
-            discount_value=20,
+            discount_value=10,
             discount_type="Procento",
             discount_threshold=1,
             certificate_from="-",
