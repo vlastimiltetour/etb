@@ -17,9 +17,14 @@ from .models import Coupon
 @require_POST
 def coupon_apply(request):
     certificate_in_cart = False
+    cart_total_price = 0
 
     # Get the cart dictionary from the session
     cart = request.session.get("cart", {})
+    for item in cart.items():
+        print(item)
+
+    print("this is cart session", cart, type(cart))
 
     # Iterate over each item in the cart
     for item_id, item_data in cart.items():
@@ -29,7 +34,13 @@ def coupon_apply(request):
 
         # Extract and print the 'velikost' value from each item
         zpusob_vyroby = item_data.get("zpusob_vyroby", "Not provided")
-        print(f"Velikost: {zpusob_vyroby}")
+        price = int(item_data.get("price", 0))
+        quantity = int(item_data.get("quantity", 0))
+        surcharge = int(float(item_data.get("surcharge", 0)))
+
+
+        cart_total_price += (price + surcharge) * quantity
+        print(f" this is item id and cart total price {item_id, cart_total_price}")
 
         if (
             zpusob_vyroby == "Tištěný certifikát"
@@ -54,8 +65,15 @@ def coupon_apply(request):
             coupon = Coupon.objects.get(
                 code__iexact=code, valid_from__lte=now, valid_to__gte=now
             )
+
+            print("this is coupon trehshold", coupon.discount_threshold, "this is price", cart_total_price)
             if certificate_in_cart:
-                messages.warning(request, "Nelze uplatnit slevu na nákup certifikátu.")
+                messages.warning(request, "Nelze uplatnit slevu na nákup certifikátu")
+                return redirect("cart:cart_detail")
+            
+            if int(coupon.discount_threshold) > int(cart_total_price):
+                messages.warning(request, f"Nedostatečná částka v košíku pro uplatnění kódu. Minimální nákup činí {coupon.discount_threshold} Kč")
+                #TODO this is unfinished, I need to either get total_price or calculate total_price
                 return redirect("cart:cart_detail")
 
             if coupon.capacity > 0 and coupon.active:

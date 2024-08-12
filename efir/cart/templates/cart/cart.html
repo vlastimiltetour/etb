@@ -558,16 +558,19 @@ async></script>
                                           <label for="shipping">Zvolený způsob dopravy</label>
                                           <!-- {{ form.shipping }}-->
                                                    <div class="form-control" id="selected_type_delivery">
-                                                      {% if cart.get_shipping == "Z" %}
+						      {% if cart.get_shipping == "Z" %}
                                                          Zásilkovna
                                                       {% elif cart.get_shipping == "P" %}
                                                          PPL
                                                       {% elif cart.get_shipping == "D" %}
                                                          PPL - Doručení domů
-                                                      {% else %}
+                                                      
+                                                      {% elif cart.get_shipping == "O" %}
                                                          Online
-                                                      {% endif %}
-                                                </div>
+
+                                                      {% else %}
+                                                         Nevyplněno - Vyberte z nabídky
+                                                      {% endif %}                                                </div>
                                                    <div style="display: none;" class="form-control" id="selected_type_delivery_ppl_forced">PPL - Doručení domů</div>
 
                                                       <input type="hidden" id="id_shipping" name="shipping" value="{{ form.initial.order_shipping }}">
