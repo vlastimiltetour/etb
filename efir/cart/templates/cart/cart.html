@@ -458,7 +458,7 @@ async></script>
                   <strong id="shipping_price"> {{ cart.get_shipping_price }} Kč</strong> 
                </li>
                <li class="list-group-item d-flex justify-content-between bg-light">
-                  <!-- #TODO total  to be calculated-->
+                  
                   <span>Total: </span> 
                   <strong>{{ cart.get_total_price_after_discount }} Kč </strong>
                </li>
@@ -558,7 +558,7 @@ async></script>
                                           <label for="shipping">Zvolený způsob dopravy</label>
                                           <!-- {{ form.shipping }}-->
                                                    <div class="form-control" id="selected_type_delivery">
-						      {% if cart.get_shipping == "Z" %}
+                                                      {% if cart.get_shipping == "Z" %}
                                                          Zásilkovna
                                                       {% elif cart.get_shipping == "P" %}
                                                          PPL
@@ -570,53 +570,58 @@ async></script>
 
                                                       {% else %}
                                                          Nevyplněno - Vyberte z nabídky
-                                                      {% endif %}                                                </div>
+                                                      {% endif %}
+                                                </div>
                                                    <div style="display: none;" class="form-control" id="selected_type_delivery_ppl_forced">PPL - Doručení domů</div>
 
                                                       <input type="hidden" id="id_shipping" name="shipping" value="{{ form.initial.order_shipping }}">
 
                                                       <div class="invalid-feedback"></div>
                                     </div>
+                                    
                                     <!-- Delivery points -->
+                                    <!-- #TODO Here I'd like to inject misto and Country and PSC -->
                                     <div id="onlineAddress" display="none">
                                                 <div class="row">
                                                    <div class="col-md-6 mb-3">
                                                       <label for="country">Země
                                                       </label>
                                                       <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
-                                                   
                                                       <div id="cart_get_country" name="cart_get_country" class="form-control"> {{ cart.get_country }}</div>
-                                                      
                                                       <input type="hidden" name="country" id="id_country"  value="{{ form.initial.order_country }}">
-
-                                    
-                                                      
-                                                      
                                                       <div class="invalid-feedback">
                                                          Valid country name is required.
                                                       </div>
                                                    </div>
                                                    <div class="col-md-6 mb-3">
                                                       <label for="email">Doručovací místo</label>
-                                                
                                                       <div class="form-control"> {{ cart.get_address }}</div>
                                                       <input type="hidden" name="address" id="id_address"  value="{{ form.initial.order_address }}">
-
                                                       <div class="invalid-feedback">
                                                          Vložte validní příjmení.
                                                       </div>
                                                    </div>
-                                                   
                                                    <div>
                                                       <input type="hidden" name="vendor_id" id="id_vendor_id"  value="{{ form.initial.vendor_id }}">
                                                    </div>
                                                 </div>   
+
+                                              
                                     </div>
-                           </div>
                                     <!-- Delivery points Ending -->
 
+                           </div>
 
 
+<style>
+   #suggestions {
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for better visibility */
+
+}
+
+
+</style>
 
 
                                           <!-- Home Delivery points start -->
@@ -1178,7 +1183,7 @@ function checkIfCertificate() {
 
 
       
-      function selectHomePPLDelivery() {
+   function selectHomePPLDelivery() {
       alert("PPL je prozatím v zaváděcím režimu - v tuto chvíli doručujeme pouze v Česku. PPL is currently in a rollout mode - we only deliver in the Czech Republic at the moment.")       
     const selectedDeliveryType = document.getElementById("selected_type_delivery");
     const selectedDeliveryTypePplForced = document.getElementById("selected_type_delivery_ppl_forced");
@@ -1199,7 +1204,7 @@ function checkIfCertificate() {
          }
          
 }
-
+// #TODO here is the submit button
 document.getElementById("submit-button").addEventListener("click", () => {
     const addressInput = document.querySelector("#cart_address");
     const countryInput = document.querySelector("#cart_country");
@@ -1266,6 +1271,7 @@ document.getElementById("submit-button").addEventListener("click", () => {
 
                        data.forEach(item => {
                            const li = document.createElement('li');
+                           
                            li.textContent = item.display_name;
 
                            li.addEventListener('click', function() {
