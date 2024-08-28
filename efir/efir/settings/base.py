@@ -223,6 +223,7 @@ ZASILKOVNA_API_KEY = os.getenv("ZASILKOVNA_API_KEY")
 ZASILKOVNA_SECRET = os.getenv("ZASILKOVNA_SECRET")
 
 
+<<<<<<< HEAD
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
 RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 
@@ -277,3 +278,9 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 
 APPEND_SLASH = True
+=======
+# Example settings for storing backups in the 'backups' directory of your project
+DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
+DBBACKUP_STORAGE_OPTIONS = {"location": "backups/"}
+DBBACKUP_CLEANUP_KEEP = 2  # Number of backups to keep
+>>>>>>> origin/master
