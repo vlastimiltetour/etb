@@ -285,7 +285,6 @@ class Cart:
 
     def clean_cart_session(self):
         # Clean up the cart session
-<<<<<<< HEAD
         print("Cleaning up the cart session...")
 
         # Clear the entire session
@@ -298,18 +297,6 @@ class Cart:
             print(f"Key: {key}, Value: {value}, type: {type(value)}")
 
         print("Saving session...")
-=======
-        del self.session[settings.CART_SESSION_ID]
-
-        try:
-            del self.session["coupon_id"]
-            del self.session["cart_country"]
-            del self.session["cart_address"]
-            del self.session["cart_vendor"]
-        except KeyError:
-            print("all good")
-
->>>>>>> origin/master
         self.save()
         print("Session saved.")
 
@@ -394,14 +381,7 @@ class Cart:
     def get_total_price_after_discount(self):
         total_price = self.get_total_price()
         discount = self.get_discount()
-        if discount:
-            if total_price >= self.get_discount_threshold():
-                if self.get_discount_type() == "Procento":
-                    total_price * (1 - discount)
-                elif self.get_discount_type() == "Částka":
-                    total_price - discount
 
-<<<<<<< HEAD
         if self.get_discount_threshold() or self.get_discount_threshold() == int(0):
             print("jo cena je vyssi", {self.get_discount_threshold()})
             if total_price >= self.get_discount_threshold():
@@ -422,9 +402,3 @@ class Cart:
 
     def transfer_discount_to_orders(self):
         return self.get_total_price_after_discount() - self.get_total_price()
-=======
-            else:
-                return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
-
-        return total_price
->>>>>>> origin/master

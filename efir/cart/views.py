@@ -15,10 +15,6 @@ from inventory.models import Inventory
 from orders.forms import OrderForm
 from orders.mail_confirmation import *
 from orders.models import OrderItem
-<<<<<<< HEAD
-=======
-from stripepayment.views import zasilkovna_create_package
->>>>>>> origin/master
 
 logger = logging.getLogger(__name__)
 
@@ -106,12 +102,8 @@ def update_cart_quantity(request, item_id):
     return redirect("cart:cart_detail")
 
 
-<<<<<<< HEAD
 def cart_detail(request, zasilkovna=True):
     certificate = 0
-=======
-def cart_detail(request, zasilkovna=False):
->>>>>>> origin/master
     try:
         cart = Cart(request)
         for item in cart:
@@ -130,11 +122,6 @@ def cart_detail(request, zasilkovna=False):
 
                 # Rest of your view logic
 
-<<<<<<< HEAD
-=======
-        # Rest of your view logic
-
->>>>>>> origin/master
     except TypeError as e:
         logger.error(f"An error occurred in the cart_detail view: {e}")
         clean_cart_session(request)
