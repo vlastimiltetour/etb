@@ -556,7 +556,7 @@ async></script>
                            <div class="row">
                                        <div class="mb-3" >
                                           <label for="shipping">Zvolený způsob dopravy</label>
-                                          <!-- {{ form.shipping }}-->
+                                          <!-- {{ form.shipping #TODO I need to add the new option personal pickup here }}-->
                                                    <div class="form-control" id="selected_type_delivery">
                                                       {% if cart.get_shipping == "Z" %}
                                                          Zásilkovna
@@ -584,6 +584,50 @@ async></script>
                                     <div id="onlineAddress" display="none">
                                                 <div class="row">
                                                    <div class="col-md-6 mb-3">
+                                                      <label for="email">Doručovací místo</label>
+                                                      <div class="form-control"> {{ cart.get_address }}</div>
+                                                      <input type="hidden" name="address" id="id_address"  value="{{ form.initial.order_address }}">
+                                                      <div class="invalid-feedback">
+                                                         Vložte validní adresu.
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-md-6 mb-3">
+                                                      <label for="country">Město
+                                                      </label>
+                                                      <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
+                                                      <div id="cart_get_country" name="cart_get_country" class="form-control" value="{{ form.order_city }}"> 
+                                                         {% if form.initial.order_city %}
+                                                         {{ form.initial.order_city }}
+                                                         {% else %}
+                                                         Nevyplněno
+                                                         {% endif %}
+
+                                                      </div>
+                                                      <input type="hidden" name="country" id="id_country"  value="{{ form.initial.order_city }}">
+                                                      <div class="invalid-feedback">
+                                                         Valid city name is required.
+                                                      </div>
+                                                   </div>
+                                                   <div>
+                                                      <input type="hidden" name="vendor_id" id="id_vendor_id"  value="{{ form.initial.vendor_id }}">
+                                                   </div>
+                                                </div>   
+                                                <div class="row">
+                                                   <div class="col-md-6 mb-3">
+                                                      <label for="email">PSČ</label>
+                                                      <div class="form-control"> 
+                                                         {% if form.initial.order_zipcode %}
+                                                         {{ form.initial.order_zipcode }}
+                                                         {% else %}
+                                                         Nevyplněno
+                                                         {% endif %}
+                                                      </div>
+                                                      <input type="hidden" name="address" id="id_address"  value="{{ form.initial.order_address }}">
+                                                      <div class="invalid-feedback">
+                                                         Vložte validní směrovací číslo.
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-md-6 mb-3">
                                                       <label for="country">Země
                                                       </label>
                                                       <!-- <div id="id_country_packeta" class="form-control" onchange="updateSelectedCountry(this.innerText)">-</div>-->
@@ -593,20 +637,10 @@ async></script>
                                                          Valid country name is required.
                                                       </div>
                                                    </div>
-                                                   <div class="col-md-6 mb-3">
-                                                      <label for="email">Doručovací místo</label>
-                                                      <div class="form-control"> {{ cart.get_address }}</div>
-                                                      <input type="hidden" name="address" id="id_address"  value="{{ form.initial.order_address }}">
-                                                      <div class="invalid-feedback">
-                                                         Vložte validní příjmení.
-                                                      </div>
-                                                   </div>
                                                    <div>
                                                       <input type="hidden" name="vendor_id" id="id_vendor_id"  value="{{ form.initial.vendor_id }}">
                                                    </div>
                                                 </div>   
-
-                                              
                                     </div>
                                     <!-- Delivery points Ending -->
 
@@ -1151,6 +1185,9 @@ function checkIfCertificate() {
          return;
       }
 
+    
+
+
       // Check if other elements exist
       if (addressInput && countryInput && vendorIdInput && cartForm && zipcode && city) {
          // Set values for inputs if needed
@@ -1201,11 +1238,11 @@ function checkIfCertificate() {
             pplMap.style.display = "none";
          } else {
             console.error("Element with ID 'ppl-parcelshop-map' not found.");
-         }
-         
+         }   
 }
-// #TODO here is the submit button
-document.getElementById("submit-button").addEventListener("click", () => {
+
+// this is experimental code
+document.getElementById("suggestions").addEventListener("click", () => {
     const addressInput = document.querySelector("#cart_address");
     const countryInput = document.querySelector("#cart_country");
     const vendorIdInput = document.querySelector("#cart_vendor");
@@ -1220,6 +1257,8 @@ document.getElementById("submit-button").addEventListener("click", () => {
     const home_ppl_zipcode = document.querySelector("#home_ppl_cart_zipcode");
     const home_ppl_city = document.querySelector("#home_ppl_cart_city");
     
+   if (addressInput && countryInput && vendorIdInput && cartForm && zipcode && city) {
+
     // Part 2: Assign values to the inputs
       addressInput.value = home_ppl_addressInput.value;
       countryInput.value = home_ppl_countryInput.value.toUpperCase();
@@ -1228,30 +1267,22 @@ document.getElementById("submit-button").addEventListener("click", () => {
       city.value = home_ppl_city.value;
       shippingSelect.value = "D"
 
+      if (
+                addressInput.value &&
+                countryInput.value &&
+                vendorIdInput.value &&
+                zipcode.value &&
+                city.value
+            ) {
+                cartForm.submit();
+            } else {
+                console.error("One or more fields are empty. Form submission canceled.");
+            }
+   
+      }})
+      
 
-
-    
-
-    // Collecting empty fields
-    let emptyFields = [];
-
-    if (!addressInput.value) emptyFields.push("Address");
-    if (!countryInput.value) emptyFields.push("Country");
-    if (!vendorIdInput.value) emptyFields.push("Vendor ID");
-    if (!zipcode.value) emptyFields.push("Zipcode");
-    if (!city.value) emptyFields.push("City");
-    if (!shippingSelect.value) emptyFields.push("Shipping");
-
-    if (emptyFields.length === 0) {
-        if (cartForm) {
-            cartForm.submit();
-        } else {
-            console.error("Form element not found.");
-        }
-    } else {
-        console.error("The following form fields are empty: " + emptyFields.join(", "));
-    }
-});
+// end of experimental code
 
     
 
