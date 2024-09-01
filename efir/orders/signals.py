@@ -12,7 +12,7 @@ def send_email_when_order_completed(sender, instance, created, **kwargs):
 
     # Check if the order is marked as shipped and the shipped email hasn't been sent
     if instance.shipped and not instance.shipped_sent:
-        order_shipped(instance.id)
+       # order_shipped(instance.id)
         logger.info(f"======= Order {instance.id} has been dispatched to transport service.")
 
         # Update the 'shipped_sent' field without triggering the signal again
