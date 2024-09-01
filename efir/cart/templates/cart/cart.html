@@ -556,7 +556,6 @@ async></script>
                            <div class="row">
                                        <div class="mb-3" >
                                           <label for="shipping">Zvolený způsob dopravy</label>
-                                          <!-- {{ form.shipping #TODO I need to add the new option personal pickup here }}-->
                                                    <div class="form-control" id="selected_type_delivery">
                                                       {% if cart.get_shipping == "Z" %}
                                                          Zásilkovna
@@ -580,7 +579,6 @@ async></script>
                                     </div>
                                     
                                     <!-- Delivery points -->
-                                    <!-- #TODO Here I'd like to inject misto and Country and PSC -->
                                     <div id="onlineAddress" display="none">
                                                 <div class="row">
                                                    <div class="col-md-6 mb-3">
