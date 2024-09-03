@@ -20,10 +20,11 @@ urlpatterns = [
         views.send_offer_confirmation,
         name="send_offer_confirmation",
     ),
-     path(
+    path(
         "send_paid_offer_confirmation/<int:order_id>/",
         views.send_paid_offer_confirmation,
         name="send_paid_offer_confirmation",
     ),
     path("update_orders", views.update_orders, name="update_orders"),
+    path("cleanup_orders", views.cleanup_orders, name="cleanup_orders"),
 ]

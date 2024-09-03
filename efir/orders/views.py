@@ -91,19 +91,19 @@ def invoice(request):
     id = 413
     order = get_object_or_404(Order, id=id)
     print(order)
-    return render(request, "orders/invoice_pdf.html", {"order": order})
-
-
+    return render(request, "orders/order_shipped.html", {"order": order})
 
     order = get_object_or_404(Order, id=id)
 
     print(order)
     return render(request, "orders/certificate_confirmation.html", {"order": order})
 
+
 def update_orders(request):
     selected_order = Order.objects.filter(id=939)
     selected_order.update(discount=-300, total_cost=2029)
     return HttpResponse("Order has been corrected")
+
 
 def contact_form(request):
     return render(request, "orders/contact_form.html")
@@ -120,3 +120,9 @@ def download_ppl_label(request, file_name):
     response = HttpResponse(fl, content_type=mime_type)
     response["Content-Disposition"] = "attachment; filename=%s" % file_name
     return response
+
+
+def cleanup_orders(request):
+    Order.objects.filter(shipped=True).update(shipped_sent=True)
+    return HttpResponse("orders cleaned up")
+
