@@ -151,6 +151,9 @@ class Cart:
         self.save()
 
     def get_shipping_price(self):
+        if hasattr(self, "free_shipping") and self.free_shipping:
+            return 0
+
         shipping_price = 0
         zpusob_vyroby_type_count = 0
         try:
@@ -244,6 +247,8 @@ class Cart:
             return "Zásilkovna"
         elif shipping == "O":
             return "Online"
+        elif shipping == "S":
+            return "Osobní odběr"
 
         return "Nevyplněno"
 
@@ -261,7 +266,7 @@ class Cart:
         if vendor is not None:
             return vendor
 
-        return "Nevyplněno"
+        return "něno"
 
     def clean_cart_address(self):
         # Clean up the cart session
@@ -393,10 +398,14 @@ class Cart:
                     return total_price_after_discount
 
             else:
+                # return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}", messages.warning(request=requests, message="Tento kupón byl již použit, nebo je neaktivní.")
                 return f"Nelze aplikovat slevu, minimální nákup {self.get_discount_threshold()}"
 
         total_price_after_discount = self.get_total_price()
         print("jo cena je nizsi", {total_price_after_discount})
+
+        if total_price_after_discount > 4000:
+            self.free_shipping = True
 
         return total_price_after_discount
 
