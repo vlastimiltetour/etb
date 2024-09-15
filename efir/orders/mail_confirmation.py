@@ -114,6 +114,7 @@ from .models import Order
 
 def unpaid_customer_order_email_confirmation(order_id):
     order = Order.objects.get(id=order_id)
+
     html_content = render_to_string(
         "orders/unpaid_customer_email_confirmation.html", {"order": order}
     )
@@ -204,6 +205,7 @@ def send_offer_confirmation(request, order_id):
 
 def send_paid_offer_confirmation(request, order_id):
     order = Order.objects.get(id=order_id)
+
     html_content = render_to_string(
         "orders/customer_email_confirmation.html", {"order": order}
     )
@@ -219,11 +221,13 @@ def send_paid_offer_confirmation(request, order_id):
 
 def order_shipped(order_id):
     order = Order.objects.get(id=order_id)
-    html_content = render_to_string("orders/order_shipped.html", {"order": order})
+
+    if order.shipping == "S":
+        html_content = render_to_string("orders/personal_pickup.html", {"order": order})
+    else:
+        html_content = render_to_string("orders/order_shipped.html", {"order": order})
     msg = EmailMultiAlternatives(
-        subject=(
-            f"Předali jsme objednávku dopravci." 
-        ),
+        subject=("Předali jsme objednávku dopravci."),
         from_email="objednavky@efirthebrand.cz",
         to=[order.email],
         bcc=["objednavky@efirthebrand.cz"],
