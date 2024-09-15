@@ -1,5 +1,3 @@
-import csv
-
 import xlwt
 from django.contrib import admin
 from django.http import HttpResponse
@@ -71,6 +69,8 @@ class OrderAdmin(admin.ModelAdmin):
         "created",
         "discount_code",
         "download_label",
+        "confirmation_sent",
+        "shipped_sent",
     ]
 
     inlines = [OrderItemInline]
@@ -210,7 +210,8 @@ class OrderAdmin(admin.ModelAdmin):
 
     actions = ["export_to_excel"]
 
-    def export_to_csv(self, request, queryset):
+
+"""    def export_to_csv(self, request, queryset):
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = 'attachment; filename="orders.csv"'
 
@@ -244,7 +245,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     export_to_csv.short_description = "Exportovat do CSV"
 
-    actions = ["export_to_csv"]
+    actions = ["export_to_csv"]"""
 
 
 """

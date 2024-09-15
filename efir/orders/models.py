@@ -21,12 +21,13 @@ class Order(models.Model):
     COUNTRY_CHOICES = [("CZ", "cz"), ("SK", "sk")]
 
     country = models.CharField(max_length=20, verbose_name="Země")
-    shipping_type = (
+    shipping_type = (  # TODO I need to add new option personal pickup here
         ("", "Vyberte si způsob dopravy"),
         ("P", "PPL"),
         ("D", "PPL - Doručení domů"),
         ("Z", "Zásilkovna"),
         ("O", "Online"),
+        ("S", "Osobní odběr"),
     )
     shipping = models.CharField(
         max_length=100,
@@ -88,6 +89,13 @@ class Order(models.Model):
     label = models.CharField(
         max_length=200, blank=True, null=True, verbose_name="Etiketa k doprave"
     )  # Or use FilePathField if you want to restrict to a certain directory
+
+    confirmation_sent = models.BooleanField(
+        default=False, verbose_name="Emailove potvrzení objednávky"
+    )
+    shipped_sent = models.BooleanField(
+        default=False, verbose_name="Email předáno k dopravci"
+    )
 
     class Meta:
         verbose_name = "Objednávky"
